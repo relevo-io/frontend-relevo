@@ -1,0 +1,40 @@
+.hero-container {
+  position: relative;
+  width: 100%;
+  /* 74px es aproximadamente la altura de tu Navbar. Esto hace que la imagen ocupe el resto de la pantalla sin hacer scroll */
+  height: calc(100vh - 74px); 
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen no se deforme */
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(15, 23, 42, 0.7); /* Un filtro azul muy oscuro y semi-transparente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-overlay h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.hero-overlay p {
+  font-size: 1.2rem;
+  color: #cbd5e1;
+}

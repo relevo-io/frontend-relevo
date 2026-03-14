@@ -1,8 +1,11 @@
+/* =========================================
+   ESTILOS DE LA BARRA DE NAVEGACIÓN
+   ========================================= */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1e293b;
+  background-color: #1e293b; /* Azul oscuro */
   padding: 1rem 2rem;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -36,7 +39,7 @@
 }
 
 .active-link {
-  color: #38bdf8 !important; /* Un azul clarito para la pestaña activa */
+  color: #38bdf8 !important;
   border-bottom: 2px solid #38bdf8;
   padding-bottom: 4px;
 }
@@ -46,8 +49,107 @@
   padding: 0.5rem 1rem;
   border-radius: 6px;
   color: white !important;
+  border: none;
 }
 
 .btn-login:hover {
+  background-color: #1d4ed8;
+}
+
+/* =========================================
+   ESTILOS DEL MODAL (POPUP)
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.btn-cerrar:hover {
+  color: #ef4444;
+}
+
+.modal-card h2 {
+  margin-top: 0;
+  color: #1e293b;
+  text-align: center;
+}
+
+.modal-card p {
+  color: #64748b;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.btn-submit {
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
   background-color: #1d4ed8;
 }
