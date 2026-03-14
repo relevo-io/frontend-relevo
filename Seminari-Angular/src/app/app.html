@@ -1,0 +1,27 @@
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">mini-spa</span>
+  </div>
+
+  <nav class="nav">
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Organizaciones
+    </a>
+
+    <a routerLink="/usuarios" routerLinkActive="active">
+      Usuarios
+    </a>
+  </nav>
+</header>
+
+<main class="container">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="footer">
+  <small>Seminari Angular · CRUD</small>
+</footer>
