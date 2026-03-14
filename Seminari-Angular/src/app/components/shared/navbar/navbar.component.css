@@ -1,0 +1,53 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e293b;
+  padding: 1rem 2rem;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.navbar-menu a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar-menu a:hover {
+  color: white;
+}
+
+.active-link {
+  color: #38bdf8 !important; /* Un azul clarito para la pestaña activa */
+  border-bottom: 2px solid #38bdf8;
+  padding-bottom: 4px;
+}
+
+.btn-login {
+  background-color: #2563eb;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: white !important;
+}
+
+.btn-login:hover {
+  background-color: #1d4ed8;
+}
