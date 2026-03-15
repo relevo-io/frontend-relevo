@@ -14,21 +14,9 @@ export class Navbar {
   public authService = inject(AuthService);
   private router = inject(Router);
 
-  // Variable para controlar el popup
-  mostrarModal = false;
-
-  abrirModal() {
-    this.mostrarModal = true;
-  }
-
-  cerrarModal() {
-    this.mostrarModal = false;
-  }
-
-  iniciarSesion(event: Event) {
-    event.preventDefault(); // Evita que recargue la página
-    this.authService.login(); // Avisa que estamos logueados
-    this.cerrarModal(); // Cierra el popup
-    this.router.navigate(['/oportunidades']); // Asegura que estemos en oportunidades
+// Función directa para entrar sin formulario
+  loginRapido() {
+    this.authService.login();
+    this.router.navigate(['/oportunidades']);
   }
 }
