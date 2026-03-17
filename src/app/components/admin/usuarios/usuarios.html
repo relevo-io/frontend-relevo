@@ -1,0 +1,108 @@
+<div class="users-page">
+  <div class="page-header">
+    <div class="title-section">
+      <h1>Gestión de Usuarios</h1>
+      <p class="subtitle">Administra los roles y estados de los usuarios en la plataforma</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary">
+        <span class="material-symbols-outlined">person_add</span>
+        Añadir Usuario
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de Filtros (Buscador + Select por Rol) -->
+  <div class="filters-bar">
+    <app-search-input 
+      [placeholder]="'Buscar por nombre o email...'"
+      (onSearch)="updateSearch($event)">
+    </app-search-input>
+
+    <div class="specific-filters">
+        <div class="filter-group">
+            <span class="material-symbols-outlined filter-icon">filter_alt</span>
+            <select (change)="updateRole($event)" class="filter-select">
+                <option value="ALL">Todos los Roles</option>
+                <option value="OWNER">Propietarios (Owners)</option>
+                <option value="INTERESTED">Interesados</option>
+            </select>
+        </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="state-container">
+      <div class="loader"></div>
+      <p>Cargando usuarios...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-container error">
+      <span class="material-symbols-outlined">error</span>
+      <p>{{ error() }}</p>
+      <button (click)="fetchUsuarios()" class="btn-retry">Reintentar</button>
+    </div>
+  } @else {
+    <!-- Table Section -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Ubicación</th>
+            <th>Email</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of filteredUsuarios(); track user._id) {
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar-mini">
+                    {{ user.fullName.charAt(0) }}
+                  </div>
+                  <div class="user-info-text">
+                    <span class="name">{{ user.fullName }}</span>
+                    <span class="bio-snippet">{{ user.bio | slice:0:30 }}...</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="{
+                    'owner': user.role === 'OWNER',
+                    'investor': user.role === 'INTERESTED'
+                  }">
+                    {{ user.role === 'OWNER' ? 'Propietario' : 'Interesado' }}
+                </span>
+              </td>
+              <td class="text-muted">{{ user.location }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn-icon" title="Editar">
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                  <button class="btn-icon" title="Eliminar">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">search_off</span>
+                  <p>No se han encontrado usuarios que coincidan con la búsqueda.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
