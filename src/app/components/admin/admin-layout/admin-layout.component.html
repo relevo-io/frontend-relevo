@@ -1,0 +1,70 @@
+<div class="admin-container">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-box">
+        <span class="material-symbols-outlined">business_center</span>
+      </div>
+      <div class="brand">
+        <h1>RELEVO</h1>
+        <p>Admin Console</p>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a routerLink="dashboard" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="usuarios" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">group</span>
+        <span>Usuarios</span>
+      </a>
+      <a routerLink="oportunidades" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">rocket_launch</span>
+        <span>Oportunidades</span>
+      </a>
+      <a routerLink="access-requests" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">assignment_ind</span>
+        <span>Access Requests</span>
+      </a>
+      <a routerLink="settings" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined">settings</span>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="system-status">
+        <p class="status-label">System Status</p>
+        <div class="status-indicator">
+          <span class="dot green"></span>
+          <span class="status-text">All systems operational</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <div class="main-wrapper">
+    <!-- Simplified Top Header (User liked the Clean Look) -->
+    <header class="admin-header">
+      <div class="header-breadcrumb">
+        <h2>Backoffice</h2>
+      </div>
+      
+      <div class="header-user">
+        <div class="user-info">
+          <p class="user-name">Admin User</p>
+          <p class="user-role">Super Admin</p>
+        </div>
+        <div class="avatar"></div>
+      </div>
+    </header>
+
+    <!-- CONTENT OUTLET -->
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
