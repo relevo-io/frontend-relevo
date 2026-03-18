@@ -18,10 +18,13 @@
       <tr *ngFor="let solicitud of solicitudes">
         <td>{{ solicitud.createdAt | date:'dd/MM/yyyy' }}</td>
         <td>
-          <strong>{{ solicitud.interestedUser.nombre || 'Usuario' }}</strong><br>
           <small>{{ solicitud.interestedUser.email }}</small>
         </td>
-        <td>{{ solicitud.opportunity.titulo || 'Sin título' }}</td>
+        <td>
+            <span class="description-truncate" [title]="solicitud.opportunity.companyDescription">
+                {{ solicitud.opportunity.companyDescription || 'Sin descripción' }}
+            </span>
+        </td>
         <td>
           <span class="message-text" [title]="solicitud.message">
             {{ solicitud.message || 'Sin mensaje' }}
@@ -33,9 +36,13 @@
           </span>
         </td>
         <td>
-          <button *ngIf="solicitud.status === 'PENDING'" class="btn-approve">Aceptar</button>
-          <button *ngIf="solicitud.status === 'PENDING'" class="btn-reject">Rechazar</button>
-          <span *ngIf="solicitud.status !== 'PENDING'">---</span>
+            <div class="actions-container" *ngIf="solicitud.status === 'PENDING'; else noActions">
+                <button (click)="cambiarEstado(solicitud._id, 'ACCEPTED')" class="btn-approve">Aceptar</button>
+                <button (click)="cambiarEstado(solicitud._id, 'REJECTED')" class="btn-reject">Rechazar</button>
+            </div>
+            <ng-template #noActions>
+                <span style="color: #cbd5e0;">---</span>
+            </ng-template>
         </td>
       </tr>
     </tbody>

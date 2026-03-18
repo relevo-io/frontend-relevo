@@ -10,7 +10,7 @@ export interface Solicitud {
   };
   opportunity: {
     _id: string;
-    titulo: string;
+    companyDescription: string;
   };
   status: SolicitudStatus;
   message?: string;
