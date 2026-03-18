@@ -160,11 +160,11 @@ table {
 }
 
 /* Anchos de columna para evitar que nombres/emails revienten el layout */
-table th:nth-child(2) { width: 30%; }  /* Usuario */
-table th:nth-child(3) { width: 14%; }  /* Rol */
-table th:nth-child(4) { width: 16%; }  /* Ubicación */
+table th:nth-child(2) { width: 28%; }  /* Usuario */
+table th:nth-child(3) { width: 13%; }  /* Rol */
+table th:nth-child(4) { width: 13%; }  /* Ubicación */
 table th:nth-child(5) { width: 24%; }  /* Email */
-table th:nth-child(6) { width: 10%; }  /* Acciones */
+table th:nth-child(6) { width: 14%; }  /* Acciones — espacio para 3 botones */
 
 th {
   padding: 16px 24px;
@@ -493,6 +493,45 @@ thead .btn-checkbox.all-selected {
   color: #136dec;
 }
 
+/* Fila de usuario oculto: atenuada para distinguirla a simple vista */
+tr.user-hidden {
+  opacity: 0.45;
+}
+
+tr.user-hidden:hover {
+  opacity: 0.65;
+  background-color: #fefce8; /* Tinte ámbar suave al pasar el ratón */
+}
+
+tr.user-hidden .avatar-mini {
+  background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 100%); /* Avatar gris cuando oculto */
+}
+
+/* Botón de visibilidad: tono ámbar cuando el usuario está oculto */
+.btn-icon[title="Mostrar usuario"] {
+  color: #d97706;
+}
+
+.btn-icon[title="Mostrar usuario"]:hover {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+/* Hover semántico: Editar → azul */
+.btn-icon[title="Editar"]:hover {
+  background: #eff6ff;
+  color: #136dec;
+  border-color: #bfdbfe;
+}
+
+/* Hover semántico: Eliminar → rojo */
+.btn-icon[title="Eliminar"]:hover {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
 /* ============================================
    BULK ACTIONS BAR (Floating)
    ============================================ */
@@ -549,7 +588,40 @@ thead .btn-checkbox.all-selected {
 .bulk-buttons {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 6px;
+}
+
+/* Botones de acción neutros (visibilidad) en la bulk bar */
+.btn-bulk-action {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #475569;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-bulk-action:hover {
+  background: #334155;
+  color: #e2e8f0;
+  border-color: #64748b;
+}
+
+.btn-bulk-action .material-symbols-outlined { font-size: 18px; }
+
+/* Separador vertical entre grupos de acciones */
+.bulk-divider {
+  width: 1px;
+  height: 22px;
+  background: #334155;
+  margin: 0 4px;
+  flex-shrink: 0;
 }
 
 .btn-bulk-delete {

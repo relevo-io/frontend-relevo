@@ -10,6 +10,7 @@ export interface Usuario {
   bio?: string;                    // required: false
   professionalBackground?: string; // required: false
   preferredRegions?: string[];
+  visible?: boolean;               // Nuevo campo para moderación
   createdAt?: string;
   updatedAt?: string;
 }

@@ -46,8 +46,12 @@ export class Usuarios implements OnInit {
     const filter = this.roleFilter();
     const allUsers = this.usuarios();
 
+    // Helper: los ocultos siempre al fondo (1 = al fondo, 0 = arriba)
+    const hiddenWeight = (u: Usuario) => u.visible === false ? 1 : 0;
+
     if (!query && filter === 'ALL') {
-      return allUsers; // No hay filtros activos
+      // Sin filtros: solo ordenamos por visibilidad
+      return [...allUsers].sort((a, b) => hiddenWeight(a) - hiddenWeight(b));
     }
 
     return allUsers
@@ -60,6 +64,10 @@ export class Usuarios implements OnInit {
         return matchesRole && matchesSearch;
       })
       .sort((a, b) => {
+        // 0ª PRIORIDAD: Ocultos siempre al fondo
+        const hiddenDiff = hiddenWeight(a) - hiddenWeight(b);
+        if (hiddenDiff !== 0) return hiddenDiff;
+
         if (!query) return 0;
 
         // --- SISTEMA DE RANKING (Relaciones Fuertes) ---
@@ -209,14 +217,75 @@ export class Usuarios implements OnInit {
   borrarSeleccionados(): void {
     const ids = Array.from(this.selectedIds());
     if (confirm(`¿Estás seguro de que quieres eliminar ${ids.length} usuarios?`)) {
-      this.usuarios.update(actuales => actuales.filter(u => !this.selectedIds().has(u._id!)));
-      this.clearSelection();
-      console.log('Borrado masivo completado localmente.');
+      this.isLoading.set(true); // Bloquear UI
+
+      this.usuarioService.deleteUsuariosBatch(ids).subscribe({
+        next: (res) => {
+          // Si el backend lo confirma, actualizamos reactivamente el signal
+          this.usuarios.update(actuales => 
+            actuales.filter(u => !ids.includes(u._id!))
+          );
+          this.clearSelection();
+          this.isLoading.set(false);
+          console.log(`Eliminado con éxito: ${res.deletedCount} de ${res.requestedCount}`);
+        },
+        error: (err) => {
+          console.error('Error en el borrado masivo:', err);
+          alert('No se pudo completar el borrado masivo.');
+          this.isLoading.set(false);
+        }
+      });
     }
   }
 
   clearSelection(): void {
     this.selectedIds.set(new Set());
+  }
+
+  // --- LÓGICA DE VISIBILIDAD ---
+
+  toggleVisibility(id: string, currentlyVisible: boolean): void {
+    const nextVisible = !currentlyVisible;
+    this.usuarioService.updateUsuarioVisibility(id, nextVisible).subscribe({
+      next: (actualizado) => {
+        // Actualizar el signal para reflejar el cambio visualmente
+        this.usuarios.update(actuales => 
+          actuales.map(u => u._id === id ? { ...u, visible: actualizado.visible } : u)
+        );
+        console.log(`Usuario ${id} ahora está ${nextVisible ? 'visible' : 'oculto'}.`);
+      },
+      error: (err) => {
+        console.error('Error al cambiar visibilidad:', err);
+        alert('No se pudo cambiar la visibilidad del usuario.');
+      }
+    });
+  }
+
+  bulkVisibility(visible: boolean): void {
+    const ids = Array.from(this.selectedIds());
+    this.isLoading.set(true);
+    
+    this.usuarioService.updateUsuariosVisibilityBatch(ids, visible).subscribe({
+      next: (res) => {
+        // Actualizamos los signals para todos los IDs afectados
+        this.usuarios.update(actuales => 
+          actuales.map(u => ids.includes(u._id!) ? { ...u, visible } : u)
+        );
+        
+        this.isLoading.set(false);
+        this.clearSelection();
+
+        // Aviso parcial si algo no coincidió
+        if (res.modifiedCount < res.requestedCount) {
+          console.warn(`Aviso: Se solicitaron ${res.requestedCount} cambios, pero se actualizaron ${res.modifiedCount}.`);
+        }
+      },
+      error: (err) => {
+        console.error('Error en cambio masivo de visibilidad:', err);
+        alert('Hubo un error al procesar el cambio masivo.');
+        this.isLoading.set(false);
+      }
+    });
   }
 
   // --- DRAWER ---

@@ -31,4 +31,21 @@ export class UsuarioService {
   updateUsuario(id: string, data: Partial<Usuario>): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.apiUrl}/${id}`, data);
   }
+
+  // 5. Borrado múltiple (DELETE con body)
+  deleteUsuariosBatch(ids: string[]): Observable<any> {
+    return this.http.request('delete', `${this.apiUrl}/batch`, {
+      body: { ids }
+    });
+  }
+
+  // 6. Cambiar visibilidad de un usuario (PATCH)
+  updateUsuarioVisibility(id: string, visible: boolean): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiUrl}/${id}/visibility`, { visible });
+  }
+
+  // 7. Cambiar visibilidad de múltiples usuarios (PATCH con body)
+  updateUsuariosVisibilityBatch(ids: string[], visible: boolean): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/batch/visibility`, { ids, visible });
+  }
 }

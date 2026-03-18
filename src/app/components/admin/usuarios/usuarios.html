@@ -68,7 +68,8 @@
         </thead>
         <tbody>
           @for (user of paginatedUsuarios(); track user._id) {
-            <tr [class.row-selected]="selectedIds().has(user._id!)">
+            <tr [class.row-selected]="selectedIds().has(user._id!)" 
+                [class.user-hidden]="user.visible === false">
               <td class="checkbox-col">
                   <button (click)="toggleSelection(user._id!)" class="btn-checkbox">
                       <span class="material-symbols-outlined">
@@ -99,6 +100,13 @@
               <td>{{ user.email }}</td>
               <td>
                 <div class="action-buttons">
+                  <button (click)="toggleVisibility(user._id!, !!user.visible)" 
+                          class="btn-icon" 
+                          [title]="user.visible === false ? 'Mostrar usuario' : 'Ocultar usuario'">
+                    <span class="material-symbols-outlined">
+                        {{ user.visible === false ? 'visibility_off' : 'visibility' }}
+                    </span>
+                  </button>
                   <button (click)="abrirEditar(user)" class="btn-icon" title="Editar">
                     <span class="material-symbols-outlined">edit</span>
                   </button>
@@ -175,6 +183,13 @@
             </div>
 
             <div class="bulk-buttons">
+                <button (click)="bulkVisibility(true)" class="btn-bulk-action" title="Mostrar seleccionados">
+                    <span class="material-symbols-outlined">visibility</span>
+                </button>
+                <button (click)="bulkVisibility(false)" class="btn-bulk-action" title="Ocultar seleccionados">
+                    <span class="material-symbols-outlined">visibility_off</span>
+                </button>
+                <div class="bulk-divider"></div>
                 <button (click)="borrarSeleccionados()" class="btn-bulk-delete" title="Borrar selección">
                     <span class="material-symbols-outlined">delete</span>
                 </button>
