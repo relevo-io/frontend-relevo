@@ -1,0 +1,58 @@
+/* Reusing the same drawer styles as the usuario-form for consistency */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  animation: fadeOverlay 0.2s ease;
+}
+
+@keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+.drawer {
+  position: fixed;
+  top: 0; right: 0; height: 100vh; width: 420px;
+  background: white; border-left: 1px solid #e2e8f0;
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.12);
+  z-index: 50; display: flex; flex-direction: column;
+  transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer.open { transform: translateX(0); }
+
+.drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; border-bottom: 1px solid #e2e8f0;
+}
+
+.drawer-title-group { display: flex; align-items: center; gap: 10px; }
+.drawer-icon { font-size: 22px; color: #136dec; background: #eff6ff; padding: 6px; border-radius: 8px; }
+
+.btn-close-drawer { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 6px; border-radius: 6px; display: flex; }
+.btn-close-drawer:hover { background: #f1f5f9; color: #1e293b; }
+
+.drawer-form { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+.field-group { display: flex; flex-direction: column; gap: 6px; }
+.field-group label { font-size: 0.8125rem; font-weight: 600; color: #374151; }
+.required { color: #dc2626; margin-left: 2px; }
+
+.field-group input, .field-group textarea, .form-select {
+  width: 100%; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  font-size: 0.875rem; color: #1e293b; background: #f8fafc; outline: none; box-sizing: border-box;
+}
+
+.field-group input:focus, .field-group textarea:focus, .form-select:focus {
+  border-color: #136dec; background: white; box-shadow: 0 0 0 3px rgba(19, 109, 236, 0.1);
+}
+
+.field-group.invalid input, .field-group.invalid textarea { border-color: #fca5a5; background: #fff5f5; }
+.field-error { font-size: 0.75rem; color: #dc2626; }
+
+.drawer-footer { display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #f1f5f9; padding-top: 20px; margin-top: auto; }
+.btn-cancel { background: white; border: 1.5px solid #e2e8f0; color: #64748b; padding: 9px 18px; border-radius: 8px; cursor: pointer; }
+.btn-save { background: #136dec; color: white; border: none; padding: 9px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-save:hover { background: #0f5abd; }
+
+.spinning { animation: spin-icon 0.8s linear infinite; }
+@keyframes spin-icon { to { transform: rotate(360deg); } }

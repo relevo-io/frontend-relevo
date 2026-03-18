@@ -14,4 +14,16 @@ export class OfertaService {
   getOfertas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(this.apiUrl);
   }
+
+  createOferta(oferta: Oferta): Observable<Oferta> {
+    return this.http.post<Oferta>(this.apiUrl, oferta);
+  }
+
+  updateOferta(id: string, oferta: Oferta): Observable<Oferta> {
+    return this.http.put<Oferta>(`${this.apiUrl}/${id}`, oferta);
+  }
+
+  deleteOferta(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

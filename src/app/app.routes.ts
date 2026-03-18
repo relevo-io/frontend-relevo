@@ -13,6 +13,7 @@ import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layo
 // Admin Pages
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { Usuarios as AdminUsuariosComponent } from './components/admin/usuarios/usuarios';
+import { Ofertas as OfertasAdminComponent } from './components/admin/ofertas/ofertas';
 
 export const routes: Routes = [
   // --- MUNDO PÚBLICO ---
@@ -36,6 +37,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'usuarios', component: AdminUsuariosComponent },
+      { path: 'ofertas', component: OfertasAdminComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

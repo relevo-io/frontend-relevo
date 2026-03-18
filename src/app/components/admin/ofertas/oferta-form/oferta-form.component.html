@@ -1,0 +1,120 @@
+@if (isOpen()) {
+  <div class="drawer-overlay" (click)="cerrar()"></div>
+
+  <aside class="drawer" [class.open]="isOpen()">
+    <div class="drawer-header">
+      <div class="drawer-title-group">
+        <span class="material-symbols-outlined drawer-icon">
+          {{ modoCrear ? 'add_business' : 'edit_note' }}
+        </span>
+        <h2>{{ titulo }}</h2>
+      </div>
+      <button (click)="cerrar()" class="btn-close-drawer" title="Cerrar">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="drawer-form" novalidate>
+
+      <!-- Sector -->
+      <div class="field-group" [class.invalid]="f['sector'].invalid && f['sector'].touched">
+        <label for="sector">Sector <span class="required">*</span></label>
+        <select id="sector" formControlName="sector" class="form-select">
+          <option value="">Selecciona un sector</option>
+          <option value="Hostelería">Hostelería</option>
+          <option value="Servicios">Servicios</option>
+          <option value="Industria">Industria</option>
+          <option value="Comercio">Comercio</option>
+        </select>
+        @if (f['sector'].invalid && f['sector'].touched) {
+          <span class="field-error">El sector es obligatorio.</span>
+        }
+      </div>
+
+      <!-- Región -->
+      <div class="field-group" [class.invalid]="f['region'].invalid && f['region'].touched">
+        <label for="region">Región <span class="required">*</span></label>
+        <input id="region" type="text" formControlName="region" placeholder="Ej. Barcelona, Madrid...">
+        @if (f['region'].invalid && f['region'].touched) {
+          <span class="field-error">La región es obligatoria.</span>
+        }
+      </div>
+
+      <!-- Facturación (Revenue Range) -->
+      <div class="field-group">
+        <label for="revenueRange">Rango de Facturación</label>
+        <select id="revenueRange" formControlName="revenueRange" class="form-select">
+          <option value="">Desconocido</option>
+          <option value="UNDER_100K">0 - 100k €</option>
+          <option value="BETWEEN_100K_500K">100k - 500k €</option>
+          <option value="BETWEEN_500K_1M">500k - 1M €</option>
+          <option value="BETWEEN_1M_5M">1M - 5M €</option>
+          <option value="OVER_5M">> 5M €</option>
+        </select>
+      </div>
+
+      <!-- Empleados -->
+      <div class="field-group">
+        <label for="employeeRange">Rango de Empleados</label>
+        <select id="employeeRange" formControlName="employeeRange" class="form-select">
+          <option value="">Desconocido</option>
+          <option value="1_5">1-5</option>
+          <option value="6_10">6-10</option>
+          <option value="11_25">11-25</option>
+          <option value="26_50">26-50</option>
+          <option value="51_100">51-100</option>
+          <option value="100_PLUS">>100</option>
+        </select>
+      </div>
+
+      <!-- Antigüedad -->
+      <div class="field-group">
+        <label for="businessAgeYears">Años de Antigüedad</label>
+        <input id="businessAgeYears" type="number" formControlName="businessAgeYears" min="0">
+      </div>
+      
+      <!-- Propietario -->
+      <div class="field-group" [class.invalid]="f['owner'].invalid && f['owner'].touched">
+        <label for="owner">Propietario <span class="required">*</span></label>
+        <select id="owner" formControlName="owner" class="form-select">
+          <option value="">Selecciona un propietario</option>
+          @for (u of usuarios(); track u._id) {
+            <option [value]="u._id">{{ u.fullName }} ({{ u.email }})</option>
+          }
+        </select>
+        @if (f['owner'].invalid && f['owner'].touched) {
+          <span class="field-error">Debes seleccionar un propietario.</span>
+        }
+      </div>
+
+      <!-- Descripción -->
+      <div class="field-group" [class.invalid]="f['companyDescription'].invalid && f['companyDescription'].touched">
+        <label for="companyDescription">Descripción de la Empresa <span class="required">*</span></label>
+        <textarea id="companyDescription" formControlName="companyDescription" rows="5" placeholder="Cuéntanos sobre el negocio..."></textarea>
+        @if (f['companyDescription'].invalid && f['companyDescription'].touched) {
+          <span class="field-error">La descripción es obligatoria (mín. 10 chars).</span>
+        }
+      </div>
+
+      @if (saveError()) {
+        <div class="save-error">
+          <span class="material-symbols-outlined">error</span>
+          {{ saveError() }}
+        </div>
+      }
+
+      <div class="drawer-footer">
+        <button type="button" (click)="cerrar()" class="btn-cancel">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="isSaving()">
+          @if (isSaving()) {
+            <span class="material-symbols-outlined spinning">refresh</span>
+            Guardando…
+          } @else {
+            <span class="material-symbols-outlined">check</span>
+            {{ modoCrear ? 'Crear Oferta' : 'Guardar Cambios' }}
+          }
+        </button>
+      </div>
+    </form>
+  </aside>
+}
