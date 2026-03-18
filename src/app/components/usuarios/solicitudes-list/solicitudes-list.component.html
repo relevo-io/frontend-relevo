@@ -1,0 +1,47 @@
+<div class="container">
+  <h2>Gestión de Solicitudes</h2>
+
+  <div *ngIf="loading" class="loading">Cargando solicitudes...</div>
+
+  <table *ngIf="!loading && solicitudes.length > 0" class="solicitudes-table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Interesado</th>
+        <th>Oportunidad</th>
+        <th>Mensaje</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let solicitud of solicitudes">
+        <td>{{ solicitud.createdAt | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <strong>{{ solicitud.interestedUser.nombre || 'Usuario' }}</strong><br>
+          <small>{{ solicitud.interestedUser.email }}</small>
+        </td>
+        <td>{{ solicitud.opportunity.titulo || 'Sin título' }}</td>
+        <td>
+          <span class="message-text" [title]="solicitud.message">
+            {{ solicitud.message || 'Sin mensaje' }}
+          </span>
+        </td>
+        <td>
+          <span class="badge" [ngClass]="solicitud.status.toLowerCase()">
+            {{ solicitud.status }}
+          </span>
+        </td>
+        <td>
+          <button *ngIf="solicitud.status === 'PENDING'" class="btn-approve">Aceptar</button>
+          <button *ngIf="solicitud.status === 'PENDING'" class="btn-reject">Rechazar</button>
+          <span *ngIf="solicitud.status !== 'PENDING'">---</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && solicitudes.length === 0" class="no-data">
+    No hay solicitudes pendientes en este momento.
+  </div>
+</div>

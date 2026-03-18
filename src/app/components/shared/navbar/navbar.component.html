@@ -7,7 +7,7 @@
     @if (authService.isLoggedIn$ | async) {
       <li><a routerLink="/ofertas" routerLinkActive="active-link">Ofertas</a></li>
       <li><a routerLink="/usuarios" routerLinkActive="active-link">Usuarios</a></li>
-      <li><a routerLink="/perfil" routerLinkActive="active-link">Mi Perfil</a></li>
+      <li><a routerLink="/solicitudes" routerLinkActive="active-link">Solicitudes</a></li>
       <li><a (click)="authService.logout()" routerLink="/" class="btn-login" style="background-color: #ef4444; cursor:pointer;">Salir</a></li>
     } 
     @else {
