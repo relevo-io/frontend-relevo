@@ -95,18 +95,21 @@ export class SolicitudesList implements OnInit {
   }
 
   cambiarEstado(id: string, nuevoEstado: 'ACCEPTED' | 'REJECTED'): void {
-    this.solicitudService.updateStatus(id, nuevoEstado).subscribe({
-      next: (actualizada) => {
-        // Actualizamos localmente el signal para que la UI reaccione instantáneamente
-        this.solicitudes.update(actuales => 
-          actuales.map(s => s._id === id ? { ...s, status: nuevoEstado } : s)
-        );
-      },
-      error: (err) => {
-        console.error('Error updating status:', err);
-        alert('No se pudo actualizar el estado.');
-      }
-    });
+  // 1. Llamada al servicio (Backend)
+  this.solicitudService.updateStatus(id, nuevoEstado).subscribe({
+    next: (solicitudActualizada) => {
+      // 2. Si el backend responde OK, actualizamos el Signal localmente
+      // Esto evita tener que recargar toda la lista (más rápido)
+      this.solicitudes.update(listaActual => 
+        listaActual.map(s => s._id === id ? { ...s, status: nuevoEstado } : s)
+      );
+      console.log('Estado persistido en BBDD:', solicitudActualizada);
+    },
+    error: (err) => {
+      console.error('Error al persistir en BBDD:', err);
+      alert('No se pudo guardar el cambio en el servidor.');
+    }
+  });
   }
 
   // --- MÉTODOS AUXILIARES (UI) ---
