@@ -1,4 +1,3 @@
-export type SolicitudStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 
 export interface Solicitud {
   _id: string;
@@ -12,7 +11,7 @@ export interface Solicitud {
     _id: string;
     companyDescription: string;
   };
-  status: SolicitudStatus;
+  status: string;
   message?: string;
   createdAt: Date;
   updatedAt: Date;

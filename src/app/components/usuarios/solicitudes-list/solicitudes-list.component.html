@@ -37,8 +37,12 @@
         </td>
         <td>
             <div class="actions-container" *ngIf="solicitud.status === 'PENDING'; else noActions">
-                <button (click)="cambiarEstado(solicitud._id, 'ACCEPTED')" class="btn-approve">Aceptar</button>
-                <button (click)="cambiarEstado(solicitud._id, 'REJECTED')" class="btn-reject">Rechazar</button>
+                <button (click)="cambiarEstado(solicitud._id, 'ACCEPTED')" class="btn-aceptar">
+                  Aceptar
+                </button>
+                <button (click)="cambiarEstado(solicitud._id, 'REJECTED')" class="btn-rechazar">
+                  Rechazar
+                </button>
             </div>
             <ng-template #noActions>
                 <span style="color: #cbd5e0;">---</span>

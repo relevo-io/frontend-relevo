@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Solicitud } from '../models/solicitud.model';
-import { ChangeDetectorRef } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
