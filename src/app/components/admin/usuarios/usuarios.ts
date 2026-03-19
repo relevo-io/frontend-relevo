@@ -4,6 +4,8 @@ import { UsuarioService } from '../../../services/usuario.service';
 import { Usuario } from '../../../models/usuario.model';
 import { SearchInputComponent } from '../../shared/search-input/search-input.component';
 import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
+import { NotificationService } from '../../../services/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-usuarios',
@@ -14,6 +16,7 @@ import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 })
 export class Usuarios implements OnInit {
   private usuarioService = inject(UsuarioService);
+  private ns = inject(NotificationService);
   
   // Base data signals
   usuarios = signal<Usuario[]>([]);
@@ -142,16 +145,12 @@ export class Usuarios implements OnInit {
     if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
       this.usuarioService.deleteUsuario(id).subscribe({
         next: () => {
-          // ACTUALIZACIÓN FUNCIONAL:
-          // Sencillamente filtramos la 'fuente de datos' original eliminando el ID.
-          // Angular recalculará automáticamente el computed 'filteredUsuarios'.
           this.usuarios.update(actuales => actuales.filter(u => u._id !== id));
-          
-          console.log(`Usuario ${id} eliminado correctamente del backend y del signal.`);
+          this.ns.success('user deleted');
         },
         error: (err) => {
           console.error('Error al intentar eliminar el usuario:', err);
-          alert('No se pudo eliminar el usuario. Revisa la consola para más detalles.');
+          this.ns.error('could not delete user');
         }
       });
     }
@@ -227,7 +226,7 @@ export class Usuarios implements OnInit {
           );
           this.clearSelection();
           this.isLoading.set(false);
-          console.log(`Eliminado con éxito: ${res.deletedCount} de ${res.requestedCount}`);
+          this.ns.success(`${res.deletedCount} deleted`);
         },
         error: (err) => {
           console.error('Error en el borrado masivo:', err);
@@ -252,11 +251,11 @@ export class Usuarios implements OnInit {
         this.usuarios.update(actuales => 
           actuales.map(u => u._id === id ? { ...u, visible: actualizado.visible } : u)
         );
-        console.log(`Usuario ${id} ahora está ${nextVisible ? 'visible' : 'oculto'}.`);
+        this.ns.success(nextVisible ? 'user visible' : 'user hidden');
       },
       error: (err) => {
         console.error('Error al cambiar visibilidad:', err);
-        alert('No se pudo cambiar la visibilidad del usuario.');
+        this.ns.error('visibility update failed');
       }
     });
   }
@@ -274,6 +273,7 @@ export class Usuarios implements OnInit {
         
         this.isLoading.set(false);
         this.clearSelection();
+        this.ns.success(`${res.modifiedCount} ${visible ? 'visible' : 'hidden'}`);
 
         // Aviso parcial si algo no coincidió
         if (res.modifiedCount < res.requestedCount) {

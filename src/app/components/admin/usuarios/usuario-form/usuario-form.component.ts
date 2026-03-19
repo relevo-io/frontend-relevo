@@ -7,8 +7,10 @@ import {
   signal,
 } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { Usuario } from '../../../../models/usuario.model';
+import { NotificationService } from '../../../../services/notification.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -20,6 +22,7 @@ import { Usuario } from '../../../../models/usuario.model';
 export class UsuarioFormComponent {
   private fb = inject(FormBuilder);
   private usuarioService = inject(UsuarioService);
+  private ns = inject(NotificationService);
 
   // --- INPUTS / OUTPUTS ---
   // null = modo crear | Usuario = modo editar
@@ -93,29 +96,59 @@ export class UsuarioFormComponent {
       this.usuarioService.createUsuario(payload as Omit<Usuario, '_id'>).subscribe({
         next: (nuevo) => {
           this.isSaving.set(false);
+          this.ns.success('user created');
           this.saved.emit(nuevo);
           this.cerrar();
         },
-        error: (err) => {
-          console.error(err);
-          this.saveError.set('Error al crear el usuario. Revisa los datos.');
+        error: (err: HttpErrorResponse) => {
           this.isSaving.set(false);
+          const errorBody = err.error;
+          const serverErrors = errorBody.errors || errorBody.details;
+
+          if (err.status === 400 && Array.isArray(serverErrors)) {
+            serverErrors.forEach((e: { field: string, message: string }) => {
+              this.form.get(e.field)?.setErrors({ serverError: e.message.toLowerCase() });
+            });
+            this.saveError.set('please check marked fields');
+          } else if (err.status === 409) {
+            const msg = (errorBody.message || 'already exists').toLowerCase();
+            this.saveError.set(msg);
+            
+            if (msg.includes('email')) {
+              this.form.get('email')?.setErrors({ serverError: 'email already in use' });
+            }
+          }
         },
       });
     } else {
       const id = this.usuario()!._id!;
-      // En edición no enviamos password si está vacío
       if (!payload.password) delete payload.password;
+      
       this.usuarioService.updateUsuario(id, payload).subscribe({
         next: (actualizado) => {
           this.isSaving.set(false);
+          this.ns.success('user updated');
           this.saved.emit(actualizado);
           this.cerrar();
         },
-        error: (err) => {
-          console.error(err);
-          this.saveError.set('Error al guardar los cambios.');
+        error: (err: HttpErrorResponse) => {
           this.isSaving.set(false);
+          const errorBody = err.error;
+          const serverErrors = errorBody.errors || errorBody.details;
+
+          if (err.status === 400 && Array.isArray(serverErrors)) {
+            serverErrors.forEach((e: { field: string, message: string }) => {
+              this.form.get(e.field)?.setErrors({ serverError: e.message.toLowerCase() });
+            });
+            this.saveError.set('validation failed');
+          } else if (err.status === 409) {
+            const msg = (errorBody.message || 'data already in use').toLowerCase();
+            this.saveError.set(msg);
+            
+            if (msg.includes('email')) {
+              this.form.get('email')?.setErrors({ serverError: 'email already exists' });
+            }
+          }
         },
       });
     }

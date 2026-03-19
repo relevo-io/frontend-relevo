@@ -28,7 +28,9 @@
           formControlName="fullName"
           placeholder="Ej. María García López"
           autocomplete="name">
-        @if (f['fullName'].invalid && f['fullName'].touched) {
+        @if (f['fullName'].errors?.['serverError']) {
+          <span class="field-error">{{ f['fullName'].errors?.['serverError'] }}</span>
+        } @else if (f['fullName'].invalid && f['fullName'].touched) {
           <span class="field-error">El nombre es obligatorio (mín. 2 caracteres).</span>
         }
       </div>
@@ -42,7 +44,9 @@
           formControlName="email"
           placeholder="usuario@ejemplo.com"
           autocomplete="email">
-        @if (f['email'].invalid && f['email'].touched) {
+        @if (f['email'].errors?.['serverError']) {
+          <span class="field-error">{{ f['email'].errors?.['serverError'] }}</span>
+        } @else if (f['email'].invalid && f['email'].touched) {
           <span class="field-error">Introduce un email válido.</span>
         }
       </div>
@@ -63,7 +67,9 @@
           formControlName="password"
           [placeholder]="modoCrear ? 'Mín. 6 caracteres' : '••••••••'"
           autocomplete="new-password">
-        @if (f['password'].invalid && f['password'].touched) {
+        @if (f['password'].errors?.['serverError']) {
+          <span class="field-error">{{ f['password'].errors?.['serverError'] }}</span>
+        } @else if (f['password'].invalid && f['password'].touched) {
           <span class="field-error">La contraseña debe tener al menos 6 caracteres.</span>
         }
       </div>
