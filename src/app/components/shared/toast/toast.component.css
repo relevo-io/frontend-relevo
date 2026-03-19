@@ -1,0 +1,160 @@
+/* ============================================
+   CONTENEDOR GLOBAL
+   ============================================ */
+
+.toast-container {
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  z-index: 9999; /* Por encima de TODO */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 360px;
+  max-width: 100vw;
+  pointer-events: none; /* Dejamos clickear a través del contenedor si no hay toast */
+}
+
+/* ============================================
+   CADA NOTIFICACIÓN (TOAST)
+   ============================================ */
+
+.toast-item {
+  pointer-events: auto; /* Sí dejamos clickear en la alerta misma */
+  background: white;
+  border-left: 5px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12),
+              0 4px 6px rgba(0, 0, 0, 0.04);
+  animation: slideInToast 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+             fadeToast 0.3s ease;
+  transition: all 0.2s;
+}
+
+/* Tipos semánticos: Colores premium */
+.toast-item.success { 
+  border-color: #22c55e;
+  background-color: #f0fdf4;
+}
+.toast-item.success .toast-icon { color: #16a34a; }
+
+.toast-item.error { 
+  border-color: #ef4444; 
+  background-color: #fef2f2;
+}
+.toast-item.error .toast-icon { color: #dc2626; }
+
+.toast-item.warning { 
+  border-color: #f59e0b;
+  background-color: #fffbeb;
+}
+.toast-item.warning .toast-icon { color: #d97706; }
+
+.toast-item.info { 
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+.toast-item.info .toast-icon { color: #2563eb; }
+
+/* Icono principal */
+.toast-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+/* Mensaje de texto */
+.toast-message {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Botón cerrar X */
+.btn-close-toast {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s;
+}
+
+.btn-close-toast:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1e293b;
+}
+
+.btn-close-toast .material-symbols-outlined { font-size: 18px; }
+
+/* ============================================
+   BARRA DE PROGRESO (AUTODESVANECIMIENTO)
+   ============================================ */
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 0 8px; /* Solo redondeamos la esquina inferior izquierda */
+  overflow: hidden;
+}
+
+/* La barra interna que "encoge" */
+.progress-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: currentColor; /* Hereda el color del tipo de toast */
+  opacity: 0.6;
+  animation: shrink var(--duration) linear forwards;
+  transform-origin: left;
+}
+
+@keyframes shrink {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* Ajuste de los items para mostrar la barra sobre el fondo de color */
+.toast-item.success { color: #16a34a; }
+.toast-item.error   { color: #dc2626; }
+.toast-item.warning { color: #d97706; }
+.toast-item.info    { color: #2563eb; }
+
+/* El toast-item tiene que ser relativo para la barra absoluta */
+.toast-item {
+  position: relative;
+  overflow: hidden; /* Cortamos la barra si se sale */
+}
+
+/* ============================================
+   ANIMACIONES DE ENTRADA
+   ============================================ */
+
+@keyframes slideInToast {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes fadeToast {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Mejoramos la salida si el navegador soporta el auto-exit */
+.toast-item:not(:last-child) {
+  margin-bottom: 4px;
+}
