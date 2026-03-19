@@ -1,0 +1,100 @@
+/* Reutilizamos la estructura base de ofertas */
+@import url('../ofertas/ofertas.css'); 
+
+/* --- Ajustes específicos de columnas para Solicitudes --- */
+
+/* Ancho Interesado */
+table th:nth-child(2) {
+    width: 25%;
+}
+
+/* Oportunidad (Empresa) */
+table th:nth-child(3) {
+    width: 25%;
+}
+
+/* Mensaje */
+table th:nth-child(4) {
+    width: 25%;
+}
+
+/* Estado */
+table th:nth-child(5) {
+    width: 15%;
+}
+
+/* Acciones */
+table th:nth-child(6) {
+    width: 10%;
+}
+
+/* --- Estilos de los Badges de Estado --- */
+.badge {
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.badge-pending {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #ffedd5;
+}
+
+.badge-accepted {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #dcfce7;
+}
+
+.badge-rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fee2e2;
+}
+
+/* --- Estilos de botones de acción específicos --- */
+.btn-confirm {
+    color: #15803d;
+}
+
+.btn-confirm:hover {
+    background: #f0fdf4;
+    color: #166534;
+    border-color: #dcfce7;
+}
+
+.btn-cancel {
+    color: #b91c1c;
+}
+
+.btn-cancel:hover {
+    background: #fef2f2;
+    color: #991b1b;
+    border-color: #fee2e2;
+}
+
+/* Celda de oportunidad */
+.opportunity-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.company-name {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Ajuste para que el mensaje no rompa la tabla */
+.text-muted {
+    display: block;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,172 @@
+<div class="users-page">
+  <div class="page-header">
+    <div class="title-section">
+      <h1>Gestión de Solicitudes</h1>
+      <p class="subtitle">Administra las peticiones de contacto y acceso a ofertas</p>
+    </div>
+    <div class="header-actions">
+      <button (click)="fetchSolicitudes()" class="btn-reload" [class.spinning]="isLoading()" title="Recargar">
+        <span class="material-symbols-outlined">refresh</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <app-search-input 
+      [placeholder]="'Buscar por email, mensaje o empresa...'"
+      (onSearch)="updateSearch($event)">
+    </app-search-input>
+
+    <div class="specific-filters">
+        <div class="filter-group">
+            <span class="material-symbols-outlined filter-icon">filter_list</span>
+            <select (change)="updateStatusFilter($event)" class="filter-select">
+                <option value="ALL">Todos los Estados</option>
+                <option value="PENDING">Pendientes</option>
+                <option value="ACCEPTED">Aceptadas</option>
+                <option value="REJECTED">Rechazadas</option>
+            </select>
+        </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="state-container">
+      <div class="loader"></div>
+      <p>Cargando solicitudes...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-container error">
+      <span class="material-symbols-outlined">error</span>
+      <p>{{ error() }}</p>
+      <button (click)="fetchSolicitudes()" class="btn-retry">Reintentar</button>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th class="checkbox-col">
+                <button (click)="toggleAll()" class="btn-checkbox">
+                    <span class="material-symbols-outlined">
+                        {{ isAllSelected() ? 'check_box' : 'check_box_outline_blank' }}
+                    </span>
+                </button>
+            </th>
+            <th>Interesado</th>
+            <th>Oportunidad</th>
+            <th>Mensaje</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of paginatedSolicitudes(); track s._id) {
+            <tr [class.row-selected]="selectedIds().has(s._id!)">
+              <td class="checkbox-col">
+                  <button (click)="toggleSelection(s._id!)" class="btn-checkbox">
+                      <span class="material-symbols-outlined">
+                          {{ selectedIds().has(s._id!) ? 'check_box' : 'check_box_outline_blank' }}
+                      </span>
+                  </button>
+              </td>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar-mini">
+                    {{ s.interestedUser?.nombre?.charAt(0) || 'U' }}
+                  </div>
+                  <div class="user-info-text">
+                    <span class="name">{{ s.interestedUser?.nombre }}</span>
+                    <span class="bio-snippet">{{ s.interestedUser?.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="opportunity-cell">
+                  <span class="company-name">{{ s.opportunity?.companyDescription | slice:0:30 }}...</span>
+                </div>
+              </td>
+              <td class="text-muted">
+                <span [title]="s.message">{{ s.message ? (s.message | slice:0:40) + '...' : 'Sin mensaje' }}</span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="'badge-' + s.status.toLowerCase()">
+                  {{ s.status }}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  @if (s.status === 'PENDING') {
+                    <button (click)="cambiarEstado(s._id!, 'ACCEPTED')" class="btn-icon btn-confirm" title="Aceptar">
+                      <span class="material-symbols-outlined">check_circle</span>
+                    </button>
+                    <button (click)="cambiarEstado(s._id!, 'REJECTED')" class="btn-icon btn-cancel" title="Rechazar">
+                      <span class="material-symbols-outlined">cancel</span>
+                    </button>
+                  } @else {
+                    <span class="text-small text-muted">Completado</span>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6">
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">mail_lock</span>
+                  <p>No se han encontrado solicitudes con estos criterios.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="pagination-footer">
+        <div class="pagination-info">
+          Mostrando
+          <strong>{{ pageStart() }}–{{ pageEnd() }}</strong>
+          de <strong>{{ filteredSolicitudes().length }}</strong> solicitudes
+        </div>
+
+        <div class="pagination-controls">
+          <div class="page-size-selector">
+            <span>Filas:</span>
+            <select (change)="pageSize.set(+$any($event.target).value); currentPage.set(1)" class="page-size-select">
+              <option value="5"  [selected]="pageSize() === 5">5</option>
+              <option value="10" [selected]="pageSize() === 10">10</option>
+              <option value="20" [selected]="pageSize() === 20">20</option>
+            </select>
+          </div>
+
+          <div class="page-buttons">
+            <button (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1" class="btn-page btn-page-arrow">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+
+            <button class="btn-page active">{{ currentPage() }}</button>
+
+            <button (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()" class="btn-page btn-page-arrow">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (someSelected()) {
+    <div class="bulk-actions-overlay">
+        <div class="bulk-actions-bar">
+            <div class="selection-info">
+                <span class="count">{{ selectedIds().size }}</span> seleccionadas
+            </div>
+            <div class="bulk-buttons">
+                <button (click)="clearSelection()" class="btn-bulk-cancel">
+                    <span class="material-symbols-outlined">close</span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+  }
+</div>
