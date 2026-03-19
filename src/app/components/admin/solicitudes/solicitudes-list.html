@@ -232,14 +232,18 @@
             </div>
 
             <div class="bulk-buttons">
-                <button class="btn-bulk-delete" title="Borrar selección">
-                    <span class="material-symbols-outlined">delete</span>
-                </button>
-                <button (click)="clearSelection()" class="btn-bulk-cancel">
-                    <span class="material-symbols-outlined">close</span>
-                    Cancelar
-                </button>
-            </div>
+            <button 
+                (click)="eliminarSeleccionados()" 
+                class="btn-bulk-delete" 
+                title="Borrar selección">
+                <span class="material-symbols-outlined">delete</span>
+            </button>
+            
+            <button (click)="clearSelection()" class="btn-bulk-cancel">
+                <span class="material-symbols-outlined">close</span>
+                Cancelar
+            </button>
+        </div>
         </div>
     </div>
   }

@@ -230,4 +230,32 @@ export class SolicitudesComponent implements OnInit {
   clearSelection(): void {
     this.selectedIds.set(new Set());
   }
+
+  eliminarSeleccionados() {
+    const idsParaBorrar = Array.from(this.selectedIds()); // Obtenemos el array de IDs del Set
+
+    if (idsParaBorrar.length === 0) return;
+
+    if (confirm(`¿Estás seguro de que quieres eliminar ${idsParaBorrar.length} solicitudes?`)) {
+      // Llamamos al servicio (asegúrate de que tu servicio tenga el método deleteMultiple)
+      this.solicitudService.deleteMultiple(idsParaBorrar).subscribe({
+        next: () => {
+          // 1. Quitamos los elementos de la tabla localmente (Reactividad con Signals)
+          this.solicitudes.update(list => 
+            list.filter(s => !idsParaBorrar.includes(s._id))
+          );
+          
+          // 2. Limpiamos la selección para que el overlay desaparezca
+          this.clearSelection();
+          
+          console.log('Solicitudes borradas con éxito');
+        },
+        error: (err) => {
+          alert('Error al borrar las solicitudes');
+          console.error(err);
+        }
+      });
+    }
+  }
+
 }

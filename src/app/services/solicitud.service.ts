@@ -27,4 +27,10 @@ export class SolicitudService {
     return this.http.post<Solicitud>(this.API_URL, data);
   }
 
+  // solicitudService.ts
+  deleteMultiple(ids: string[]) {
+  // Enviamos los IDs en el cuerpo de la petición
+  return this.http.post(`${this.API_URL}/delete-multiple`, { ids });
+}
+
 }
