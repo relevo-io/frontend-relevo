@@ -124,15 +124,15 @@
               <td>
                 <div class="user-cell">
                   <div class="avatar-mini" style="background-color: #0047FF; color: white;">
-                    {{ s.interestedUser?.email?.charAt(0) | uppercase }}
+                    {{ s.interestedUser.email.charAt(0) | uppercase }}
                   </div>
                   <div class="user-info-text">
-                    <span class="name">{{ s.interestedUser?.email || 'Usuario' }}</span>
+                    <span class="name">{{ s.interestedUser.email || 'Usuario' }}</span>
                   </div>
                 </div>
               </td>
               <td>
-                <span style="font-weight: 500;">{{ s.opportunity?.companyDescription }}</span>
+                <span style="font-weight: 500;">{{ s.opportunity.companyDescription }}</span>
               </td>
               <td class="text-muted">
                 @if (s.message && s.message.length > 40) {
