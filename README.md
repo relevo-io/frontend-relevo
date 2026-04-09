@@ -1,124 +1,58 @@
-# MiniSpa
+# Relevo Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+Este es el frontend de **Relevo**, un Marketplace de adquisición y sucesión de empresas. Construido con **Angular 21**, enfocado en una experiencia de usuario premium, seguridad robusta y una arquitectura escalable.
 
-## Structure
+## 🚀 Tecnologías Principales
 
-```
-src/
-├── environments/
-│   └── environment.ts
-│
-└── app/
-    ├── app.ts
-    ├── app.spec.ts
-    ├── app.config.ts
-    ├── app.config.server.ts
-    ├── app.html
-    ├── app.css
-    ├── app.routes.ts
-    ├── app.routes.server.ts
-    │
-    ├── models/
-    │   ├── organizacion.model.ts
-    │   └── usuario.model.ts
-    │
-    ├── services/
-    │   ├── organizacion.service.ts
-    │   ├── organizacion.spec.ts
-    │   ├── usuario.service.ts
-    │   └── usuario.spec.ts
-    │
-    ├── organizacion-list/
-    │   ├── organizacion-list.ts
-    │   ├── organizacion-list.html
-    │   ├── organizacion-list.css
-    │   └── organizacion-list.spec.ts
-    │
-    ├── usuario-list/
-    │   ├── usuario-list.ts
-    │   ├── usuario-list.html
-    │   └── usuario-list.css
-    │
-    └── confirm-dialog/
-        ├── organizacion-list.ts
-        ├── organizacion-list.html
-        ├── organizacion-list.css
-        └── organizacion-list.spec.ts
-```
+*   **Angular 21**: Uso de **Signals** para la gestión de estado reactivo.
+*   **Vanilla CSS**: Diseño custom premium sin dependencias de frameworks de utilidades.
+*   **JWT Auth**: Sistema de autenticación completo con Guards y Roles.
+*   **Aesthetics**: Glassmorphism, tipografías modernas (Manrope/Inter) y micro-animaciones.
+
+## 📂 Organización del Proyecto
+
+Siguiendo las mejores prácticas de Angular, el proyecto se divide en tres pilares fundamentales dentro de `src/app`:
+
+### 1. `core/` (El cerebro)
+Contiene todo lo que es global y único en la aplicación.
+*   **`guards/`**: Porteros de rutas (`authGuard`, `adminGuard`).
+*   **`interceptors/`**: Lógica de red (añadir JWT a las peticiones).
+*   **`models/`**: Definiciones de interfaces (Usuario, Oferta, Auth).
+*   **`services/`**: Lógica de negocio y comunicación con el Backend.
+*   **`layout/`**: Estructuras globales (Navbar, Footer, Layouts).
+
+### 2. `pages/` (Las vistas)
+Organizado por "mundos" o contextos de usuario:
+*   **`landing/`**: Página principal de alto impacto para marketing.
+*   **`auth/`**: Flujos de Login y Registro.
+*   **`admin/`**: Panel de control privado para la gestión de la plataforma.
+*   **`public/`**: Marketplace, listado de ofertas y perfiles públicos.
+
+### 3. `shared/` (Piezas reutilizables)
+Componentes que se usan en múltiples sitios (botones custom, diálogos, estados de carga).
 
 ---
 
-## Development server
+## 🛠️ Desarrollo
 
-To start a local development server, run:
-
+### Servidor de Desarrollo
+Para levantar el proyecto localmente:
 ```bash
 ng serve
 ```
+La aplicación estará disponible en `http://localhost:4200`.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/admin`. The application will automatically reload whenever you modify any of the source files.
+### Comandos Útiles
+*   **Build**: `ng build` (Genera la carpeta `dist/` optimizada).
+*   **Test**: `ng test` (Ejecuta las pruebas unitarias con Vitest).
+*   **Lint**: `ng lint` (Asegura la calidad del código).
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🔐 Seguridad y Roles
+La aplicación distingue entre tres roles principales:
+1.  **ADMIN**: Acceso total al Backoffice.
+2.  **OWNER**: Usuarios que quieren vender su negocio.
+3.  **INTERESTED**: Usuarios que buscan comprar oportunidades.
 
-```bash
-ng generate component component-name
-```
-
-To generate a new interface (models), run:
-
-```bash
-ng generate interface interface-name
-```
-
-To generate a new service, run:
-
-```bash
-ng generate service service-name
-```
-
-To generate a new pipe, run:
-
-```bash
-ng generate pipe pipe-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Los **Guards** aseguran que un usuario no pueda saltar de un contexto a otro sin los permisos adecuados.
