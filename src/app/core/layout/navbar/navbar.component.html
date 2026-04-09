@@ -1,0 +1,24 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/" class="logo">Relevo</a>
+    </div>
+
+    <div class="navbar-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Marketplace</a>
+      <a routerLink="/owners">For Owners</a>
+      <a routerLink="/buyers">For Buyers</a>
+      <a routerLink="/guide">Succession Guide</a>
+    </div>
+
+    <div class="navbar-actions">
+      @if (authService.isLoggedIn()) {
+        <a routerLink="/ofertas" class="btn-text">Dashboard</a>
+        <button (click)="authService.logout()" class="btn-logout">Cerrar Sesión</button>
+      } @else {
+        <button routerLink="/login" class="btn-text">Sign In</button>
+        <button (click)="loginRapido()" class="btn-primary">Get Started</button>
+      }
+    </div>
+  </div>
+</nav>

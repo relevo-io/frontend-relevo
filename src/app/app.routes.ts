@@ -1,19 +1,24 @@
 import { Routes } from '@angular/router';
-import { Login } from './components/usuarios/login/login.component';
-import { OfertaListComponent } from './components/ofertas/oferta-list/oferta-list.component';
-import { OfertaDetalle } from './components/ofertas/oferta-detalle/oferta-detalle.component';
-import { UsuariosListComponent } from './components/usuarios/usuarios-list/usuarios-list.component';
-import { PerfilComponent } from './components/usuarios/perfil/perfil.component';
+import { PublicLayoutComponent } from './core/layout/public-layout/public-layout.component';
+import { AdminLayoutComponent } from './pages/admin/admin-layout/admin-layout.component';
 
-// Layouts
-import { PublicLayoutComponent } from './components/shared/public-layout/public-layout.component';
-import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
+// --- GUARDS ---
+import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
+
+// --- PAGES ---
+import { Home as LandingComponent } from './pages/landing/home.component';
+import { Login as LoginComponent } from './pages/auth/login/login.component';
+import { OfertaListComponent } from './pages/public/ofertas/oferta-list/oferta-list.component';
+import { OfertaDetalle } from './pages/public/ofertas/oferta-detalle/oferta-detalle.component';
+import { UsuariosListComponent } from './pages/public/usuarios/usuarios-list.component';
+import { PerfilComponent } from './pages/public/perfil/perfil.component';
 
 // Admin Pages
-import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
-import { Usuarios as AdminUsuariosComponent } from './components/admin/usuarios/usuarios';
-import { Ofertas as OfertasAdminComponent } from './components/admin/ofertas/ofertas';
-import { SolicitudesComponent } from './components/admin/solicitudes/solicitudes-list';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { Usuarios as AdminUsuariosComponent } from './pages/admin/usuarios/usuarios';
+import { Ofertas as OfertasAdminComponent } from './pages/admin/ofertas/ofertas';
+import { SolicitudesComponent } from './pages/admin/solicitudes/solicitudes-list';
 
 export const routes: Routes = [
   // --- MUNDO PÚBLICO ---
@@ -21,20 +26,24 @@ export const routes: Routes = [
     path: '',
     component: PublicLayoutComponent,
     children: [
-      { path: '', component: DashboardComponent },
-      { path: 'login', component: Login },
+      { path: '', component: LandingComponent },
+      { path: 'login', component: LoginComponent },
       { path: 'ofertas', component: OfertaListComponent },
       { path: 'ofertas/:id', component: OfertaDetalle },
       { path: 'usuarios', component: UsuariosListComponent },
-      { path: 'perfil', component: PerfilComponent },
-      
+      { 
+        path: 'perfil', 
+        component: PerfilComponent,
+        canActivate: [authGuard] // Protegemos el perfil
+      },
     ]
   },
 
-  // --- MUNDO ADMIN ---
+  // --- MUNDO ADMIN (Totalmente protegido) ---
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [authGuard, adminGuard], // Doble capa: logueado + admin
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'usuarios', component: AdminUsuariosComponent },
@@ -47,3 +56,4 @@ export const routes: Routes = [
   // Fallback
   { path: '**', redirectTo: '' }
 ];
+

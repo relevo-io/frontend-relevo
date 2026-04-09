@@ -1,0 +1,48 @@
+<div class="contenedor-usuarios">
+  <div class="header-section">
+    <h2> Comunidad Relevo</h2>
+    <p>Conoce a los usuarios registrados en la plataforma.</p>
+  </div>
+
+  <div class="grid-usuarios">
+    @for (user of usuarios; track $index) {
+      <div class="usuario-card">
+        
+        <div class="card-header">
+          <div class="info-principal">
+            <h3>{{ user.fullName }}</h3>
+            <div class="roles-container" style="display: flex; gap: 4px; flex-wrap: wrap;">
+              @for (role of (user.roles || []); track role) {
+                <span class="role-badge" [ngClass]="role.toLowerCase()">
+                  {{ role === 'INTERESTED' ? 'Interesado' : role === 'OWNER' ? 'Propietario' : role === 'ADMIN' ? 'Admin' : (role | titlecase) }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <div class="info-item">
+            <span class="icono">📧</span>
+            <span>{{ user.email }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="icono">📍</span>
+            <span>{{ user.location || 'Ubicación no especificada' }}</span>
+          </div>
+          
+          <div class="info-item">
+            <span class="icono">💼</span>
+            <span>{{ user.professionalBackground || 'Experiencia no especificada' }}</span>
+          </div>
+        </div>
+
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>Buscando usuarios en la base de datos...</p>
+      </div>
+    }
+  </div>
+</div>

@@ -1,6 +1,104 @@
-/* You can add global styles to this file, and also import other style files */
-body {
+/* =========================================
+   DESIGN TOKENS (Variables)
+   Based on the Landing Page theme
+   ========================================= */
+:root {
+  /* Colors */
+  --primary: #031632;
+  --on-primary: #ffffff;
+  --primary-container: #1a2b48;
+  --on-primary-container: #8293b5;
+  
+  --secondary: #006d3d;
+  --on-secondary: #ffffff;
+  --secondary-container: #97f3b5;
+  --on-secondary-container: #047240;
+  
+  --surface: #f9f9f9;
+  --on-surface: #1a1c1c;
+  --surface-variant: #e2e2e2;
+  --on-surface-variant: #44474d;
+  
+  --outline: #75777e;
+  --outline-variant: #c5c6ce;
+  
+  --surface-container-low: #f3f3f3;
+  --surface-container: #eeeeee;
+  --surface-container-high: #e8e8e8;
+  --surface-container-highest: #e2e2e2;
+  --surface-container-lowest: #ffffff;
+
+  /* Typography */
+  --font-headline: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Spacing & Borders */
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+  
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-ambient: 0 20px 40px -15px rgba(3, 22, 50, 0.04);
+}
+
+/* =========================================
+   BASE STYLES
+   ========================================= */
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--surface);
+  color: var(--on-surface);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* Utils */
+.container-full {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
