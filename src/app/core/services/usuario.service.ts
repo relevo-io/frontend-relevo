@@ -17,6 +17,11 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(this.apiUrl);
   }
 
+  // 1b. Obtener un usuario por ID
+  getUsuario(id: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
+  }
+
   // 2. Eliminar un usuario por su ID de MongoDB
   deleteUsuario(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);

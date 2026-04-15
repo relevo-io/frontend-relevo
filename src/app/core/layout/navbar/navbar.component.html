@@ -15,6 +15,8 @@
       @if (authService.isLoggedIn()) {
         @if (authService.isAdmin()) {
           <a routerLink="/admin/dashboard" class="btn-text">Dashboard</a>
+        } @else {
+          <a routerLink="/perfil" class="btn-text">Mi Perfil</a>
         }
         <button (click)="authService.logout()" class="btn-logout">Cerrar Sesión</button>
       } @else {
