@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthResponse } from '../models/auth.model';
+import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
 import { Usuario } from '../models/usuario.model';
 
 @Injectable({
@@ -39,7 +39,7 @@ export class AuthService {
     }
   }
 
-  login(credentials: { email: string, password: string }): Observable<AuthResponse> {
+  login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(res => {
         if (res.accessToken && res.usuario && isPlatformBrowser(this.platformId)) {
@@ -54,7 +54,7 @@ export class AuthService {
 
 
 
-  register(userData: Partial<Usuario>): Observable<Usuario> {
+  register(userData: RegisterRequest): Observable<Usuario> {
     return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, userData);
   }
 

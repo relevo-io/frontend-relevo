@@ -9,6 +9,7 @@ import { adminGuard } from './core/guards/admin.guard';
 // --- PAGES ---
 import { Home as LandingComponent } from './pages/landing/home.component';
 import { Login as LoginComponent } from './pages/auth/login/login.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
 import { OfertaListComponent } from './pages/public/ofertas/oferta-list/oferta-list.component';
 import { OfertaDetalle } from './pages/public/ofertas/oferta-detalle/oferta-detalle.component';
 import { UsuariosListComponent } from './pages/public/usuarios/usuarios-list.component';
@@ -28,6 +29,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: LandingComponent },
       { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
       { path: 'ofertas', component: OfertaListComponent },
       { path: 'ofertas/:id', component: OfertaDetalle },
       { path: 'usuarios', component: UsuariosListComponent },

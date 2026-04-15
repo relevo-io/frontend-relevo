@@ -1,5 +1,15 @@
 import { Usuario } from './usuario.model';
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest extends LoginRequest {
+  fullName: string;
+  roles: ('OWNER' | 'INTERESTED')[];
+}
+
 export interface AuthResponse {
   message: string;
   accessToken: string;

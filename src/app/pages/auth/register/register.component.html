@@ -1,0 +1,113 @@
+<main class="login-page">
+  <!-- Panel Visual (Izquierdo) -->
+  <section class="auth-visual">
+    <div class="visual-content">
+      <div class="logo">Relevo</div>
+      <div class="visual-text">
+        <h2>El primer paso hacia tu próximo gran proyecto.</h2>
+        <p>Tanto si buscas preservar tu legado como si buscas nuevas oportunidades, este es el lugar correcto.</p>
+      </div>
+      
+      <div class="visual-badge">
+        <div class="badge-icon">
+          <span class="material-symbols-outlined icon-fill">rocket_launch</span>
+        </div>
+        <div class="badge-info">
+          <p class="badge-title">Plataforma Segura</p>
+          <p class="badge-sub">Garantizamos privacidad total.</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Decoración -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </section>
+
+  <!-- Panel Formulario (Derecho) -->
+  <section class="auth-form-panel">
+    <div class="form-container">
+      <div class="form-header">
+        <h1>Crea tu cuenta</h1>
+        <p>Únete a la mayor red de sucesión empresarial</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+        @if (errorMessage()) {
+          <div class="error-alert">
+            <span class="material-symbols-outlined">error</span>
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="fullName">Nombre y Apellidos</label>
+          <input 
+            type="text" 
+            id="fullName" 
+            formControlName="fullName" 
+            placeholder="Juan Pérez"
+            [class.invalid]="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email profesional</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="email@ejemplo.com"
+            [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña (Mín. 6 carácteres)</label>
+          <div class="password-input">
+            <input 
+              [type]="showPassword() ? 'text' : 'password'" 
+              id="password" 
+              formControlName="password" 
+              placeholder="••••••••"
+              [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+            >
+            <button type="button" class="toggle-pass" (click)="togglePassword()">
+              <span class="material-symbols-outlined">
+                {{ showPassword() ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group role-selector">
+          <label>¿Qué quieres hacer en Relevo?</label>
+          <div class="role-options">
+            <label class="role-card" [class.selected]="registerForm.get('role')?.value === 'INTERESTED'">
+              <input type="radio" formControlName="role" value="INTERESTED">
+              <span class="role-title">Soy Comprador</span>
+              <span class="role-desc">Busco negocios para adquirir.</span>
+            </label>
+            <label class="role-card" [class.selected]="registerForm.get('role')?.value === 'OWNER'">
+              <input type="radio" formControlName="role" value="OWNER">
+              <span class="role-title">Soy Propietario</span>
+              <span class="role-desc">Quiero traspasar mi negocio.</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="registerForm.invalid || isLoading()">
+          @if (isLoading()) {
+            <span class="spinner"></span> Registrando...
+          } @else {
+            Crear cuenta gratuita
+          }
+        </button>
+      </form>
+
+      <div class="form-footer">
+        <p>¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
+      </div>
+    </div>
+  </section>
+</main>

@@ -41,13 +41,8 @@ export class Login {
     this.authService.login({ email: email!, password: password! }).subscribe({
       next: (res) => {
         this.isLoading.set(false);
-        // Redirigir según el rol
-        if (this.authService.isAdmin()) {
-          this.router.navigate(['/admin']);
-        } else {
-          // Si no es admin (ej: INTERESTED o OWNER), va a la Landing pública
-          this.router.navigate(['/']);
-        }
+
+        this.router.navigate(['/']);
       },
 
       error: (err) => {

@@ -13,7 +13,9 @@
 
     <div class="navbar-actions">
       @if (authService.isLoggedIn()) {
-        <a routerLink="/ofertas" class="btn-text">Dashboard</a>
+        @if (authService.isAdmin()) {
+          <a routerLink="/admin/dashboard" class="btn-text">Dashboard</a>
+        }
         <button (click)="authService.logout()" class="btn-logout">Cerrar Sesión</button>
       } @else {
         <button routerLink="/login" class="btn-text">Sign In</button>
