@@ -2,59 +2,54 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { NotificationService } from '../services/notification.service';
+import { ApiErrorResponse } from '../models/error.model';
 
 /**
  * Interceptor funcional moderno para capturar errores HTTP de forma global.
- * Actúa antes de que el error llegue al componente.
+ * Actúa antes de que el error llegue al componente y procesa el ApiErrorResponse estándar.
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const ns = inject(NotificationService);
 
   return next(req).pipe(
-    catchError((error: HttpErrorResponse) => {
-      let errorMessage = 'Ha ocurrido un error inesperado';
+    catchError((response: HttpErrorResponse) => {
+      // El backend ahora devuelve de forma estricta un ApiErrorResponse
+      const apiError = response.error as ApiErrorResponse;
+      let errorMessage = 'Ha ocurrido un error inesperado de red';
 
-      // 1. Filtrar por tipos de código (Contrato Backend)
-      switch (error.status) {
-        case 400:
+      if (apiError && apiError.message) {
+        errorMessage = apiError.message;
+      }
+
+      // 1. Filtrar por tipo de error
+      switch (apiError?.errorCode || 'UNKNOWN_ERROR') {
+        case 'VALIDATION_ERROR':
           // Dejamos pasar errores de validación para manejo local en el form
+          // O mandamos un log genérico
+          ns.error('Por favor, revisa los datos del formulario');
           break;
 
-        case 401:
-          errorMessage = 'Sesión expirada. Por favor, inicia sesión de nuevo.';
-          ns.error(errorMessage);
-          // Aquí podríamos redirigir a /login
+        case 'UNAUTHORIZED':
+          // El auth interceptor ya maneja el logout real, aquí solo avisamos
+          if (!req.url.includes('/auth/refresh')) {
+             ns.error('Sesión terminada o credenciales incorrectas');
+          }
           break;
 
-        case 403:
-          errorMessage = 'No tienes permisos para realizar esta acción.';
-          ns.error(errorMessage);
-          break;
-
-        case 404:
-          errorMessage = 'El recurso solicitado no existe.';
-          ns.error(errorMessage);
-          break;
-
-        case 409:
-          // Dejamos pasar conflictos (email duplicado) para el formulario
-          break;
-
-        case 500:
-          errorMessage = 'Error interno en el servidor. Inténtalo más tarde.';
+        case 'FORBIDDEN':
+        case 'NOT_FOUND':
+        case 'INTERNAL_ERROR':
           ns.error(errorMessage);
           break;
 
         default:
-          if (error.error?.message) {
-            errorMessage = error.error.message;
-          }
+          // Fallback final
           ns.error(errorMessage);
           break;
       }
 
-      // Re-enviamos el error para que el componente también pueda reaccionar si quiere
-      return throwError(() => error);
+      // Re-enviamos el error completo (ahora el componente podrá leer el apiError.details)
+      return throwError(() => response);
     })
   );
 };
