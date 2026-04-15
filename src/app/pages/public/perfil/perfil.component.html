@@ -1,35 +1,86 @@
-<div class="perfil-layout">
-  <h2>Mi Perfil - Gestión de Solicitudes</h2>
-
-  <section class="card">
-    <h3>Nueva Solicitud</h3>
-    <div class="form-group">
-      <textarea 
-        [(ngModel)]="mensajeNuevo" 
-        placeholder="Escribe aquí tu mensaje de interés..."
-        class="input-texto">
-      </textarea>
-      <button (click)="enviarSolicitud()" class="btn-crear">
-        Enviar Solicitud
-      </button>
-    </div>
-  </section>
-
-  <section class="lista-solicitudes">
-    <h3>Mis Solicitudes Enviadas</h3>
-    
-    @for (s of misSolicitudes; track s._id) {
-      <div class="item-solicitud">
-        <div class="contenido">
-          <p><strong>Mensaje:</strong> {{ s.message }}</p>
-          <small>ID Oferta: {{ s.oferta }}</small>
-        </div>
-        <div class="acciones">
-          <span class="badge" [attr.data-status]="s.status">{{ s.status }}</span>
-        </div>
+<main class="perfil-page">
+  <div class="perfil-container">
+    @if (isLoading()) {
+      <div class="loading-state">
+        <span class="spinner"></span> Cargando perfil...
       </div>
-    } @empty {
-      <p class="aviso">No tienes solicitudes creadas todavía.</p>
+    } @else if (usuario(); as user) {
+      
+      <!-- Targeta de Capçalera (Nom, Correu i Tags de Rol) -->
+      <div class="profile-card basic-info">
+        <div class="avatar-circle">
+          {{ user.fullName.charAt(0).toUpperCase() }}
+        </div>
+        <div class="info-content">
+          <h1>{{ user.fullName }}</h1>
+          <p class="email">{{ user.email }}</p>
+          <div class="badges">
+            @for (rol of user.roles; track rol) {
+              <span class="badge" [class.owner]="rol === 'OWNER'" [class.interested]="rol === 'INTERESTED'">{{ rol }}</span>
+            }
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Targeta d'Informació Addicional i Edició de Formularis -->
+      <div class="profile-card details-info">
+        <div class="card-header">
+          <h2>Mi Información Profesional</h2>
+          <button class="btn-edit" (click)="toggleEdit()">
+            <span class="material-symbols-outlined">{{ isEditing() ? 'close' : 'edit' }}</span>
+            {{ isEditing() ? 'Cancelar' : 'Editar Info' }}
+          </button>
+        </div>
+
+        @if (isEditing()) {
+          <form [formGroup]="profileForm" (ngSubmit)="guardarPerfil()" class="edit-form">
+            
+            <div class="form-group">
+              <label>Ubicación / Región</label>
+              <input type="text" formControlName="location" placeholder="Ej: Barcelona, Catalunya, o Remoto">
+            </div>
+
+            <div class="form-group">
+              <label>Biografía Breve</label>
+              <textarea formControlName="bio" placeholder="Cuéntanos quién eres en 2 líneas..." rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Experiencia Profesional y Capacidades</label>
+              <textarea formControlName="professionalBackground" placeholder="Describe tu vocación emprendedora. Capital disponible, sectores conocidos, años de experiencia..." rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="btn-save" [disabled]="isSaving()">
+              {{ isSaving() ? 'Guardando...' : 'Guardar Cambios' }}
+            </button>
+          </form>
+
+        } @else {
+          <!-- Mode Lectura -->
+          <div class="view-mode">
+            <div class="data-group">
+              <h3>Ubicación / Región</h3>
+              <p>{{ user.location || 'No especificada. Te animamos a añadirla.' }}</p>
+            </div>
+            
+            <div class="data-group">
+              <h3>Biografía Breve</h3>
+              <p>{{ user.bio || 'Aún no has escrito tu biografía.' }}</p>
+            </div>
+
+            <div class="data-group">
+              <h3>Experiencia Profesional y Capacidades (Público)</h3>
+              <p>{{ user.professionalBackground || 'Añadir tu currículum inversor mejorará enormemente tus posibilidades de trato.' }}</p>
+            </div>
+          </div>
+        }
+      </div>
+
+    } @else {
+      <div class="error-state">
+        <span class="material-symbols-outlined">error</span> No se pudo cargar tu perfil.
+      </div>
     }
-  </section>
-</div>
+  </div>
+</main>

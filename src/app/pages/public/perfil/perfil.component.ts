@@ -1,70 +1,79 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { SolicitudAccesoService } from '../../../core/services/solicitud-acceso.service';
-import { SolicitudAcceso } from '../../../core/models/comunicacion.model';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UsuarioService } from '../../../core/services/usuario.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { Usuario } from '../../../core/models/usuario.model';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
-  private solicitudService = inject(SolicitudAccesoService);
+  private usuarioService = inject(UsuarioService);
+  public authService = inject(AuthService);
+  private fb = inject(FormBuilder);
 
-  // --- DATOS DEL FORMULARIO ---
-  mensajeNuevo: string = '';
-  
-  // IDs DE PRUEBA (Sustituye por IDs reales de tu MongoDB de 24 caracteres)
-  miUserId = "65f1a2b3c4d5e6f7a8b9c034";
-  ofertaIdTest = "65f1a2b3c4d5e6f7a8b9c012";
-  ownerIdTest = "65f1a2b3c4d5e6f7a8b9c056";
+  usuario = signal<Usuario | null>(null);
+  isEditing = signal(false);
+  isLoading = signal(true);
+  isSaving = signal(false);
 
-  // --- LISTA DE SOLICITUDES ---
-  misSolicitudes: SolicitudAcceso[] = [];
+  profileForm: FormGroup = this.fb.group({
+    location: [''],
+    bio: [''],
+    professionalBackground: ['']
+  });
 
   ngOnInit() {
-    this.cargarSolicitudes();
+    this.cargarMiPerfil();
   }
 
-  // L - LEER (Read)
-  cargarSolicitudes() {
-    this.solicitudService.getSolicitudesPorUsuario(this.miUserId).subscribe({
-      next: (data) => this.misSolicitudes = data,
-      error: (err) => console.error('Error al cargar lista:', err)
+  cargarMiPerfil() {
+    const cachedUser = this.authService.currentUser();
+    if (!cachedUser?._id) return;
+
+    this.usuarioService.getUsuario(cachedUser._id).subscribe({
+      next: (data) => {
+        this.usuario.set(data);
+        this.profileForm.patchValue({
+          location: data.location || '',
+          bio: data.bio || '',
+          professionalBackground: data.professionalBackground || ''
+        });
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      }
     });
   }
 
-  // C - CREAR (Create)
-  enviarSolicitud() {
-  if (!this.mensajeNuevo.trim()) return;
+  toggleEdit() {
+    this.isEditing.update(v => !v);
+  }
 
-  // Vamos a usar un ID de oferta real que YA CARGÓ en tu lista
-  // Esto asegura que la oferta existe.
-  const data: SolicitudAcceso = {
-    oferta: this.misSolicitudes[0]?.oferta || "65f1a2b3c4d5e6f7a8b9c012", 
-    interestedUser: "65f1a2b3c4d5e6f7a8b9c034", 
-    owner: "65f1a2b3c4d5e6f7a8b9c056", 
-    message: this.mensajeNuevo,
-    status: 'PENDING'
-  };
+  guardarPerfil() {
+    const current = this.usuario();
+    if (!current?._id) return;
 
-  console.log("Datos enviados al servidor:", data);
+    this.isSaving.set(true);
+    const formVals = this.profileForm.value;
 
-  this.solicitudService.crearSolicitud(data).subscribe({
-    next: (res) => {
-      this.mensajeNuevo = '';
-      this.cargarSolicitudes();
-      alert('¡Éxito!');
-    },
-    error: (err) => {
-      // AQUÍ ESTÁ EL TRUCO: Accedemos al mensaje de error del backend
-      console.error("Detalle técnico del error:", err.error); 
-      alert("Error del Servidor: " + JSON.stringify(err.error));
-    }
-  });
-}
+    this.usuarioService.updateUsuario(current._id, formVals).subscribe({
+      next: (actualizado) => {
+        this.usuario.set(actualizado);
+        this.isEditing.set(false);
+        this.isSaving.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.isSaving.set(false);
+      }
+    });
+  }
 
 }
