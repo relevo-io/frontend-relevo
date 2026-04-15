@@ -29,7 +29,7 @@ export class AuthService {
   private checkToken() {
     const token = localStorage.getItem('access_token');
     const userData = localStorage.getItem('user_data');
-    
+
     if (token && userData) {
       try {
         this.currentUser.set(JSON.parse(userData));
@@ -56,6 +56,16 @@ export class AuthService {
 
   register(userData: RegisterRequest): Observable<Usuario> {
     return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, userData);
+  }
+
+  refreshToken(): Observable<{ accessToken: string }> {
+    return this.http.post<{ accessToken: string }>(`${this.apiUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
+      tap(res => {
+        if (res.accessToken && isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('access_token', res.accessToken);
+        }
+      })
+    );
   }
 
   logout() {

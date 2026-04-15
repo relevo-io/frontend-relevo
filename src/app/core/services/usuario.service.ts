@@ -8,9 +8,9 @@ import { Usuario } from '../models/usuario.model';
 })
 export class UsuarioService {
   private http = inject(HttpClient);
-  
+
   // Confirma que esta sea la ruta correcta de tu backend para los usuarios
-  private apiUrl = 'http://localhost:4000/api/usuarios'; 
+  private apiUrl = 'http://localhost:4000/api/usuarios';
 
   // 1. Obtener la lista completa
   getUsuarios(): Observable<Usuario[]> {
