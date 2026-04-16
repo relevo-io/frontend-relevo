@@ -1,5 +1,4 @@
-import { inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { map, catchError, of } from 'rxjs';
@@ -11,22 +10,21 @@ import { map, catchError, of } from 'rxjs';
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const platformId = inject(PLATFORM_ID);
 
-  // Si estamos en el servidor (SSR), dejamos pasar porque allí no hay localStorage.
-  // El navegador hará su propia pasada una vez cargue y ahí sí echará al usuario si toca.
-  if (!isPlatformBrowser(platformId)) {
+  // SSR: En el servidor no hay localStorage, dejamos pasar para que el navegador re-evalúe
+  if (!authService.isBrowser) {
     return true;
   }
 
+  // Paso 1: Si ya tiene sesión activa en memoria (Signal) → Adelante
   if (authService.isLoggedIn()) {
     return true;
   }
 
-  // Si no está logueado en memoria, comprobar si tiene token (Caché borrada)
-  const token = localStorage.getItem('access_token');
+  // Paso 2: Si no hay Signal pero sí hay token (ej: F5 o caché borrada)
+  // getToken() ya maneja internamente el isPlatformBrowser + localStorage
+  const token = authService.getToken();
   if (token) {
-    // Congelamos la pantalla hasta que el Backend nos conteste quién es
     return authService.fetchProfile().pipe(
       map(() => true),
       catchError(() => {
@@ -36,8 +34,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     );
   }
 
-  // Redirigir al login si no está autenticado en absoluto
+  // Paso 3: Sin sesión ni token → Fuera
   router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
   return false;
 };
-

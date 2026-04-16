@@ -19,6 +19,7 @@ export class AuthService {
   public currentUser = signal<Usuario | null>(null);
   public isLoggedIn = computed(() => !!this.currentUser());
   public isAdmin = computed(() => this.currentUser()?.roles?.includes('ADMIN') ?? false);
+  public isBrowser = isPlatformBrowser(this.platformId);
 
   constructor() {
     afterNextRender(() => {
