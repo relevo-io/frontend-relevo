@@ -4,14 +4,14 @@
 
 .auth-visual {
   display: none; background: radial-gradient(circle at top left, var(--primary) 0%, var(--primary-container) 100%);
-  position: relative; overflow: hidden; padding: 3rem; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden; padding: 3rem 3rem 1.5rem 3rem; flex-direction: column; justify-content: space-between;
 }
 @media (min-width: 768px) { .auth-visual { display: flex; width: 41.6%; } }
 
-.visual-content { position: relative; z-index: 10; }
+.visual-content { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; }
 .logo { color: white; font-family: var(--font-headline); font-weight: 800; font-size: 1.5rem; margin-bottom: 3rem; }
 .visual-text h2 { color: white; font-size: 2.5rem; margin-bottom: 1.5rem; }
-.visual-text p { color: var(--primary-fixed-dim); font-size: 1.125rem; max-width: 400px; line-height: 1.6; }
+.visual-text p { color: rgba(255, 255, 255, 0.85); font-size: 1.125rem; max-width: 400px; line-height: 1.6; }
 
 .visual-badge {
   display: flex; align-items: center; gap: 1.5rem; background: rgba(255, 255, 255, 0.1);
@@ -20,7 +20,7 @@
 .badge-icon { width: 48px; height: 48px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
 .icon-fill { font-variation-settings: 'FILL' 1; }
 .badge-title { font-weight: 700; color: white; margin-bottom: 0.25rem; }
-.badge-sub { font-size: 0.875rem; color: var(--on-primary-container); }
+.badge-sub { font-size: 0.875rem; color: rgba(255, 255, 255, 0.75); }
 
 .blob { position: absolute; border-radius: 50%; filter: blur(100px); }
 .blob-1 { width: 400px; height: 400px; background: rgba(0, 109, 61, 0.15); bottom: -100px; right: -100px; }
@@ -56,9 +56,11 @@
 }
 .role-card:hover { border-color: var(--primary-fixed-dim); }
 .role-card.selected { border-color: var(--primary); background-color: var(--primary-container); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+.role-card.selected .role-title { color: white; }
+.role-card.selected .role-desc { color: rgba(255, 255, 255, 0.85); }
 .role-card input[type="radio"] { display: none; }
-.role-title { font-weight: 700; font-size: 1rem; color: var(--on-surface); }
-.role-desc { font-size: 0.75rem; color: var(--on-surface-variant); line-height: 1.2; }
+.role-title { font-weight: 700; font-size: 1rem; color: var(--on-surface); transition: color 0.2s ease; }
+.role-desc { font-size: 0.75rem; color: var(--on-surface-variant); line-height: 1.2; transition: color 0.2s ease; }
 
 .btn-submit {
   background-color: var(--secondary); color: white; padding: 1.25rem; border-radius: var(--radius-full);

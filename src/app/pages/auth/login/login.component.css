@@ -18,7 +18,7 @@
   background: radial-gradient(circle at top left, var(--primary) 0%, var(--primary-container) 100%);
   position: relative;
   overflow: hidden;
-  padding: 3rem;
+  padding: 3rem 3rem 1.5rem 3rem; /* Menos padding abajo para bajar el badge */
   flex-direction: column;
   justify-content: space-between;
 }
@@ -33,6 +33,9 @@
 .visual-content {
   position: relative;
   z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
@@ -51,7 +54,7 @@
 }
 
 .visual-text p {
-  color: var(--primary-fixed-dim);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 1.125rem;
   max-width: 400px;
   line-height: 1.6;
@@ -83,7 +86,7 @@
 .icon-fill { font-variation-settings: 'FILL' 1; }
 
 .badge-title { font-weight: 700; color: white; margin-bottom: 0.25rem; }
-.badge-sub { font-size: 0.875rem; color: var(--on-primary-container); }
+.badge-sub { font-size: 0.875rem; color: rgba(255, 255, 255, 0.75); }
 
 /* Decoración Blobs */
 .blob {
