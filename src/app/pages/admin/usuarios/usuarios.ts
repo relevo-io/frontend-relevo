@@ -5,7 +5,7 @@ import { Usuario } from '../../../core/models/usuario.model';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 import { UsuarioFormComponent } from './usuario-form/usuario-form.component';
 import { NotificationService } from '../../../core/services/notification.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -17,6 +17,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class Usuarios implements OnInit {
   private usuarioService = inject(UsuarioService);
   private ns = inject(NotificationService);
+  private confirmService = inject(ConfirmDialogService);
   
   // Base data signals
   usuarios = signal<Usuario[]>([]);
@@ -141,16 +142,17 @@ export class Usuarios implements OnInit {
   }
 
   // --- ACCIÓN FUNCIONAL: Eliminar Usuario ---
-  confirmarEliminar(id: string): void {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+  async confirmarEliminar(id: string): Promise<void> {
+    const confirmed = await this.confirmService.ask('Eliminar Usuario', '¿Estás seguro de que quieres eliminar este usuario? Esta acción es irreversible.', 'Eliminar');
+    if (confirmed) {
       this.usuarioService.deleteUsuario(id).subscribe({
         next: () => {
           this.usuarios.update(actuales => actuales.filter(u => u._id !== id));
-          this.ns.success('user deleted');
+          this.ns.success('Usuario eliminado');
         },
         error: (err) => {
           console.error('Error al intentar eliminar el usuario:', err);
-          this.ns.error('could not delete user');
+          this.ns.error('Error al eliminar usuario');
         }
       });
     }
@@ -213,9 +215,11 @@ export class Usuarios implements OnInit {
     });
   }
 
-  borrarSeleccionados(): void {
+  async borrarSeleccionados(): Promise<void> {
     const ids = Array.from(this.selectedIds());
-    if (confirm(`¿Estás seguro de que quieres eliminar ${ids.length} usuarios?`)) {
+    const confirmed = await this.confirmService.ask('Borrado Múltiple', `¿Estás seguro de que quieres eliminar ${ids.length} usuarios? Se perderán todos sus datos permanentemente.`, 'Eliminar Todo');
+    
+    if (confirmed) {
       this.isLoading.set(true); // Bloquear UI
 
       this.usuarioService.deleteUsuariosBatch(ids).subscribe({
@@ -226,11 +230,11 @@ export class Usuarios implements OnInit {
           );
           this.clearSelection();
           this.isLoading.set(false);
-          this.ns.success(`${res.deletedCount} deleted`);
+          this.ns.success(`${res.deletedCount} usuarios eliminados`);
         },
         error: (err) => {
           console.error('Error en el borrado masivo:', err);
-          alert('No se pudo completar el borrado masivo.');
+          this.ns.error('No se pudo completar el borrado masivo.');
           this.isLoading.set(false);
         }
       });

@@ -67,10 +67,13 @@
         </select>
       </div>
 
-      <!-- Antigüedad -->
-      <div class="field-group">
-        <label for="businessAgeYears">Años de Antigüedad</label>
-        <input id="businessAgeYears" type="number" formControlName="businessAgeYears" min="0">
+      <!-- Creación -->
+      <div class="field-group" [class.invalid]="f['creationYear']?.invalid && f['creationYear']?.touched">
+        <label for="creationYear">Año de creación</label>
+        <input id="creationYear" type="number" formControlName="creationYear" placeholder="Ej. 2015">
+        @if (f['creationYear']?.invalid && f['creationYear']?.touched) {
+          <span class="field-error">Ingresa un año válido.</span>
+        }
       </div>
       
       <!-- Propietario -->

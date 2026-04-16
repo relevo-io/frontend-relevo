@@ -1,8 +1,55 @@
-.dashboard-placeholder {
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+.dashboard-page {
+  animation: fadeIn 0.4s ease-out;
 }
-h1 { margin-bottom: 1rem; color: #1e293b; }
-p { color: #64748b; }
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  color: var(--admin-text-muted);
+  font-size: 1rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.welcome-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 500px;
+}
+
+.icon-glow {
+  font-size: 32px;
+  color: var(--secondary);
+  text-shadow: 0 0 15px rgba(0, 109, 61, 0.4);
+}
+
+.welcome-card h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.welcome-card p {
+  color: var(--admin-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

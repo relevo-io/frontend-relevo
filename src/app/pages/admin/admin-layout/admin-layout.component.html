@@ -1,45 +1,54 @@
-<div class="admin-container">
+<div class="admin-container admin-theme">
   <!-- Sidebar Navigation -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="logo-box">
-        <span class="material-symbols-outlined">business_center</span>
+        <span class="material-symbols-outlined">analytics</span>
       </div>
       <div class="brand">
         <h1>RELEVO</h1>
-        <p>Admin Console</p>
+        <p>Consola de Administración</p>
       </div>
     </div>
 
     <nav class="nav-links">
       <a routerLink="dashboard" routerLinkActive="active" class="nav-item">
-        <span class="material-symbols-outlined">dashboard</span>
+        <span class="material-symbols-outlined icon-fill">grid_view</span>
         <span>Dashboard</span>
       </a>
       <a routerLink="usuarios" routerLinkActive="active" class="nav-item">
-        <span class="material-symbols-outlined">group</span>
+        <span class="material-symbols-outlined icon-fill">badge</span>
         <span>Usuarios</span>
       </a>
       <a routerLink="ofertas" routerLinkActive="active" class="nav-item">
-        <span class="material-symbols-outlined">rocket_launch</span>
+        <span class="material-symbols-outlined icon-fill">rocket_launch</span>
         <span>Ofertas</span>
       </a>
       <a routerLink="solicitudes" routerLinkActive="active" class="nav-item">
-        <span class="material-symbols-outlined">assignment_ind</span>
-        <span>Access Requests</span>
+        <span class="material-symbols-outlined icon-fill">notifications_active</span>
+        <span>Solicitudes</span>
       </a>
+      
+      <div class="nav-divider">Configuración</div>
+      
       <a routerLink="settings" routerLinkActive="active" class="nav-item">
-        <span class="material-symbols-outlined">settings</span>
-        <span>Settings</span>
+        <span class="material-symbols-outlined icon-fill">settings</span>
+        <span>Ajustes</span>
+      </a>
+      
+      <div class="nav-divider">Sistema</div>
+
+      <a routerLink="/" class="nav-item">
+        <span class="material-symbols-outlined icon-fill">public</span>
+        <span>Web Principal</span>
       </a>
     </nav>
 
     <div class="sidebar-footer">
-      <div class="system-status">
-        <p class="status-label">System Status</p>
+      <div class="system-status tech-card">
         <div class="status-indicator">
           <span class="dot green"></span>
-          <span class="status-text">All systems operational</span>
+          <span class="status-text">Sistemas operativos</span>
         </div>
       </div>
     </div>
@@ -47,18 +56,28 @@
 
   <!-- Main Area -->
   <div class="main-wrapper">
-    <!-- Simplified Top Header (User liked the Clean Look) -->
+    <!-- Clean Top Header -->
     <header class="admin-header">
-      <div class="header-breadcrumb">
-        <h2>Backoffice</h2>
+      <div class="header-left">
+        <span class="breadcrumb-root">Admin</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Backoffice</span>
       </div>
       
-      <div class="header-user">
-        <div class="user-info">
-          <p class="user-name">Admin User</p>
-          <p class="user-role">Super Admin</p>
+      <div class="header-right">
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <div class="user-profile">
+          <div class="user-info">
+            <span class="name">Admin User</span>
+            <span class="role">Super Admin</span>
+          </div>
+          <div class="avatar"></div>
         </div>
-        <div class="avatar"></div>
       </div>
     </header>
 

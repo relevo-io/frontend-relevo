@@ -4,7 +4,7 @@ export interface Oferta {
   sector: string;
   revenueRange?: string;
   owner: string;
-  businessAgeYears?: number;
+  creationYear?: number;
   employeeRange?: string;
   companyDescription: string;
   publishedAt?: string;

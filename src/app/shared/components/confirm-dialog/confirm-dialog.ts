@@ -1,25 +1,14 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 
 @Component({
+  selector: 'app-confirm-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [CommonModule],
   templateUrl: './confirm-dialog.html',
   styleUrls: ['./confirm-dialog.css']
 })
 export class ConfirmDialogComponent {
-  name: string;
-
-  constructor(private dialogRef: MatDialogRef<ConfirmDialogComponent>, @Inject(MAT_DIALOG_DATA) name: string) {
-    this.name = name;
-  }
-
-  onYes() {
-    this.dialogRef.close(true);
-  }
-
-  onNo() {
-    this.dialogRef.close(false);
-  }
+  confirmService = inject(ConfirmDialogService);
 }

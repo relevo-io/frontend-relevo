@@ -1,129 +1,121 @@
-<div class="users-page">
-  <div class="page-header">
-    <div class="title-section">
-      <h1>Gestión de Solicitudes</h1>
-      <p class="subtitle">Administra las peticiones de contacto y acceso a ofertas</p>
+<div class="users-page animate-in">
+  <header class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Gestión de Solicitudes</h1>
+      <p class="page-subtitle">Administra las peticiones de contacto y acceso a las oportunidades.</p>
     </div>
     <div class="header-actions">
-      <button (click)="fetchSolicitudes()" class="btn-reload" [class.spinning]="isLoading()" title="Recargar">
+      <button (click)="fetchSolicitudes()" class="icon-btn" [class.spinning]="isLoading()" title="Recargar">
         <span class="material-symbols-outlined">refresh</span>
       </button>
     </div>
-  </div>
+  </header>
 
-  <div class="filters-bar" style="margin-bottom: 24px; padding: 20px; background: white; border-radius: 8px; border: 1px solid #eaeaea;">
-    <h3 style="margin-top: 0; margin-bottom: 16px; font-size: 1.1rem; color: #333;">Añadir Nueva Solicitud</h3>
-    <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" style="display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
-      
-      <div style="flex: 1; min-width: 200px;">
-        <label for="interestedUser" style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: #666;">Usuario Interesado</label>
-        <select 
-          id="interestedUser" 
-          formControlName="interestedUserId"
-          class="filter-select"
-          style="width: 100%; border: 1px solid #ccc; padding: 8px 12px; border-radius: 4px;">
-          <option value="" disabled selected>Selecciona un usuario...</option>
-          @for (user of usuarios(); track user._id) {
-            <option [value]="user._id">{{ user.email }}</option>
-          }
-        </select>
-      </div>
+  <!-- Create Request Form (Technical Style) -->
+  <div class="control-panel tech-card form-section" style="margin-bottom: 32px; display: block;">
+    <h3 class="form-title">Nueva Solicitud Interna</h3>
+    <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="tech-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="interestedUser">Usuario Interesado</label>
+          <select id="interestedUser" formControlName="interestedUserId" class="tech-select-full">
+            <option value="" disabled selected>Selecciona un usuario...</option>
+            @for (user of usuarios(); track user._id) {
+              <option [value]="user._id">{{ user.email }}</option>
+            }
+          </select>
+        </div>
 
-      <div style="flex: 1; min-width: 200px;">
-        <label for="opportunity" style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: #666;">Oferta (Empresa)</label>
-        <select 
-          id="opportunity" 
-          formControlName="opportunityId"
-          class="filter-select"
-          style="width: 100%; border: 1px solid #ccc; padding: 8px 12px; border-radius: 4px;">
-          <option value="" disabled selected>Selecciona una oferta...</option>
-          @for (oferta of ofertas(); track oferta._id) {
-            <option [value]="oferta._id">{{ oferta.companyDescription }}</option>
-          }
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="opportunity">Oferta (Empresa)</label>
+          <select id="opportunity" formControlName="opportunityId" class="tech-select-full">
+            <option value="" disabled selected>Selecciona una oferta...</option>
+            @for (oferta of ofertas(); track oferta._id) {
+              <option [value]="oferta._id">{{ oferta.companyDescription }}</option>
+            }
+          </select>
+        </div>
 
-      <div style="flex: 2; min-width: 250px;">
-        <label for="message" style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: #666;">Mensaje</label>
-        <input 
-          type="text" 
-          id="message" 
-          formControlName="message" 
-          placeholder="Escribe un mensaje de interés..."
-          style="width: 100%; border: 1px solid #ccc; padding: 8px 12px; border-radius: 4px; outline: none;">
-      </div>
+        <div class="form-group span-2">
+          <label for="message">Mensaje</label>
+          <input type="text" id="message" formControlName="message" placeholder="Escribe un mensaje de interés..." class="tech-input">
+        </div>
 
-      <div>
-        <button type="submit" class="btn-primary" [disabled]="solicitudForm.invalid" style="height: 38px;">
-          <span class="material-symbols-outlined">send</span>
-          Enviar
-        </button>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary-tech" [disabled]="solicitudForm.invalid">
+            <span class="material-symbols-outlined">send</span>
+            Enviar
+          </button>
+        </div>
       </div>
     </form>
   </div>
 
-  <div class="filters-bar">
-    <app-search-input 
-      [placeholder]="'Buscar por email, mensaje o empresa...'"
-      (onSearch)="updateSearch($event)">
-    </app-search-input>
+  <!-- Filters Bar -->
+  <div class="control-panel tech-card">
+    <div class="search-section">
+      <app-search-input 
+        [placeholder]="'Buscar por email, mensaje o empresa...'"
+        (onSearch)="updateSearch($event)">
+      </app-search-input>
+    </div>
 
-    <div class="specific-filters">
-        <div class="filter-group">
-            <span class="material-symbols-outlined filter-icon">filter_alt</span>
-            <select (change)="updateEstadoFilter($event)" class="filter-select">
-                <option value="ALL">Todos los Estados</option>
-                <option value="PENDING">Pendientes</option>
-                <option value="ACCEPTED">Aceptadas</option>
-                <option value="REJECTED">Rechazadas</option>
-            </select>
-        </div>
+    <div class="filter-section">
+      <div class="filter-group">
+        <span class="material-symbols-outlined">filter_list</span>
+        <select (change)="updateEstadoFilter($event)" class="tech-select">
+          <option value="ALL">Todos los Estados</option>
+          <option value="PENDING">Pendientes</option>
+          <option value="ACCEPTED">Aceptadas</option>
+          <option value="REJECTED">Rechazadas</option>
+        </select>
+      </div>
     </div>
   </div>
 
   @if (isLoading()) {
-    <div class="state-container">
-      <div class="loader"></div>
-      <p>Cargando solicitudes...</p>
+    <div class="state-container tech-card">
+      <div class="loader-tech"></div>
+      <p>Sincronizando solicitudes...</p>
     </div>
   } @else if (error()) {
-    <div class="state-container error">
-      <span class="material-symbols-outlined">error</span>
+    <div class="state-container error tech-card">
+      <span class="material-symbols-outlined">warning</span>
       <p>{{ error() }}</p>
-      <button (click)="fetchSolicitudes()" class="btn-retry">Reintentar</button>
+      <button (click)="fetchSolicitudes()" class="btn-secondary-tech">Reintentar</button>
     </div>
   } @else {
-    <div class="table-container">
-      <table>
+    <div class="tech-table-container">
+      <table class="tech-table">
         <thead>
           <tr>
             <th class="checkbox-col">
-                <button (click)="toggleAll()" class="btn-checkbox">
-                    <span class="material-symbols-outlined">
-                        {{ isAllSelected() ? 'check_box' : 'check_box_outline_blank' }}
-                    </span>
-                </button>
+              <button (click)="toggleAll()" class="btn-checkbox">
+                <span class="material-symbols-outlined">
+                  {{ isAllSelected() ? 'check_box' : 'check_box_outline_blank' }}
+                </span>
+              </button>
             </th>
             <th>Interesado</th>
             <th>Oportunidad</th>
             <th>Mensaje</th>
             <th>Estado</th>
-            <th style="text-align: right;">Acciones</th>
+            <th class="text-right">Acciones</th>
           </tr>
         </thead>
         <tbody>
           @for (s of paginatedSolicitudes(); track s._id) {
             <tr [class.row-selected]="selectedIds().has(s._id!)">
               <td class="checkbox-col">
-                  <button (click)="toggleSelection(s._id!)" class="btn-checkbox">
-                      <span class="material-symbols-outlined">
-                          {{ selectedIds().has(s._id!) ? 'check_box' : 'check_box_outline_blank' }}
-                      </span>
-                  </button>
+                <button (click)="toggleSelection(s._id!)" class="btn-checkbox">
+                  <span class="material-symbols-outlined">
+                    {{ selectedIds().has(s._id!) ? 'check_box' : 'check_box_outline_blank' }}
+                  </span>
+                </button>
               </td>
               <td>
                 <div class="user-cell">
-                  <div class="avatar-mini" style="background-color: #0047FF; color: white;">
+                  <div class="avatar-mini">
                     {{ s.interestedUser.email.charAt(0) | uppercase }}
                   </div>
                   <div class="user-info-text">
@@ -132,37 +124,37 @@
                 </div>
               </td>
               <td>
-                <span style="font-weight: 500;">{{ s.opportunity.companyDescription }}</span>
+                <span class="tech-data">{{ s.opportunity.companyDescription }}</span>
               </td>
-              <td class="text-muted">
-                @if (s.message && s.message.length > 40) {
-                    {{ (s.message | slice:0:40) }}...
-                  } @else {
-                    {{ s.message || 'Sin mensaje' }}
-                  }
-              </td>
-              <td>
-                @if (s.status === 'PENDING') {
-                  <span style="background: #FFF4E5; color: #B35F00; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">PENDING</span>
-                } @else if (s.status === 'ACCEPTED') {
-                  <span style="background: #E6F4EA; color: #1E8E3E; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">ACCEPTED</span>
-                } @else if (s.status === 'REJECTED') {
-                  <span style="background: #FCE8E6; color: #D93025; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">REJECTED</span>
+              <td class="email-cell">
+                @if (s.message && s.message.length > 50) {
+                  {{ (s.message | slice:0:50) }}...
                 } @else {
-                  <span>{{ s.status }}</span>
+                  {{ s.message || 'Sin mensaje' }}
                 }
               </td>
               <td>
-                <div class="action-buttons" style="justify-content: flex-end;">
+                @if (s.status === 'PENDING') {
+                  <span class="tech-badge bg-pending">PENDIENTE</span>
+                } @else if (s.status === 'ACCEPTED') {
+                  <span class="tech-badge bg-owner">ACEPTADA</span>
+                } @else if (s.status === 'REJECTED') {
+                  <span class="tech-badge bg-reject">RECHAZADA</span>
+                } @else {
+                  <span class="tech-badge">{{ s.status }}</span>
+                }
+              </td>
+              <td class="text-right">
+                <div class="action-group">
                   @if (s.status === 'PENDING') {
-                    <button (click)="actualizarEstado(s._id!, 'ACCEPTED')" class="btn-icon" title="Aceptar" style="color: #1E8E3E;">
+                    <button (click)="actualizarEstado(s._id!, 'ACCEPTED')" class="action-btn success" title="Aceptar">
                       <span class="material-symbols-outlined">check_circle</span>
                     </button>
-                    <button (click)="actualizarEstado(s._id!, 'REJECTED')" class="btn-icon" title="Rechazar" style="color: #D93025;">
+                    <button (click)="actualizarEstado(s._id!, 'REJECTED')" class="action-btn delete" title="Rechazar">
                       <span class="material-symbols-outlined">cancel</span>
                     </button>
                   } @else {
-                    <span style="font-size: 0.85rem; color: #666;">Completado</span>
+                    <span class="status-marker">Completada</span>
                   }
                 </div>
               </td>
@@ -171,8 +163,8 @@
             <tr>
               <td colspan="6">
                 <div class="empty-state">
-                  <span class="material-symbols-outlined">search_off</span>
-                  <p>No se han encontrado solicitudes que coincidan con la búsqueda.</p>
+                  <span class="material-symbols-outlined">database_off</span>
+                  <p>No se han encontrado solicitudes coincidentes.</p>
                 </div>
               </td>
             </tr>
@@ -180,71 +172,55 @@
         </tbody>
       </table>
 
-      <div class="pagination-footer">
+      <!-- Tech Pagination -->
+      <footer class="tech-pagination">
         <div class="pagination-info">
-          Mostrando
-          <strong>{{ pageStart() }}–{{ pageEnd() }}</strong>
-          de <strong>{{ filteredSolicitudes().length }}</strong> solicitudes
+          Mostrando <strong>{{ pageStart() }}–{{ pageEnd() }}</strong> de <strong>{{ filteredSolicitudes().length }}</strong> solicitudes
         </div>
 
         <div class="pagination-controls">
-          <div class="page-size-selector">
+          <div class="select-wrapper">
             <span>Filas:</span>
-            <select (change)="pageSize.set(+$any($event.target).value); currentPage.set(1)" class="page-size-select">
+            <select (change)="pageSize.set(+$any($event.target).value); currentPage.set(1)" class="tech-select-mini">
               <option value="5"  [selected]="pageSize() === 5">5</option>
               <option value="10" [selected]="pageSize() === 10">10</option>
               <option value="20" [selected]="pageSize() === 20">20</option>
             </select>
           </div>
 
-          <div class="page-buttons">
-            <button (click)="prevPage()" [disabled]="currentPage() === 1" class="btn-page btn-page-arrow">
+          <div class="page-nav">
+            <button (click)="prevPage()" [disabled]="currentPage() === 1" class="nav-btn">
               <span class="material-symbols-outlined">chevron_left</span>
             </button>
-
-            @for (page of pageNumbers(); track $index) {
-              @if (page === -1) {
-                <span class="page-ellipsis">…</span>
-              } @else {
-                <button
-                  (click)="goToPage(page)"
-                  class="btn-page"
-                  [class.active]="currentPage() === page">
-                  {{ page }}
-                </button>
-              }
-            }
-
-            <button (click)="nextPage()" [disabled]="currentPage() === totalPages()" class="btn-page btn-page-arrow">
+            <span class="page-indicator">{{ currentPage() }} / {{ totalPages() }}</span>
+            <button (click)="nextPage()" [disabled]="currentPage() === totalPages()" class="nav-btn">
               <span class="material-symbols-outlined">chevron_right</span>
             </button>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   }
 
   @if (someSelected()) {
     <div class="bulk-actions-overlay">
-        <div class="bulk-actions-bar">
-            <div class="selection-info">
-                <span class="count">{{ selectedIds().size }}</span>
-            </div>
+      <div class="bulk-actions-bar">
+        <div class="selection-info">
+          <span class="count">{{ selectedIds().size }}</span>
+          <span>seleccionados</span>
+        </div>
 
-            <div class="bulk-buttons">
-            <button 
-                (click)="eliminarSeleccionados()" 
-                class="btn-bulk-delete" 
-                title="Borrar selección">
-                <span class="material-symbols-outlined">delete</span>
-            </button>
-            
-            <button (click)="clearSelection()" class="btn-bulk-cancel">
-                <span class="material-symbols-outlined">close</span>
-                Cancelar
-            </button>
+        <div class="bulk-buttons">
+          <button (click)="eliminarSeleccionados()" class="btn-bulk-delete" title="Borrar selección">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+          <div class="bulk-divider"></div>
+          <button (click)="clearSelection()" class="btn-bulk-cancel">
+            <span class="material-symbols-outlined">close</span>
+            Cancelar
+          </button>
         </div>
-        </div>
+      </div>
     </div>
   }
 </div>

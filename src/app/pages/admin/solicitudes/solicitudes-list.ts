@@ -7,6 +7,8 @@ import { Solicitud } from '../../../core/models/solicitud.model';
 import { Oferta } from '../../../core/models/oferta.model';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 import { UsuarioService } from '../../../core/services/usuario.service';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-solicitudes-admin',
@@ -20,6 +22,8 @@ export class SolicitudesComponent implements OnInit {
   private ofertaService = inject(OfertaService);
   private fb = inject(FormBuilder);
   private usuarioService = inject(UsuarioService);
+  private ns = inject(NotificationService);
+  private confirmService = inject(ConfirmDialogService);
 
   // Formulario de nueva solicitud
   solicitudForm: FormGroup = this.fb.group({
@@ -65,9 +69,9 @@ export class SolicitudesComponent implements OnInit {
       const empresa = s.opportunity?.companyDescription?.toLowerCase() || '';
       const mensaje = s.message?.toLowerCase() || '';
       const email = s.interestedUser?.email?.toLowerCase() || '';
-      
-      const matchesSearch = !query || 
-        empresa.includes(query) || 
+
+      const matchesSearch = !query ||
+        empresa.includes(query) ||
         mensaje.includes(query) ||
         email.includes(query);
 
@@ -148,16 +152,17 @@ export class SolicitudesComponent implements OnInit {
   onSubmit(): void {
     if (this.solicitudForm.valid) {
       const formData = this.solicitudForm.value;
-      
+
       this.solicitudService.crearSolicitud(formData).subscribe({
         next: (nuevaSolicitud) => {
           // Añadimos al principio de la lista actualizando el signal
           this.solicitudes.update(actuales => [nuevaSolicitud, ...actuales]);
           this.solicitudForm.reset({ opportunityId: '', message: '' });
+          this.ns.success('Solicitud enviada exitosamente');
         },
         error: (err) => {
           console.error('Error al crear solicitud:', err);
-          alert('Hubo un error al enviar la solicitud');
+          this.ns.error('Hubo un error al enviar la solicitud');
         }
       });
     }
@@ -167,13 +172,14 @@ export class SolicitudesComponent implements OnInit {
   actualizarEstado(id: string, nuevoEstado: string): void {
     this.solicitudService.updateStatus(id, nuevoEstado).subscribe({
       next: (solicitudActualizada) => {
-        this.solicitudes.update(actuales => 
+        this.solicitudes.update(actuales =>
           actuales.map(s => s._id === id ? { ...s, status: nuevoEstado } : s)
         );
+        this.ns.success(`Solicitud marcada como ${nuevoEstado}`);
       },
       error: (err) => {
         console.error('Error actualizando estado:', err);
-        alert('No se pudo actualizar el estado.');
+        this.ns.error('No se pudo actualizar el estado.');
       }
     });
   }
@@ -235,31 +241,31 @@ export class SolicitudesComponent implements OnInit {
     this.selectedIds.set(new Set());
   }
 
-  eliminarSeleccionados() {
+  async eliminarSeleccionados(): Promise<void> {
     const idsParaBorrar = Array.from(this.selectedIds()); // Obtenemos el array de IDs del Set
 
     if (idsParaBorrar.length === 0) return;
 
-    if (confirm(`¿Estás seguro de que quieres eliminar ${idsParaBorrar.length} solicitudes?`)) {
-      // Llamamos al servicio (asegúrate de que tu servicio tenga el método deleteMultiple)
+    const confirmed = await this.confirmService.ask('Eliminar Solicitudes', `¿Estás seguro de que quieres eliminar ${idsParaBorrar.length} solicitudes?`, 'Eliminar Todo');
+
+    if (confirmed) {
       this.solicitudService.deleteMultiple(idsParaBorrar).subscribe({
         next: () => {
-          // 1. Quitamos los elementos de la tabla localmente (Reactividad con Signals)
-          this.solicitudes.update(list => 
+          // 1. Quitamos los elementos de la tabla localmente
+          this.solicitudes.update(list =>
             list.filter(s => !idsParaBorrar.includes(s._id))
           );
-          
+
           // 2. Limpiamos la selección para que el overlay desaparezca
           this.clearSelection();
-          
-          console.log('Solicitudes borradas con éxito');
+
+          this.ns.success(`${idsParaBorrar.length} solicitudes eliminadas`);
         },
         error: (err) => {
-          alert('Error al borrar las solicitudes');
+          this.ns.error('Error al borrar las solicitudes');
           console.error(err);
         }
       });
     }
   }
-
 }

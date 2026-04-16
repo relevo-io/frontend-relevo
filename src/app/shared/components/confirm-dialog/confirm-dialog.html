@@ -1,10 +1,30 @@
-<h2 mat-dialog-title>Delete</h2>
+@if (confirmService.isOpen()) {
+<div class="confirm-overlay animate-in" (click)="confirmService.respond(false)">
+  <div class="confirm-modal" (click)="$event.stopPropagation()">
+    <!-- Icon -->
+    <div class="confirm-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
 
-<mat-dialog-content>
-  Are you sure you want to delete {{ name }}?
-</mat-dialog-content>
+    @if (confirmService.config(); as config) {
+      <div class="confirm-content">
+        <h3 class="confirm-title">{{ config.title }}</h3>
+        <p class="confirm-message">{{ config.message }}</p>
+      </div>
 
-<mat-dialog-actions>
-  <button class="btn" (click)="onNo()">No</button>
-  <button class="btn" color="warn" (click)="onYes()">Yes</button>
-</mat-dialog-actions>
+      <div class="confirm-actions">
+        <button class="confirm-btn btn-cancel" (click)="confirmService.respond(false)">
+          {{ config.cancelText }}
+        </button>
+        <button class="confirm-btn btn-danger" (click)="confirmService.respond(true)">
+          {{ config.confirmText }}
+        </button>
+      </div>
+    }
+  </div>
+</div>
+}

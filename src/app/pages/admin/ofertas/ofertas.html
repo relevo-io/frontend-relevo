@@ -1,82 +1,83 @@
-<div class="users-page">
-  <div class="page-header">
-    <div class="title-section">
-      <h1>Gestión de Ofertas</h1>
-      <p class="subtitle">Administra las ofertas de relevo generacional en la plataforma</p>
+<div class="users-page animate-in">
+  <header class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Gestión de Ofertas</h1>
+      <p class="page-subtitle">Administra las listas de ofertas y oportunidades de relevo generacional.</p>
     </div>
     <div class="header-actions">
-      <button (click)="fetchOfertas()" class="btn-reload" [class.spinning]="isLoading()" title="Recargar">
+      <button (click)="fetchOfertas()" class="icon-btn" [class.spinning]="isLoading()" title="Recargar">
         <span class="material-symbols-outlined">refresh</span>
       </button>
-      <button (click)="abrirCrear()" class="btn-primary">
+      <button (click)="abrirCrear()" class="btn-primary-tech">
         <span class="material-symbols-outlined">add_business</span>
         Añadir Oferta
       </button>
     </div>
-  </div>
+  </header>
 
-  <!-- Barra de Filtros -->
-  <div class="filters-bar">
-    <app-search-input 
-      [placeholder]="'Buscar por sector, región o descripción...'"
-      (onSearch)="updateSearch($event)">
-    </app-search-input>
+  <!-- Control Bar -->
+  <div class="control-panel tech-card">
+    <div class="search-section">
+      <app-search-input 
+        [placeholder]="'Buscar por sector, región o descripción...'"
+        (onSearch)="updateSearch($event)">
+      </app-search-input>
+    </div>
 
-    <div class="specific-filters">
-        <div class="filter-group">
-            <span class="material-symbols-outlined filter-icon">filter_alt</span>
-            <select (change)="updateSector($event)" class="filter-select">
-                <option value="ALL">Todos los Sectores</option>
-                <option value="Hostelería">Hostelería</option>
-                <option value="Servicios">Servicios</option>
-                <option value="Industria">Industria</option>
-                <option value="Comercio">Comercio</option>
-            </select>
-        </div>
+    <div class="filter-section">
+      <div class="filter-group">
+        <span class="material-symbols-outlined">filter_list</span>
+        <select (change)="updateSector($event)" class="tech-select">
+          <option value="ALL">Todos los Sectores</option>
+          <option value="Hostelería">Hostelería</option>
+          <option value="Servicios">Servicios</option>
+          <option value="Industria">Industria</option>
+          <option value="Comercio">Comercio</option>
+        </select>
+      </div>
     </div>
   </div>
 
-  <!-- Loading State -->
+  <!-- Table Section -->
   @if (isLoading()) {
-    <div class="state-container">
-      <div class="loader"></div>
-      <p>Cargando ofertas...</p>
+    <div class="state-container tech-card">
+      <div class="loader-tech"></div>
+      <p>Sincronizando datos...</p>
     </div>
   } @else if (error()) {
-    <div class="state-container error">
-      <span class="material-symbols-outlined">error</span>
+    <div class="state-container error tech-card">
+      <span class="material-symbols-outlined">warning</span>
       <p>{{ error() }}</p>
-      <button (click)="fetchOfertas()" class="btn-retry">Reintentar</button>
+      <button (click)="fetchOfertas()" class="btn-secondary-tech">Reintentar</button>
     </div>
   } @else {
-    <!-- Table Section -->
-    <div class="table-container">
-      <table>
+    <div class="tech-table-container">
+      <table class="tech-table">
         <thead>
           <tr>
             <th class="checkbox-col">
-                <button (click)="toggleAll()" class="btn-checkbox">
-                    <span class="material-symbols-outlined">
-                        {{ isAllSelected() ? 'check_box' : 'check_box_outline_blank' }}
-                    </span>
-                </button>
+              <button (click)="toggleAll()" class="btn-checkbox">
+                <span class="material-symbols-outlined">
+                  {{ isAllSelected() ? 'check_box' : 'check_box_outline_blank' }}
+                </span>
+              </button>
             </th>
-            <th>Oferta</th>
+            <th>Oferta / Sector</th>
             <th>Ubicación</th>
-            <th>Antigüedad</th>
+            <th>Creación</th>
             <th>Empleados</th>
-            <th>Acciones</th>
+            <th class="text-right">Acciones</th>
           </tr>
         </thead>
         <tbody>
           @for (o of paginatedOfertas(); track o._id) {
             <tr [class.row-selected]="selectedIds().has(o._id!)">
               <td class="checkbox-col">
-                  <button (click)="toggleSelection(o._id!)" class="btn-checkbox">
-                      <span class="material-symbols-outlined">
-                          {{ selectedIds().has(o._id!) ? 'check_box' : 'check_box_outline_blank' }}
-                      </span>
-                  </button>
+                <button (click)="toggleSelection(o._id!)" class="btn-checkbox">
+                  <span class="material-symbols-outlined">
+                    {{ selectedIds().has(o._id!) ? 'check_box' : 'check_box_outline_blank' }}
+                  </span>
+                </button>
               </td>
               <td>
                 <div class="user-cell">
@@ -85,19 +86,26 @@
                   </div>
                   <div class="user-info-text">
                     <span class="name">{{ o.sector }}</span>
-                    <span class="bio-snippet">{{ o.companyDescription | slice:0:40 }}...</span>
+                    <span class="bio-snippet">{{ o.companyDescription | slice:0:50 }}...</span>
                   </div>
                 </div>
               </td>
-              <td class="text-muted">{{ o.region }}</td>
-              <td>{{ o.businessAgeYears }} años</td>
-              <td>{{ o.employeeRange }}</td>
               <td>
-                <div class="action-buttons">
-                  <button (click)="abrirEditar(o)" class="btn-icon" title="Editar">
+                <div class="location-cell">
+                  <span class="material-symbols-outlined">location_on</span>
+                  <span>{{ o.region }}</span>
+                </div>
+              </td>
+              <td class="tech-data">{{ o.creationYear }}</td>
+              <td>
+                <span class="tech-badge bg-interested">{{ o.employeeRange }}</span>
+              </td>
+              <td class="text-right">
+                <div class="action-group">
+                  <button (click)="abrirEditar(o)" class="action-btn" title="Editar">
                     <span class="material-symbols-outlined">edit</span>
                   </button>
-                  <button (click)="confirmarEliminar(o._id!)" class="btn-icon" title="Eliminar">
+                  <button (click)="confirmarEliminar(o._id!)" class="action-btn delete" title="Eliminar">
                     <span class="material-symbols-outlined">delete</span>
                   </button>
                 </div>
@@ -107,8 +115,8 @@
             <tr>
               <td colspan="6">
                 <div class="empty-state">
-                  <span class="material-symbols-outlined">search_off</span>
-                  <p>No se han encontrado ofertas que coincidan con la búsqueda.</p>
+                  <span class="material-symbols-outlined">database_off</span>
+                  <p>No se han encontrado ofertas coincidentes.</p>
                 </div>
               </td>
             </tr>
@@ -116,48 +124,33 @@
         </tbody>
       </table>
 
-      <!-- Pagination Footer -->
-      <div class="pagination-footer">
+      <!-- Tech Pagination -->
+      <footer class="tech-pagination">
         <div class="pagination-info">
-          Mostrando
-          <strong>{{ pageStart() }}–{{ pageEnd() }}</strong>
-          de <strong>{{ filteredOfertas().length }}</strong> ofertas
+          Mostrando <strong>{{ pageStart() }}–{{ pageEnd() }}</strong> de <strong>{{ filteredOfertas().length }}</strong> registros
         </div>
 
         <div class="pagination-controls">
-          <div class="page-size-selector">
+          <div class="select-wrapper">
             <span>Filas:</span>
-            <select (change)="pageSize.set(+$any($event.target).value); currentPage.set(1)" class="page-size-select">
+            <select (change)="pageSize.set(+$any($event.target).value); currentPage.set(1)" class="tech-select-mini">
               <option value="5"  [selected]="pageSize() === 5">5</option>
               <option value="10" [selected]="pageSize() === 10">10</option>
               <option value="20" [selected]="pageSize() === 20">20</option>
             </select>
           </div>
 
-          <div class="page-buttons">
-            <button (click)="prevPage()" [disabled]="currentPage() === 1" class="btn-page btn-page-arrow">
+          <div class="page-nav">
+            <button (click)="prevPage()" [disabled]="currentPage() === 1" class="nav-btn">
               <span class="material-symbols-outlined">chevron_left</span>
             </button>
-
-            @for (page of pageNumbers(); track $index) {
-              @if (page === -1) {
-                <span class="page-ellipsis">…</span>
-              } @else {
-                <button
-                  (click)="goToPage(page)"
-                  class="btn-page"
-                  [class.active]="currentPage() === page">
-                  {{ page }}
-                </button>
-              }
-            }
-
-            <button (click)="nextPage()" [disabled]="currentPage() === totalPages()" class="btn-page btn-page-arrow">
+            <span class="page-indicator">{{ currentPage() }} / {{ totalPages() }}</span>
+            <button (click)="nextPage()" [disabled]="currentPage() === totalPages()" class="nav-btn">
               <span class="material-symbols-outlined">chevron_right</span>
             </button>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   }
 
@@ -167,12 +160,14 @@
         <div class="bulk-actions-bar">
             <div class="selection-info">
                 <span class="count">{{ selectedIds().size }}</span>
+                <span>seleccionados</span>
             </div>
 
             <div class="bulk-buttons">
                 <button (click)="borrarSeleccionados()" class="btn-bulk-delete" title="Borrar selección">
                     <span class="material-symbols-outlined">delete</span>
                 </button>
+                <div class="bulk-divider"></div>
                 <button (click)="clearSelection()" class="btn-bulk-cancel">
                     <span class="material-symbols-outlined">close</span>
                     Cancelar

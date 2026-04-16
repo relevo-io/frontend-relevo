@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OfertaService } from '../../../core/services/oferta.service';
 import { Oferta } from '../../../core/models/oferta.model';
 import { NotificationService } from '../../../core/services/notification.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { SearchInputComponent } from '../../../shared/components/search-input/search-input.component';
 import { OfertaFormComponent } from './oferta-form/oferta-form.component';
 
@@ -15,6 +16,8 @@ import { OfertaFormComponent } from './oferta-form/oferta-form.component';
 })
 export class Ofertas implements OnInit {
   private ofertaService = inject(OfertaService);
+  private ns = inject(NotificationService);
+  private confirmService = inject(ConfirmDialogService);
 
   // Base data signals
   ofertas = signal<Oferta[]>([]);
@@ -118,15 +121,17 @@ export class Ofertas implements OnInit {
     });
   }
 
-  confirmarEliminar(id: string): void {
-    if (confirm('¿Estás seguro de que quieres eliminar esta oferta?')) {
+  async confirmarEliminar(id: string): Promise<void> {
+    const confirmed = await this.confirmService.ask('Eliminar Oferta', '¿Estás seguro de que quieres eliminar esta oferta? Esta acción no se puede deshacer.', 'Eliminar');
+    if (confirmed) {
       this.ofertaService.deleteOferta(id).subscribe({
         next: () => {
           this.ofertas.update(actuales => actuales.filter(o => o._id !== id));
+          this.ns.success('Oferta eliminada');
         },
         error: (err) => {
           console.error('Error deleting offer:', err);
-          alert('No se pudo eliminar la oferta.');
+          this.ns.error('No se pudo eliminar la oferta');
         }
       });
     }
@@ -182,12 +187,15 @@ export class Ofertas implements OnInit {
     });
   }
 
-  borrarSeleccionados(): void {
+  async borrarSeleccionados(): Promise<void> {
     const ids = Array.from(this.selectedIds());
-    if (confirm(`¿Estás seguro de que quieres eliminar ${ids.length} ofertas?`)) {
+    const confirmed = await this.confirmService.ask('Borrado Múltiple', `¿Estás seguro de que quieres eliminar ${ids.length} ofertas?`, 'Eliminar Todo');
+    if (confirmed) {
       // Nota: En una app real haríamos un delete masivo en el backend.
+      // Ya que no lo tenemos integrado nativamente para ofertas, lo hacemos en frontend
       this.ofertas.update(actuales => actuales.filter(o => !this.selectedIds().has(o._id!)));
       this.clearSelection();
+      this.ns.success(`${ids.length} ofertas eliminadas`);
     }
   }
 
@@ -210,6 +218,7 @@ export class Ofertas implements OnInit {
   }
 
   onOfertaGuardada(guardada: Oferta): void {
+    let creacion = false;
     this.ofertas.update(actuales => {
       const idx = actuales.findIndex(o => o._id === guardada._id);
       if (idx >= 0) {
@@ -217,8 +226,10 @@ export class Ofertas implements OnInit {
         copia[idx] = guardada;
         return copia;
       } else {
+        creacion = true;
         return [guardada, ...actuales];
       }
     });
+    this.ns.success(creacion ? 'Oferta creada exitosamente' : 'Oferta actualizada exitosamente');
   }
 }

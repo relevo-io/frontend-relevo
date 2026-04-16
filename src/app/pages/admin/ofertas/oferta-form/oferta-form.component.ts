@@ -42,7 +42,7 @@ export class OfertaFormComponent implements OnInit {
     sector: ['', Validators.required],
     companyDescription: ['', [Validators.required, Validators.minLength(10)]],
     revenueRange: [''],
-    businessAgeYears: [0, [Validators.min(0)]],
+    creationYear: [new Date().getFullYear(), [Validators.min(1800), Validators.max(new Date().getFullYear())]],
     employeeRange: [''],
     owner: ['', Validators.required],
   });
@@ -56,14 +56,14 @@ export class OfertaFormComponent implements OnInit {
           sector: o.sector,
           companyDescription: o.companyDescription,
           revenueRange: o.revenueRange ?? '',
-          businessAgeYears: o.businessAgeYears ?? 0,
+          creationYear: o.creationYear ?? new Date().getFullYear(),
           employeeRange: o.employeeRange ?? '',
           owner: typeof o.owner === 'string' ? o.owner : (o.owner as any)?._id || '69badc3148170f008dcf068b',
         });
       } else {
         this.form.reset({
           owner: '',
-          businessAgeYears: 0
+          creationYear: new Date().getFullYear()
         });
       }
       this.saveError.set(null);

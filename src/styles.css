@@ -40,6 +40,14 @@
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
   --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
   --shadow-ambient: 0 20px 40px -15px rgba(3, 22, 50, 0.04);
+
+  /* Technical/Admin Specific */
+  --admin-bg: #010a18;
+  --admin-sidebar: #031632;
+  --admin-card: rgba(255, 255, 255, 0.03);
+  --admin-border: rgba(255, 255, 255, 0.08);
+  --admin-text-main: #ffffff;
+  --admin-text-muted: #8293b5;
 }
 
 /* =========================================
@@ -101,4 +109,174 @@ button {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Admin Layout Utilities */
+.admin-theme {
+  --surface: var(--admin-bg);
+  --on-surface: var(--admin-text-main);
+  --on-surface-variant: var(--admin-text-muted);
+  --outline: var(--admin-border);
+  background-color: var(--admin-bg);
+  color: var(--admin-text-main);
+}
+
+.btn-checkbox {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-checkbox:hover {
+  border-color: var(--secondary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.row-selected {
+  background: rgba(0, 71, 255, 0.1) !important;
+}
+
+.row-selected .btn-checkbox {
+  background: var(--secondary);
+  border-color: var(--secondary);
+}
+
+/* Bulk Actions consistency */
+.bulk-actions-overlay {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bulk-actions-bar {
+  background: var(--secondary);
+  padding: 12px 24px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 10px 40px rgba(0, 109, 61, 0.4);
+  color: white;
+}
+
+.selection-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+}
+
+.selection-info .count {
+  background: white;
+  color: var(--secondary);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.bulk-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bulk-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 8px;
+}
+
+.btn-bulk-action, .btn-bulk-delete, .btn-bulk-cancel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: white;
+  transition: all 0.2s;
+}
+
+.btn-bulk-action:hover, .btn-bulk-cancel:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-bulk-delete {
+  background: #ef4444;
+}
+
+.btn-bulk-delete:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+.tech-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.tech-card:hover {
+  border-color: var(--secondary);
+  box-shadow: 0 0 20px rgba(0, 109, 61, 0.1);
+}
+
+.tech-table-container {
+  overflow-x: auto;
+  background: var(--admin-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--admin-border);
+}
+
+.tech-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.tech-table th {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.tech-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-border);
+  font-size: 0.875rem;
+}
+
+.tech-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
 }
