@@ -13,8 +13,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([
-      authInterceptor, 
-      errorInterceptor
+      errorInterceptor,  // Exterior: muestra toasts DESPUÉS de que auth haya intentado el refresh
+      authInterceptor    // Interior: captura 401 PRIMERO e intenta refresh silencioso
     ]))
   ],
 };
