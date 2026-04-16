@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed, PLATFORM_ID } from '@angular/core';
+import { Injectable, inject, signal, computed, PLATFORM_ID, afterNextRender } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, map } from 'rxjs';
@@ -21,22 +21,44 @@ export class AuthService {
   public isAdmin = computed(() => this.currentUser()?.roles?.includes('ADMIN') ?? false);
 
   constructor() {
-    if (isPlatformBrowser(this.platformId)) {
+    afterNextRender(() => {
       this.checkToken();
-    }
+    });
   }
 
   private checkToken() {
     const token = localStorage.getItem('access_token');
     const userData = localStorage.getItem('user_data');
 
+    // 1. Cargar caché inmediatamente si existe para no bloquear UI
     if (token && userData) {
       try {
         this.currentUser.set(JSON.parse(userData));
       } catch (e) {
-        this.logout();
+        // Fallará la caché pero fetchProfile lo arregla
       }
     }
+
+    // 2. Background Sync 
+    if (token) {
+      this.fetchProfile().subscribe({
+        error: () => {
+          // Si el Backend rechaza el JWT (ej: expirado), limpiamos la sesión
+          this.logout();
+        }
+      });
+    }
+  }
+
+  fetchProfile(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/auth/me`).pipe(
+      tap(usuario => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('user_data', JSON.stringify(usuario));
+          this.currentUser.set(usuario);
+        }
+      })
+    );
   }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
