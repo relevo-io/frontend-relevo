@@ -216,30 +216,3 @@
   font-weight: 700;
   color: white;
 }
-
-.btn-primary-tech {
-  background: var(--secondary);
-  color: white;
-  padding: 10px 20px;
-  border-radius: var(--radius-lg);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.2);
-}
-
-.btn-primary-tech:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 109, 61, 0.3);
-}
-
-.state-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 0 !important;
-  color: var(--admin-text-muted);
-}

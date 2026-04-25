@@ -280,3 +280,117 @@ button {
   display: inline-flex;
   align-items: center;
 }
+
+/* Admin Shared Components & Buttons */
+.btn-primary-tech {
+  background: var(--secondary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.2);
+  cursor: pointer;
+}
+
+.btn-primary-tech:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 109, 61, 0.3);
+  background: #047240;
+}
+
+.btn-primary-tech:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary-tech {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--admin-border);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-secondary-tech:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--secondary);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: var(--admin-text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.icon-btn.spinning .material-symbols-outlined {
+  animation: spin 1s linear infinite;
+}
+
+/* Common State Containers */
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 0;
+  color: var(--admin-text-muted);
+  text-align: center;
+  gap: 16px;
+}
+
+.state-container.error {
+  color: #ef4444;
+}
+
+.state-container .material-symbols-outlined {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.loader-tech {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--admin-border);
+  border-top-color: var(--secondary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Animations */
+.animate-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
