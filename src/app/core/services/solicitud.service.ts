@@ -33,4 +33,9 @@ export class SolicitudService {
     });
   }
 
+  // Obtener las solicitudes del propietario logueado
+  getMisSolicitudes(): Observable<Solicitud[]> {
+    return this.http.get<Solicitud[]>(`${this.API_URL}/me`);
+  }
+
 }

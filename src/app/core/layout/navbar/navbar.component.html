@@ -16,6 +16,12 @@
 
     <div class="navbar-actions">
       @if (authService.isLoggedIn()) {
+        <a routerLink="/mis-solicitudes" class="bell-btn" title="Solicitudes de acceso">
+          <span class="material-symbols-outlined">notifications</span>
+          @if (pendingRequests().length > 0) {
+            <span class="notification-badge">{{ pendingRequests().length }}</span>
+          }
+        </a>
         <a [routerLink]="getSessionActionRoute()" class="btn-outline">{{ getSessionActionLabel() }}</a>
         <button (click)="authService.logout()" class="btn-outline">Cerrar sesion</button>
       } @else {

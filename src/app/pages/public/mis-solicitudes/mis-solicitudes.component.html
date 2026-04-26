@@ -1,0 +1,81 @@
+<main class="landing-content bg-light min-h-screen">
+  <section class="container-full py-4">
+    
+    <div class="page-header">
+      <h2>Gestión de Solicitudes</h2>
+      <p class="section-lead">Revisa y gestiona quién puede acceder a los detalles confidenciales de tus ofertas publicadas.</p>
+    </div>
+
+    @if (isLoading()) {
+      <div class="empty-state">
+        <span class="material-symbols-outlined spinning">sync</span>
+        <p>Cargando tu historial...</p>
+      </div>
+    } @else {
+      @if (solicitudes().length === 0) {
+        <div class="empty-state list-container">
+          <span class="material-symbols-outlined icon-large">inbox</span>
+          <h3>Bandeja vacía</h3>
+          <p>Te notificaremos cuando un inversor solicite acceso a tus ofertas.</p>
+        </div>
+      } @else {
+        
+        <div class="list-header hidden-mobile">
+          <div class="col-offer">Oferta</div>
+          <div class="col-investor">Inversor Interesado</div>
+          <div class="col-msg">Mensaje del Inversor</div>
+          <div class="col-status align-right">Estado</div>
+        </div>
+
+        <div class="list-container">
+          @for (req of solicitudes(); track req._id) {
+            <div class="request-row" [class.is-resolved]="req.status !== 'PENDING'">
+              
+              <div class="col-offer">
+                <strong>{{ req.opportunity.companyDescription || 'Empresa Privada' }}</strong>
+                <small>ID: {{ req.opportunity._id | slice:-6 | uppercase }}</small>
+              </div>
+
+              <div class="col-investor">
+                <span class="material-symbols-outlined avatar-icon">account_circle</span>
+                <div class="inv-data">
+                  <strong>{{ req.interestedUser.nombre || 'Usuario Desconocido' }}</strong>
+                  <small>{{ req.interestedUser.email || 'Sin email' }}</small>
+                </div>
+              </div>
+
+              <div class="col-msg">
+                @if (req.message) {
+                  <div class="message-box">
+                    <em>"{{ req.message }}"</em>
+                  </div>
+                } @else {
+                  <span class="empty-text">Sin mensaje adjunto</span>
+                }
+              </div>
+
+              <div class="col-status align-right">
+                @if (req.status === 'PENDING') {
+                  <div class="action-buttons">
+                    <button class="btn-icon decline" (click)="responder(req._id, 'REJECTED')" title="Rechazar">
+                      <span class="material-symbols-outlined">close</span>
+                    </button>
+                    <button class="btn-icon accept" (click)="responder(req._id, 'ACCEPTED')" title="Conceder Acceso">
+                      <span class="material-symbols-outlined">check</span>
+                    </button>
+                  </div>
+                } @else if (req.status === 'ACCEPTED') {
+                  <span class="badge accepted">ACEPTADA</span>
+                } @else {
+                  <span class="badge rejected">RECHAZADA</span>
+                }
+                <span class="date">{{ req.createdAt | date:'dd/MM/yyyy' }}</span>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+    }
+  </section>
+</main>

@@ -19,6 +19,7 @@ import { PerfilComponent } from './pages/public/perfil/perfil.component';
 import { AvisoLegalComponent } from './pages/legal/aviso-legal/aviso-legal.component';
 import { TerminosServicioComponent } from './pages/legal/terminos-servicio/terminos-servicio.component';
 import { PoliticaPrivacidadComponent } from './pages/legal/politica-privacidad/politica-privacidad.component';
+import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-solicitudes.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -43,14 +44,11 @@ export const routes: Routes = [
       { path: 'terminos-servicio', component: TerminosServicioComponent },
       { path: 'politica-privacidad', component: PoliticaPrivacidadComponent },
       { path: 'usuarios', component: UsuariosListComponent },
-      { 
-        path: 'perfil', 
-        component: PerfilComponent,
-        canActivate: [authGuard] // Protegemos el perfil
-      },
+      { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] }, // Protegemos el perfil
+      { path: 'mis-solicitudes', component: MisSolicitudesComponent, canActivate: [authGuard] }, // Protegemos las solicitudes
     ]
   },
-
+  
   // --- MUNDO ADMIN (Totalmente protegido) ---
   {
     path: 'admin',
