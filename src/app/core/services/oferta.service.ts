@@ -11,8 +11,15 @@ export class OfertaService {
   
   private apiUrl = 'http://localhost:4000/api/ofertas'; 
 
-  getOfertas(): Observable<Oferta[]> {
+  getOfertas(excludeOwnerId?: string): Observable<Oferta[]> {
+    if (excludeOwnerId) {
+      return this.http.get<Oferta[]>(`${this.apiUrl}?excludeOwnerId=${excludeOwnerId}`);
+    }
     return this.http.get<Oferta[]>(this.apiUrl);
+  }
+
+  getOfertaById(id: string): Observable<Oferta> {
+    return this.http.get<Oferta>(`${this.apiUrl}/${id}`);
   }
 
   createOferta(oferta: Oferta): Observable<Oferta> {

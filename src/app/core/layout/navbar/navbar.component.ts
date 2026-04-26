@@ -1,19 +1,40 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { MarketplaceSearchService } from '../../services/marketplace-search.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive], // Quitamos AsyncPipe
+  imports: [RouterLink, FormsModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
 export class Navbar {
   public authService = inject(AuthService);
+  private router = inject(Router);
+  private marketplaceSearchService = inject(MarketplaceSearchService);
 
-  // Mock de inicio rápido (solo para testing si no quieres usar el form)
-  loginRapido() {
-    this.authService.login({ email: 'test@relevo.io', password: 'password' }).subscribe();
+  searchQuery = this.marketplaceSearchService.query;
+
+  onSearchInput(value: string): void {
+    this.marketplaceSearchService.setQuery(value);
+    if (!this.router.url.startsWith('/admin') && this.router.url !== '/') {
+      this.router.navigate(['/']);
+    }
+  }
+
+  goToSell(): void {
+    this.router.navigate(['/ofertas/crear']);
+  }
+
+  getSessionActionLabel(): string {
+    return this.authService.isAdmin() ? 'Dashboard' : 'Perfil';
+  }
+
+  getSessionActionRoute(): string {
+    return this.authService.isAdmin() ? '/admin/dashboard' : '/perfil';
   }
 }
+

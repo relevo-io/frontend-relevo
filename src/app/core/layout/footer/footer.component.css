@@ -35,7 +35,7 @@
 }
 
 .footer-links a {
-  color: var(--text-muted);
+  color: var(--on-surface-variant);
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.2s;
@@ -46,6 +46,6 @@
 }
 
 .footer-copy {
-  color: var(--text-muted);
+  color: var(--on-surface-variant);
   font-size: 0.875rem;
 }

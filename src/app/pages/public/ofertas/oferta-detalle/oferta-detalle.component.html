@@ -1,1 +1,119 @@
-<p>oferta-detalle works!</p>
+﻿<section class="offer-detail-page">
+  <div class="container-full">
+    <a routerLink="/" class="back-link">Volver al marketplace</a>
+
+    @if (isLoading()) {
+      <div class="state-box">
+        <div class="loader"></div>
+        <p>Cargando detalle de oferta...</p>
+      </div>
+    } @else if (error()) {
+      <div class="state-box error-box">
+        <span class="material-symbols-outlined">error</span>
+        <p>{{ error() }}</p>
+      </div>
+    } @else if (oferta(); as o) {
+      <article class="offer-card-large">
+        <header class="card-header">
+          <span class="sector">{{ o.sector }}</span>
+          @if (o.employeeRange) {
+            <span class="employees">{{ formatEmployees(o.employeeRange) }} empleados</span>
+          }
+        </header>
+
+        <h1>{{ o.region }}</h1>
+
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Facturacion</span>
+            <strong>{{ formatRevenue(o.revenueRange) }}</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Desde</span>
+            <strong>{{ o.creationYear ?? 'No disponible' }}</strong>
+          </div>
+        </div>
+
+        <section class="description-block">
+          <h2>Company Description</h2>
+          <p>{{ o.companyDescription }}</p>
+        </section>
+
+        <section class="description-block">
+          <h2>Extended Description</h2>
+          <p>{{ o.extendedDescription || 'No disponible.' }}</p>
+        </section>
+
+        @if (isOwnOffer()) {
+          <div class="own-offer-notice">
+            <span class="material-symbols-outlined">check_circle</span>
+            <span>Oferta creada por ti. No puedes solicitar tu propia oferta.</span>
+          </div>
+        }
+
+        <div class="actions">
+          @if (!isOwnOffer()) {
+            <button (click)="abrirFormularioSolicitud()" class="btn-interest" [disabled]="isSending()">
+              Solicitar esta oferta
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </div>
+
+  @if (showRequestForm()) {
+    <div class="modal-overlay" (click)="cerrarFormularioSolicitud()"></div>
+    <section class="request-modal" role="dialog" aria-modal="true" aria-label="Formulario de solicitud">
+      <header class="modal-header">
+        <h2>Completa tu perfil para solicitar</h2>
+        <button type="button" class="btn-close" (click)="cerrarFormularioSolicitud()">Cerrar</button>
+      </header>
+
+      <form [formGroup]="requestForm" (ngSubmit)="enviarSolicitud()" class="request-form" novalidate>
+        <div class="field-group" [class.invalid]="requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched">
+          <label for="professionalBackground">Cual es tu background?</label>
+          <textarea id="professionalBackground" rows="4" formControlName="professionalBackground"></textarea>
+          @if (requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched) {
+            <span class="field-error">Este campo es obligatorio.</span>
+          }
+        </div>
+
+        <div class="field-group" [class.invalid]="requestForm.controls.preferredRegionsText.invalid && requestForm.controls.preferredRegionsText.touched">
+          <label for="preferredRegionsText">Zonas preferidas</label>
+          <input id="preferredRegionsText" type="text" formControlName="preferredRegionsText" placeholder="Ej. Madrid, Barcelona, Valencia" />
+          @if (requestForm.controls.preferredRegionsText.invalid && requestForm.controls.preferredRegionsText.touched) {
+            <span class="field-error">Debes indicar al menos una zona.</span>
+          }
+        </div>
+
+        <div class="field-group" [class.invalid]="requestForm.controls.cv.invalid && requestForm.controls.cv.touched">
+          <label for="cv">CV (texto)</label>
+          <textarea id="cv" rows="4" formControlName="cv"></textarea>
+          @if (requestForm.controls.cv.invalid && requestForm.controls.cv.touched) {
+            <span class="field-error">Debes completar el CV en formato texto.</span>
+          }
+        </div>
+
+        <div class="field-group" [class.invalid]="requestForm.controls.bio.invalid && requestForm.controls.bio.touched">
+          <label for="bio">Bio</label>
+          <textarea id="bio" rows="3" formControlName="bio"></textarea>
+          @if (requestForm.controls.bio.invalid && requestForm.controls.bio.touched) {
+            <span class="field-error">La bio es obligatoria.</span>
+          }
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarFormularioSolicitud()">Cancelar</button>
+          <button type="submit" class="btn-submit" [disabled]="isSending()">
+            @if (isSending()) {
+              Enviando...
+            } @else {
+              Guardar y solicitar
+            }
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+</section>

@@ -1,0 +1,104 @@
+<section class="create-offer-page">
+  <div class="container-full">
+    <header class="page-header">
+      <h1>Vender ahora</h1>
+      <p>Completa el formulario para publicar tu oferta en Relevo.</p>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="offer-form" novalidate>
+      <div class="field-group" [class.invalid]="f['sector'].invalid && f['sector'].touched">
+        <label for="sector">Sector <span class="required">*</span></label>
+        <select id="sector" formControlName="sector">
+          <option value="">Selecciona un sector</option>
+          <option value="Hostelería">Hostelería</option>
+          <option value="Servicios">Servicios</option>
+          <option value="Industria">Industria</option>
+          <option value="Comercio">Comercio</option>
+        </select>
+        @if (f['sector'].invalid && f['sector'].touched) {
+          <span class="field-error">El sector es obligatorio.</span>
+        }
+      </div>
+
+      <div class="field-group" [class.invalid]="f['region'].invalid && f['region'].touched">
+        <label for="region">Región <span class="required">*</span></label>
+        <input id="region" type="text" formControlName="region" placeholder="Ej. Madrid, Barcelona..." />
+        @if (f['region'].invalid && f['region'].touched) {
+          <span class="field-error">La región es obligatoria.</span>
+        }
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label for="revenueRange">Rango de Facturación</label>
+          <select id="revenueRange" formControlName="revenueRange">
+            <option value="">Desconocido</option>
+            <option value="UNDER_100K">0 - 100k €</option>
+            <option value="BETWEEN_100K_500K">100k - 500k €</option>
+            <option value="BETWEEN_500K_1M">500k - 1M €</option>
+            <option value="BETWEEN_1M_5M">1M - 5M €</option>
+            <option value="OVER_5M">Más de 5M €</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="employeeRange">Rango de Empleados</label>
+          <select id="employeeRange" formControlName="employeeRange">
+            <option value="">Desconocido</option>
+            <option value="1_5">1-5</option>
+            <option value="6_10">6-10</option>
+            <option value="11_25">11-25</option>
+            <option value="26_50">26-50</option>
+            <option value="51_100">51-100</option>
+            <option value="100_PLUS">Más de 100</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group" [class.invalid]="f['creationYear'].invalid && f['creationYear'].touched">
+        <label for="creationYear">Año de creación</label>
+        <input id="creationYear" type="number" formControlName="creationYear" />
+        @if (f['creationYear'].invalid && f['creationYear'].touched) {
+          <span class="field-error">Ingresa un año válido.</span>
+        }
+      </div>
+
+      <div class="field-group" [class.invalid]="f['companyDescription'].invalid && f['companyDescription'].touched">
+        <label for="companyDescription">Company Description <span class="required">*</span></label>
+        <textarea
+          id="companyDescription"
+          rows="4"
+          formControlName="companyDescription"
+          placeholder="Descripción breve para la tarjeta de oferta..."
+        ></textarea>
+        @if (f['companyDescription'].invalid && f['companyDescription'].touched) {
+          <span class="field-error">La descripción breve es obligatoria (mín. 10 caracteres).</span>
+        }
+      </div>
+
+      <div class="field-group" [class.invalid]="f['extendedDescription'].invalid && f['extendedDescription'].touched">
+        <label for="extendedDescription">Extended Description <span class="required">*</span></label>
+        <textarea
+          id="extendedDescription"
+          rows="8"
+          formControlName="extendedDescription"
+          placeholder="Añade información ampliada: operación, clientes, equipo, motivos del traspaso..."
+        ></textarea>
+        @if (f['extendedDescription'].invalid && f['extendedDescription'].touched) {
+          <span class="field-error">La descripción extendida es obligatoria (mín. 20 caracteres).</span>
+        }
+      </div>
+
+      <div class="actions">
+        <a routerLink="/" class="btn-cancel">Cancelar</a>
+        <button type="submit" class="btn-save" [disabled]="isSaving()">
+          @if (isSaving()) {
+            Publicando...
+          } @else {
+            Publicar oferta
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

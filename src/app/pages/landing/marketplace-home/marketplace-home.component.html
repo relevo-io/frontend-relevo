@@ -1,0 +1,86 @@
+﻿<main class="marketplace-home">
+  <section class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-overlay container-full">
+      <div class="hero-card">
+        <h1>Listo para vender tu empresa o tomar el relevo?</h1>
+        <p>
+          Publica tu negocio en minutos o encuentra una empresa en funcionamiento para empezar con base solida.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary" routerLink="/ofertas/crear">Vender ahora</button>
+          <button class="btn-secondary" routerLink="/como-funciona">Como funciona Relevo</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="offers container-full">
+    <div class="offers-header">
+      <div>
+        <h2>Empresas disponibles</h2>
+        <p>Explora oportunidades reales publicadas por propietarios verificados.</p>
+      </div>
+      <div class="offers-status">
+        @if (isLoading()) {
+          <span>Cargando ofertas...</span>
+        } @else {
+          <span>{{ filteredOfertas().length }} resultados</span>
+        }
+      </div>
+    </div>
+
+    @if (sectoresDestacados().length > 0) {
+      <div class="sector-filters">
+        @for (sector of sectoresDestacados(); track sector) {
+          <button class="sector-chip" (click)="filtrarPorSector(sector)">{{ sector }}</button>
+        }
+        @if (searchQuery()) {
+          <button class="clear-filter" (click)="limpiarFiltro()">Limpiar filtro</button>
+        }
+      </div>
+    }
+
+    @if (error()) {
+      <div class="state-box error-box">
+        <span class="material-symbols-outlined">error</span>
+        <p>{{ error() }}</p>
+      </div>
+    } @else if (isLoading()) {
+      <div class="state-box">
+        <div class="loader"></div>
+        <p>Cargando ofertas desde el backend...</p>
+      </div>
+    } @else if (filteredOfertas().length === 0) {
+      <div class="state-box">
+        <span class="material-symbols-outlined">search_off</span>
+        <p>No hay ofertas que coincidan con tu busqueda.</p>
+      </div>
+    } @else {
+      <div class="offers-grid">
+        @for (oferta of filteredOfertas(); track oferta._id) {
+          <article class="offer-card" [routerLink]="['/ofertas', oferta._id]">
+            <header class="card-head">
+              <span class="sector">{{ oferta.sector }}</span>
+              @if (oferta.employeeRange) {
+                <span class="meta">{{ formatEmployees(oferta.employeeRange) }} empleados</span>
+              }
+            </header>
+
+            <h3>{{ oferta.region }}</h3>
+            <p class="description">{{ oferta.companyDescription }}</p>
+
+            <div class="card-footer">
+              @if (oferta.revenueRange) {
+                <span><strong>Facturacion:</strong> {{ formatRevenue(oferta.revenueRange) }}</span>
+              }
+              @if (oferta.creationYear) {
+                <span><strong>Desde:</strong> {{ oferta.creationYear }}</span>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</main>

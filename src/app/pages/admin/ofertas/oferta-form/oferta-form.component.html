@@ -1,4 +1,4 @@
-@if (isOpen()) {
+﻿@if (isOpen()) {
   <div class="drawer-overlay" (click)="cerrar()"></div>
 
   <aside class="drawer" [class.open]="isOpen()">
@@ -15,13 +15,11 @@
     </div>
 
     <form [formGroup]="form" (ngSubmit)="guardar()" class="drawer-form" novalidate>
-
-      <!-- Sector -->
       <div class="field-group" [class.invalid]="f['sector'].invalid && f['sector'].touched">
         <label for="sector">Sector <span class="required">*</span></label>
         <select id="sector" formControlName="sector" class="form-select">
           <option value="">Selecciona un sector</option>
-          <option value="Hostelería">Hostelería</option>
+          <option value="Hosteleria">Hosteleria</option>
           <option value="Servicios">Servicios</option>
           <option value="Industria">Industria</option>
           <option value="Comercio">Comercio</option>
@@ -31,29 +29,26 @@
         }
       </div>
 
-      <!-- Región -->
       <div class="field-group" [class.invalid]="f['region'].invalid && f['region'].touched">
-        <label for="region">Región <span class="required">*</span></label>
-        <input id="region" type="text" formControlName="region" placeholder="Ej. Barcelona, Madrid...">
+        <label for="region">Region <span class="required">*</span></label>
+        <input id="region" type="text" formControlName="region" placeholder="Ej. Barcelona, Madrid..." />
         @if (f['region'].invalid && f['region'].touched) {
-          <span class="field-error">La región es obligatoria.</span>
+          <span class="field-error">La region es obligatoria.</span>
         }
       </div>
 
-      <!-- Facturación (Revenue Range) -->
       <div class="field-group">
-        <label for="revenueRange">Rango de Facturación</label>
+        <label for="revenueRange">Rango de Facturacion</label>
         <select id="revenueRange" formControlName="revenueRange" class="form-select">
           <option value="">Desconocido</option>
-          <option value="UNDER_100K">0 - 100k €</option>
-          <option value="BETWEEN_100K_500K">100k - 500k €</option>
-          <option value="BETWEEN_500K_1M">500k - 1M €</option>
-          <option value="BETWEEN_1M_5M">1M - 5M €</option>
-          <option value="OVER_5M">> 5M €</option>
+          <option value="UNDER_100K">0 - 100k EUR</option>
+          <option value="BETWEEN_100K_500K">100k - 500k EUR</option>
+          <option value="BETWEEN_500K_1M">500k - 1M EUR</option>
+          <option value="BETWEEN_1M_5M">1M - 5M EUR</option>
+          <option value="OVER_5M">Mas de 5M EUR</option>
         </select>
       </div>
 
-      <!-- Empleados -->
       <div class="field-group">
         <label for="employeeRange">Rango de Empleados</label>
         <select id="employeeRange" formControlName="employeeRange" class="form-select">
@@ -63,20 +58,18 @@
           <option value="11_25">11-25</option>
           <option value="26_50">26-50</option>
           <option value="51_100">51-100</option>
-          <option value="100_PLUS">>100</option>
+          <option value="100_PLUS">Mas de 100</option>
         </select>
       </div>
 
-      <!-- Creación -->
       <div class="field-group" [class.invalid]="f['creationYear']?.invalid && f['creationYear']?.touched">
-        <label for="creationYear">Año de creación</label>
-        <input id="creationYear" type="number" formControlName="creationYear" placeholder="Ej. 2015">
+        <label for="creationYear">Ano de creacion</label>
+        <input id="creationYear" type="number" formControlName="creationYear" placeholder="Ej. 2015" />
         @if (f['creationYear']?.invalid && f['creationYear']?.touched) {
-          <span class="field-error">Ingresa un año válido.</span>
+          <span class="field-error">Ingresa un ano valido.</span>
         }
       </div>
-      
-      <!-- Propietario -->
+
       <div class="field-group" [class.invalid]="f['owner'].invalid && f['owner'].touched">
         <label for="owner">Propietario <span class="required">*</span></label>
         <select id="owner" formControlName="owner" class="form-select">
@@ -90,12 +83,19 @@
         }
       </div>
 
-      <!-- Descripción -->
       <div class="field-group" [class.invalid]="f['companyDescription'].invalid && f['companyDescription'].touched">
-        <label for="companyDescription">Descripción de la Empresa <span class="required">*</span></label>
-        <textarea id="companyDescription" formControlName="companyDescription" rows="5" placeholder="Cuéntanos sobre el negocio..."></textarea>
+        <label for="companyDescription">Company Description <span class="required">*</span></label>
+        <textarea id="companyDescription" formControlName="companyDescription" rows="5" placeholder="Cuentanos sobre el negocio..."></textarea>
         @if (f['companyDescription'].invalid && f['companyDescription'].touched) {
-          <span class="field-error">La descripción es obligatoria (mín. 10 chars).</span>
+          <span class="field-error">La descripcion es obligatoria (min. 10 chars).</span>
+        }
+      </div>
+
+      <div class="field-group" [class.invalid]="f['extendedDescription'].invalid && f['extendedDescription'].touched">
+        <label for="extendedDescription">Extended Description <span class="required">*</span></label>
+        <textarea id="extendedDescription" formControlName="extendedDescription" rows="7" placeholder="Anade detalles ampliados para la ficha de oferta..."></textarea>
+        @if (f['extendedDescription'].invalid && f['extendedDescription'].touched) {
+          <span class="field-error">La descripcion extendida es obligatoria (min. 20 chars).</span>
         }
       </div>
 
@@ -111,7 +111,7 @@
         <button type="submit" class="btn-save" [disabled]="isSaving()">
           @if (isSaving()) {
             <span class="material-symbols-outlined spinning">refresh</span>
-            Guardando…
+            Guardando...
           } @else {
             <span class="material-symbols-outlined">check</span>
             {{ modoCrear ? 'Crear Oferta' : 'Guardar Cambios' }}

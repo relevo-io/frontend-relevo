@@ -1,7 +1,8 @@
-import { Component, signal, inject } from '@angular/core';
+﻿import { Component, signal, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { RegisterRequest } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-register',
@@ -40,23 +41,25 @@ export class RegisterComponent {
     this.errorMessage.set(null);
 
     const formValues = this.registerForm.value;
-    const requestData = {
+    const requestData: RegisterRequest = {
       fullName: formValues.fullName,
       email: formValues.email,
       password: formValues.password,
-      roles: [formValues.role]
+      roles: ['OWNER', 'INTERESTED']
     };
 
     this.authService.register(requestData).subscribe({
       next: () => {
         this.isLoading.set(false);
-        // Després de registrar, els portem al login perquè entrin.
+        // DesprÃ©s de registrar, els portem al login perquÃ¨ entrin.
         this.router.navigate(['/login']);
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.error?.message || 'Error en el registro. Este email ya podría estar en uso.');
+        this.errorMessage.set(err.error?.message || 'Error en el registro. Este email ya podrÃ­a estar en uso.');
       }
     });
   }
 }
+
+

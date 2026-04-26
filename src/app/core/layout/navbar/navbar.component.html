@@ -1,28 +1,27 @@
-<nav class="navbar">
+﻿<nav class="navbar">
   <div class="navbar-container">
     <div class="navbar-brand">
       <a routerLink="/" class="logo">Relevo</a>
     </div>
 
-    <div class="navbar-links">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Marketplace</a>
-      <a routerLink="/owners">For Owners</a>
-      <a routerLink="/buyers">For Buyers</a>
-      <a routerLink="/guide">Succession Guide</a>
+    <div class="navbar-search">
+      <span class="material-symbols-outlined">search</span>
+      <input
+        type="text"
+        placeholder="Busca empresas por sector, region o descripcion"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="onSearchInput($event)"
+      />
     </div>
 
     <div class="navbar-actions">
       @if (authService.isLoggedIn()) {
-        @if (authService.isAdmin()) {
-          <a routerLink="/admin/dashboard" class="btn-text">Dashboard</a>
-        } @else {
-          <a routerLink="/perfil" class="btn-text">Mi Perfil</a>
-        }
-        <button (click)="authService.logout()" class="btn-logout">Cerrar Sesión</button>
+        <a [routerLink]="getSessionActionRoute()" class="btn-outline">{{ getSessionActionLabel() }}</a>
+        <button (click)="authService.logout()" class="btn-outline">Cerrar sesion</button>
       } @else {
-        <button routerLink="/login" class="btn-text">Sign In</button>
-        <button (click)="loginRapido()" class="btn-primary">Get Started</button>
+        <button routerLink="/register" class="btn-outline">Registrate | Inicia sesion</button>
       }
+      <button (click)="goToSell()" class="btn-solid">Vender ahora</button>
     </div>
   </div>
 </nav>
