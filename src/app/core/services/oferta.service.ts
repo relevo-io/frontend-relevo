@@ -26,4 +26,9 @@ export class OfertaService {
   deleteOferta(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  // --- MARKETPLACE ---
+  getOfertasMarketplace(): Observable<Oferta[]> {
+    return this.http.get<Oferta[]>(`${this.apiUrl}/marketplace`);
+  }
 }

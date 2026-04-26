@@ -1,31 +1,97 @@
-<div class="contenedor-ofertas">
-  <h2>Ofertas</h2>
+<main class="landing-content bg-light pb-8 min-h-screen">
+  
+  <section class="marketplace-header container-full text-center">
+    <span class="tag">MARKETPLACE PRIVADO</span>
+    <h2>Oportunidades de Inversión</h2>
+    <p class="section-lead">Explora negocios rentables y consolidados. Solicita acceso para conectar con los propietarios y conocer los detalles confidenciales.</p>
+  </section>
 
-  <div class="grid-ofertas">
-    @for (oferta of ofertas; track $index) {
-      <div class="oferta-card">
-        
-        <div class="card-header">
-          <h3>{{ oferta.sector }} - {{ oferta.region }}</h3>
-          <span class="badge" *ngIf="oferta.employeeRange">
-            {{ oferta.employeeRange }} empleados
-          </span>
-        </div>
-
-        <div class="card-body">
-          <p class="descripcion-corta">{{ oferta.companyDescription }}</p>
-          
-          <ul class="detalles-lista">
-            <li><strong>Sector:</strong> {{ oferta.sector }}</li>
-            <li><strong>Ubicación:</strong> {{ oferta.region }}</li>
-            <li><strong>Año de creación:</strong> {{ oferta.creationYear }}</li>
-            <li *ngIf="oferta.revenueRange"><strong>Facturación:</strong> {{ oferta.revenueRange }}</li>
-          </ul>
-        </div>
-        
-      </div>
-    } @empty {
-      <p class="cargando">No se encontraron ofertas en la base de datos.</p>
-    }
+  <div *ngIf="isLoading()" class="container-full text-center py-4">
+    <span class="material-symbols-outlined spinning">sync</span>
+    <p class="mt-2">Cargando oportunidades...</p>
   </div>
-</div>
+
+  <section class="container-full marketplace-grid" *ngIf="!isLoading()">
+    <div class="offer-card" *ngFor="let oferta of ofertas()">
+      
+      <div class="card-header">
+        <span class="badge-sector">{{ oferta.sector }}</span>
+        <span class="location"><span class="material-symbols-outlined">location_on</span> {{ oferta.region }}</span>
+      </div>
+      
+      <div class="card-body">
+        <p class="description">{{ oferta.companyDescription }}</p>
+        
+        <div class="info-metrics">
+          <div class="metric">
+            <span class="material-symbols-outlined">euro</span>
+            <div>
+              <small>Facturación</small>
+              <strong>{{ formatRango(oferta.revenueRange) }}</strong>
+            </div>
+          </div>
+          <div class="metric">
+            <span class="material-symbols-outlined">groups</span>
+            <div>
+              <small>Equipo</small>
+              <strong>{{ formatRango(oferta.employeeRange) }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <button class="btn btn-secondary-light w-full justify-center" (click)="verDetalles(oferta)">Ver detalles</button>
+        <button class="btn btn-primary-dark w-full justify-center mt-2" (click)="solicitarAcceso(oferta._id!)">Solicitar acceso</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="drawer-backdrop" *ngIf="drawerOpen()" (click)="cerrarDrawer()"></div>
+  <div class="drawer-panel" [class.open]="drawerOpen()">
+    <div class="drawer-content" *ngIf="ofertaSeleccionada() as oferta">
+      
+      <div class="drawer-header">
+        <h3>Detalles del Negocio</h3>
+        <button class="icon-btn" (click)="cerrarDrawer()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <div class="drawer-body">
+        <span class="tag">{{ oferta.sector }}</span>
+        <p class="lead-desc">{{ oferta.companyDescription }}</p>
+        
+        <ul class="check-list mt-4">
+          <li>
+            <span class="material-symbols-outlined">location_on</span> 
+            Región: {{ oferta.region }}
+          </li>
+          <li>
+            <span class="material-symbols-outlined">calendar_today</span> 
+            Año de creación: {{ oferta.creationYear || 'No especificado' }}
+          </li>
+          <li>
+            <span class="material-symbols-outlined">euro</span> 
+            Facturación: {{ formatRango(oferta.revenueRange) }}
+          </li>
+          <li>
+            <span class="material-symbols-outlined">groups</span> 
+            Empleados: {{ formatRango(oferta.employeeRange) }}
+          </li>
+        </ul>
+
+        <div class="alert-info mt-4">
+          <span class="material-symbols-outlined">lock</span>
+          <p><small>La identidad de la empresa y del propietario están protegidas. Solicita acceso para firmar el NDA y revelar la información.</small></p>
+        </div>
+      </div>
+      
+      <div class="drawer-footer">
+         <button class="btn btn-primary-dark w-full justify-center" (click)="solicitarAcceso(oferta._id!)">Solicitar acceso al propietario</button>
+      </div>
+
+    </div>
+  </div>
+
+</main>

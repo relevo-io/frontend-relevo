@@ -1,4 +1,3 @@
-
 export interface Solicitud {
   _id: string;
   owner: any; 
