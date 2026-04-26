@@ -31,6 +31,7 @@ export class OfertaDetalle {
   isLoading = signal<boolean>(true);
   isSending = signal<boolean>(false);
   showRequestForm = signal<boolean>(false);
+  solicitudEnviada = signal<boolean>(false);
   error = signal<string | null>(null);
 
   requestForm = this.fb.group({
@@ -139,12 +140,13 @@ export class OfertaDetalle {
           this.solicitudService
             .crearSolicitud({
               opportunityId: offer._id!,
-              message: `Solicitud enviada por ${currentUser.fullName}.`,
+              message: formValue.professionalBackground?.trim() || `Interesado en la oferta.`,
             })
             .subscribe({
               next: () => {
                 this.isSending.set(false);
                 this.showRequestForm.set(false);
+                this.solicitudEnviada.set(true);
                 this.authService.fetchProfile().subscribe();
                 this.ns.success('Solicitud enviada correctamente');
               },

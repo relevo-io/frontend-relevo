@@ -44,18 +44,18 @@
           <p>{{ o.extendedDescription || 'No disponible.' }}</p>
         </section>
 
-        @if (isOwnOffer()) {
-          <div class="own-offer-notice">
-            <span class="material-symbols-outlined">check_circle</span>
-            <span>Oferta creada por ti. No puedes solicitar tu propia oferta.</span>
-          </div>
-        }
-
-        <div class="actions">
+       <div class="actions mt-4">
           @if (!isOwnOffer()) {
-            <button (click)="abrirFormularioSolicitud()" class="btn-interest" [disabled]="isSending()">
-              Solicitar esta oferta
-            </button>
+            @if (solicitudEnviada()) {
+              <div class="status-message pending">
+                <span class="material-symbols-outlined">schedule</span>
+                <span><strong>Solicitud enviada.</strong> Pendiente de revisión por el propietario.</span>
+              </div>
+            } @else {
+              <button (click)="abrirFormularioSolicitud()" class="btn-interest" [disabled]="isSending()">
+                Solicitar esta oferta
+              </button>
+            }
           }
         </div>
       </article>
