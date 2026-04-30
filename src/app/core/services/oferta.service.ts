@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Oferta } from '../models/oferta.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { Oferta } from '../models/oferta.model';
 export class OfertaService {
   private http = inject(HttpClient);
   
-  private apiUrl = 'http://localhost:4000/api/ofertas'; 
+  private apiUrl = `${environment.apiUrl}/api/ofertas`;
 
   getOfertas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(this.apiUrl);
