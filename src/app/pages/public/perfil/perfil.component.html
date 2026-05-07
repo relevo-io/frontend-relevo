@@ -2,11 +2,10 @@
   <div class="perfil-container">
     @if (isLoading()) {
       <div class="loading-state">
-        <span class="spinner"></span> Cargando perfil...
+        <span class="spinner"></span> {{ 'PROFILE_PAGE.LOADING' | translate }}
       </div>
     } @else if (usuario(); as user) {
       
-      <!-- Targeta de Capçalera (Nom, Correu i Tags de Rol) -->
       <div class="profile-card basic-info">
         <div class="avatar-circle">
           {{ user.fullName.charAt(0).toUpperCase() }}
@@ -16,20 +15,20 @@
           <p class="email">{{ user.email }}</p>
           <div class="badges">
             @for (rol of user.roles; track rol) {
-              <span class="badge" [class.owner]="rol === 'OWNER'" [class.interested]="rol === 'INTERESTED'">{{ rol }}</span>
+              <span class="badge" [class.owner]="rol === 'OWNER'" [class.interested]="rol === 'INTERESTED'">
+                {{ (rol === 'OWNER' ? 'COMMON.ROLE_OWNER' : 'COMMON.ROLE_INTERESTED') | translate }}
+              </span>
             }
           </div>
         </div>
-
       </div>
 
-      <!-- Targeta d'Informació Addicional i Edició de Formularis -->
       <div class="profile-card details-info">
         <div class="card-header">
-          <h2>Mi Información Profesional</h2>
+          <h2>{{ 'PROFILE_PAGE.PROFESSIONAL_INFO' | translate }}</h2>
           <button class="btn-edit" (click)="toggleEdit()">
             <span class="material-symbols-outlined">{{ isEditing() ? 'close' : 'edit' }}</span>
-            {{ isEditing() ? 'Cancelar' : 'Editar Info' }}
+            {{ (isEditing() ? 'PROFILE_PAGE.CANCEL' : 'PROFILE_PAGE.EDIT_INFO') | translate }}
           </button>
         </div>
 
@@ -37,41 +36,40 @@
           <form [formGroup]="profileForm" (ngSubmit)="guardarPerfil()" class="edit-form">
             
             <div class="form-group">
-              <label>Ubicación / Región</label>
-              <input type="text" formControlName="location" placeholder="Ej: Barcelona, Catalunya, o Remoto">
+              <label>{{ 'PROFILE_PAGE.LOCATION_LABEL' | translate }}</label>
+              <input type="text" formControlName="location" [placeholder]="'PROFILE_PAGE.LOCATION_PLACEHOLDER' | translate">
             </div>
 
             <div class="form-group">
-              <label>Biografía Breve</label>
-              <textarea formControlName="bio" placeholder="Cuéntanos quién eres en 2 líneas..." rows="2"></textarea>
+              <label>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</label>
+              <textarea formControlName="bio" [placeholder]="'PROFILE_PAGE.BIO_PLACEHOLDER' | translate" rows="2"></textarea>
             </div>
 
             <div class="form-group">
-              <label>Experiencia Profesional y Capacidades</label>
-              <textarea formControlName="professionalBackground" placeholder="Describe tu vocación emprendedora. Capital disponible, sectores conocidos, años de experiencia..." rows="4"></textarea>
+              <label>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</label>
+              <textarea formControlName="professionalBackground" [placeholder]="'PROFILE_PAGE.BACKGROUND_PLACEHOLDER' | translate" rows="4"></textarea>
             </div>
 
             <button type="submit" class="btn-save" [disabled]="isSaving()">
-              {{ isSaving() ? 'Guardando...' : 'Guardar Cambios' }}
+              {{ (isSaving() ? 'PROFILE_PAGE.SAVING' : 'PROFILE_PAGE.SAVE_CHANGES') | translate }}
             </button>
           </form>
 
         } @else {
-          <!-- Mode Lectura -->
           <div class="view-mode">
             <div class="data-group">
-              <h3>Ubicación / Región</h3>
-              <p>{{ user.location || 'No especificada. Te animamos a añadirla.' }}</p>
+              <h3>{{ 'PROFILE_PAGE.LOCATION_LABEL' | translate }}</h3>
+              <p>{{ user.location || ('PROFILE_PAGE.NO_LOCATION' | translate) }}</p>
             </div>
             
             <div class="data-group">
-              <h3>Biografía Breve</h3>
-              <p>{{ user.bio || 'Aún no has escrito tu biografía.' }}</p>
+              <h3>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</h3>
+              <p>{{ user.bio || ('PROFILE_PAGE.NO_BIO' | translate) }}</p>
             </div>
 
             <div class="data-group">
-              <h3>Experiencia Profesional y Capacidades (Público)</h3>
-              <p>{{ user.professionalBackground || 'Añadir tu currículum inversor mejorará enormemente tus posibilidades de trato.' }}</p>
+              <h3>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</h3>
+              <p>{{ user.professionalBackground || ('PROFILE_PAGE.NO_BACKGROUND' | translate) }}</p>
             </div>
           </div>
         }
@@ -79,7 +77,7 @@
 
     } @else {
       <div class="error-state">
-        <span class="material-symbols-outlined">error</span> No se pudo cargar tu perfil.
+        <span class="material-symbols-outlined">error</span> {{ 'PROFILE_PAGE.ERROR_LOADING' | translate }}
       </div>
     }
   </div>

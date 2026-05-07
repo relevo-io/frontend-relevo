@@ -1,5 +1,5 @@
 /* Copia dels estils base del Login */
-.login-page { min-height: 100vh; display: flex; flex-direction: column; }
+.login-page { min-height: 100vh; display: flex; flex-direction: column; padding-top: 100px; }
 @media (min-width: 768px) { .login-page { flex-direction: row; } }
 
 .auth-visual {
@@ -9,7 +9,15 @@
 @media (min-width: 768px) { .auth-visual { display: flex; width: 41.6%; } }
 
 .visual-content { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; }
-.logo { color: white; font-family: var(--font-headline); font-weight: 800; font-size: 1.5rem; margin-bottom: 3rem; }
+.logo {
+  color: white;
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  letter-spacing: -0.05em;
+}
 .visual-text h2 { color: white; font-size: 2.5rem; margin-bottom: 1.5rem; }
 .visual-text p { color: rgba(255, 255, 255, 0.85); font-size: 1.125rem; max-width: 400px; line-height: 1.6; }
 
@@ -28,7 +36,11 @@
 
 .auth-form-panel { flex: 1; background-color: var(--surface-container-low); display: flex; align-items: center; justify-content: center; padding: 2rem; overflow-y: auto; }
 .form-container { width: 100%; max-width: 480px; margin: auto; }
-.form-header h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+.form-header h1 {
+  font-size: 2.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 .form-header p { color: var(--on-surface-variant); font-size: 1.125rem; margin-bottom: 2.5rem; }
 
 .auth-form { display: flex; flex-direction: column; gap: 1.25rem; }
@@ -42,6 +54,7 @@
   outline: none; background-color: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(3, 22, 50, 0.1);
 }
 .form-group input.invalid { border-color: #ef4444; }
+.field-error { color: #ef4444; font-size: 0.75rem; font-weight: 600; margin-left: 0.5rem; }
 
 .password-input { position: relative; }
 .password-input input { padding-right: 3.5rem; }
@@ -55,10 +68,13 @@
   display: flex; flex-direction: column; gap: 0.25rem;
 }
 .role-card:hover { border-color: var(--primary-fixed-dim); }
-.role-card.selected { border-color: var(--primary); background-color: var(--primary-container); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+.role-card.selected { border-color: var(--primary); background-color: var(--primary); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); }
 .role-card.selected .role-title { color: white; }
-.role-card.selected .role-desc { color: rgba(255, 255, 255, 0.85); }
+.role-card.selected .role-desc { color: rgba(255, 255, 255, 0.9); }
+.role-card.selected .role-icon { color: white; }
 .role-card input[type="radio"] { display: none; }
+.role-icon { font-size: 2rem; color: var(--on-surface-variant); }
+.role-info { display: flex; flex-direction: column; gap: 0.25rem; }
 .role-title { font-weight: 700; font-size: 1rem; color: var(--on-surface); transition: color 0.2s ease; }
 .role-desc { font-size: 0.75rem; color: var(--on-surface-variant); line-height: 1.2; transition: color 0.2s ease; }
 

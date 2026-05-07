@@ -54,4 +54,9 @@ export class UsuarioService {
   updateUsuariosVisibilityBatch(ids: string[], visible: boolean): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/batch/visibility`, { ids, visible });
   }
+
+  // 8. Cambiar idioma de un usuario (PATCH)
+  updateUsuarioLanguage(id: string, language: string): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiUrl}/${id}`, { language });
+  }
 }

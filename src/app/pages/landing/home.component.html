@@ -10,35 +10,35 @@
       <div class="hero-text">
         <div class="badge">
           <span class="material-symbols-outlined">verified</span>
-          Marketplace Líder en Sucesión Empresarial
+          {{ 'HOME.MARKETPLACE_BADGE' | translate }}
         </div>
-        <h1>Asegura el futuro de tu legado, <span class="highlight">impulsa tu nuevo negocio.</span></h1>
-        <p>Conectamos a fundadores experimentados con la próxima generación de líderes empresariales. Una transición segura, profesional y confidencial.</p>
+        <h1>{{ 'HOME.SLOGAN' | translate }} <span class="highlight">{{ 'HOME.SLOGAN2' | translate }}</span></h1>
+        <p>{{ 'HOME.INTRO' | translate }}</p>
         
         <div class="hero-cta">
           <button class="btn btn-primary-dark" routerLink="/register">
-            Quiero vender mi empresa
+            {{ 'AUTH.ROLE_OWNER' | translate }}
             <span class="material-symbols-outlined">trending_flat</span>
           </button>
-          <button class="btn btn-secondary-light" routerLink="/register">Busco comprar un negocio</button>
+          <button class="btn btn-secondary-light" routerLink="/register">{{ 'AUTH.ROLE_INTERESTED' | translate }}</button>
         </div>
       </div>
 
       <div class="hero-stats">
         <div class="stat-card card-white">
-          <span class="stat-value">€12M+</span>
-          <p class="stat-label">Valor total transaccionado este año</p>
+          <span class="stat-value">{{ 'HOME.STAT_VALUE1' | translate }}</span>
+          <p class="stat-label">{{ 'HOME.STAT_LABEL1' | translate }}</p>
         </div>
         <div class="stat-card card-dark">
           <div class="avatar-group">
             <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-qDmhEy15v4dRCGM69XZu8m3QzqwvY1X6H47TWaua4v5M9n1dgNm4Sn4VA8NB1VwwI16Jz0aBj0oCHPRL99nBDY8y9wFfcr-bQIirQSsCvQWFlIEQzyB4M3Xu83eNAFYSfxrGwwaGY8mhMDiSszOlKgq7YiMjJpRHzJV_CCVnKqH4REGfWFwSZpGgankptjuuPbKhBPvU-Z-i_DfrSt5iHVIZ611km9Et8AFi0Ib9d9KzbFSUoJvws3fUrwktpRt4c_dNtIEpX50" alt="User">
             <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeh9-cxr9M1YaVKu3cuhZ2GHeFygavdxh5X620jwctXwTv1GwLnYhyzH0AdFCgNS60O8ZTHakDPLA5J_VnEsLFxMdyjiqbuiuHhhiICD3f9rQ8NCA4eB3j7n7sTEOJNJcUCh9o5A5DXKk9hte28pD_3-6oZpaU0VUo5Wfc1jn7nmTCXhFLoJaDzCqwB7wadzO6r4ORi8XpkFlbwVGJ1Fp7A5ivwggTuDQ_c3y5f85h7edVK1QWunrVzIXG1L7SbZId7lEeKYBNGZc" alt="User">
           </div>
-          <p class="stat-label">+500 propietarios activos</p>
+          <p class="stat-label">{{ 'HOME.STAT_LABEL2' | translate }}</p>
         </div>
         <div class="stat-card card-green">
           <span class="material-symbols-outlined icon-fill">handshake</span>
-          <p class="stat-label-bold">98% Éxito en transferencias</p>
+          <p class="stat-label-bold">{{ 'HOME.STATS_SUCCESS' | translate }}</p>
         </div>
         <div class="stat-image">
           <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqPVbIjdTGNQa0fm5UsiMQ6MqOxbCCdfzZ6kDvbsQicr3XXzhhQn2TCgjoxpct8fuohjznd94_c2NVT9PKpsrD5Dcx7whHudDxliueiQx-al8OdC3rjTMt7JAh1BsYB8ODH3M-e48948L9gS-OKWCuxF-SUbOvbvVq4rodUrjkiLdeGZUl3rJv-mEdwtd5h804HpuQSsTo0YU0SxmM4xVBsTA1MFBn_M28doczXdNa0M8HsNn_d1QnuCGwRJEYt-KI8tBEE4w5CJQ" alt="Heritage">
@@ -53,26 +53,25 @@
       <div class="feature-visual">
         <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPcIHB_0_HBJvYJUzrfM-RSYjuf7HbBy4J_EYgidJgpVkClF420T1EvEc-cZb8oVRx6NGDSTyBdECkxZu38_R4h56P1HkEOUrZFZcNML-ibpOYvQGrYVgHk0rhQNken1vwFi0f2VO4SHWJsi46C7bkfclQEtKzuB8syqOTkl2fBFUms2XBTIlnfBBOHDpCwq0822qQfYfEVpfybQYRd2cGrIMsIlg7SZY-Cu6tEA7QxOo_5VEL7cwbV80so8bAtWQQxho8KSI1FC0" alt="Consultation">
         <div class="testimonial-bubble">
-          <p>"Relevo entendió que mi empresa no era solo números, sino el trabajo de toda mi vida."</p>
+          <p>{{ 'HOME.TESTIMONIAL_TEXT' | translate }}</p>
           <div class="auth-info">
              <div class="auth-avatar">M</div>
              <div>
-               <strong>Manuel G.</strong>
-               <span>Ex-dueño, Manufactura Textil</span>
+               <strong>{{ 'HOME.TESTIMONIAL_AUTHOR' | translate }}</strong>
              </div>
           </div>
         </div>
       </div>
       <div class="feature-info">
-        <span class="tag">PARA PROPIETARIOS</span>
-        <h2>Tu retiro merece un sucesor a la altura.</h2>
-        <p>Has construido algo valioso. No dejes que se pierda. Te ayudamos a encontrar al comprador ideal que respete tus valores y mantenga viva tu visión, mientras obtienes el valor justo por tu esfuerzo.</p>
+        <span class="tag">{{ 'HOME.OWNERS_TITLE' | translate }}</span>
+        <h2>{{ 'HOME.OWNERS_SUBTITLE' | translate }}</h2>
+        <p>{{ 'HOME.OWNERS_DESC' | translate }}</p>
         <ul class="check-list">
-          <li><span class="material-symbols-outlined">check</span> Valoración profesional y realista del negocio.</li>
-          <li><span class="material-symbols-outlined">check</span> Filtrado exhaustivo de compradores potenciales.</li>
-          <li><span class="material-symbols-outlined">check</span> Máxima confidencialidad durante todo el proceso.</li>
+          <li><span class="material-symbols-outlined">check</span> {{ 'HOME.OWNERS_FEATURE1' | translate }}</li>
+          <li><span class="material-symbols-outlined">check</span> {{ 'HOME.OWNERS_FEATURE2' | translate }}</li>
+          <li><span class="material-symbols-outlined">check</span> {{ 'HOME.OWNERS_FEATURE3' | translate }}</li>
         </ul>
-        <a href="#" class="link-arrow">Saber más sobre el proceso de venta <span class="material-symbols-outlined">arrow_forward</span></a>
+        <a href="#" class="link-arrow">{{ 'HOME.OWNERS_LEARN_MORE' | translate }} <span class="material-symbols-outlined">arrow_forward</span></a>
       </div>
     </div>
   </section>
@@ -81,28 +80,28 @@
   <section class="features">
     <div class="container-full grid-2">
       <div class="feature-info">
-        <span class="tag">PARA EMPRENDEDORES</span>
-        <h2>Emprende sobre una base sólida y rentable.</h2>
-        <p>No empieces de cero. Adquiere una empresa establecida con flujo de caja, clientes y un equipo formado. Accede a oportunidades exclusivas que no están en el mercado abierto.</p>
+        <span class="tag">{{ 'HOME.ENTREPRENEURS_TITLE' | translate }}</span>
+        <h2>{{ 'HOME.ENTREPRENEURS_SUBTITLE' | translate }}</h2>
+        <p>{{ 'HOME.ENTREPRENEURS_DESC' | translate }}</p>
         <div class="sub-grid">
           <div class="feature-card">
             <span class="material-symbols-outlined">insights</span>
-            <h3>Rentabilidad Probada</h3>
-            <p>Accede a históricos financieros auditados.</p>
+            <h3>{{ 'HOME.ENTREPRENEURS_FEATURE_TITLE' | translate }}</h3>
+            <p>{{ 'HOME.ENTREPRENEURS_FEATURE_DESC' | translate }}</p>
           </div>
           <div class="feature-card">
             <span class="material-symbols-outlined">account_balance</span>
-            <h3>Facilidad de Financiación</h3>
-            <p>Es más fácil financiar un negocio que ya funciona.</p>
+            <h3>{{ 'HOME.FINANCING_TITLE' | translate }}</h3>
+            <p>{{ 'HOME.FINANCING_DESC' | translate }}</p>
           </div>
         </div>
-        <button class="btn btn-primary-dark lg">Explorar negocios disponibles</button>
+        <button class="btn btn-primary-dark lg">{{ 'HOME.EXPLORE_BUSINESSES' | translate }}</button>
       </div>
       <div class="feature-visual">
          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7uNLbCA0b4JiQH3NIYrcQwQe35_wOcQRgCaOOnMHqDIGjF8RJTy_hdNScwZzq_tzSHY0hctLy5BOx3WiOdnbpNQWdIvy8Oqhb9CFWJ5IhZ5XmE-fRZ0AaRdx5Q-iWg23k-9ovbRLYv2GweZuo5ICKg6YobMHWqlCqXisJzs-EBDAQUhJeBFvG42VZ-kx1pWkgFFxfmVMljFMHNV2v2sSoYMZUQ9W0ENOMJHKSh4yvY-LxbzYd5bNGMDaKwo3y7jH2sSiCI1MCxYc" alt="Buyers">
          <div class="overlay-badge">
            <span class="val">+250</span>
-           <span class="lbl">OPORTUNIDADES DE INVERSIÓN</span>
+           <span class="lbl">{{ 'HOME.INVESTMENT_OPPORTUNITIES' | translate }}</span>
          </div>
       </div>
     </div>
@@ -111,24 +110,24 @@
   <!-- Process Section -->
   <section class="process bg-white">
     <div class="container-full text-center">
-      <h2>El camino hacia una sucesión exitosa</h2>
-      <p class="section-lead">Un proceso simple, riguroso y transparente diseñado para la tranquilidad de ambas partes.</p>
+      <h2>{{ 'HOME.PROCESS_TITLE' | translate }}</h2>
+      <p class="section-lead">{{ 'HOME.PROCESS_SUBTITLE' | translate }}</p>
       
       <div class="steps-grid">
         <div class="step">
           <div class="step-number">1</div>
-          <h3>Análisis y Perfilado</h3>
-          <p>Evaluamos el negocio o el perfil del comprador para asegurar la compatibilidad cultural y financiera.</p>
+          <h3>{{ 'HOME.STEP1_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.STEP1_DESC' | translate }}</p>
         </div>
         <div class="step">
           <div class="step-number">2</div>
-          <h3>Conexión Confidencial</h3>
-          <p>Bajo acuerdos de no divulgación (NDA), presentamos las partes y facilitamos las primeras reuniones.</p>
+          <h3>{{ 'HOME.STEP2_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.STEP2_DESC' | translate }}</p>
         </div>
         <div class="step">
           <div class="step-number">3</div>
-          <h3>Cierre y Transición</h3>
-          <p>Acompañamos en la negociación, due diligence y el plan de relevo para garantizar la continuidad.</p>
+          <h3>{{ 'HOME.STEP3_TITLE' | translate }}</h3>
+          <p>{{ 'HOME.STEP3_DESC' | translate }}</p>
         </div>
       </div>
     </div>
@@ -138,48 +137,48 @@
   <section class="trust dark">
     <div class="container-full grid-2">
       <div class="trust-content">
-        <h2>Tu seguridad es nuestra prioridad.</h2>
-        <p class="lead">Operamos bajo los más altos estándares de ética y profesionalidad para proteger la integridad de cada negocio.</p>
+        <h2>{{ 'HOME.TRUST_TITLE' | translate }}</h2>
+        <p class="lead">{{ 'HOME.TRUST_SUBTITLE' | translate }}</p>
         
         <div class="trust-points">
           <div class="point">
             <span class="material-symbols-outlined">lock</span>
             <div>
-              <h4>Confidencialidad Blindada</h4>
-              <p>La identidad de tu empresa solo se revela a compradores verificados bajo estrictos contratos legales.</p>
+              <h4>{{ 'HOME.TRUST_FEATURE1_TITLE' | translate }}</h4>
+              <p>{{ 'HOME.TRUST_FEATURE1_DESC' | translate }}</p>
             </div>
           </div>
           <div class="point">
             <span class="material-symbols-outlined">support_agent</span>
             <div>
-              <h4>Soporte Profesional</h4>
-              <p>Asesores expertos en fusiones y adquisiciones (M&A) disponibles en cada paso.</p>
+              <h4>{{ 'HOME.TRUST_FEATURE2_TITLE' | translate }}</h4>
+              <p>{{ 'HOME.TRUST_FEATURE2_DESC' | translate }}</p>
             </div>
           </div>
         </div>
       </div>
       
       <div class="form-card">
-        <h3>¿Listo para empezar el relevo?</h3>
+        <h3>{{ 'HOME.CONTACT_TITLE' | translate }}</h3>
         <form class="contact-form">
           <div class="form-row">
             <div class="form-group">
-              <label>Nombre completo</label>
-              <input type="text" placeholder="Ej. Juan Pérez">
+              <label>{{ 'AUTH.FULL_NAME_LABEL' | translate }}</label>
+              <input type="text" [placeholder]="'AUTH.FULL_NAME_HINT' | translate">
             </div>
             <div class="form-group">
-              <label>Email profesional</label>
-              <input type="email" placeholder="email@empresa.com">
+              <label>{{ 'AUTH.EMAIL_LABEL' | translate }}</label>
+              <input type="email" [placeholder]="'AUTH.EMAIL_HINT' | translate">
             </div>
           </div>
           <div class="form-group">
-            <label>Interés principal</label>
+            <label>{{ 'HOME.CONTACT_INTEREST_LABEL' | translate }}</label>
             <select>
-              <option>Quiero vender mi empresa</option>
-              <option>Quiero comprar un negocio</option>
+              <option>{{ 'AUTH.ROLE_OWNER' | translate }}</option>
+              <option>{{ 'AUTH.ROLE_INTERESTED' | translate }}</option>
             </select>
           </div>
-          <button type="button" routerLink="/register" class="btn btn-secondary w-full">Solicitar consulta gratuita</button>
+          <button type="button" routerLink="/register" class="btn btn-secondary w-full">{{ 'HOME.CONTACT_BUTTON' | translate }}</button>
         </form>
       </div>
     </div>

@@ -3,11 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MarketplaceSearchService } from '../../services/marketplace-search.service';
+import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, LanguageSelectorComponent, TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
@@ -37,4 +39,3 @@ export class Navbar {
     return this.authService.isAdmin() ? '/admin/dashboard' : '/perfil';
   }
 }
-

@@ -12,7 +12,8 @@ export interface Usuario {
   professionalBackground?: string; // required: false
   cv?: string;
   preferredRegions?: string[];
-  visible?: boolean;               // Nuevo campo para moderación
+  visible?: boolean;
+  language?: string;
   createdAt?: string;
   updatedAt?: string;
 }

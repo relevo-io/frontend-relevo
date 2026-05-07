@@ -6,11 +6,12 @@ import { OfertaService } from '../../../core/services/oferta.service';
 import { MarketplaceSearchService } from '../../../core/services/marketplace-search.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-marketplace-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './marketplace-home.component.html',
   styleUrl: './marketplace-home.component.css',
 })
@@ -18,6 +19,7 @@ export class MarketplaceHomeComponent {
   private ofertaService = inject(OfertaService);
   private marketplaceSearchService = inject(MarketplaceSearchService);
   private authService = inject(AuthService);
+  private translate = inject(TranslateService);
 
   ofertas = signal<Oferta[]>([]);
   isLoading = signal<boolean>(true);
@@ -75,7 +77,7 @@ export class MarketplaceHomeComponent {
       },
       error: (backendError) => {
         console.error('Error al conectar con el backend:', backendError);
-        this.error.set('No se pudieron cargar las ofertas. Inténtalo de nuevo.');
+        this.error.set(this.translate.instant('MARKETPLACE_HOME.LOADING_ERROR'));
         this.isLoading.set(false);
       },
     });

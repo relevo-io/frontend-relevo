@@ -1,4 +1,4 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -9,11 +9,12 @@ import { SolicitudService } from '../../../../core/services/solicitud.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-oferta-detalle',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, TranslateModule],
   templateUrl: './oferta-detalle.component.html',
   styleUrl: './oferta-detalle.component.css',
 })
@@ -26,6 +27,7 @@ export class OfertaDetalle {
   private ns = inject(NotificationService);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
+  private translate = inject(TranslateService);
 
   oferta = signal<Oferta | null>(null);
   isLoading = signal<boolean>(true);
@@ -53,7 +55,7 @@ export class OfertaDetalle {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (!id) {
-        this.error.set('No se encontro el identificador de la oferta.');
+        this.error.set(this.translate.instant('OFFER_DETAIL.NOT_FOUND_ERROR') || 'No se encontró el identificador de la oferta.');
         this.isLoading.set(false);
         return;
       }
@@ -73,7 +75,7 @@ export class OfertaDetalle {
       },
       error: (err) => {
         console.error('Error cargando detalle de oferta:', err);
-        this.error.set('No se pudo cargar la oferta.');
+        this.error.set(this.translate.instant('OFFER_DETAIL.LOADING_ERROR') || 'No se pudo cargar la oferta.');
         this.isLoading.set(false);
       },
     });
@@ -86,7 +88,7 @@ export class OfertaDetalle {
     }
 
     if (this.isOwnOffer()) {
-      this.ns.info('Oferta creada por ti. No puedes solicitar tu propia oferta.');
+      this.ns.info(this.translate.instant('OFFER_DETAIL.OWN_OFFER_NOTICE'));
       return;
     }
 
@@ -115,7 +117,7 @@ export class OfertaDetalle {
     const offer = this.oferta();
 
     if (!currentUser?._id || !offer?._id) {
-      this.ns.error('No se pudo identificar usuario u oferta.');
+      this.ns.error(this.translate.instant('COMMON.NOTIF.IDENTIFY_ERROR'));
       return;
     }
 
@@ -146,12 +148,12 @@ export class OfertaDetalle {
                 this.isSending.set(false);
                 this.showRequestForm.set(false);
                 this.authService.fetchProfile().subscribe();
-                this.ns.success('Solicitud enviada correctamente');
+                this.ns.success(this.translate.instant('COMMON.NOTIF.REQUEST_SENT_SUCCESS'));
               },
               error: (err) => {
                 console.error('Error creando solicitud:', err);
                 this.isSending.set(false);
-                this.ns.error('No se pudo crear la solicitud.');
+                this.ns.error(this.translate.instant('COMMON.NOTIF.REQUEST_SENT_ERROR'));
               },
             });
         },
@@ -159,7 +161,7 @@ export class OfertaDetalle {
           console.error('Error actualizando perfil previo a solicitud:', err);
           this.isSending.set(false);
           const detail = err?.error?.details?.[0]?.message;
-          this.ns.error(detail ? `No se pudo guardar tu informacion de perfil: ${detail}` : 'No se pudo guardar tu informacion de perfil.');
+          this.ns.error(detail ? `${this.translate.instant('COMMON.NOTIF.PROFILE_UPDATE_ERROR')}: ${detail}` : this.translate.instant('COMMON.NOTIF.PROFILE_UPDATE_ERROR'));
         },
       });
   }

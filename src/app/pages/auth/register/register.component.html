@@ -4,8 +4,8 @@
     <div class="visual-content">
       <div class="logo">Relevo</div>
       <div class="visual-text">
-        <h2>El primer paso hacia tu próximo gran proyecto.</h2>
-        <p>Tanto si buscas preservar tu legado como si buscas nuevas oportunidades, este es el lugar correcto.</p>
+        <h2>{{ 'AUTH.VISUAL.TITLE' | translate }}</h2>
+        <p>{{ 'AUTH.VISUAL.SUBTITLE' | translate }}</p>
       </div>
       
       <div class="visual-badge">
@@ -13,8 +13,8 @@
           <span class="material-symbols-outlined icon-fill">rocket_launch</span>
         </div>
         <div class="badge-info">
-          <p class="badge-title">Plataforma Segura</p>
-          <p class="badge-sub">Garantizamos privacidad total.</p>
+          <p class="badge-title">{{ 'AUTH.VISUAL.BADGE_TITLE' | translate }}</p>
+          <p class="badge-sub">{{ 'AUTH.VISUAL.BADGE_SUB' | translate }}</p>
         </div>
       </div>
     </div>
@@ -28,11 +28,11 @@
   <section class="auth-form-panel">
     <div class="form-container">
       <div class="form-header">
-        <h1>Crea tu cuenta</h1>
-        <p>Únete a la mayor red de sucesión empresarial</p>
+        <h1>{{ 'AUTH.REGISTER_TITLE' | translate }}</h1>
+        <p>{{ 'AUTH.REGISTER_SUBTITLE' | translate }}</p>
       </div>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
         @if (errorMessage()) {
           <div class="error-alert">
             <span class="material-symbols-outlined">error</span>
@@ -40,37 +40,48 @@
           </div>
         }
 
+        <!-- Nombre Completo -->
         <div class="form-group">
-          <label for="fullName">Nombre y Apellidos</label>
+          <label for="fullName">{{ 'AUTH.FULL_NAME_LABEL' | translate }}</label>
           <input 
             type="text" 
             id="fullName" 
             formControlName="fullName" 
-            placeholder="Juan Pérez"
-            [class.invalid]="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched"
+            [placeholder]="'AUTH.FULL_NAME_HINT' | translate"
+            [class.invalid]="f['fullName'].invalid && f['fullName'].touched"
           >
+          @if (f['fullName'].invalid && f['fullName'].touched) {
+            <span class="field-error">{{ 'OFFER_DETAIL.REQUIRED_FIELD' | translate }}</span>
+          }
         </div>
 
+        <!-- Email -->
         <div class="form-group">
-          <label for="email">Email profesional</label>
+          <label for="email">{{ 'AUTH.EMAIL_LABEL' | translate }}</label>
           <input 
             type="email" 
             id="email" 
             formControlName="email" 
-            placeholder="email@ejemplo.com"
-            [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+            [placeholder]="'AUTH.EMAIL_HINT' | translate"
+            [class.invalid]="f['email'].invalid && f['email'].touched"
           >
+          @if (f['email'].invalid && f['email'].touched) {
+            <span class="field-error">
+              {{ f['email'].errors?.['required'] ? ('OFFER_DETAIL.REQUIRED_FIELD' | translate) : ('AUTH.EMAIL_INVALID' | translate) }}
+            </span>
+          }
         </div>
 
+        <!-- Password -->
         <div class="form-group">
-          <label for="password">Contraseña (Mín. 6 carácteres)</label>
+          <label for="password">{{ 'AUTH.PASSWORD_LABEL' | translate }}</label>
           <div class="password-input">
             <input 
               [type]="showPassword() ? 'text' : 'password'" 
               id="password" 
               formControlName="password" 
-              placeholder="••••••••"
-              [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+              [placeholder]="'AUTH.PASSWORD_HINT_REGISTER' | translate"
+              [class.invalid]="f['password'].invalid && f['password'].touched"
             >
             <button type="button" class="toggle-pass" (click)="togglePassword()">
               <span class="material-symbols-outlined">
@@ -78,35 +89,45 @@
               </span>
             </button>
           </div>
+          @if (f['password'].invalid && f['password'].touched) {
+            <span class="field-error">{{ 'AUTH.PASSWORD_HINT_REGISTER' | translate }}</span>
+          }
         </div>
 
-        <div class="form-group role-selector">
-          <label>¿Qué quieres hacer en Relevo?</label>
+        <!-- Rol -->
+        <div class="form-group">
+          <label>{{ 'AUTH.ROLE_QUESTION' | translate }}</label>
           <div class="role-options">
-            <label class="role-card" [class.selected]="registerForm.get('role')?.value === 'INTERESTED'">
+            <label class="role-card" [class.selected]="f['role'].value === 'INTERESTED'">
               <input type="radio" formControlName="role" value="INTERESTED">
-              <span class="role-title">Soy Comprador</span>
-              <span class="role-desc">Busco negocios para adquirir.</span>
+              <span class="role-icon material-symbols-outlined">person_search</span>
+              <div class="role-info">
+                <span class="role-title">{{ 'AUTH.ROLE_INTERESTED' | translate }}</span>
+                <span class="role-desc">{{ 'AUTH.ROLE_INTERESTED_DESC' | translate }}</span>
+              </div>
             </label>
-            <label class="role-card" [class.selected]="registerForm.get('role')?.value === 'OWNER'">
+            <label class="role-card" [class.selected]="f['role'].value === 'OWNER'">
               <input type="radio" formControlName="role" value="OWNER">
-              <span class="role-title">Soy Propietario</span>
-              <span class="role-desc">Quiero traspasar mi negocio.</span>
+              <span class="role-icon material-symbols-outlined">storefront</span>
+              <div class="role-info">
+                <span class="role-title">{{ 'AUTH.ROLE_OWNER' | translate }}</span>
+                <span class="role-desc">{{ 'AUTH.ROLE_OWNER_DESC' | translate }}</span>
+              </div>
             </label>
           </div>
         </div>
 
-        <button type="submit" class="btn-submit" [disabled]="registerForm.invalid || isLoading()">
+        <button type="submit" class="btn-submit" [disabled]="isLoading()">
           @if (isLoading()) {
-            <span class="spinner"></span> Registrando...
+            <span class="spinner"></span> {{ 'AUTH.REGISTER_BUTTON' | translate }}...
           } @else {
-            Crear cuenta gratuita
+            {{ 'AUTH.REGISTER_BUTTON' | translate }}
           }
         </button>
       </form>
 
       <div class="form-footer">
-        <p>¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
+        <p>{{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }} <a routerLink="/login">{{ 'AUTH.LOGIN_LINK' | translate }}</a></p>
       </div>
     </div>
   </section>

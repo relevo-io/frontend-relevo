@@ -1,0 +1,16 @@
+.lang-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+}
+
+.lang-text {
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+button[mat-menu-item] {
+  display: flex;
+  align-items: center;
+}
