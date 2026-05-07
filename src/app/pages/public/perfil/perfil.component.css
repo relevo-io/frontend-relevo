@@ -212,3 +212,129 @@
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Recent Chats Section ────────────────── */
+.recent-chats .card-header {
+  margin-bottom: 1.5rem;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.recent-chats .card-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unread-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: var(--secondary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.btn-view-all {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.btn-view-all:hover {
+  text-decoration: underline;
+}
+
+.empty-state-small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 2rem 0;
+  color: var(--on-surface-variant);
+  text-align: center;
+}
+
+.empty-state-small .material-symbols-outlined {
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+.chat-list-small {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.chat-item:hover {
+  background: var(--surface-container-low);
+  border-color: var(--primary-container);
+}
+
+.chat-item.unread {
+  background: #f0fdf4;
+  border-color: var(--secondary-container);
+}
+
+.chat-avatar-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-container));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.chat-info-sm {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chat-name-sm {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-date-sm {
+  font-size: 0.7rem;
+  color: var(--on-surface-variant);
+}
+
+.unread-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--secondary);
+  border-radius: 50%;
+  flex-shrink: 0;
+}

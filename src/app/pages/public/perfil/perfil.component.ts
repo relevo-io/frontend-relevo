@@ -1,26 +1,33 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ChatService } from '../../../core/services/chat.service';
 import { Usuario } from '../../../core/models/usuario.model';
+import { Chat } from '../../../core/models/chat.model';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink, DatePipe],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   public authService = inject(AuthService);
+  private chatService = inject(ChatService);
   private fb = inject(FormBuilder);
 
   usuario = signal<Usuario | null>(null);
+  recentChats = signal<Chat[]>([]);
   isEditing = signal(false);
   isLoading = signal(true);
   isSaving = signal(false);
+
+  currentUserId = computed(() => this.authService.currentUser()?._id ?? '');
 
   profileForm: FormGroup = this.fb.group({
     location: [''],
@@ -30,6 +37,7 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit() {
     this.cargarMiPerfil();
+    this.cargarChatsRecientes();
   }
 
   cargarMiPerfil() {
@@ -76,4 +84,30 @@ export class PerfilComponent implements OnInit {
     });
   }
 
+  cargarChatsRecientes(): void {
+    this.chatService.getMyChats().subscribe({
+      next: (chats) => this.recentChats.set(chats.slice(0, 5)),
+      error: () => { /* silencioso */ }
+    });
+  }
+
+  getOtherParticipantName(chat: Chat): string {
+    const userId = this.currentUserId();
+    const owner = chat.owner as { _id: string; fullName: string } | string;
+    const interested = chat.interested as { _id: string; fullName: string } | string;
+    if (typeof owner === 'object' && owner._id !== userId) return owner.fullName;
+    if (typeof interested === 'object' && interested._id !== userId) return interested.fullName;
+    return 'Usuario';
+  }
+
+  getUnreadCount(chat: Chat): number {
+    const userId = this.currentUserId();
+    const owner = chat.owner as { _id: string } | string;
+    const isOwner = typeof owner === 'object' ? owner._id === userId : owner === userId;
+    return isOwner ? chat.unreadOwner : chat.unreadInterested;
+  }
+
+  getTotalUnread(): number {
+    return this.recentChats().reduce((sum, c) => sum + this.getUnreadCount(c), 0);
+  }
 }

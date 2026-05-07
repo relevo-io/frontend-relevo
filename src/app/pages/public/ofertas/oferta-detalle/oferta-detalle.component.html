@@ -1,4 +1,4 @@
-﻿<section class="offer-detail-page">
+<section class="offer-detail-page">
   <div class="container-full">
     <a routerLink="/" class="back-link">Volver al marketplace</a>
 
@@ -55,6 +55,21 @@
           @if (!isOwnOffer()) {
             <button (click)="abrirFormularioSolicitud()" class="btn-interest" [disabled]="isSending()">
               Solicitar esta oferta
+            </button>
+          }
+          @if (canChat()) {
+            <button
+              id="btn-contactar-owner"
+              class="btn-chat"
+              (click)="contactarOwner()"
+              [disabled]="isStartingChat()"
+            >
+              <span class="material-symbols-outlined">chat</span>
+              @if (isStartingChat()) {
+                Abriendo chat...
+              } @else {
+                Contactar con el propietario
+              }
             </button>
           }
         </div>
