@@ -8,7 +8,7 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+RUN npm run build -- --configuration=production
 
 EXPOSE 4300
 
