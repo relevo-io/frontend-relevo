@@ -1,0 +1,167 @@
+<section class="chat-room-wrapper">
+
+  <!-- Connection Banner -->
+  @if (connectionStatus() === 'disconnected' || connectionStatus() === 'reconnecting') {
+    <div class="connection-banner" [class.reconnecting]="connectionStatus() === 'reconnecting'">
+      <span class="material-symbols-outlined">wifi_off</span>
+      {{ connectionStatus() === 'reconnecting' ? 'Reconectando...' : 'Sin conexión' }}
+    </div>
+  }
+
+  <!-- Chat Header -->
+  <header class="chat-header">
+    <a routerLink="/chats" class="back-btn" aria-label="Volver a chats">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </a>
+
+    <div class="chat-header-info">
+      <div class="avatar">{{ otherParticipantName().charAt(0).toUpperCase() }}</div>
+      <div class="header-text">
+        <div class="participant-name">
+          {{ otherParticipantName() }}
+          <span class="presence-dot" [class.online]="presenceStatus() === 'online'" aria-label="Estado de conexión"></span>
+        </div>
+        @if (ofertaInfo()) {
+          <div class="oferta-label">
+            <span class="material-symbols-outlined">storefront</span>
+            {{ ofertaInfo()!.sector }} · {{ ofertaInfo()!.region }}
+          </div>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- Messages Area -->
+  <main
+    class="messages-area"
+    #messagesContainer
+    (scroll)="onScroll($event)"
+    aria-label="Mensajes del chat"
+  >
+    <!-- Load More -->
+    @if (hasMoreMessages() && !isLoadingMore()) {
+      <div class="load-more-wrapper">
+        <button class="btn-load-more" (click)="loadMoreMessages()">
+          <span class="material-symbols-outlined">expand_less</span>
+          Cargar mensajes anteriores
+        </button>
+      </div>
+    }
+
+    @if (isLoadingMore()) {
+      <div class="loading-more-indicator">
+        <div class="mini-spinner"></div>
+      </div>
+    }
+
+    <!-- Initial loading -->
+    @if (isLoading()) {
+      <div class="chat-loading">
+        <div class="loader-tech"></div>
+      </div>
+    } @else {
+
+      <!-- Message list -->
+      @for (msg of messages(); track msg._id ?? msg.localId) {
+        <div class="message-row" [class.mine]="isMine(msg)" [class.theirs]="!isMine(msg)">
+          @if (!isMine(msg)) {
+            <div class="avatar-sm">{{ getSenderName(msg).charAt(0).toUpperCase() }}</div>
+          }
+          <div class="bubble-wrapper">
+            <div
+              class="bubble"
+              [class.bubble-mine]="isMine(msg)"
+              [class.bubble-theirs]="!isMine(msg)"
+              [class.bubble-sending]="msg.status === 'sending'"
+              [class.bubble-error]="msg.status === 'error'"
+            >
+              <p class="bubble-text">{{ msg.content }}</p>
+              <div class="bubble-meta">
+                <span class="bubble-time">{{ msg.createdAt | date:'HH:mm' }}</span>
+                @if (isMine(msg)) {
+                  @switch (msg.status) {
+                    @case ('sending') {
+                      <span class="material-symbols-outlined status-icon sending">schedule</span>
+                    }
+                    @case ('error') {
+                      <button class="retry-btn" (click)="retryMessage(msg)" title="Reintentar envío">
+                        <span class="material-symbols-outlined status-icon error">error</span>
+                      </button>
+                    }
+                    @default {
+                      <span class="material-symbols-outlined status-icon sent">done</span>
+                    }
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Empty state -->
+      @if (messages().length === 0) {
+        <div class="empty-chat">
+          <span class="material-symbols-outlined">forum</span>
+          <p>Sé el primero en escribir</p>
+        </div>
+      }
+
+      <!-- Typing indicator -->
+      @if (typingUserId()) {
+        <div class="message-row theirs typing-row">
+          <div class="avatar-sm">•</div>
+          <div class="bubble bubble-theirs typing-bubble">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      }
+
+    }
+  </main>
+
+  <!-- New Message Banner -->
+  @if (showNewMessageBanner()) {
+    <button class="new-message-banner" (click)="scrollToBottom()">
+      <span class="material-symbols-outlined">arrow_downward</span>
+      Nuevo mensaje
+    </button>
+  }
+
+  <!-- Input Area -->
+  <footer class="chat-footer">
+    @if (isReadOnly()) {
+      <div class="readonly-notice">
+        <span class="material-symbols-outlined">lock</span>
+        Esta oferta ya no está disponible. El chat es de solo lectura.
+      </div>
+    } @else {
+      <div class="input-row">
+        <textarea
+          id="message-input"
+          class="message-input"
+          [value]="messageInput()"
+          (input)="onInputChange($any($event.target).value)"
+          (keydown)="onKeydown($event)"
+          placeholder="Escribe un mensaje..."
+          rows="1"
+          [disabled]="isSending()"
+          aria-label="Escribir mensaje"
+          maxlength="2000"
+        ></textarea>
+        <button
+          id="send-message-btn"
+          class="send-btn"
+          (click)="sendMessage()"
+          [disabled]="!messageInput().trim() || isSending()"
+          aria-label="Enviar mensaje"
+        >
+          <span class="material-symbols-outlined">send</span>
+        </button>
+      </div>
+    }
+  </footer>
+
+</section>

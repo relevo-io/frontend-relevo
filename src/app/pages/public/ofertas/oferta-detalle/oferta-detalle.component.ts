@@ -10,6 +10,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { AuthService } from '../../../../core/services/auth.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ChatService } from '../../../../core/services/chat.service';
 
 @Component({
   selector: 'app-oferta-detalle',
@@ -26,12 +27,14 @@ export class OfertaDetalle {
   private usuarioService = inject(UsuarioService);
   private ns = inject(NotificationService);
   private authService = inject(AuthService);
+  private chatService = inject(ChatService);
   private fb = inject(FormBuilder);
   private translate = inject(TranslateService);
 
   oferta = signal<Oferta | null>(null);
   isLoading = signal<boolean>(true);
   isSending = signal<boolean>(false);
+  isStartingChat = signal<boolean>(false);
   showRequestForm = signal<boolean>(false);
   error = signal<string | null>(null);
 
@@ -49,6 +52,11 @@ export class OfertaDetalle {
 
     const ownerId = this.extractOwnerId(offer.owner);
     return ownerId === currentUserId;
+  });
+
+  /** Visible si: logueado + no es su propia oferta */
+  canChat = computed(() => {
+    return this.authService.isLoggedIn() && !this.isOwnOffer();
   });
 
   constructor() {
@@ -172,6 +180,28 @@ export class OfertaDetalle {
 
   formatEmployees(value?: string): string {
     return formatEmployeeRange(value);
+  }
+
+  async contactarOwner(): Promise<void> {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+      return;
+    }
+
+    const ofertaId = this.oferta()?._id;
+    if (!ofertaId) return;
+
+    this.isStartingChat.set(true);
+    try {
+      const chat = await this.chatService.getOrCreateChat(ofertaId).toPromise();
+      if (chat?._id) {
+        this.router.navigate(['/chats', chat._id]);
+      }
+    } catch (err) {
+      this.ns.error('No se pudo iniciar el chat. Inténtalo de nuevo.');
+    } finally {
+      this.isStartingChat.set(false);
+    }
   }
 
   private extractOwnerId(owner: unknown): string | null {

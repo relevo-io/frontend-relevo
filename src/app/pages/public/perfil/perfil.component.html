@@ -75,6 +75,45 @@
         }
       </div>
 
+      <!-- Chats Recientes -->
+      <div class="profile-card recent-chats">
+        <div class="card-header">
+          <h2>
+            Mis Conversaciones
+            @if (getTotalUnread() > 0) {
+              <span class="unread-badge">{{ getTotalUnread() }}</span>
+            }
+          </h2>
+          <a routerLink="/chats" class="btn-view-all">Ver todos</a>
+        </div>
+
+        @if (recentChats().length === 0) {
+          <div class="empty-state-small">
+            <span class="material-symbols-outlined">chat_bubble</span>
+            <p>No tienes chats recientes.</p>
+          </div>
+        } @else {
+          <ul class="chat-list-small">
+            @for (chat of recentChats(); track chat._id) {
+              <li>
+                <a [routerLink]="['/chats', chat._id]" class="chat-item" [class.unread]="getUnreadCount(chat) > 0">
+                  <div class="chat-avatar-sm">
+                    {{ getOtherParticipantName(chat).charAt(0).toUpperCase() }}
+                  </div>
+                  <div class="chat-info-sm">
+                    <span class="chat-name-sm">{{ getOtherParticipantName(chat) }}</span>
+                    <span class="chat-date-sm">{{ chat.updatedAt | date:'dd/MM HH:mm' }}</span>
+                  </div>
+                  @if (getUnreadCount(chat) > 0) {
+                    <span class="unread-dot"></span>
+                  }
+                </a>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
     } @else {
       <div class="error-state">
         <span class="material-symbols-outlined">error</span> {{ 'PROFILE_PAGE.ERROR_LOADING' | translate }}
