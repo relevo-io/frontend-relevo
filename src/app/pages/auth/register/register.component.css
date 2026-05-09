@@ -1,10 +1,14 @@
 /* Copia dels estils base del Login */
-.login-page { min-height: 100vh; display: flex; flex-direction: column; padding-top: 100px; }
+.login-page { min-height: 100vh; display: flex; flex-direction: column; padding-top: 100px; background-color: var(--surface); }
 @media (min-width: 768px) { .login-page { flex-direction: row; } }
 
 .auth-visual {
-  display: none; background: radial-gradient(circle at top left, var(--primary) 0%, var(--primary-container) 100%);
+  display: none; background: radial-gradient(circle at top left, var(--primary-container) 0%, var(--surface-container-low) 100%);
   position: relative; overflow: hidden; padding: 3rem 3rem 1.5rem 3rem; flex-direction: column; justify-content: space-between;
+}
+body.dark-mode .auth-visual {
+  background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9) 0%, rgba(2, 6, 23, 0.98) 100%) !important;
+  backdrop-filter: blur(14px);
 }
 @media (min-width: 768px) { .auth-visual { display: flex; width: 41.6%; } }
 
@@ -22,8 +26,10 @@
 .visual-text p { color: rgba(255, 255, 255, 0.85); font-size: 1.125rem; max-width: 400px; line-height: 1.6; }
 
 .visual-badge {
-  display: flex; align-items: center; gap: 1.5rem; background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px); padding: 1.5rem; border-radius: var(--radius-xl); margin-top: auto; z-index: 10;
+  display: flex; align-items: center; gap: 1.5rem; background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 1.5rem; border-radius: var(--radius-xl); 
+  border: 1px solid rgba(255, 255, 255, 0.4); margin-top: auto; z-index: 10;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 .badge-icon { width: 48px; height: 48px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
 .icon-fill { font-variation-settings: 'FILL' 1; }
@@ -51,7 +57,7 @@
   border-radius: var(--radius-xl); font-family: inherit; font-size: 1rem; transition: all 0.2s ease; width: 100%; box-sizing: border-box;
 }
 .form-group input:not([type="radio"]):focus {
-  outline: none; background-color: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(3, 22, 50, 0.1);
+  outline: none; background-color: var(--surface-container-lowest); border-color: var(--primary); box-shadow: 0 0 0 4px var(--shadow-ambient);
 }
 .form-group input.invalid { border-color: #ef4444; }
 .field-error { color: #ef4444; font-size: 0.75rem; font-weight: 600; margin-left: 0.5rem; }
@@ -68,10 +74,10 @@
   display: flex; flex-direction: column; gap: 0.25rem;
 }
 .role-card:hover { border-color: var(--primary-fixed-dim); }
-.role-card.selected { border-color: var(--primary); background-color: var(--primary); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); }
-.role-card.selected .role-title { color: white; }
-.role-card.selected .role-desc { color: rgba(255, 255, 255, 0.9); }
-.role-card.selected .role-icon { color: white; }
+.role-card.selected { border-color: var(--secondary) !important; background-color: var(--secondary) !important; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important; }
+.role-card.selected .role-title { color: white !important; }
+.role-card.selected .role-desc { color: rgba(255, 255, 255, 0.9) !important; }
+.role-card.selected .role-icon { color: white !important; }
 .role-card input[type="radio"] { display: none; }
 .role-icon { font-size: 2rem; color: var(--on-surface-variant); }
 .role-info { display: flex; flex-direction: column; gap: 0.25rem; }
@@ -93,3 +99,9 @@
 .form-footer a:hover { text-decoration: underline; }
 .spinner { width: 1.25rem; height: 1.25rem; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+body.dark-mode .visual-badge {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}

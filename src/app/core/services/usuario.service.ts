@@ -59,4 +59,9 @@ export class UsuarioService {
   updateUsuarioLanguage(id: string, language: string): Observable<Usuario> {
     return this.http.patch<Usuario>(`${this.apiUrl}/${id}`, { language });
   }
+
+  // 9. Cambiar tema de un usuario (PATCH)
+  updateUsuarioTheme(id: string, theme: string): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiUrl}/${id}`, { theme });
+  }
 }

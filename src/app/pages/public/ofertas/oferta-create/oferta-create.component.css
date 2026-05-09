@@ -1,5 +1,5 @@
 .create-offer-page {
-  padding-top: 112px;
+  padding-top: 130px;
   padding-bottom: 48px;
 }
 
@@ -10,6 +10,7 @@
 .page-header h1 {
   font-size: 2rem;
   margin-bottom: 6px;
+  color: var(--on-surface);
 }
 
 .page-header p {
@@ -24,6 +25,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  box-shadow: var(--shadow-ambient);
 }
 
 .field-row {
@@ -40,23 +42,24 @@
 
 .field-group label {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--on-surface);
 }
 
 .required {
-  color: #b91c1c;
+  color: #ef4444;
 }
 
 .field-group input,
 .field-group textarea,
 .field-group select {
   width: 100%;
-  border: 1px solid #d7dce7;
+  border: 1px solid var(--outline-variant);
   border-radius: 10px;
   padding: 10px 12px;
   font-family: var(--font-body);
   font-size: 0.95rem;
-  background: #fff;
+  background: var(--surface-container-low);
+  color: var(--on-surface);
 }
 
 .field-group textarea {
@@ -67,8 +70,8 @@
 .field-group textarea:focus,
 .field-group select:focus {
   outline: none;
-  border-color: #9eb2d8;
-  box-shadow: 0 0 0 3px rgba(158, 178, 216, 0.2);
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(0, 109, 61, 0.2);
 }
 
 .field-group.invalid input,
@@ -78,7 +81,7 @@
 }
 
 .field-error {
-  color: #b91c1c;
+  color: #ef4444;
   font-size: 0.85rem;
 }
 
@@ -101,20 +104,37 @@
 }
 
 .btn-cancel {
-  background: #fff;
-  border: 1px solid #cfd5df;
-  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
 }
 
 .btn-save {
   border: 1px solid var(--secondary);
   background: var(--secondary);
-  color: var(--on-secondary);
+  color: #ffffff;
 }
 
 .btn-save:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* AGGRESSIVE DARK MODE OVERRIDES */
+body.dark-mode .offer-form {
+  background-color: #0a1120 !important;
+}
+
+body.dark-mode .field-group input,
+body.dark-mode .field-group textarea,
+body.dark-mode .field-group select {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .btn-cancel {
+  color: #94a3b8 !important;
 }
 
 @media (max-width: 780px) {

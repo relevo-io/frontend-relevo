@@ -57,7 +57,9 @@
     "SEARCH_PLACEHOLDER": "Busca empreses per sector, regió o descripció...",
     "DASHBOARD": "Dashboard",
     "PROFILE": "Perfil",
-    "HOME": "Inici"
+    "HOME": "Inici",
+    "DARK_MODE": "Mode fosc",
+    "LIGHT_MODE": "Mode clar"
   },
   "PROFILE": {
     "TITLE": "El Meu Perfil",

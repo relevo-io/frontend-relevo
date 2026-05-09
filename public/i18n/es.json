@@ -57,7 +57,9 @@
     "SEARCH_PLACEHOLDER": "Busca empresas por sector, región o descripción...",
     "DASHBOARD": "Dashboard",
     "PROFILE": "Perfil",
-    "HOME": "Inicio"
+    "HOME": "Inicio",
+    "DARK_MODE": "Modo oscuro",
+    "LIGHT_MODE": "Modo claro"
   },
   "PROFILE": {
     "TITLE": "Mi Perfil",
