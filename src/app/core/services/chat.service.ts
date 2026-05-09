@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject, fromEvent, merge } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
+import { environment } from '../../../environments/environment';
 import {
   Chat,
   Mensaje,
@@ -13,8 +14,8 @@ import {
   PresenceStatus
 } from '../models/chat.model';
 
-const API_URL = 'http://localhost:4000/api';
-const SOCKET_URL = 'http://localhost:4000';
+const API_URL = `${environment.apiUrl}/api`;
+const SOCKET_URL = new URL(environment.apiUrl).origin;
 
 @Injectable({
   providedIn: 'root'

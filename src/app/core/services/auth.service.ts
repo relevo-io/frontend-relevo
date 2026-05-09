@@ -5,6 +5,7 @@ import { Observable, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
 import { Usuario } from '../models/usuario.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
-  private apiUrl = 'http://localhost:4000/api';
+  private apiUrl = `${environment.apiUrl}/api`;
 
   // --- SIGNALS ---
   public currentUser = signal<Usuario | null>(null);
