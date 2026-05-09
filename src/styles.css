@@ -19,6 +19,8 @@
   --surface-variant: #e2e2e2;
   --on-surface-variant: #44474d;
   
+  --navbar-bg: rgba(255, 255, 255, 0.92);
+  
   --outline: #75777e;
   --outline-variant: #c5c6ce;
   
@@ -48,7 +50,12 @@
   --admin-border: rgba(255, 255, 255, 0.08);
   --admin-text-main: #ffffff;
   --admin-text-muted: #8293b5;
+
+  /* Utility Alphas */
+  --surface-alpha-80: rgba(249, 249, 249, 0.8);
 }
+
+/* Dark mode overrides moved to bottom for priority */
 
 /* =========================================
    BASE STYLES
@@ -61,14 +68,20 @@
 
 html, body {
   height: 100%;
+  background-color: var(--surface) !important;
 }
 
 body {
   font-family: var(--font-body);
-  background-color: var(--surface);
+  background-color: var(--surface) !important;
   color: var(--on-surface);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Forçar fons en contenidors de pàgina */
+main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace-home {
+  background-color: var(--surface) !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -105,7 +118,7 @@ button {
   height: 1px;
   padding: 0;
   margin: -1px;
-  overflow: hidden;
+  
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
@@ -393,4 +406,399 @@ button {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+
+/* =========================================
+   DARK MODE OVERRIDES (PRIORITY)
+   ========================================= */
+body.dark-mode {
+  --primary: #cbd5e1;
+  --on-primary: #020617;
+  --primary-container: #1e293b;
+  --on-primary-container: #94a3b8;
+  
+  --secondary: #006d3d;
+  --on-secondary: #ffffff;
+  --secondary-container: rgba(0, 109, 61, 0.2);
+  --on-secondary-container: #4ade80;
+  
+  --surface: #0f172a;
+  --on-surface: #f1f5f9;
+  --surface-variant: #1e293b;
+  --on-surface-variant: #94a3b8;
+  
+  --outline: #334155;
+  --outline-variant: #1e293b;
+  
+  --surface-container-low: #0a1120;
+  --surface-container: #1e293b;
+  --surface-container-high: #334155;
+  --surface-container-highest: #475569;
+  --surface-container-lowest: #020617;
+
+  --surface-alpha-80: rgba(2, 6, 23, 0.9);
+  --navbar-bg: rgba(2, 6, 23, 0.95) !important;
+}
+
+html.dark-mode, body.dark-mode {
+  background-color: #0f172a !important;
+}
+
+body.dark-mode main, 
+body.dark-mode .login-page, 
+body.dark-mode .register-page, 
+body.dark-mode .legal-page, 
+body.dark-mode .offer-detail-page, 
+body.dark-mode .marketplace-home, 
+body.dark-mode .perfil-page {
+  background-color: #0f172a !important;
+}
+/* GLOBAL BLINDAGE AGAINST WHITE */
+html.dark-mode, 
+body.dark-mode,
+html.dark-mode body {
+  background-color: #0f172a !important;
+}
+
+body.dark-mode .offer-card-large,
+body.dark-mode .profile-card,
+body.dark-mode .form-card,
+body.dark-mode .meta-item {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .meta-item strong {
+  color: #ffffff !important;
+}
+
+/* FORÇAR CONTRAST OFERTA DETALL DES DE GLOBAL */
+body.dark-mode .offer-card-large {
+  background-color: #0a1120 !important;
+  border-color: #1e293b !important;
+}
+
+body.dark-mode .meta-item {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+}
+
+body.dark-mode .meta-item strong {
+  color: #ffffff !important;
+}
+
+body.dark-mode .meta-label {
+  color: #94a3b8 !important;
+}
+
+/* UNIFICACIÓ TOTAL OFERTA DETALL AMB MARKETPLACE */
+body.dark-mode .offer-card-large {
+  background-color: #0a1120 !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .meta-item {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+
+/* RETOC FINAL ELEGÀNCIA OFERTA DETALL */
+body.dark-mode .offer-card-large {
+  background-color: #020617 !important;
+  border-color: #0f172a !important;
+}
+
+body.dark-mode .meta-item {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+}
+
+/* EFECTE GLASSMORPHISM PER AL PERFIL */
+body.dark-mode .profile-card,
+body.dark-mode .chat-item {
+  background: rgba(2, 6, 23, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+/* MILLORA INPUTS PERFIL I FORMULARIS EN MODE FOSC */
+body.dark-mode input,
+body.dark-mode textarea {
+  background-color: #0a1120 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155 !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.8 !important;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus {
+  border-color: var(--secondary) !important;
+  background-color: #020617 !important;
+  box-shadow: 0 0 0 3px rgba(0, 109, 61, 0.2) !important;
+}
+
+/* MILLORA BOTONS PERFIL MODE FOSC */
+body.dark-mode .btn-save {
+  background-color: #2563eb !important; /* Blau vibrant professional */
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+}
+
+body.dark-mode .btn-save:hover {
+  background-color: #1d4ed8 !important;
+  transform: translateY(-2px);
+}
+
+body.dark-mode .btn-cancel {
+  background-color: transparent !important;
+  color: #94a3b8 !important;
+  border: 1px solid #334155 !important;
+}
+
+body.dark-mode .btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #f1f5f9 !important;
+}
+
+/* CORRECCIÓ BOTONS PERFIL - TORNANT A L'ESTÈTICA SOBRIA */
+body.dark-mode .btn-save {
+  background-color: #334155 !important; /* Blau grisós sobri i professional */
+  color: #f1f5f9 !important;
+  border: 1px solid #475569 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .btn-save:hover {
+  background-color: #475569 !important;
+  transform: translateY(-1px);
+}
+
+/* BOTÓ SAVE PERFIL EN VERD CORPORATIU (MODE FOSC) */
+body.dark-mode .btn-save {
+  background-color: var(--secondary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.3) !important;
+}
+
+body.dark-mode .btn-save:hover {
+  background-color: #047240 !important;
+  opacity: 0.95;
+}
+
+/* LÒGICA GLOBAL DE CONTRAST EN HOVER (MODE FOSC) */
+body.dark-mode .btn-outline:hover,
+body.dark-mode .btn-secondary:hover,
+body.dark-mode .btn-chat:hover,
+body.dark-mode .btn-edit:hover,
+body.dark-mode .sector-chip:hover,
+body.dark-mode .btn-cancel:hover {
+  background-color: #cbd5e1 !important; /* Gris-blau molt clar */
+  color: #031632 !important;            /* Blau profund original */
+}
+
+body.dark-mode .btn-solid:hover,
+body.dark-mode .btn-primary:hover,
+body.dark-mode .btn-interest:hover,
+body.dark-mode .btn-save:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* BLINDATGE LLEGIBILITAT LANDING (GLOBAL) */
+body.dark-mode .landing-content h1,
+body.dark-mode .landing-content h2,
+body.dark-mode .landing-content h3,
+body.dark-mode .landing-content p,
+body.dark-mode .landing-content li,
+body.dark-mode .landing-content span:not(.logo):not(.badge),
+body.dark-mode .landing-content strong,
+body.dark-mode .landing-content .stat-label,
+body.dark-mode .landing-content .section-lead {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .landing-content .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+body.dark-mode .landing-content .secondary-text,
+body.dark-mode .landing-content .highlight {
+  color: var(--secondary) !important;
+}
+
+body.dark-mode .landing-content .stat-value {
+  color: #4ade80 !important;
+}
+
+body.dark-mode .landing-content .trust {
+  background-color: #0a1120 !important;
+}
+
+body.dark-mode .landing-content .testimonial-bubble {
+  background: rgba(30, 41, 59, 0.9) !important;
+  color: #f1f5f9 !important;
+}
+
+/* TRANSFORMACIÓ PREMIUM CHAT ROOM (MODE FOSC) */
+body.dark-mode .chat-room-wrapper {
+  background: radial-gradient(circle at top right, #0f172a 0%, #020617 100%) !important;
+  border-color: #1e293b !important;
+}
+
+body.dark-mode .chat-header,
+body.dark-mode .chat-footer {
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-color: #1e293b !important;
+}
+
+body.dark-mode .bubble-mine {
+  background: linear-gradient(135deg, #006d3d 0%, #047240 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.2) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .bubble-theirs {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .message-input {
+  background-color: #0a1120 !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .message-input:focus {
+  border-color: var(--secondary) !important;
+  background-color: #020617 !important;
+}
+
+body.dark-mode .participant-name {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .back-btn {
+  color: #ffffff !important;
+}
+
+/* JERARQUIA DE CONTRAST MÀXIM CHAT (MODE FOSC) */
+body.dark-mode .chat-room-wrapper {
+  background-color: #020617 !important; /* El punt més fosc */
+  border: 1px solid #334155 !important;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6) !important;
+   /* Més aire a dalt */
+   /* Arrodonim per separar-lo dels marges de la web */
+  
+}
+
+body.dark-mode .chat-header {
+  background-color: #1e293b !important; /* Més clar per fer de "marc" */
+  border-bottom: 1px solid #334155 !important;
+}
+
+body.dark-mode .chat-footer {
+  background-color: #1e293b !important; /* Més clar per fer de "marc" */
+  border-top: 1px solid #334155 !important;
+  padding: 16px 20px !important;
+}
+
+body.dark-mode .messages-area {
+  background-color: #050a12 !important; /* To intermig per a la conversa */
+}
+
+body.dark-mode .message-input {
+  background-color: #020617 !important; /* Tornem al fosc per a l'input */
+  border: 1px solid #475569 !important;
+}
+
+/* =========================================
+   BLINDATGE ENFOSQUIMENT IMATGE HERO
+   ========================================= */
+body.dark-mode .hero-bg img,
+body.dark-mode .hero-image {
+  filter: brightness(0.85) saturate(1.1) !important;
+  opacity: 0.65 !important;
+  transition: filter 0.6s ease !important;
+}
+
+body.dark-mode .hero-overlay {
+  background: linear-gradient(90deg, #020617 0%, rgba(2, 6, 23, 0.45) 60%, transparent 100%) !important;
+}
+
+body.dark-mode .hero-image {
+  background-image: linear-gradient(90deg, #020617 0%, rgba(2, 6, 23, 0.45) 60%, transparent 100%),
+    url('/assets/images/abstract-blue.png') !important;
+}
+
+/* FORÇAR TARGETA HERO FOSCA (MARKETPLACE) */
+body.dark-mode .hero-card {
+  background-color: #020617 !important;
+  background: rgba(2, 6, 23, 0.95) !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .hero-card h1 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .hero-card p {
+  color: #cbd5e1 !important;
+}
+
+/* UNIFICACIÓ TOTAL TARGETES DE XAT (GLOBAL DARK MODE) */
+body.dark-mode .chat-card,
+body.dark-mode .chat-item {
+  background: rgba(2, 6, 23, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .chat-card:hover,
+body.dark-mode .chat-item:hover {
+  background: rgba(30, 41, 59, 0.5) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .chat-name {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+body.dark-mode .chat-preview {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .chat-time,
+body.dark-mode .chat-oferta {
+  color: #64748b !important;
+}
+
+body.dark-mode .chat-card.unread {
+  background: rgba(0, 109, 61, 0.2) !important;
+  border-color: rgba(0, 109, 61, 0.4) !important;
+}
+
+body.dark-mode .unread-total-badge {
+  background-color: var(--secondary) !important;
+  color: #ffffff !important;
 }

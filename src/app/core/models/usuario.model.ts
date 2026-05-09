@@ -14,6 +14,7 @@ export interface Usuario {
   preferredRegions?: string[];
   visible?: boolean;
   language?: string;
+  theme?: string;
   createdAt?: string;
   updatedAt?: string;
 }

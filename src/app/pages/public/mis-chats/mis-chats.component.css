@@ -276,3 +276,56 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ─────────────────────────────────────────────
+   DARK MODE REFINEMENT (GLASSMORPISM)
+   ───────────────────────────────────────────── */
+
+body.dark-mode .mis-chats-header h1 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .subtitle {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .chat-card {
+  background: rgba(2, 6, 23, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .chat-card:hover {
+  background: rgba(30, 41, 59, 0.5) !important;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .chat-name {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .chat-preview {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .chat-time,
+body.dark-mode .chat-oferta {
+  color: #64748b !important;
+}
+
+body.dark-mode .chat-card.unread {
+  background: rgba(0, 109, 61, 0.15) !important;
+  border-color: rgba(0, 109, 61, 0.3) !important;
+}
+
+body.dark-mode .chat-preview.unread-text {
+  color: #ffffff !important;
+}
+
+body.dark-mode .readonly-badge {
+  background: #334155 !important;
+  border-color: #020617 !important;
+}

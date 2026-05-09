@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { MarketplaceSearchService } from '../../services/marketplace-search.service';
 import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class Navbar {
   public authService = inject(AuthService);
+  public themeService = inject(ThemeService);
   private router = inject(Router);
   private marketplaceSearchService = inject(MarketplaceSearchService);
 

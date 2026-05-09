@@ -15,6 +15,11 @@
     </div>
 
     <div class="navbar-actions">
+      <button (click)="themeService.toggleTheme()" class="btn-theme" [title]="(themeService.currentTheme() === 'light' ? 'NAVBAR.DARK_MODE' : 'NAVBAR.LIGHT_MODE') | translate">
+        <span class="material-symbols-outlined">
+          {{ themeService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode' }}
+        </span>
+      </button>
       <app-language-selector></app-language-selector>
       @if (authService.isLoggedIn()) {
         <a [routerLink]="getSessionActionRoute()" class="btn-outline">{{ (authService.isAdmin() ? 'NAVBAR.DASHBOARD' : 'NAVBAR.PROFILE') | translate }}</a>

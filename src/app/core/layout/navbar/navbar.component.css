@@ -2,9 +2,9 @@
   position: fixed;
   top: 0;
   width: 100%;
-  height: 80px;
+  height: 95px;
   z-index: 100;
-  background-color: rgba(255, 255, 255, 0.92);
+  background-color: var(--navbar-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--outline-variant);
@@ -27,10 +27,10 @@
 }
 
 .logo {
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.8rem;
+  font-weight: 850;
   color: var(--primary);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
 }
 
 .navbar-search {
@@ -45,7 +45,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 20px;
-  color: #74819a;
+  color: var(--on-surface-variant);
   pointer-events: none;
 }
 
@@ -53,12 +53,17 @@
   width: 100%;
   height: 44px;
   border-radius: 10px;
-  border: 1px solid #d2d8e2;
+  border: 1px solid var(--outline-variant) !important;
   padding: 0 12px 0 40px;
   font-size: 0.95rem;
-  color: var(--primary);
-  background: #f8fafc;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--on-surface) !important;
+  background: var(--surface-container-low) !important;
+  transition: all 0.2s ease;
+}
+
+body.dark-mode .navbar-search input {
+  background: var(--surface-container-low);
+  border-color: var(--outline);
 }
 
 .navbar-search input:focus {
@@ -74,12 +79,33 @@
   flex-shrink: 0;
 }
 
+.btn-theme {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-surface);
+  transition: background-color 0.2s ease;
+}
+
+.btn-theme:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .btn-theme:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .btn-outline,
 .btn-solid {
-  height: 40px;
+  height: 46px;
   border-radius: 999px;
-  padding: 0 14px;
-  font-size: 0.86rem;
+  padding: 0 20px;
+  font-size: 0.95rem;
   font-weight: 700;
   white-space: nowrap;
   display: inline-flex;
@@ -89,9 +115,9 @@
 }
 
 .btn-outline {
-  border: 1px solid #cfd5df;
-  color: var(--primary);
-  background: white;
+  border: 1px solid var(--outline-variant) !important;
+  color: var(--on-surface) !important;
+  background: var(--surface-container-low) !important;
 }
 
 .btn-solid {
@@ -141,3 +167,8 @@
   }
 }
 
+
+body.dark-mode .btn-outline:hover {
+  background-color: var(--primary) !important;
+  color: var(--on-primary) !important;
+}
