@@ -29,7 +29,7 @@
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": ["all"]
+              "allowedHosts": ["ea4.upc.edu", "localhost", "127.0.0.1"]
             },
             "ssr": {
               "entry": "src/server.ts"
@@ -67,6 +67,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "allowedHosts": true
+          },
           "configurations": {
             "production": {
               "buildTarget": "mini-spa:build:production"
