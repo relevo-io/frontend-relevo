@@ -234,5 +234,19 @@
     "ca": "Catalán",
     "es": "Castellano",
     "en": "Inglés"
+  },
+  "ERRORS": {
+    "AUTH": {
+      "INVALID_CREDENTIALS": "Las credenciales son incorrectas. Inténtalo de nuevo.",
+      "REFRESH_TOKEN_REQUIRED": "Es necesario volver a iniciar sesión.",
+      "REFRESH_TOKEN_INVALID": "Sesión caducada o inválida. Entra de nuevo.",
+      "UNAUTHORIZED": "Sesión terminada o credenciales incorrectas."
+    },
+    "DATABASE": {
+      "DUPLICATE_FIELD": "Ya existe un registro con estos datos (email o nombre)."
+    },
+    "VALIDATION_ERROR": "Por favor, revisa los datos del formulario.",
+    "NETWORK_ERROR": "Ha ocurrido un error inesperado de red.",
+    "INTERNAL_ERROR": "Ha ocurrido un error inesperado en el servidor."
   }
 }

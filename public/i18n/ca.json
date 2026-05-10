@@ -234,5 +234,19 @@
     "ca": "Català",
     "es": "Castellà",
     "en": "Anglès"
+  },
+  "ERRORS": {
+    "AUTH": {
+      "INVALID_CREDENTIALS": "Les credencials són incorrectes. Torna-ho a intentar.",
+      "REFRESH_TOKEN_REQUIRED": "S'ha de tornar a iniciar sessió.",
+      "REFRESH_TOKEN_INVALID": "Sessió caducada. Torna a entrar.",
+      "UNAUTHORIZED": "Sessió acabada o credencials incorrectes."
+    },
+    "DATABASE": {
+      "DUPLICATE_FIELD": "Ja existeix un registre amb aquestes dades (email o nom)."
+    },
+    "VALIDATION_ERROR": "Si us plau, revisa les dades del formulari.",
+    "NETWORK_ERROR": "S'ha produït un error de xarxa inesperat.",
+    "INTERNAL_ERROR": "S'ha produït un error inesperat al servidor."
   }
 }

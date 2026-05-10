@@ -234,5 +234,19 @@
     "ca": "Catalan",
     "es": "Spanish",
     "en": "English"
+  },
+  "ERRORS": {
+    "AUTH": {
+      "INVALID_CREDENTIALS": "Invalid credentials. Please try again.",
+      "REFRESH_TOKEN_REQUIRED": "Session expired. Please login again.",
+      "REFRESH_TOKEN_INVALID": "Session invalid. Please login again.",
+      "UNAUTHORIZED": "Session ended or invalid credentials."
+    },
+    "DATABASE": {
+      "DUPLICATE_FIELD": "A record with this data already exists (email or name)."
+    },
+    "VALIDATION_ERROR": "Please, review the form data.",
+    "NETWORK_ERROR": "An unexpected network error occurred.",
+    "INTERNAL_ERROR": "An unexpected error occurred on the server."
   }
 }

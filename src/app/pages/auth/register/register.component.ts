@@ -69,9 +69,9 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        const msg = err.error?.message || 'Error en el registro.';
-        this.errorMessage.set(msg);
-        this.ns.error(msg);
+        const msgKey = err.error?.message || 'ERRORS.INTERNAL_ERROR';
+        const translatedMsg = this.translate.instant(msgKey);
+        this.errorMessage.set(translatedMsg);
       }
     });
   }
