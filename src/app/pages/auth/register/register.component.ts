@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/auth.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../core/services/notification.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,7 @@ export class RegisterComponent {
   private router = inject(Router);
   private translate = inject(TranslateService);
   private ns = inject(NotificationService);
+  private themeService = inject(ThemeService);
 
   registerForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
@@ -54,7 +56,9 @@ export class RegisterComponent {
       fullName: formValues.fullName,
       email: formValues.email,
       password: formValues.password,
-      roles: formValues.role === 'OWNER' ? ['OWNER'] : ['INTERESTED']
+      roles: formValues.role === 'OWNER' ? ['OWNER'] : ['INTERESTED'],
+      theme: this.themeService.currentTheme(),
+      language: this.translate.currentLang || this.translate.defaultLang || 'es'
     };
 
     this.authService.register(requestData).subscribe({

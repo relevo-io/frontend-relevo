@@ -8,6 +8,8 @@ export interface LoginRequest {
 export interface RegisterRequest extends LoginRequest {
   fullName: string;
   roles: ('OWNER' | 'INTERESTED')[];
+  theme?: string;
+  language?: string;
 }
 
 export interface AuthResponse {
