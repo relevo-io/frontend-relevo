@@ -251,5 +251,15 @@
     "VALIDATION_ERROR": "Por favor, revisa los datos del formulario.",
     "NETWORK_ERROR": "Ha ocurrido un error inesperado de red.",
     "INTERNAL_ERROR": "Ha ocurrido un error inesperado en el servidor."
+  },
+  "MAILBOX": {
+    "TITLE": "Solicitudes Recibidas",
+    "SUBTITLE": "Gestiona las peticiones de acceso a tus ofertas",
+    "EMPTY_TITLE": "No tienes ninguna solicitud pendiente",
+    "EMPTY_DESC": "Cuando alguien esté interesado en tus ofertas, lo verás aquí.",
+    "MESSAGE_LABEL": "Mensaje del interesado",
+    "ACCEPT": "Aceptar",
+    "REJECT": "Denegar",
+    "RESOLVED_AS": "Se ha resuelto como:"
   }
 }

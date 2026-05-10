@@ -251,5 +251,15 @@
     "VALIDATION_ERROR": "Please, review the form data.",
     "NETWORK_ERROR": "An unexpected network error occurred.",
     "INTERNAL_ERROR": "An unexpected error occurred on the server."
+  },
+  "MAILBOX": {
+    "TITLE": "Received Requests",
+    "SUBTITLE": "Manage access requests for your offers",
+    "EMPTY_TITLE": "You have no pending requests",
+    "EMPTY_DESC": "When someone is interested in your offers, you will see it here.",
+    "MESSAGE_LABEL": "Message from the interested party",
+    "ACCEPT": "Accept",
+    "REJECT": "Reject",
+    "RESOLVED_AS": "Resolved as:"
   }
 }

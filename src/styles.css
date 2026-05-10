@@ -802,3 +802,45 @@ body.dark-mode .unread-total-badge {
   background-color: var(--secondary) !important;
   color: #ffffff !important;
 }
+
+/* =========================================
+   BLINDATGE BÚSTIA DE SOL·LICITUDS (DARK MODE)
+   ========================================= */
+body.dark-mode .mailbox-page {
+  background-color: #0f172a !important;
+}
+
+body.dark-mode .request-card {
+  background-color: #0a1120 !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4) !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .mailbox-header h1 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .subtitle,
+body.dark-mode .company-desc,
+body.dark-mode .date,
+body.dark-mode .resolution-text {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .applicant-details {
+  background-color: #1e293b !important;
+  border-left-color: var(--secondary) !important;
+}
+
+body.dark-mode .info-group h4 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .info-group p {
+  color: #cbd5e1 !important;
+}
+
+body.dark-mode .offer-info h3 {
+  color: #f1f5f9 !important;
+}

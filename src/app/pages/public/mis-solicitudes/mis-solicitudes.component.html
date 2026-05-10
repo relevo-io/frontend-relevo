@@ -1,0 +1,86 @@
+<main class="mailbox-page">
+  <div class="mailbox-container">
+    <div class="mailbox-header">
+      <h1>{{ 'MAILBOX.TITLE' | translate }}</h1>
+      <p class="subtitle">{{ 'MAILBOX.SUBTITLE' | translate }}</p>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-state">
+        <span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}
+      </div>
+    } @else if (solicitudes().length === 0) {
+      <div class="empty-state">
+        <span class="material-symbols-outlined">inbox</span>
+        <h2>{{ 'MAILBOX.EMPTY_TITLE' | translate }}</h2>
+        <p>{{ 'MAILBOX.EMPTY_DESC' | translate }}</p>
+      </div>
+    } @else {
+      <div class="requests-list">
+        @for (solicitud of solicitudes(); track solicitud._id) {
+          <div class="request-card">
+            <div class="request-header">
+              <div class="offer-info">
+                <h3>{{ solicitud.opportunity.sector }} - {{ solicitud.opportunity.region }}</h3>
+                <p class="company-desc">{{ solicitud.opportunity.companyDescription }}</p>
+                <span class="date">{{ solicitud.createdAt | date:'shortDate' }}</span>
+              </div>
+              <span class="status-badge" [ngClass]="solicitud.status.toLowerCase()">
+                {{ 'STATUS.' + solicitud.status | translate }}
+              </span>
+            </div>
+
+            <div class="request-body">
+              <div class="user-info">
+                <div class="avatar">{{ solicitud.interestedUser.fullName.charAt(0).toUpperCase() }}</div>
+                <div class="user-details">
+                  <span class="name">{{ solicitud.interestedUser.fullName }}</span>
+                  <span class="email">{{ solicitud.interestedUser.email }}</span>
+                </div>
+              </div>
+
+              <div class="applicant-details">
+                @if (solicitud.interestedUser.bio) {
+                  <div class="info-group">
+                    <h4>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</h4>
+                    <p>{{ solicitud.interestedUser.bio }}</p>
+                  </div>
+                }
+                @if (solicitud.interestedUser.professionalBackground) {
+                  <div class="info-group">
+                    <h4>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</h4>
+                    <p>{{ solicitud.interestedUser.professionalBackground }}</p>
+                  </div>
+                }
+                @if (solicitud.interestedUser.cv) {
+                  <div class="info-group">
+                    <h4>{{ 'OFFER_DETAIL.CV_LABEL' | translate }}</h4>
+                    <p>{{ solicitud.interestedUser.cv }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="request-actions">
+              @if (solicitud.status === 'PENDING') {
+                <button class="btn-accept" (click)="cambiarEstado(solicitud._id, 'ACCEPTED')">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  {{ 'MAILBOX.ACCEPT' | translate }}
+                </button>
+                <button class="btn-reject" (click)="cambiarEstado(solicitud._id, 'REJECTED')">
+                  <span class="material-symbols-outlined">cancel</span>
+                  {{ 'MAILBOX.REJECT' | translate }}
+                </button>
+              } @else {
+                <p class="resolution-text">
+                  {{ 'MAILBOX.RESOLVED_AS' | translate }} 
+                  <strong>{{ 'STATUS.' + solicitud.status | translate }}</strong>
+                </p>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</main>

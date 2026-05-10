@@ -251,5 +251,15 @@
     "VALIDATION_ERROR": "Si us plau, revisa les dades del formulari.",
     "NETWORK_ERROR": "S'ha produït un error de xarxa inesperat.",
     "INTERNAL_ERROR": "S'ha produït un error inesperat al servidor."
+  },
+  "MAILBOX": {
+    "TITLE": "Sol·licituds Rebudes",
+    "SUBTITLE": "Gestiona les peticions d'accés a les teves ofertes",
+    "EMPTY_TITLE": "No tens cap sol·licitud pendent",
+    "EMPTY_DESC": "Quan algú estigui interessat en les teves ofertes, ho veuràs aquí.",
+    "MESSAGE_LABEL": "Missatge de l'interessat",
+    "ACCEPT": "Acceptar",
+    "REJECT": "Denegar",
+    "RESOLVED_AS": "S'ha resolt com a:"
   }
 }

@@ -21,6 +21,7 @@ import { TerminosServicioComponent } from './pages/legal/terminos-servicio/termi
 import { PoliticaPrivacidadComponent } from './pages/legal/politica-privacidad/politica-privacidad.component';
 import { ChatRoomComponent } from './pages/public/chat/chat-room.component';
 import { MisChatsComponent } from './pages/public/mis-chats/mis-chats.component';
+import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-solicitudes.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -58,6 +59,11 @@ export const routes: Routes = [
       {
         path: 'chats/:chatId',
         component: ChatRoomComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'mis-solicitudes',
+        component: MisSolicitudesComponent,
         canActivate: [authGuard]
       },
     ]

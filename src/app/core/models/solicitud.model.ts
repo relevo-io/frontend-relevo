@@ -4,12 +4,17 @@ export interface Solicitud {
   owner: any; 
   interestedUser: {
     _id: string;
-    nombre: string;
+    fullName: string;
     email: string;
+    bio?: string;
+    professionalBackground?: string;
+    cv?: string;
   };
   opportunity: {
     _id: string;
     companyDescription: string;
+    sector: string;
+    region: string;
   };
   status: string;
   message?: string;
