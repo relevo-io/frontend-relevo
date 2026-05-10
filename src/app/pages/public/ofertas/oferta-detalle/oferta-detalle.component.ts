@@ -161,15 +161,12 @@ export class OfertaDetalle {
               error: (err) => {
                 console.error('Error creando solicitud:', err);
                 this.isSending.set(false);
-                this.ns.error(this.translate.instant('COMMON.NOTIF.REQUEST_SENT_ERROR'));
               },
             });
         },
         error: (err) => {
           console.error('Error actualizando perfil previo a solicitud:', err);
           this.isSending.set(false);
-          const detail = err?.error?.details?.[0]?.message;
-          this.ns.error(detail ? `${this.translate.instant('COMMON.NOTIF.PROFILE_UPDATE_ERROR')}: ${detail}` : this.translate.instant('COMMON.NOTIF.PROFILE_UPDATE_ERROR'));
         },
       });
   }
@@ -198,7 +195,7 @@ export class OfertaDetalle {
         this.router.navigate(['/chats', chat._id]);
       }
     } catch (err) {
-      this.ns.error('No se pudo iniciar el chat. Inténtalo de nuevo.');
+      this.ns.error(this.translate.instant('COMMON.NOTIF.CHAT_ERROR'));
     } finally {
       this.isStartingChat.set(false);
     }

@@ -13,7 +13,8 @@
       "REQUEST_SENT_SUCCESS": "Solicitud enviada correctamente",
       "REQUEST_SENT_ERROR": "No se pudo crear la solicitud.",
       "PROFILE_UPDATE_ERROR": "No se pudo guardar tu información de perfil.",
-      "REGISTER_SUCCESS": "Cuenta creada correctamente. Ahora puedes iniciar sesión."
+      "REGISTER_SUCCESS": "Cuenta creada correctamente. Ahora puedes iniciar sesión.",
+      "CHAT_ERROR": "No se pudo iniciar el chat. Inténtalo de nuevo."
     }
   },
   "AUTH": {
@@ -196,7 +197,9 @@
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "La bio es obligatoria.",
     "SENDING": "Enviando...",
-    "SAVE_REQUEST": "Guardar y solicitar"
+    "SAVE_REQUEST": "Guardar y solicitar",
+    "OPENING_CHAT": "Abriendo chat...",
+    "CONTACT_OWNER": "Contactar con el propietario"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "¿Listo para vender tu empresa o tomar el relevo?",

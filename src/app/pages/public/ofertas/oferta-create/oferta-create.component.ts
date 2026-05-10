@@ -67,9 +67,6 @@ export class OfertaCreateComponent {
       },
       error: (err) => {
         console.error('Error al crear oferta:', err);
-        if (err?.error?.errorCode !== 'VALIDATION_ERROR') {
-          this.ns.error(this.translate.instant('COMMON.NOTIF.OFFER_CREATED_ERROR'));
-        }
         this.isSaving.set(false);
       },
     });

@@ -13,7 +13,8 @@
       "REQUEST_SENT_SUCCESS": "Request sent successfully",
       "REQUEST_SENT_ERROR": "Could not create the request.",
       "PROFILE_UPDATE_ERROR": "Could not save your profile information.",
-      "REGISTER_SUCCESS": "Account created successfully. You can now log in."
+      "REGISTER_SUCCESS": "Account created successfully. You can now log in.",
+      "CHAT_ERROR": "Could not start the chat. Please try again."
     }
   },
   "AUTH": {
@@ -196,7 +197,9 @@
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "Bio is required.",
     "SENDING": "Sending...",
-    "SAVE_REQUEST": "Save and request"
+    "SAVE_REQUEST": "Save and request",
+    "OPENING_CHAT": "Opening chat...",
+    "CONTACT_OWNER": "Contact the owner"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "Ready to sell your company or take over?",

@@ -66,9 +66,9 @@
             >
               <span class="material-symbols-outlined">chat</span>
               @if (isStartingChat()) {
-                Abriendo chat...
+                {{ 'OFFER_DETAIL.OPENING_CHAT' | translate }}
               } @else {
-                Contactar con el propietario
+                {{ 'OFFER_DETAIL.CONTACT_OWNER' | translate }}
               }
             </button>
           }
@@ -82,7 +82,6 @@
     <section class="request-modal" role="dialog" aria-modal="true" [attr.aria-label]="'OFFER_DETAIL.MODAL_TITLE' | translate">
       <header class="modal-header">
         <h2>{{ 'OFFER_DETAIL.MODAL_TITLE' | translate }}</h2>
-        <button type="button" class="btn-close" (click)="cerrarFormularioSolicitud()">{{ 'OFFER_DETAIL.CLOSE' | translate }}</button>
       </header>
 
       <form [formGroup]="requestForm" (ngSubmit)="enviarSolicitud()" class="request-form" novalidate>

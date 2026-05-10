@@ -13,7 +13,8 @@
       "REQUEST_SENT_SUCCESS": "Sol·licitud enviada correctament",
       "REQUEST_SENT_ERROR": "No s'ha pogut crear la sol·licitud.",
       "PROFILE_UPDATE_ERROR": "No s'ha pogut guardar la teva informació de perfil.",
-      "REGISTER_SUCCESS": "Compte creat correctament. Ara pots iniciar sessió."
+      "REGISTER_SUCCESS": "Compte creat correctament. Ara pots iniciar sessió.",
+      "CHAT_ERROR": "No s'ha pogut iniciar el xat. Torna-ho a provar."
     }
   },
   "AUTH": {
@@ -196,7 +197,9 @@
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "La bio és obligatòria.",
     "SENDING": "Enviant...",
-    "SAVE_REQUEST": "Guardar i sol·licitar"
+    "SAVE_REQUEST": "Guardar i sol·licitar",
+    "OPENING_CHAT": "Obrint xat...",
+    "CONTACT_OWNER": "Contactar amb el propietari"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "Llest per vendre la teva empresa o prendre el relleu?",
