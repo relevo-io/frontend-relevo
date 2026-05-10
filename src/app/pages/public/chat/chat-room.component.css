@@ -7,7 +7,7 @@
   flex-direction: column;
   height: calc(100vh - 160px); /* Ajustat per al nou marge */
   max-width: 760px;
-  margin: 100px auto 40px; /* 100px top margin per a tots els modes */
+  margin: 140px auto 40px; /* Augmentat per al nou Navbar (105px) */
   background: var(--surface-container-lowest);
   border: 1px solid var(--outline-variant);
   border-radius: 16px;

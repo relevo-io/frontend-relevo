@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe, NgClass } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { ChatService } from '../../../core/services/chat.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Chat } from '../../../core/models/chat.model';
@@ -8,7 +9,7 @@ import { Chat } from '../../../core/models/chat.model';
 @Component({
   selector: 'app-mis-chats',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, TranslateModule],
   templateUrl: './mis-chats.component.html',
   styleUrl: './mis-chats.component.css'
 })

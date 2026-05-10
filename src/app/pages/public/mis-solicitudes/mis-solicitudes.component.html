@@ -5,6 +5,24 @@
       <p class="subtitle">{{ 'MAILBOX.SUBTITLE' | translate }}</p>
     </div>
 
+    <!-- Tabs -->
+    <div class="mailbox-tabs">
+      @if (isOwner()) {
+        <button 
+          [class.active]="activeTab() === 'received'" 
+          (click)="setTab('received')">
+          <span class="material-symbols-outlined">inbox</span>
+          {{ 'MAILBOX.TAB_RECEIVED' | translate }}
+        </button>
+      }
+      <button 
+        [class.active]="activeTab() === 'sent'" 
+        (click)="setTab('sent')">
+        <span class="material-symbols-outlined">send</span>
+        {{ 'MAILBOX.TAB_SENT' | translate }}
+      </button>
+    </div>
+
     @if (isLoading()) {
       <div class="loading-state">
         <span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}
@@ -31,51 +49,89 @@
             </div>
 
             <div class="request-body">
+              <!-- User Info (changes depending on tab) -->
               <div class="user-info">
-                <div class="avatar">{{ solicitud.interestedUser.fullName.charAt(0).toUpperCase() }}</div>
-                <div class="user-details">
-                  <span class="name">{{ solicitud.interestedUser.fullName }}</span>
-                  <span class="email">{{ solicitud.interestedUser.email }}</span>
-                </div>
+                @if (activeTab() === 'received') {
+                  <div class="avatar">{{ solicitud.interestedUser.fullName.charAt(0).toUpperCase() }}</div>
+                  <div class="user-details">
+                    <span class="label">{{ 'MAILBOX.MESSAGE_LABEL' | translate }}</span>
+                    <span class="name">{{ solicitud.interestedUser.fullName }}</span>
+                    <span class="email">{{ solicitud.interestedUser.email }}</span>
+                  </div>
+                } @else {
+                  <div class="avatar">{{ solicitud.owner.fullName.charAt(0).toUpperCase() }}</div>
+                  <div class="user-details">
+                    <span class="label">{{ 'MAILBOX.SENT_TO' | translate }}</span>
+                    <span class="name">{{ solicitud.owner.fullName }}</span>
+                    <span class="email">{{ solicitud.owner.email }}</span>
+                  </div>
+                }
               </div>
 
-              <div class="applicant-details">
-                @if (solicitud.interestedUser.bio) {
-                  <div class="info-group">
-                    <h4>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</h4>
-                    <p>{{ solicitud.interestedUser.bio }}</p>
-                  </div>
-                }
-                @if (solicitud.interestedUser.professionalBackground) {
-                  <div class="info-group">
-                    <h4>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</h4>
-                    <p>{{ solicitud.interestedUser.professionalBackground }}</p>
-                  </div>
-                }
-                @if (solicitud.interestedUser.cv) {
-                  <div class="info-group">
-                    <h4>{{ 'OFFER_DETAIL.CV_LABEL' | translate }}</h4>
-                    <p>{{ solicitud.interestedUser.cv }}</p>
-                  </div>
-                }
-              </div>
+              <!-- Only show applicant details to the Owner (Received tab) -->
+              @if (activeTab() === 'received') {
+                <div class="applicant-details">
+                  @if (solicitud.interestedUser.bio) {
+                    <div class="info-group">
+                      <h4>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</h4>
+                      <p>{{ solicitud.interestedUser.bio }}</p>
+                    </div>
+                  }
+                  @if (solicitud.interestedUser.professionalBackground) {
+                    <div class="info-group">
+                      <h4>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</h4>
+                      <p>{{ solicitud.interestedUser.professionalBackground }}</p>
+                    </div>
+                  }
+                  @if (solicitud.interestedUser.cv) {
+                    <div class="info-group">
+                      <h4>{{ 'OFFER_DETAIL.CV_LABEL' | translate }}</h4>
+                      <p>{{ solicitud.interestedUser.cv }}</p>
+                    </div>
+                  }
+                </div>
+              }
             </div>
 
             <div class="request-actions">
-              @if (solicitud.status === 'PENDING') {
-                <button class="btn-accept" (click)="cambiarEstado(solicitud._id, 'ACCEPTED')">
-                  <span class="material-symbols-outlined">check_circle</span>
-                  {{ 'MAILBOX.ACCEPT' | translate }}
-                </button>
-                <button class="btn-reject" (click)="cambiarEstado(solicitud._id, 'REJECTED')">
-                  <span class="material-symbols-outlined">cancel</span>
-                  {{ 'MAILBOX.REJECT' | translate }}
-                </button>
-              } @else {
-                <p class="resolution-text">
-                  {{ 'MAILBOX.RESOLVED_AS' | translate }} 
-                  <strong>{{ 'STATUS.' + solicitud.status | translate }}</strong>
-                </p>
+              <!-- Actions for Received Requests -->
+              @if (activeTab() === 'received') {
+                @if (solicitud.status === 'PENDING') {
+                  <button class="btn-accept" (click)="cambiarEstado(solicitud._id, 'ACCEPTED')">
+                    {{ 'MAILBOX.ACCEPT' | translate }}
+                  </button>
+                  <button class="btn-reject" (click)="cambiarEstado(solicitud._id, 'REJECTED')">
+                    {{ 'MAILBOX.REJECT' | translate }}
+                  </button>
+                } @else {
+                  <div class="resolution-container">
+                    <p class="resolution-text">
+                      {{ 'MAILBOX.RESOLVED_AS' | translate }} 
+                      <span [ngClass]="solicitud.status.toLowerCase()">{{ 'STATUS.' + solicitud.status | translate }}</span>
+                    </p>
+                    @if (solicitud.status === 'ACCEPTED') {
+                      <button class="btn-contact" (click)="contactarOwner(solicitud)">
+                        <span class="material-symbols-outlined">chat</span>
+                        {{ 'MAILBOX.CONTACT_OWNER' | translate }}
+                      </button>
+                    }
+                  </div>
+                }
+              }
+
+              <!-- Actions for Sent Requests -->
+              @if (activeTab() === 'sent') {
+                @if (solicitud.status === 'ACCEPTED') {
+                  <button class="btn-contact" (click)="contactarOwner(solicitud)">
+                    <span class="material-symbols-outlined">chat</span>
+                    {{ 'MAILBOX.CONTACT_OWNER' | translate }}
+                  </button>
+                } @else {
+                  <p class="resolution-text">
+                    {{ 'MAILBOX.RESOLVED_AS' | translate }} 
+                    <span [ngClass]="solicitud.status.toLowerCase()">{{ 'STATUS.' + solicitud.status | translate }}</span>
+                  </p>
+                }
               }
             </div>
           </div>

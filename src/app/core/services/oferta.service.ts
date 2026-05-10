@@ -23,6 +23,10 @@ export class OfertaService {
     return this.http.get<Oferta>(`${this.apiUrl}/${id}`);
   }
 
+  getMisOfertas(): Observable<Oferta[]> {
+    return this.http.get<Oferta[]>(`${this.apiUrl}/me`);
+  }
+
   createOferta(oferta: Oferta): Observable<Oferta> {
     return this.http.post<Oferta>(this.apiUrl, oferta);
   }

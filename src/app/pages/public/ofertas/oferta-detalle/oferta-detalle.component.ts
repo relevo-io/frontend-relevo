@@ -37,6 +37,7 @@ export class OfertaDetalle {
   isStartingChat = signal<boolean>(false);
   showRequestForm = signal<boolean>(false);
   error = signal<string | null>(null);
+  solicitudStatus = signal<string | null>(null);
 
   requestForm = this.fb.group({
     professionalBackground: ['', [Validators.required, Validators.minLength(10)]],
@@ -54,9 +55,11 @@ export class OfertaDetalle {
     return ownerId === currentUserId;
   });
 
-  /** Visible si: logueado + no es su propia oferta */
+  /** Visible si: logueado + no es su propia oferta + solicitud ACCEPTED */
   canChat = computed(() => {
-    return this.authService.isLoggedIn() && !this.isOwnOffer();
+    return this.authService.isLoggedIn() && 
+           !this.isOwnOffer() && 
+           this.solicitudStatus() === 'ACCEPTED';
   });
 
   constructor() {
@@ -80,12 +83,26 @@ export class OfertaDetalle {
       next: (data) => {
         this.oferta.set(data);
         this.isLoading.set(false);
+        this.verificarEstadoSolicitud(id);
       },
       error: (err) => {
         console.error('Error cargando detalle de oferta:', err);
         this.error.set(this.translate.instant('OFFER_DETAIL.LOADING_ERROR') || 'No se pudo cargar la oferta.');
         this.isLoading.set(false);
       },
+    });
+  }
+
+  verificarEstadoSolicitud(ofertaId: string): void {
+    if (!this.authService.isLoggedIn()) return;
+    
+    this.solicitudService.getMiSolicitudParaOferta(ofertaId).subscribe({
+      next: (sol) => {
+        if (sol) {
+          this.solicitudStatus.set(sol.status);
+        }
+      },
+      error: (err) => console.error('Error verificando estado solicitud:', err)
     });
   }
 

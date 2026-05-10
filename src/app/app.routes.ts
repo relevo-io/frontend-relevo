@@ -22,6 +22,7 @@ import { PoliticaPrivacidadComponent } from './pages/legal/politica-privacidad/p
 import { ChatRoomComponent } from './pages/public/chat/chat-room.component';
 import { MisChatsComponent } from './pages/public/mis-chats/mis-chats.component';
 import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-solicitudes.component';
+import { MisOfertasComponent } from './pages/public/mis-ofertas/mis-ofertas.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -64,6 +65,11 @@ export const routes: Routes = [
       {
         path: 'mis-solicitudes',
         component: MisSolicitudesComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'mis-ofertas',
+        component: MisOfertasComponent,
         canActivate: [authGuard]
       },
     ]

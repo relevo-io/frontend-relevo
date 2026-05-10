@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -21,6 +21,15 @@ export class Navbar {
   private marketplaceSearchService = inject(MarketplaceSearchService);
 
   searchQuery = this.marketplaceSearchService.query;
+  isMenuOpen = signal(false);
+
+  toggleMenu() {
+    this.isMenuOpen.update(v => !v);
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
 
   onSearchInput(value: string): void {
     this.marketplaceSearchService.setQuery(value);

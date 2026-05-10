@@ -20,6 +20,7 @@ export class AuthService {
   public currentUser = signal<Usuario | null>(null);
   public isLoggedIn = computed(() => !!this.currentUser());
   public isAdmin = computed(() => this.currentUser()?.roles?.includes('ADMIN') ?? false);
+  public isOwner = computed(() => this.currentUser()?.roles?.includes('OWNER') ?? false);
   public isBrowser = isPlatformBrowser(this.platformId);
 
   constructor() {

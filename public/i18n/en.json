@@ -5,17 +5,19 @@
     "HELLO_WORLD": "Hello World!",
     "FILL_ALL_FIELDS_ERROR": "Please fill all fields",
     "ROLE_OWNER": "Owner",
-    "ROLE_INTERESTED": "Buyer",
+    "ROLE_INTERESTED": "Interested",
     "NOTIF": {
       "OFFER_CREATED_SUCCESS": "Offer created successfully",
-      "OFFER_CREATED_ERROR": "Could not create the offer. Verify your permissions and try again.",
+      "OFFER_CREATED_ERROR": "Could not create the offer. Please verify your permissions and try again.",
       "IDENTIFY_ERROR": "Could not identify user or offer.",
       "REQUEST_SENT_SUCCESS": "Request sent successfully",
       "REQUEST_SENT_ERROR": "Could not create the request.",
       "PROFILE_UPDATE_ERROR": "Could not save your profile information.",
       "REGISTER_SUCCESS": "Account created successfully. You can now log in.",
       "CHAT_ERROR": "Could not start the chat. Please try again."
-    }
+    },
+    "VIEW": "View",
+    "VIEW_ALL": "View all"
   },
   "AUTH": {
     "LOGIN_TITLE": "Log In",
@@ -253,13 +255,36 @@
     "INTERNAL_ERROR": "An unexpected error occurred on the server."
   },
   "MAILBOX": {
-    "TITLE": "Received Requests",
-    "SUBTITLE": "Manage access requests for your offers",
-    "EMPTY_TITLE": "You have no pending requests",
-    "EMPTY_DESC": "When someone is interested in your offers, you will see it here.",
-    "MESSAGE_LABEL": "Message from the interested party",
+    "TITLE": "Request Management",
+    "SUBTITLE": "Manage access requests and track your own applications",
+    "TAB_RECEIVED": "Received",
+    "TAB_SENT": "Sent",
+    "EMPTY_TITLE": "No requests yet",
+    "EMPTY_DESC": "Activity related to your offers and applications will appear here.",
+    "MESSAGE_LABEL": "Interested party info",
     "ACCEPT": "Accept",
     "REJECT": "Reject",
-    "RESOLVED_AS": "Resolved as:"
+    "RESOLVED_AS": "Status:",
+    "SENT_TO": "Sent to:",
+    "CONTACT_OWNER": "Contact Owner"
+  },
+  "MY_OFFERS": {
+    "TITLE": "My Offers",
+    "SUBTITLE": "Manage your businesses published on Relevo",
+    "EMPTY_TITLE": "You haven't published any offers",
+    "EMPTY_DESC": "Start now to find the ideal successor for your business.",
+    "CREATE_NEW": "Publish new offer"
+  },
+  "CHATS_PAGE": {
+    "TITLE": "My Conversations",
+    "SUBTITLE": "Manage your chats with owners and interested parties",
+    "EMPTY_TITLE": "No conversations yet",
+    "EMPTY_DESC": "Explore the marketplace and contact other users to start talking.",
+    "EXPLORE": "Explore offers"
+  },
+  "STATUS": {
+    "PENDING": "Pending",
+    "ACCEPTED": "Accepted",
+    "REJECTED": "Rejected"
   }
 }

@@ -37,6 +37,7 @@
   /* Spacing & Borders */
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
+  --radius-2xl: 1.25rem;
   --radius-full: 9999px;
   
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
@@ -843,4 +844,43 @@ body.dark-mode .info-group p {
 
 body.dark-mode .offer-info h3 {
   color: #f1f5f9 !important;
+}
+
+body.dark-mode .mailbox-tabs {
+  border-bottom-color: #1e293b !important;
+}
+
+body.dark-mode .mailbox-tabs button:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .mailbox-tabs button.active {
+  background-color: rgba(0, 109, 61, 0.2) !important;
+  color: #4ade80 !important;
+}
+
+body.dark-mode .mailbox-tabs button.active::after {
+  background-color: #4ade80 !important;
+}
+
+body.dark-mode .empty-state {
+  background-color: #0a1120 !important;
+  border: 1px solid #1e293b !important;
+  color: #f1f5f9 !important;
+  padding: 3rem !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+body.dark-mode .empty-state h2 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .empty-state p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .empty-state .material-symbols-outlined {
+  color: #1e293b !important;
+  font-size: 4rem !important;
 }

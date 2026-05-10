@@ -1,7 +1,6 @@
 
 export interface Solicitud {
   _id: string;
-  owner: any; 
   interestedUser: {
     _id: string;
     fullName: string;
@@ -9,6 +8,11 @@ export interface Solicitud {
     bio?: string;
     professionalBackground?: string;
     cv?: string;
+  };
+  owner: {
+    _id: string;
+    fullName: string;
+    email: string;
   };
   opportunity: {
     _id: string;

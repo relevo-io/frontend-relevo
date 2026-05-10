@@ -15,7 +15,9 @@
       "PROFILE_UPDATE_ERROR": "No s'ha pogut guardar la teva informació de perfil.",
       "REGISTER_SUCCESS": "Compte creat correctament. Ara pots iniciar sessió.",
       "CHAT_ERROR": "No s'ha pogut iniciar el xat. Torna-ho a provar."
-    }
+    },
+    "VIEW": "Veure",
+    "VIEW_ALL": "Veure-ho tot"
   },
   "AUTH": {
     "LOGIN_TITLE": "Iniciar Sessió",
@@ -253,13 +255,36 @@
     "INTERNAL_ERROR": "S'ha produït un error inesperat al servidor."
   },
   "MAILBOX": {
-    "TITLE": "Sol·licituds Rebudes",
-    "SUBTITLE": "Gestiona les peticions d'accés a les teves ofertes",
-    "EMPTY_TITLE": "No tens cap sol·licitud pendent",
-    "EMPTY_DESC": "Quan algú estigui interessat en les teves ofertes, ho veuràs aquí.",
-    "MESSAGE_LABEL": "Missatge de l'interessat",
+    "TITLE": "Gestió de Sol·licituds",
+    "SUBTITLE": "Gestiona les teves peticions d'accés i el seguiment de les teves aplicacions",
+    "TAB_RECEIVED": "Rebudes",
+    "TAB_SENT": "Enviades",
+    "EMPTY_TITLE": "No tens cap sol·licitud",
+    "EMPTY_DESC": "Aquí apareixerà l'activitat de les teves ofertes i aplicacions.",
+    "MESSAGE_LABEL": "Informació de l'interessat",
     "ACCEPT": "Acceptar",
     "REJECT": "Denegar",
-    "RESOLVED_AS": "S'ha resolt com a:"
+    "RESOLVED_AS": "Estat:",
+    "SENT_TO": "Enviada a:",
+    "CONTACT_OWNER": "Contactar amb el propietari"
+  },
+  "MY_OFFERS": {
+    "TITLE": "Les meves Ofertes",
+    "SUBTITLE": "Gestiona els teus negocis publicats a Relevo",
+    "EMPTY_TITLE": "No has publicat cap oferta",
+    "EMPTY_DESC": "Comença ara a buscar el relleu ideal per al teu negoci.",
+    "CREATE_NEW": "Publicar nova oferta"
+  },
+  "CHATS_PAGE": {
+    "TITLE": "Les meves Converses",
+    "SUBTITLE": "Gestiona els teus xats amb propietaris i interessats",
+    "EMPTY_TITLE": "Encara no tens cap conversa",
+    "EMPTY_DESC": "Explora el marketplace i contacta amb altres usuaris per començar a parlar.",
+    "EXPLORE": "Explorar ofertes"
+  },
+  "STATUS": {
+    "PENDING": "Pendent",
+    "ACCEPTED": "Acceptada",
+    "REJECTED": "Denegada"
   }
 }

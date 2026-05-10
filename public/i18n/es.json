@@ -5,17 +5,19 @@
     "HELLO_WORLD": "¡Hola Mundo!",
     "FILL_ALL_FIELDS_ERROR": "Por favor, rellena todos los campos",
     "ROLE_OWNER": "Propietario",
-    "ROLE_INTERESTED": "Comprador",
+    "ROLE_INTERESTED": "Interesado",
     "NOTIF": {
       "OFFER_CREATED_SUCCESS": "Oferta creada correctamente",
-      "OFFER_CREATED_ERROR": "No se pudo crear la oferta. Verifica tus permisos y vuelve a intentarlo.",
-      "IDENTIFY_ERROR": "No se pudo identificar usuario u oferta.",
+      "OFFER_CREATED_ERROR": "No se pudo crear la oferta. Verifica tus permisos y reintenta.",
+      "IDENTIFY_ERROR": "No se pudo identificar al usuario o la oferta.",
       "REQUEST_SENT_SUCCESS": "Solicitud enviada correctamente",
       "REQUEST_SENT_ERROR": "No se pudo crear la solicitud.",
       "PROFILE_UPDATE_ERROR": "No se pudo guardar tu información de perfil.",
       "REGISTER_SUCCESS": "Cuenta creada correctamente. Ahora puedes iniciar sesión.",
-      "CHAT_ERROR": "No se pudo iniciar el chat. Inténtalo de nuevo."
-    }
+      "CHAT_ERROR": "No se pudo iniciar el chat. Reinténtalo."
+    },
+    "VIEW": "Ver",
+    "VIEW_ALL": "Ver todo"
   },
   "AUTH": {
     "LOGIN_TITLE": "Iniciar Sesión",
@@ -253,13 +255,36 @@
     "INTERNAL_ERROR": "Ha ocurrido un error inesperado en el servidor."
   },
   "MAILBOX": {
-    "TITLE": "Solicitudes Recibidas",
-    "SUBTITLE": "Gestiona las peticiones de acceso a tus ofertas",
-    "EMPTY_TITLE": "No tienes ninguna solicitud pendiente",
-    "EMPTY_DESC": "Cuando alguien esté interesado en tus ofertas, lo verás aquí.",
-    "MESSAGE_LABEL": "Mensaje del interesado",
+    "TITLE": "Gestión de Solicitudes",
+    "SUBTITLE": "Gestiona tus peticiones de acceso y el seguimiento de tus aplicaciones",
+    "TAB_RECEIVED": "Recibidas",
+    "TAB_SENT": "Enviadas",
+    "EMPTY_TITLE": "No tienes ninguna solicitud",
+    "EMPTY_DESC": "Aquí aparecerá la actividad de tus ofertas y aplicaciones.",
+    "MESSAGE_LABEL": "Información del interesado",
     "ACCEPT": "Aceptar",
     "REJECT": "Denegar",
-    "RESOLVED_AS": "Se ha resuelto como:"
+    "RESOLVED_AS": "Estado:",
+    "SENT_TO": "Enviada a:",
+    "CONTACT_OWNER": "Contactar con el propietario"
+  },
+  "MY_OFFERS": {
+    "TITLE": "Mis Ofertas",
+    "SUBTITLE": "Gestiona tus negocios publicados en Relevo",
+    "EMPTY_TITLE": "No has publicado ninguna oferta",
+    "EMPTY_DESC": "Comienza ahora a buscar el relevo ideal para tu negocio.",
+    "CREATE_NEW": "Publicar nueva oferta"
+  },
+  "CHATS_PAGE": {
+    "TITLE": "Mis Conversaciones",
+    "SUBTITLE": "Gestiona tus chats con propietarios e interesados",
+    "EMPTY_TITLE": "Aún no tienes ninguna conversación",
+    "EMPTY_DESC": "Explora el marketplace y contacta con otros usuarios para empezar a hablar.",
+    "EXPLORE": "Explorar ofertas"
+  },
+  "STATUS": {
+    "PENDING": "Pendiente",
+    "ACCEPTED": "Aceptada",
+    "REJECTED": "Denegada"
   }
 }

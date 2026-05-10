@@ -1,25 +1,31 @@
-/* ─────────────────────────────────────────────
-   MIS CHATS
-   ───────────────────────────────────────────── */
+.mailbox-page {
+  min-height: calc(100vh - 95px);
+  padding: 120px 1rem 3rem;
+  background-color: var(--surface-container-lowest);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-.mis-chats-wrapper {
-  max-width: 680px;
+.mailbox-container {
+  max-width: 800px;
   margin: 0 auto;
-  padding: 112px 16px 80px; /* 80px navbar + 32px padding */
 }
 
-/* ── Header ──────────────────────────────── */
-.mis-chats-header {
-  margin-bottom: 28px;
+.mailbox-header {
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.mis-chats-header h1 {
+.mailbox-header h1 {
+  font-size: 2.5rem;
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  color: var(--primary);
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1.6rem;
-  color: var(--primary);
-  margin-bottom: 6px;
+  gap: 12px;
 }
 
 .mis-chats-header h1 .material-symbols-outlined {
@@ -46,62 +52,59 @@
   font-weight: 700;
 }
 
-/* ── State containers ─────────────────────── */
-.state-container {
+.loading-state, .empty-state, .error-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 0;
-  color: var(--on-surface-variant);
+  padding: 5rem 2rem;
   text-align: center;
-  gap: 16px;
+  background-color: var(--surface-container-low);
+  border-radius: var(--radius-2xl);
+  border: 1px dashed var(--outline-variant);
 }
 
-.state-container .material-symbols-outlined {
-  font-size: 52px;
-  opacity: 0.35;
+.loading-state .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0,0,0,0.1);
+  border-left-color: var(--secondary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
 }
 
-.state-container.error {
-  color: #ef4444;
+.empty-state .material-symbols-outlined {
+  font-size: 4rem;
+  color: var(--outline);
+  margin-bottom: 1.5rem;
+  opacity: 0.4;
 }
 
-.state-container.error .material-symbols-outlined {
-  opacity: 1;
+.empty-state h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
 }
 
-.btn-retry {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 20px;
-  background: var(--primary);
+.empty-state p {
+  color: var(--on-surface-variant);
+  margin-bottom: 2rem;
+  max-width: 400px;
+}
+
+.btn-create-first {
+  background-color: var(--secondary);
   color: white;
+  padding: 0.8rem 2rem;
   border-radius: var(--radius-full);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: opacity 0.2s;
-}
-
-.btn-retry:hover { opacity: 0.85; }
-
-.btn-go-ofertas {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
-  background: var(--secondary);
-  color: white;
-  border-radius: var(--radius-full);
-  font-size: 0.85rem;
   font-weight: 700;
-  transition: opacity 0.2s;
+  transition: transform 0.2s;
 }
 
-.btn-go-ofertas:hover { opacity: 0.85; }
+.btn-create-first:hover {
+  transform: translateY(-2px);
+}
 
 /* ── Chat list ───────────────────────────── */
 .chat-list {
@@ -264,28 +267,31 @@
 }
 
 /* ── Loader ───────────────────────────────── */
-.loader-tech {
-  width: 36px;
-  height: 36px;
-  border: 3px solid var(--outline-variant);
-  border-top-color: var(--secondary);
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
 /* ─────────────────────────────────────────────
-   DARK MODE REFINEMENT (GLASSMORPISM)
+   DARK MODE REFINEMENT
    ───────────────────────────────────────────── */
+body.dark-mode .mailbox-page {
+  background: #020617;
+}
 
-body.dark-mode .mis-chats-header h1 {
+body.dark-mode .mailbox-header h1 {
   color: #ffffff !important;
 }
 
-body.dark-mode .subtitle {
+body.dark-mode .empty-state {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+}
+
+body.dark-mode .empty-state h2 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .empty-state p {
   color: #94a3b8 !important;
 }
 

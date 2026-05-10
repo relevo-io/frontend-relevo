@@ -29,6 +29,10 @@ export class SolicitudService {
     return this.http.get<Solicitud[]>(`${this.API_URL}/me/recibidas`);
   }
 
+  getMisSolicitudesEnviadas(): Observable<Solicitud[]> {
+    return this.http.get<Solicitud[]>(`${this.API_URL}/me/enviadas`);
+  }
+
   crearSolicitud(data: { opportunityId: string, message: string }): Observable<Solicitud> {
     return this.http.post<Solicitud>(this.API_URL, data);
   }
@@ -37,6 +41,10 @@ export class SolicitudService {
     return this.http.request('delete', `${this.API_URL}/batch`, {
       body: { ids }
     });
+  }
+
+  getMiSolicitudParaOferta(ofertaId: string): Observable<Solicitud | null> {
+    return this.http.get<Solicitud | null>(`${this.API_URL}/oferta/${ofertaId}/me`);
   }
 
 }

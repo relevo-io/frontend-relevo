@@ -1,46 +1,45 @@
-<section class="mis-chats-wrapper">
+<main class="mailbox-page">
+  <div class="mailbox-container">
+    <header class="mailbox-header">
+      <h1>
+        {{ 'CHATS_PAGE.TITLE' | translate }}
+        @if (getTotalUnread() > 0) {
+          <span class="unread-total-badge">{{ getTotalUnread() }}</span>
+        }
+      </h1>
+      <p class="subtitle">{{ 'CHATS_PAGE.SUBTITLE' | translate }}</p>
+    </header>
 
-  <header class="mis-chats-header">
-    <h1>
-      <span class="material-symbols-outlined">forum</span>
-      Conversaciones
-      @if (getTotalUnread() > 0) {
-        <span class="unread-total-badge">{{ getTotalUnread() }}</span>
-      }
-    </h1>
-    <p class="subtitle">Tus chats activos con propietarios e interesados</p>
-  </header>
+    <!-- Loading -->
+    @if (isLoading()) {
+      <div class="loading-state">
+        <span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}
+      </div>
+    }
 
-  <!-- Loading -->
-  @if (isLoading()) {
-    <div class="state-container">
-      <div class="loader-tech"></div>
-    </div>
-  }
+    <!-- Error -->
+    @if (!isLoading() && error()) {
+      <div class="error-state">
+        <span class="material-symbols-outlined">error</span>
+        <p>{{ error() }}</p>
+        <button class="btn-retry" (click)="loadChats()">
+          <span class="material-symbols-outlined">refresh</span>
+          {{ 'COMMON.RETRY' | translate }}
+        </button>
+      </div>
+    }
 
-  <!-- Error -->
-  @if (!isLoading() && error()) {
-    <div class="state-container error">
-      <span class="material-symbols-outlined">error</span>
-      <p>{{ error() }}</p>
-      <button class="btn-retry" (click)="loadChats()">
-        <span class="material-symbols-outlined">refresh</span>
-        Reintentar
-      </button>
-    </div>
-  }
-
-  <!-- Empty -->
-  @if (!isLoading() && !error() && chats().length === 0) {
-    <div class="state-container">
-      <span class="material-symbols-outlined">chat_bubble</span>
-      <p>No tienes conversaciones todavía</p>
-      <a routerLink="/ofertas" class="btn-go-ofertas">
-        <span class="material-symbols-outlined">storefront</span>
-        Explorar ofertas
-      </a>
-    </div>
-  }
+    <!-- Empty -->
+    @if (!isLoading() && !error() && chats().length === 0) {
+      <div class="empty-state">
+        <span class="material-symbols-outlined">chat_bubble</span>
+        <h2>{{ 'CHATS_PAGE.EMPTY_TITLE' | translate }}</h2>
+        <p>{{ 'CHATS_PAGE.EMPTY_DESC' | translate }}</p>
+        <a routerLink="/ofertas" class="btn-create-first">
+          {{ 'CHATS_PAGE.EXPLORE' | translate }}
+        </a>
+      </div>
+    }
 
   <!-- Chat list -->
   @if (!isLoading() && !error() && chats().length > 0) {
@@ -87,5 +86,5 @@
       }
     </ul>
   }
-
-</section>
+  </div>
+</main>

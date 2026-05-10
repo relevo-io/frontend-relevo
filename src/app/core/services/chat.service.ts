@@ -200,8 +200,8 @@ export class ChatService implements OnDestroy {
   // ─────────────────────────────────────────────
 
   /** Crea o recupera el chat para una oferta */
-  getOrCreateChat(ofertaId: string): Observable<Chat> {
-    return this.http.post<Chat>(`${API_URL}/chats`, { ofertaId });
+  getOrCreateChat(ofertaId: string, interestedId?: string): Observable<Chat> {
+    return this.http.post<Chat>(`${API_URL}/chats`, { ofertaId, interestedId });
   }
 
   /** Lista de mis chats activos */

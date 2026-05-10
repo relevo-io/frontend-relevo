@@ -83,28 +83,40 @@
               <span class="material-symbols-outlined">inbox</span>
               {{ 'MAILBOX.TITLE' | translate }}
             </h2>
-            <a routerLink="/mis-solicitudes" class="btn-view-all">Obrir bústia</a>
+            <a routerLink="/mis-solicitudes" class="btn-view-all">{{ 'COMMON.VIEW_ALL' | translate }}</a>
           </div>
           <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px;">{{ 'MAILBOX.SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="profile-card offers-management-card">
+          <div class="card-header">
+            <h2 style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined">business_center</span>
+              {{ 'MY_OFFERS.TITLE' | translate }}
+            </h2>
+            <a routerLink="/mis-ofertas" class="btn-view-all">{{ 'COMMON.VIEW_ALL' | translate }}</a>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px;">{{ 'MY_OFFERS.SUBTITLE' | translate }}</p>
         </div>
       }
 
       <!-- Chats Recientes -->
       <div class="profile-card recent-chats">
         <div class="card-header">
-          <h2>
-            Mis Conversaciones
+          <h2 style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined">chat_bubble</span>
+            {{ 'CHATS_PAGE.TITLE' | translate }}
             @if (getTotalUnread() > 0) {
               <span class="unread-badge">{{ getTotalUnread() }}</span>
             }
           </h2>
-          <a routerLink="/chats" class="btn-view-all">Ver todos</a>
+          <a routerLink="/chats" class="btn-view-all">{{ 'COMMON.VIEW_ALL' | translate }}</a>
         </div>
 
         @if (recentChats().length === 0) {
           <div class="empty-state-small">
             <span class="material-symbols-outlined">chat_bubble</span>
-            <p>No tienes chats recientes.</p>
+            <p>{{ 'CHATS_PAGE.EMPTY_TITLE' | translate }}</p>
           </div>
         } @else {
           <ul class="chat-list-small">
