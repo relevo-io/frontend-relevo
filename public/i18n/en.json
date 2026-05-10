@@ -266,7 +266,8 @@
     "REJECT": "Reject",
     "RESOLVED_AS": "Status:",
     "SENT_TO": "Sent to:",
-    "CONTACT_OWNER": "Contact Owner"
+    "CONTACT_OWNER": "Contact Owner",
+    "CONTACT_INTERESTED": "Contact interested party"
   },
   "MY_OFFERS": {
     "TITLE": "My Offers",
@@ -281,6 +282,19 @@
     "EMPTY_TITLE": "No conversations yet",
     "EMPTY_DESC": "Explore the marketplace and contact other users to start talking.",
     "EXPLORE": "Explore offers"
+  },
+  "CHAT": {
+    "READ_ONLY_NOTICE": "This offer is no longer available. Chat is read-only.",
+    "APPROVAL_TITLE": "New message request",
+    "APPROVAL_DESC": "{{ name }} wants to contact you. Do you want to accept the conversation?",
+    "ACCEPT": "Accept",
+    "REJECT": "Ignore",
+    "WAITING_APPROVAL": "Waiting for the user to accept your message request...",
+    "REJECTED_NOTICE": "This user has decided not to accept your message request.",
+    "REJECTED_NOTICE_OWNER": "You have decided not to accept this message request.",
+    "EMPTY_STATE": "Be the first to write",
+    "LOAD_MORE": "Load previous messages",
+    "NEW_MESSAGE": "New message"
   },
   "STATUS": {
     "PENDING": "Pending",

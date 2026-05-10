@@ -266,7 +266,8 @@
     "REJECT": "Denegar",
     "RESOLVED_AS": "Estado:",
     "SENT_TO": "Enviada a:",
-    "CONTACT_OWNER": "Contactar con el propietario"
+    "CONTACT_OWNER": "Contactar con el propietario",
+    "CONTACT_INTERESTED": "Contactar con el interesado"
   },
   "MY_OFFERS": {
     "TITLE": "Mis Ofertas",
@@ -281,6 +282,19 @@
     "EMPTY_TITLE": "Aún no tienes ninguna conversación",
     "EMPTY_DESC": "Explora el marketplace y contacta con otros usuarios para empezar a hablar.",
     "EXPLORE": "Explorar ofertas"
+  },
+  "CHAT": {
+    "READ_ONLY_NOTICE": "Esta oferta ya no está disponible. El chat es de solo lectura.",
+    "APPROVAL_TITLE": "Nueva solicitud de mensaje",
+    "APPROVAL_DESC": "{{ name }} quiere contactar contigo. ¿Quieres aceptar la conversación?",
+    "ACCEPT": "Aceptar",
+    "REJECT": "Ignorar",
+    "WAITING_APPROVAL": "Esperando a que el usuario acepte tu solicitud de mensaje...",
+    "REJECTED_NOTICE": "Este usuario ha decidido no aceptar tu solicitud de mensaje.",
+    "REJECTED_NOTICE_OWNER": "Has decidido no aceptar esta solicitud de mensaje.",
+    "EMPTY_STATE": "Sé el primero en escribir",
+    "LOAD_MORE": "Cargar mensajes anteriores",
+    "NEW_MESSAGE": "Nuevo mensaje"
   },
   "STATUS": {
     "PENDING": "Pendiente",

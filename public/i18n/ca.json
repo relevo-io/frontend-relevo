@@ -266,7 +266,8 @@
     "REJECT": "Denegar",
     "RESOLVED_AS": "Estat:",
     "SENT_TO": "Enviada a:",
-    "CONTACT_OWNER": "Contactar amb el propietari"
+    "CONTACT_OWNER": "Contactar amb el propietari",
+    "CONTACT_INTERESTED": "Contactar amb l'interessat"
   },
   "MY_OFFERS": {
     "TITLE": "Les meves Ofertes",
@@ -281,6 +282,19 @@
     "EMPTY_TITLE": "Encara no tens cap conversa",
     "EMPTY_DESC": "Explora el marketplace i contacta amb altres usuaris per començar a parlar.",
     "EXPLORE": "Explorar ofertes"
+  },
+  "CHAT": {
+    "READ_ONLY_NOTICE": "Aquesta oferta ja no està disponible. El xat és de només lectura.",
+    "APPROVAL_TITLE": "Nova sol·licitud de missatge",
+    "APPROVAL_DESC": "{{ name }} vol contactar amb tu. Vols acceptar la conversa?",
+    "ACCEPT": "Acceptar",
+    "REJECT": "Ignorar",
+    "WAITING_APPROVAL": "Esperant que l'usuari accepti la teva sol·licitud de missatge...",
+    "REJECTED_NOTICE": "Aquest usuari ha decidit no acceptar la teva sol·licitud de missatge.",
+    "REJECTED_NOTICE_OWNER": "Has decidit no acceptar aquesta sol·licitud de missatge.",
+    "EMPTY_STATE": "Sigues el primer a escriure",
+    "LOAD_MORE": "Carregar missatges anteriors",
+    "NEW_MESSAGE": "Nou missatge"
   },
   "STATUS": {
     "PENDING": "Pendent",

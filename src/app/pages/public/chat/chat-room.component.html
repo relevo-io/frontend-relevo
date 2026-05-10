@@ -43,7 +43,7 @@
       <div class="load-more-wrapper">
         <button class="btn-load-more" (click)="loadMoreMessages()">
           <span class="material-symbols-outlined">expand_less</span>
-          Cargar mensajes anteriores
+          {{ 'CHAT.LOAD_MORE' | translate }}
         </button>
       </div>
     }
@@ -103,7 +103,7 @@
       @if (messages().length === 0) {
         <div class="empty-chat">
           <span class="material-symbols-outlined">forum</span>
-          <p>Sé el primero en escribir</p>
+          <p>{{ 'CHAT.EMPTY_STATE' | translate }}</p>
         </div>
       }
 
@@ -126,7 +126,7 @@
   @if (showNewMessageBanner()) {
     <button class="new-message-banner" (click)="scrollToBottom()">
       <span class="material-symbols-outlined">arrow_downward</span>
-      Nuevo mensaje
+      {{ 'CHAT.NEW_MESSAGE' | translate }}
     </button>
   }
 
@@ -135,7 +135,39 @@
     @if (isReadOnly()) {
       <div class="readonly-notice">
         <span class="material-symbols-outlined">lock</span>
-        Esta oferta ya no está disponible. El chat es de solo lectura.
+        {{ 'CHAT.READ_ONLY_NOTICE' | translate }}
+      </div>
+    } @else if (isPendingApproval()) {
+      <div class="approval-banner">
+        @if (isOwnerOfOffer()) {
+          <div class="approval-content">
+            <span class="material-symbols-outlined icon-main">waving_hand</span>
+            <div class="approval-text">
+              <h4>{{ 'CHAT.APPROVAL_TITLE' | translate }}</h4>
+              <p>{{ 'CHAT.APPROVAL_DESC' | translate:{ name: otherParticipantName() } }}</p>
+            </div>
+            <div class="approval-actions">
+              <button class="btn-approve" (click)="updateStatus('APPROVED')">
+                <span class="material-symbols-outlined">check</span>
+                {{ 'CHAT.ACCEPT' | translate }}
+              </button>
+              <button class="btn-reject-chat" (click)="updateStatus('REJECTED')">
+                <span class="material-symbols-outlined">close</span>
+                {{ 'CHAT.REJECT' | translate }}
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="waiting-banner">
+            <span class="material-symbols-outlined">hourglass_empty</span>
+            <p>{{ 'CHAT.WAITING_APPROVAL' | translate }}</p>
+          </div>
+        }
+      </div>
+    } @else if (chat()?.status === 'REJECTED') {
+      <div class="rejected-banner">
+        <span class="material-symbols-outlined">block</span>
+        <p>{{ (isOwnerOfOffer() ? 'CHAT.REJECTED_NOTICE_OWNER' : 'CHAT.REJECTED_NOTICE') | translate }}</p>
       </div>
     } @else {
       <div class="input-row">
@@ -147,7 +179,7 @@
           (keydown)="onKeydown($event)"
           placeholder="Escribe un mensaje..."
           rows="1"
-          [disabled]="isSending()"
+          [disabled]="!canReply() || isSending()"
           aria-label="Escribir mensaje"
           maxlength="2000"
         ></textarea>

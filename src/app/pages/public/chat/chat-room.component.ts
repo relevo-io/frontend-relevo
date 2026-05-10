@@ -10,11 +10,12 @@ import {
   AfterViewChecked,
   PLATFORM_ID
 } from '@angular/core';
-import { isPlatformBrowser, NgClass, AsyncPipe, DatePipe } from '@angular/common';
+import { isPlatformBrowser, AsyncPipe, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { TranslateModule } from '@ngx-translate/core';
 import { ChatService } from '../../../core/services/chat.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Mensaje, Chat, ConnectionStatus, PresenceStatus } from '../../../core/models/chat.model';
@@ -22,7 +23,7 @@ import { Mensaje, Chat, ConnectionStatus, PresenceStatus } from '../../../core/m
 @Component({
   selector: 'app-chat-room',
   standalone: true,
-  imports: [DatePipe, FormsModule, RouterLink],
+  imports: [DatePipe, FormsModule, RouterLink, TranslateModule],
   templateUrl: './chat-room.component.html',
   styleUrl: './chat-room.component.css'
 })
@@ -59,6 +60,23 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   // ── Computed ─────────────────────────────────
   currentUserId = computed(() => this.authService.currentUser()?._id ?? '');
   isReadOnly = computed(() => this.chat()?.isReadOnly ?? false);
+  isPendingApproval = computed(() => this.chat()?.status === 'PENDING_APPROVAL');
+  
+  isOwnerOfOffer = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    const ownerId = typeof c.owner === 'object' ? c.owner._id : c.owner;
+    return ownerId === this.currentUserId();
+  });
+
+  canReply = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    if (c.isReadOnly) return false;
+    if (c.status === 'PENDING_APPROVAL') return false;
+    if (c.status === 'REJECTED') return false;
+    return true;
+  });
 
   otherParticipantName = computed(() => {
     const c = this.chat();
@@ -247,6 +265,21 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.messages.set(updated);
     } finally {
       this.isSending.set(false);
+    }
+  }
+
+  async updateStatus(newStatus: 'APPROVED' | 'REJECTED'): Promise<void> {
+    const id = this.chatId();
+    this.isLoading.set(true);
+    try {
+      const updated = await this.chatService.updateChatStatus(id, newStatus).toPromise();
+      if (updated) {
+        this.chat.set(updated);
+      }
+    } catch (err) {
+      console.error('[ChatRoom] Error updating status:', err);
+    } finally {
+      this.isLoading.set(false);
     }
   }
 

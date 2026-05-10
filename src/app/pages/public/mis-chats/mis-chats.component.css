@@ -335,3 +335,60 @@ body.dark-mode .readonly-badge {
   background: #334155 !important;
   border-color: #020617 !important;
 }
+
+/* ── Quick Actions ────────────────────────── */
+.quick-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--outline-variant);
+}
+
+.btn-quick-approve, .btn-quick-reject {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-quick-approve {
+  color: #22c55e;
+}
+
+.btn-quick-approve:hover {
+  background: #f0fdf4;
+  transform: scale(1.1);
+}
+
+.btn-quick-reject {
+  color: #ef4444;
+}
+
+.btn-quick-reject:hover {
+  background: #fef2f2;
+  transform: scale(1.1);
+}
+
+.btn-quick-approve .material-symbols-outlined,
+.btn-quick-reject .material-symbols-outlined {
+  font-size: 24px !important;
+}
+
+body.dark-mode .quick-actions {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .btn-quick-approve:hover {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+body.dark-mode .btn-quick-reject:hover {
+  background: rgba(239, 68, 68, 0.1);
+}

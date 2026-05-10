@@ -458,6 +458,215 @@
   cursor: not-allowed;
 }
 
+/* ── Approval Banners ──────────────────────── */
+.approval-banner, .waiting-banner, .rejected-banner {
+  padding: 20px;
+  background: var(--surface-container);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--outline-variant);
+  margin-bottom: 12px;
+  animation: fadeInMsg 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.approval-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .approval-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.icon-main {
+  font-size: 32px !important;
+  color: var(--secondary);
+  background: var(--secondary-container);
+  padding: 12px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.approval-text {
+  flex: 1;
+}
+
+.approval-text h4 {
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.approval-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--on-surface-variant);
+  line-height: 1.5;
+}
+
+.approval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn-approve, .btn-reject-chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+}
+
+.btn-approve {
+  background: var(--secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.2);
+}
+
+.btn-approve:hover {
+  background: #047240;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 109, 61, 0.3);
+}
+
+.btn-reject-chat {
+  background: transparent;
+  color: #ef4444;
+  border: 1.5px solid #fecaca;
+}
+
+.btn-reject-chat:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.waiting-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface-container-low);
+  border-style: dashed;
+}
+
+.waiting-banner p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+}
+
+.waiting-banner .material-symbols-outlined {
+  color: var(--primary);
+  animation: rotate 2s linear infinite;
+}
+
+.rejected-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff1f2;
+  border-color: #fecaca;
+  color: #9f1239;
+}
+
+.rejected-banner p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ── Dark Mode ───────────────────────────── */
+body.dark-mode .chat-room-wrapper {
+  background: #020617;
+  border-color: #1e293b;
+}
+
+body.dark-mode .chat-header,
+body.dark-mode .chat-footer {
+  background: #0f172a;
+  border-color: #1e293b;
+}
+
+body.dark-mode .messages-area {
+  background-color: #020617;
+}
+
+body.dark-mode .bubble-theirs {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .message-input {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+:host-context(.dark-mode) .approval-banner,
+:host-context(.dark-mode) .waiting-banner,
+body.dark-mode .approval-banner,
+body.dark-mode .waiting-banner {
+  background: rgba(15, 23, 42, 0.9) !important;
+  backdrop-filter: blur(8px);
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .icon-main {
+  background: #064e3b;
+  color: #a7f3d0;
+}
+
+body.dark-mode .approval-text h4 {
+  color: var(--secondary);
+}
+
+body.dark-mode .approval-text p,
+:host-context(.dark-mode) .waiting-banner p,
+body.dark-mode .waiting-banner p {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .btn-reject-chat {
+  color: #f87171;
+  border-color: #7f1d1d;
+}
+
+body.dark-mode .btn-reject-chat:hover {
+  background: #450a0a;
+}
+
+:host-context(.dark-mode) .rejected-banner,
+body.dark-mode .rejected-banner {
+  background: #450a0a !important;
+  border-color: #7f1d1d !important;
+  color: #fee2e2 !important;
+}
+
+:host-context(.dark-mode) .rejected-banner p,
+body.dark-mode .rejected-banner p,
+:host-context(.dark-mode) .rejected-banner .material-symbols-outlined,
+body.dark-mode .rejected-banner .material-symbols-outlined {
+  color: #fee2e2 !important;
+}
+
+body.dark-mode .waiting-banner .material-symbols-outlined {
+  color: var(--secondary);
+}
+
 /* ── Animations ───────────────────────────── */
 @keyframes fadeInMsg {
   from { opacity: 0; transform: translateY(6px); }

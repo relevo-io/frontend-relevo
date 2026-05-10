@@ -110,9 +110,9 @@
                       <span [ngClass]="solicitud.status.toLowerCase()">{{ 'STATUS.' + solicitud.status | translate }}</span>
                     </p>
                     @if (solicitud.status === 'ACCEPTED') {
-                      <button class="btn-contact" (click)="contactarOwner(solicitud)">
+                      <button class="btn-contact" (click)="contactar(solicitud)">
                         <span class="material-symbols-outlined">chat</span>
-                        {{ 'MAILBOX.CONTACT_OWNER' | translate }}
+                        {{ 'MAILBOX.CONTACT_INTERESTED' | translate }}
                       </button>
                     }
                   </div>
@@ -122,7 +122,7 @@
               <!-- Actions for Sent Requests -->
               @if (activeTab() === 'sent') {
                 @if (solicitud.status === 'ACCEPTED') {
-                  <button class="btn-contact" (click)="contactarOwner(solicitud)">
+                  <button class="btn-contact" (click)="contactar(solicitud)">
                     <span class="material-symbols-outlined">chat</span>
                     {{ 'MAILBOX.CONTACT_OWNER' | translate }}
                   </button>

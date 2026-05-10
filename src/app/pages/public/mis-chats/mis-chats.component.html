@@ -80,6 +80,18 @@
                   <span class="unread-badge">{{ getUnreadCount(chat) }}</span>
                 }
               </div>
+
+              <!-- Accions ràpides per a propietaris en xats pendents -->
+              @if (chat.status === 'PENDING_APPROVAL' && isOwnerOfOffer(chat)) {
+                <div class="quick-actions">
+                  <button class="btn-quick-approve" (click)="updateChatStatus($event, chat, 'APPROVED')" title="Acceptar xat">
+                    <span class="material-symbols-outlined">check_circle</span>
+                  </button>
+                  <button class="btn-quick-reject" (click)="updateChatStatus($event, chat, 'REJECTED')" title="Ignorar xat">
+                    <span class="material-symbols-outlined">cancel</span>
+                  </button>
+                </div>
+              }
             </div>
           </a>
         </li>

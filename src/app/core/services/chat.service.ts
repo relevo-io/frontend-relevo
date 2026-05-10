@@ -11,7 +11,8 @@ import {
   SendMessageAck,
   JoinChatAck,
   ConnectionStatus,
-  PresenceStatus
+  PresenceStatus,
+  ChatStatus
 } from '../models/chat.model';
 
 const API_URL = `${environment.apiUrl}/api`;
@@ -51,12 +52,19 @@ export class ChatService implements OnDestroy {
 
   connect(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    // CRITICAL FIX: Check if socket instance exists, not just if it is connected.
-    // Otherwise, async connections create multiple sockets.
-    if (this.socket) return;
-
     const token = this.authService.getToken();
     if (!token) return;
+
+    // Si el socket ja existeix però el token ha canviat (canvi d'usuari), desconnectem
+    if (this.socket) {
+      const auth = this.socket.auth;
+      const socketToken = typeof auth === 'object' ? (auth as any)?.['token'] : null;
+      
+      if (socketToken === `Bearer ${token}`) return;
+      
+      console.warn('[ChatService] Token mismatch detected, reconnecting socket...');
+      this.disconnect();
+    }
 
     // Run socket initialization outside Angular to avoid infinite change detection loops
     this.ngZone.runOutsideAngular(() => {
@@ -222,6 +230,11 @@ export class ChatService implements OnDestroy {
   /** Marca mensajes como leídos vía REST (fallback si el socket no está disponible) */
   markReadRest(chatId: string): Observable<void> {
     return this.http.patch<void>(`${API_URL}/chats/${chatId}/read`, {});
+  }
+
+  /** Actualiza el estado de aprobación de un chat (APPROVED / REJECTED) */
+  updateChatStatus(chatId: string, status: 'APPROVED' | 'REJECTED'): Observable<Chat> {
+    return this.http.patch<Chat>(`${API_URL}/chats/${chatId}/status`, { status });
   }
 
   // ─────────────────────────────────────────────

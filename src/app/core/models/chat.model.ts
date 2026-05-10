@@ -8,6 +8,8 @@ export interface LastMessage {
   sentAt: string;
 }
 
+export type ChatStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED';
+
 export interface Chat {
   _id: string;
   oferta: string | { _id: string; sector: string; region: string; companyDescription: string };
@@ -17,6 +19,7 @@ export interface Chat {
   unreadOwner: number;
   unreadInterested: number;
   isReadOnly: boolean;
+  status: ChatStatus;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -83,4 +83,22 @@ export class MisChatsComponent implements OnInit {
     if (!chat.lastMessage) return false;
     return chat.lastMessage.senderId === this.currentUserId();
   }
+
+  isOwnerOfOffer(chat: Chat): boolean {
+    const userId = this.currentUserId();
+    const ownerId = typeof chat.owner === 'object' ? chat.owner._id : chat.owner;
+    return ownerId === userId;
+  }
+
+  updateChatStatus(event: Event, chat: Chat, status: 'APPROVED' | 'REJECTED'): void {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    this.chatService.updateChatStatus(chat._id, status).subscribe({
+      next: (updated) => {
+        this.chats.update(list => list.map(c => c._id === chat._id ? updated : c));
+      },
+      error: (err) => console.error('Error updating chat status:', err)
+    });
+  }
 }

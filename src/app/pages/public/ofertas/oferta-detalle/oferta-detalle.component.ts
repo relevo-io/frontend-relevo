@@ -55,11 +55,9 @@ export class OfertaDetalle {
     return ownerId === currentUserId;
   });
 
-  /** Visible si: logueado + no es su propia oferta + solicitud ACCEPTED */
+  /** Visible si: logueado + no es su propia oferta (ahora permitimos contactar sin solicitud previa) */
   canChat = computed(() => {
-    return this.authService.isLoggedIn() && 
-           !this.isOwnOffer() && 
-           this.solicitudStatus() === 'ACCEPTED';
+    return this.authService.isLoggedIn() && !this.isOwnOffer();
   });
 
   constructor() {

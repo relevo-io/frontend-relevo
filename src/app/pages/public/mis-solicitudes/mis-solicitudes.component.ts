@@ -79,7 +79,7 @@ export class MisSolicitudesComponent implements OnInit {
     });
   }
 
-  async contactarOwner(solicitud: Solicitud) {
+  async contactar(solicitud: Solicitud) {
     if (solicitud.status !== 'ACCEPTED') return;
 
     try {

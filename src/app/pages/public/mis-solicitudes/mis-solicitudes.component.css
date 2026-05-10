@@ -363,14 +363,16 @@ body.dark-mode .status-badge.pending {
   color: #fbbf24;
 }
 
-body.dark-mode .status-badge.accepted {
-  background-color: rgba(16, 185, 129, 0.2);
-  color: #34d399;
+body.dark-mode .status-badge.accepted,
+:host-context(.dark-mode) .status-badge.accepted {
+  background-color: #064e3b !important;
+  color: #a7f3d0 !important;
 }
 
-body.dark-mode .status-badge.rejected {
-  background-color: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+body.dark-mode .status-badge.rejected,
+:host-context(.dark-mode) .status-badge.rejected {
+  background-color: #7f1d1d !important;
+  color: #fecaca !important;
 }
 
 .empty-state {
