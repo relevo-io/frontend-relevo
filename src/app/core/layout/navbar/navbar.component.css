@@ -371,3 +371,22 @@ body.dark-mode .btn-switch-theme:hover {
   background-color: var(--secondary);
   color: white;
 }
+.unread-badge {
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+body.dark-mode .unread-badge {
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}

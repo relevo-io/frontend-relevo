@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { ChatService } from '../../../core/services/chat.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Chat } from '../../../core/models/chat.model';
+import { Chat, Mensaje } from '../../../core/models/chat.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-mis-chats',
@@ -16,6 +17,7 @@ import { Chat } from '../../../core/models/chat.model';
 export class MisChatsComponent implements OnInit {
   private chatService = inject(ChatService);
   private authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef);
 
   chats = signal<Chat[]>([]);
   isLoading = signal(true);
@@ -24,7 +26,45 @@ export class MisChatsComponent implements OnInit {
   currentUserId = computed(() => this.authService.currentUser()?._id ?? '');
 
   ngOnInit(): void {
+    this.chatService.connect();
     this.loadChats();
+    this.listenToNotifications();
+  }
+
+  private listenToNotifications(): void {
+    this.chatService.notifications$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ chatId, message }) => {
+        this.chats.update(list => {
+          const index = list.findIndex(c => c._id === chatId);
+          if (index === -1) return list;
+
+          const updatedChat = { ...list[index] };
+          
+          // Actualitzar l'últim missatge
+          updatedChat.lastMessage = {
+            content: message.content,
+            senderId: typeof message.sender === 'object' ? message.sender._id : message.sender,
+            sentAt: message.createdAt
+          };
+          updatedChat.updatedAt = message.createdAt;
+
+          // Incrementar comptador de no llegits (ja que la notificació és per al receptor)
+          const isOwner = this.isOwnerOfOffer(updatedChat);
+          if (isOwner) updatedChat.unreadOwner++;
+          else updatedChat.unreadInterested++;
+
+          const newList = [...list];
+          newList[index] = updatedChat;
+          
+          // Re-ordenar perquè el més recent surti a dalt
+          return newList.sort((a, b) => {
+            const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+            const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+            return dateB - dateA;
+          });
+        });
+      });
   }
 
   loadChats(): void {

@@ -1,7 +1,7 @@
 import { Injectable, inject, PLATFORM_ID, OnDestroy, NgZone } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject, fromEvent, merge } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, fromEvent, merge, tap } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
@@ -36,9 +36,15 @@ export class ChatService implements OnDestroy {
   private typingSubject = new BehaviorSubject<string | null>(null);
   private connectionStatusSubject = new BehaviorSubject<ConnectionStatus>('disconnected');
   private presenceSubject = new BehaviorSubject<PresenceStatus>('offline');
+  private notificationsSubject = new Subject<{ chatId: string; message: Mensaje }>();
+  private totalUnreadSubject = new BehaviorSubject<number>(0);
 
   /** Stream de mensajes nuevos entrantes */
   readonly messages$ = this.messagesSubject.asObservable();
+  /** Notificaciones globales (para actualizar listados) */
+  readonly notifications$ = this.notificationsSubject.asObservable();
+  /** Conteo total de mensajes no leídos */
+  readonly totalUnread$ = this.totalUnreadSubject.asObservable();
   /** Stream del userId que está escribiendo (null si no hay nadie) */
   readonly typing$ = this.typingSubject.asObservable();
   /** Estado de la conexión socket */
@@ -139,6 +145,13 @@ export class ChatService implements OnDestroy {
       this.ngZone.run(() => this.presenceSubject.next('offline'));
     });
 
+    this.socket.on('chat_notification', (data: { chatId: string; message: Mensaje }) => {
+      this.ngZone.run(() => {
+        this.notificationsSubject.next(data);
+        this.totalUnreadSubject.next(this.totalUnreadSubject.value + 1);
+      });
+    });
+
     this.socket.on('error', (error: { message: string }) => {
       console.error('[ChatService] Socket error:', error.message);
     });
@@ -214,7 +227,16 @@ export class ChatService implements OnDestroy {
 
   /** Lista de mis chats activos */
   getMyChats(): Observable<Chat[]> {
-    return this.http.get<Chat[]>(`${API_URL}/chats`);
+    return this.http.get<Chat[]>(`${API_URL}/chats`).pipe(
+      tap((chats: Chat[]) => {
+        const userId = this.authService.currentUser()?._id;
+        const total = chats.reduce((sum: number, chat: Chat) => {
+          const isOwner = typeof chat.owner === 'object' ? chat.owner._id === userId : chat.owner === userId;
+          return sum + (isOwner ? chat.unreadOwner : chat.unreadInterested);
+        }, 0);
+        this.totalUnreadSubject.next(total);
+      })
+    );
   }
 
   /**
@@ -228,8 +250,13 @@ export class ChatService implements OnDestroy {
   }
 
   /** Marca mensajes como leídos vía REST (fallback si el socket no está disponible) */
-  markReadRest(chatId: string): Observable<void> {
-    return this.http.patch<void>(`${API_URL}/chats/${chatId}/read`, {});
+  markChatAsRead(chatId: string): Observable<{ ok: boolean }> {
+    return this.http.patch<{ ok: boolean }>(`${API_URL}/chats/${chatId}/read`, {}).pipe(
+      tap(() => {
+        // Podríamos recalcular el total o simplemente recargar
+        this.getMyChats().subscribe();
+      })
+    );
   }
 
   /** Actualiza el estado de aprobación de un chat (APPROVED / REJECTED) */

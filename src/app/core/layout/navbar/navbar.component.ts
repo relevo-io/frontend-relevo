@@ -6,6 +6,7 @@ import { MarketplaceSearchService } from '../../services/marketplace-search.serv
 import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { ThemeService } from '../../services/theme.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,11 +18,17 @@ import { ThemeService } from '../../services/theme.service';
 export class Navbar {
   public authService = inject(AuthService);
   public themeService = inject(ThemeService);
+  private chatService = inject(ChatService);
   private router = inject(Router);
   private marketplaceSearchService = inject(MarketplaceSearchService);
 
   searchQuery = this.marketplaceSearchService.query;
   isMenuOpen = signal(false);
+  unreadCount = signal(0);
+
+  constructor() {
+    this.chatService.totalUnread$.subscribe(count => this.unreadCount.set(count));
+  }
 
   toggleMenu() {
     this.isMenuOpen.update(v => !v);
