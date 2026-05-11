@@ -59,29 +59,35 @@ export class MarketplaceHomeComponent {
   });
 
   constructor() {
-    effect(() => {
-      this.authService.currentUser();
-      this.cargarOfertas();
+    effect((onCleanup) => {
+      // 1. Al leer currentUser(), el effect se queda escuchando sus cambios
+      const currentUserId = this.authService.currentUser()?._id;
+      
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      // 2. Lanzamos la petición HTTP y la guardamos en una variable
+      const peticion = this.ofertaService.getOfertas(currentUserId).subscribe({
+        next: (datosDelServidor) => {
+          this.ofertas.set(datosDelServidor);
+          this.isLoading.set(false);
+        },
+        error: (backendError) => {
+          console.error('Error al conectar con el backend:', backendError);
+          this.error.set(this.translate.instant('MARKETPLACE_HOME.LOADING_ERROR'));
+          this.isLoading.set(false);
+        },
+      });
+
+      // 3. Si el usuario cambia mientras la petición 1 estaba en vuelo, 
+      // Angular cancelará la petición 1 antes de lanzar la petición 2.
+      onCleanup(() => {
+        peticion.unsubscribe();
+      });
     });
   }
 
-  cargarOfertas(): void {
-    this.isLoading.set(true);
-    this.error.set(null);
-    const currentUserId = this.authService.currentUser()?._id;
 
-    this.ofertaService.getOfertas(currentUserId).subscribe({
-      next: (datosDelServidor) => {
-        this.ofertas.set(datosDelServidor);
-        this.isLoading.set(false);
-      },
-      error: (backendError) => {
-        console.error('Error al conectar con el backend:', backendError);
-        this.error.set(this.translate.instant('MARKETPLACE_HOME.LOADING_ERROR'));
-        this.isLoading.set(false);
-      },
-    });
-  }
 
   filtrarPorSector(sector: string): void {
     this.marketplaceSearchService.setQuery(sector);

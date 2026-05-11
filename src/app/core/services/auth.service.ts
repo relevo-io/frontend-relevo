@@ -24,9 +24,10 @@ export class AuthService {
   public isBrowser = isPlatformBrowser(this.platformId);
 
   constructor() {
-    afterNextRender(() => {
+    // Si estamos en el navegador, leemos la caché al instante, sin esperar al siguiente render
+    if (this.isBrowser) {
       this.checkToken();
-    });
+    }
   }
 
   private checkToken() {
