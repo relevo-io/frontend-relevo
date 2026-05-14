@@ -6,6 +6,6 @@ import { TranslateModule } from '@ngx-translate/core';
   selector: 'app-home',
   imports: [RouterModule, TranslateModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrl: './home.component.css'
 })
 export class Home {}

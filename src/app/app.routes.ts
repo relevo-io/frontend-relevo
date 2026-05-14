@@ -47,8 +47,8 @@ export const routes: Routes = [
       { path: 'terminos-servicio', component: TerminosServicioComponent },
       { path: 'politica-privacidad', component: PoliticaPrivacidadComponent },
       { path: 'usuarios', component: UsuariosListComponent },
-      { 
-        path: 'perfil', 
+      {
+        path: 'perfil',
         component: PerfilComponent,
         canActivate: [authGuard]
       },
@@ -71,7 +71,7 @@ export const routes: Routes = [
         path: 'mis-ofertas',
         component: MisOfertasComponent,
         canActivate: [authGuard]
-      },
+      }
     ]
   },
 
@@ -92,4 +92,3 @@ export const routes: Routes = [
   // Fallback
   { path: '**', redirectTo: '' }
 ];
-

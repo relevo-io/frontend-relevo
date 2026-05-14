@@ -17,7 +17,7 @@ import { ChatService } from '../../../../core/services/chat.service';
   standalone: true,
   imports: [CommonModule, RouterLink, ReactiveFormsModule, TranslateModule],
   templateUrl: './oferta-detalle.component.html',
-  styleUrl: './oferta-detalle.component.css',
+  styleUrl: './oferta-detalle.component.css'
 })
 export class OfertaDetalle {
   private route = inject(ActivatedRoute);
@@ -43,7 +43,7 @@ export class OfertaDetalle {
     professionalBackground: ['', [Validators.required, Validators.minLength(10)]],
     preferredRegionsText: ['', [Validators.required, Validators.minLength(2)]],
     bio: ['', [Validators.required, Validators.minLength(10)]],
-    cv: ['', [Validators.required, Validators.minLength(10)]],
+    cv: ['', [Validators.required, Validators.minLength(10)]]
   });
 
   isOwnOffer = computed(() => {
@@ -64,7 +64,9 @@ export class OfertaDetalle {
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (!id) {
-        this.error.set(this.translate.instant('OFFER_DETAIL.NOT_FOUND_ERROR') || 'No se encontró el identificador de la oferta.');
+        this.error.set(
+          this.translate.instant('OFFER_DETAIL.NOT_FOUND_ERROR') || 'No se encontró el identificador de la oferta.'
+        );
         this.isLoading.set(false);
         return;
       }
@@ -87,13 +89,13 @@ export class OfertaDetalle {
         console.error('Error cargando detalle de oferta:', err);
         this.error.set(this.translate.instant('OFFER_DETAIL.LOADING_ERROR') || 'No se pudo cargar la oferta.');
         this.isLoading.set(false);
-      },
+      }
     });
   }
 
   verificarEstadoSolicitud(ofertaId: string): void {
     if (!this.authService.isLoggedIn()) return;
-    
+
     this.solicitudService.getMiSolicitudParaOferta(ofertaId).subscribe({
       next: (sol) => {
         if (sol) {
@@ -120,7 +122,7 @@ export class OfertaDetalle {
       professionalBackground: current?.professionalBackground ?? '',
       preferredRegionsText: (current?.preferredRegions ?? []).join(', '),
       bio: current?.bio ?? '',
-      cv: current?.cv ?? '',
+      cv: current?.cv ?? ''
     });
 
     this.showRequestForm.set(true);
@@ -157,14 +159,14 @@ export class OfertaDetalle {
         professionalBackground: formValue.professionalBackground?.trim(),
         preferredRegions,
         bio: formValue.bio?.trim(),
-        cv: formValue.cv?.trim(),
+        cv: formValue.cv?.trim()
       })
       .subscribe({
         next: () => {
           this.solicitudService
             .crearSolicitud({
               opportunityId: offer._id!,
-              message: `Solicitud enviada por ${currentUser.fullName}.`,
+              message: `Solicitud enviada por ${currentUser.fullName}.`
             })
             .subscribe({
               next: () => {
@@ -176,13 +178,13 @@ export class OfertaDetalle {
               error: (err) => {
                 console.error('Error creando solicitud:', err);
                 this.isSending.set(false);
-              },
+              }
             });
         },
         error: (err) => {
           console.error('Error actualizando perfil previo a solicitud:', err);
           this.isSending.set(false);
-        },
+        }
       });
   }
 

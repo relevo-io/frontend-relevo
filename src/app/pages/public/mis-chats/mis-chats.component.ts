@@ -32,39 +32,37 @@ export class MisChatsComponent implements OnInit {
   }
 
   private listenToNotifications(): void {
-    this.chatService.notifications$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ chatId, message }) => {
-        this.chats.update(list => {
-          const index = list.findIndex(c => c._id === chatId);
-          if (index === -1) return list;
+    this.chatService.notifications$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ chatId, message }) => {
+      this.chats.update((list) => {
+        const index = list.findIndex((c) => c._id === chatId);
+        if (index === -1) return list;
 
-          const updatedChat = { ...list[index] };
-          
-          // Actualitzar l'últim missatge
-          updatedChat.lastMessage = {
-            content: message.content,
-            senderId: typeof message.sender === 'object' ? message.sender._id : message.sender,
-            sentAt: message.createdAt
-          };
-          updatedChat.updatedAt = message.createdAt;
+        const updatedChat = { ...list[index] };
 
-          // Incrementar comptador de no llegits (ja que la notificació és per al receptor)
-          const isOwner = this.isOwnerOfOffer(updatedChat);
-          if (isOwner) updatedChat.unreadOwner++;
-          else updatedChat.unreadInterested++;
+        // Actualitzar l'últim missatge
+        updatedChat.lastMessage = {
+          content: message.content,
+          senderId: typeof message.sender === 'object' ? message.sender._id : message.sender,
+          sentAt: message.createdAt
+        };
+        updatedChat.updatedAt = message.createdAt;
 
-          const newList = [...list];
-          newList[index] = updatedChat;
-          
-          // Re-ordenar perquè el més recent surti a dalt
-          return newList.sort((a, b) => {
-            const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-            const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-            return dateB - dateA;
-          });
+        // Incrementar comptador de no llegits (ja que la notificació és per al receptor)
+        const isOwner = this.isOwnerOfOffer(updatedChat);
+        if (isOwner) updatedChat.unreadOwner++;
+        else updatedChat.unreadInterested++;
+
+        const newList = [...list];
+        newList[index] = updatedChat;
+
+        // Re-ordenar perquè el més recent surti a dalt
+        return newList.sort((a, b) => {
+          const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+          const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+          return dateB - dateA;
         });
       });
+    });
   }
 
   loadChats(): void {
@@ -133,10 +131,10 @@ export class MisChatsComponent implements OnInit {
   updateChatStatus(event: Event, chat: Chat, status: 'APPROVED' | 'REJECTED'): void {
     event.preventDefault();
     event.stopPropagation();
-    
+
     this.chatService.updateChatStatus(chat._id, status).subscribe({
       next: (updated) => {
-        this.chats.update(list => list.map(c => c._id === chat._id ? updated : c));
+        this.chats.update((list) => list.map((c) => (c._id === chat._id ? updated : c)));
       },
       error: (err) => console.error('Error updating chat status:', err)
     });

@@ -14,14 +14,17 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch(), withInterceptors([
-      errorInterceptor,  // Exterior: muestra toasts DESPUÉS de que auth haya intentado el refresh
-      authInterceptor    // Interior: captura 401 PRIMERO e intenta refresh silencioso
-    ])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([
+        errorInterceptor, // Exterior: muestra toasts DESPUÉS de que auth haya intentado el refresh
+        authInterceptor // Interior: captura 401 PRIMERO e intenta refresh silencioso
+      ])
+    ),
     provideTranslateService(),
     provideTranslateHttpLoader({
       prefix: '/i18n/',
-      suffix: '.json',
-    }),
-  ],
+      suffix: '.json'
+    })
+  ]
 };

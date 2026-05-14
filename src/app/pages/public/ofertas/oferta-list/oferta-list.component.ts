@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OfertaService } from '../../../../core/services/oferta.service'; 
-import { Oferta } from '../../../../core/models/oferta.model'; 
+import { OfertaService } from '../../../../core/services/oferta.service';
+import { Oferta } from '../../../../core/models/oferta.model';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class OfertaListComponent implements OnInit {
   private ofertaService = inject(OfertaService);
-  
+
   ofertas: Oferta[] = [];
 
   ngOnInit() {

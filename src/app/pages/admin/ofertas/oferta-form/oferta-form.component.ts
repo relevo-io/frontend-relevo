@@ -1,12 +1,4 @@
-import {
-  Component,
-  inject,
-  input,
-  output,
-  effect,
-  signal,
-  OnInit,
-} from '@angular/core';
+import { Component, inject, input, output, effect, signal, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { OfertaService } from '../../../../core/services/oferta.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
@@ -18,7 +10,7 @@ import { Usuario } from '../../../../core/models/usuario.model';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './oferta-form.component.html',
-  styleUrl: './oferta-form.component.css',
+  styleUrl: './oferta-form.component.css'
 })
 export class OfertaFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -27,9 +19,9 @@ export class OfertaFormComponent implements OnInit {
 
   // --- INPUTS / OUTPUTS ---
   oferta = input<Oferta | null>(null);
-  isOpen  = input<boolean>(false);
-  saved   = output<Oferta>();
-  closed  = output<void>();
+  isOpen = input<boolean>(false);
+  saved = output<Oferta>();
+  closed = output<void>();
 
   // --- ESTADO INTERNO ---
   isSaving = signal<boolean>(false);
@@ -45,7 +37,7 @@ export class OfertaFormComponent implements OnInit {
     revenueRange: [''],
     creationYear: [new Date().getFullYear(), [Validators.min(1800), Validators.max(new Date().getFullYear())]],
     employeeRange: [''],
-    owner: ['', Validators.required],
+    owner: ['', Validators.required]
   });
 
   constructor() {
@@ -60,7 +52,7 @@ export class OfertaFormComponent implements OnInit {
           revenueRange: o.revenueRange ?? '',
           creationYear: o.creationYear ?? new Date().getFullYear(),
           employeeRange: o.employeeRange ?? '',
-          owner: typeof o.owner === 'string' ? o.owner : (o.owner as any)?._id || '69badc3148170f008dcf068b',
+          owner: typeof o.owner === 'string' ? o.owner : (o.owner as any)?._id || '69badc3148170f008dcf068b'
         });
       } else {
         this.form.reset({
@@ -80,17 +72,23 @@ export class OfertaFormComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe({
       next: (data) => {
         // Filtramos para que solo salgan usuarios visibles (o que no tengan el campo visible, asumiendo true)
-        const visibles = data.filter(u => u.visible !== false);
+        const visibles = data.filter((u) => u.visible !== false);
         this.usuarios.set(visibles);
       },
       error: (err) => console.error('Error cargando usuarios:', err)
     });
   }
 
-  get modoCrear(): boolean { return !this.oferta(); }
-  get titulo(): string { return this.modoCrear ? 'Añadir Oferta' : 'Editar Oferta'; }
+  get modoCrear(): boolean {
+    return !this.oferta();
+  }
+  get titulo(): string {
+    return this.modoCrear ? 'Añadir Oferta' : 'Editar Oferta';
+  }
 
-  get f() { return this.form.controls; }
+  get f() {
+    return this.form.controls;
+  }
 
   cerrar(): void {
     this.form.reset();
@@ -119,7 +117,7 @@ export class OfertaFormComponent implements OnInit {
           console.error(err);
           this.saveError.set('Error al crear la oferta.');
           this.isSaving.set(false);
-        },
+        }
       });
     } else {
       const id = this.oferta()!._id!;
@@ -133,7 +131,7 @@ export class OfertaFormComponent implements OnInit {
           console.error(err);
           this.saveError.set('Error al guardar los cambios.');
           this.isSaving.set(false);
-        },
+        }
       });
     }
   }

@@ -22,7 +22,12 @@
 
       <div class="field-group" [class.invalid]="f['region'].invalid && f['region'].touched">
         <label for="region">{{ 'OFFER_CREATE.REGION_LABEL' | translate }} <span class="required">*</span></label>
-        <input id="region" type="text" formControlName="region" [placeholder]="'OFFER_CREATE.REGION_PLACEHOLDER' | translate" />
+        <input
+          id="region"
+          type="text"
+          formControlName="region"
+          [placeholder]="'OFFER_CREATE.REGION_PLACEHOLDER' | translate"
+        />
         @if (f['region'].invalid && f['region'].touched) {
           <span class="field-error">{{ 'OFFER_CREATE.REGION_REQUIRED' | translate }}</span>
         }
@@ -64,7 +69,9 @@
       </div>
 
       <div class="field-group" [class.invalid]="f['companyDescription'].invalid && f['companyDescription'].touched">
-        <label for="companyDescription">{{ 'OFFER_CREATE.DESC_SHORT_LABEL' | translate }} <span class="required">*</span></label>
+        <label for="companyDescription"
+          >{{ 'OFFER_CREATE.DESC_SHORT_LABEL' | translate }} <span class="required">*</span></label
+        >
         <textarea
           id="companyDescription"
           rows="4"
@@ -77,7 +84,9 @@
       </div>
 
       <div class="field-group" [class.invalid]="f['extendedDescription'].invalid && f['extendedDescription'].touched">
-        <label for="extendedDescription">{{ 'OFFER_CREATE.DESC_EXT_LABEL' | translate }} <span class="required">*</span></label>
+        <label for="extendedDescription"
+          >{{ 'OFFER_CREATE.DESC_EXT_LABEL' | translate }} <span class="required">*</span></label
+        >
         <textarea
           id="extendedDescription"
           rows="8"

@@ -7,7 +7,7 @@
         <h2>{{ 'AUTH.VISUAL.TITLE' | translate }}</h2>
         <p>{{ 'AUTH.VISUAL.SUBTITLE' | translate }}</p>
       </div>
-      
+
       <div class="visual-badge">
         <div class="badge-icon">
           <span class="material-symbols-outlined icon-fill">rocket_launch</span>
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Decoración -->
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -43,13 +43,13 @@
         <!-- Nombre Completo -->
         <div class="form-group">
           <label for="fullName">{{ 'AUTH.FULL_NAME_LABEL' | translate }}</label>
-          <input 
-            type="text" 
-            id="fullName" 
-            formControlName="fullName" 
+          <input
+            type="text"
+            id="fullName"
+            formControlName="fullName"
             [placeholder]="'AUTH.FULL_NAME_HINT' | translate"
             [class.invalid]="f['fullName'].invalid && f['fullName'].touched"
-          >
+          />
           @if (f['fullName'].invalid && f['fullName'].touched) {
             <span class="field-error">{{ 'OFFER_DETAIL.REQUIRED_FIELD' | translate }}</span>
           }
@@ -58,16 +58,20 @@
         <!-- Email -->
         <div class="form-group">
           <label for="email">{{ 'AUTH.EMAIL_LABEL' | translate }}</label>
-          <input 
-            type="email" 
-            id="email" 
-            formControlName="email" 
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
             [placeholder]="'AUTH.EMAIL_HINT' | translate"
             [class.invalid]="f['email'].invalid && f['email'].touched"
-          >
+          />
           @if (f['email'].invalid && f['email'].touched) {
             <span class="field-error">
-              {{ f['email'].errors?.['required'] ? ('OFFER_DETAIL.REQUIRED_FIELD' | translate) : ('AUTH.EMAIL_INVALID' | translate) }}
+              {{
+                f['email'].errors?.['required']
+                  ? ('OFFER_DETAIL.REQUIRED_FIELD' | translate)
+                  : ('AUTH.EMAIL_INVALID' | translate)
+              }}
             </span>
           }
         </div>
@@ -76,13 +80,13 @@
         <div class="form-group">
           <label for="password">{{ 'AUTH.PASSWORD_LABEL' | translate }}</label>
           <div class="password-input">
-            <input 
-              [type]="showPassword() ? 'text' : 'password'" 
-              id="password" 
-              formControlName="password" 
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="password"
+              formControlName="password"
               [placeholder]="'AUTH.PASSWORD_HINT_REGISTER' | translate"
               [class.invalid]="f['password'].invalid && f['password'].touched"
-            >
+            />
             <button type="button" class="toggle-pass" (click)="togglePassword()">
               <span class="material-symbols-outlined">
                 {{ showPassword() ? 'visibility_off' : 'visibility' }}
@@ -99,7 +103,7 @@
           <label>{{ 'AUTH.ROLE_QUESTION' | translate }}</label>
           <div class="role-options">
             <label class="role-card" [class.selected]="f['role'].value === 'INTERESTED'">
-              <input type="radio" formControlName="role" value="INTERESTED">
+              <input type="radio" formControlName="role" value="INTERESTED" />
               <span class="role-icon material-symbols-outlined">person_search</span>
               <div class="role-info">
                 <span class="role-title">{{ 'AUTH.ROLE_INTERESTED' | translate }}</span>
@@ -107,7 +111,7 @@
               </div>
             </label>
             <label class="role-card" [class.selected]="f['role'].value === 'OWNER'">
-              <input type="radio" formControlName="role" value="OWNER">
+              <input type="radio" formControlName="role" value="OWNER" />
               <span class="role-icon material-symbols-outlined">storefront</span>
               <div class="role-info">
                 <span class="role-title">{{ 'AUTH.ROLE_OWNER' | translate }}</span>
@@ -127,7 +131,9 @@
       </form>
 
       <div class="form-footer">
-        <p>{{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }} <a routerLink="/login">{{ 'AUTH.LOGIN_LINK' | translate }}</a></p>
+        <p>
+          {{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }} <a routerLink="/login">{{ 'AUTH.LOGIN_LINK' | translate }}</a>
+        </p>
       </div>
     </div>
   </section>

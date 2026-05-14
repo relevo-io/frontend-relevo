@@ -31,7 +31,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
         case 'UNAUTHORIZED':
           if (!req.url.includes('/auth/refresh')) {
-             ns.error(translate.instant('ERRORS.AUTH.UNAUTHORIZED'));
+            ns.error(translate.instant('ERRORS.AUTH.UNAUTHORIZED'));
           }
           break;
 
@@ -43,11 +43,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           ns.error(translate.instant(errorMessage));
           break;
 
-        default:
+        default: {
           // Fallback final: intentamos traducir por si es una clave, si no mostramos el original
           const fallbackMsg = translate.instant(errorMessage || 'ERRORS.NETWORK_ERROR');
           ns.error(fallbackMsg);
           break;
+        }
       }
 
       // Re-enviamos el error completo (ahora el componente podrá leer el apiError.details)

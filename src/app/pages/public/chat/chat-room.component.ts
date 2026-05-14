@@ -61,7 +61,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   currentUserId = computed(() => this.authService.currentUser()?._id ?? '');
   isReadOnly = computed(() => this.chat()?.isReadOnly ?? false);
   isPendingApproval = computed(() => this.chat()?.status === 'PENDING_APPROVAL');
-  
+
   isOwnerOfOffer = computed(() => {
     const c = this.chat();
     if (!c) return false;
@@ -119,7 +119,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
     this.destroy$.next();
     this.destroy$.complete();
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   // ─────────────────────────────────────────────
@@ -131,7 +131,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     try {
       // Load chat metadata
       const chats = await this.chatService.getMyChats().toPromise();
-      const chat = chats?.find(c => c._id === chatId);
+      const chat = chats?.find((c) => c._id === chatId);
       this.chat.set(chat ?? null);
 
       // Load initial message history (last 30)
@@ -154,57 +154,49 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private subscribeToRealtime(chatId: string): void {
     // Incoming messages
-    this.chatService.messages$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((msg) => {
-        // Filter messages for this chat only
-        if (msg.chat !== chatId) return;
+    this.chatService.messages$.pipe(takeUntil(this.destroy$)).subscribe((msg) => {
+      // Filter messages for this chat only
+      if (msg.chat !== chatId) return;
 
-        // Replace optimistic message if it matches localId
-        const existing = this.messages().findIndex(m => m.localId && m.localId === (msg as any).localId);
-        if (existing !== -1) {
-          const updated = [...this.messages()];
-          updated[existing] = { ...msg, status: 'sent' };
-          this.messages.set(updated);
-        } else {
-          this.messages.set([...this.messages(), { ...msg, status: 'sent' }]);
-        }
+      // Replace optimistic message if it matches localId
+      const existing = this.messages().findIndex((m) => m.localId && m.localId === (msg as any).localId);
+      if (existing !== -1) {
+        const updated = [...this.messages()];
+        updated[existing] = { ...msg, status: 'sent' };
+        this.messages.set(updated);
+      } else {
+        this.messages.set([...this.messages(), { ...msg, status: 'sent' }]);
+      }
 
-        // Scroll smart logic
-        if (this.isAtBottom()) {
-          this.shouldScrollToBottom = true;
-          this.chatService.markAsRead(chatId);
-        } else {
-          this.showNewMessageBanner.set(true);
-        }
-      });
+      // Scroll smart logic
+      if (this.isAtBottom()) {
+        this.shouldScrollToBottom = true;
+        this.chatService.markAsRead(chatId);
+      } else {
+        this.showNewMessageBanner.set(true);
+      }
+    });
 
     // Typing
-    this.chatService.typing$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(userId => this.typingUserId.set(userId));
+    this.chatService.typing$.pipe(takeUntil(this.destroy$)).subscribe((userId) => this.typingUserId.set(userId));
 
     // Connection status
     this.chatService.connectionStatus$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(status => this.connectionStatus.set(status));
+      .subscribe((status) => this.connectionStatus.set(status));
 
     // Presence
-    this.chatService.presence$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(status => this.presenceStatus.set(status));
+    this.chatService.presence$.pipe(takeUntil(this.destroy$)).subscribe((status) => this.presenceStatus.set(status));
   }
 
   private setupTypingDebounce(chatId: string): void {
-    this.typingInput$
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
-      .subscribe(value => {
-        if (value.length > 0) {
-          this.chatService.sendTypingStart(chatId);
-        } else {
-          this.chatService.sendTypingStop(chatId);
-        }
-      });
+    this.typingInput$.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((value) => {
+      if (value.length > 0) {
+        this.chatService.sendTypingStart(chatId);
+      } else {
+        this.chatService.sendTypingStop(chatId);
+      }
+    });
   }
 
   // ─────────────────────────────────────────────
@@ -245,23 +237,17 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
       if (ack.ok && ack.message) {
         // Replace optimistic with confirmed message
-        const updated = this.messages().map(m =>
-          m.localId === localId
-            ? { ...ack.message!, status: 'sent' as const }
-            : m
+        const updated = this.messages().map((m) =>
+          m.localId === localId ? { ...ack.message!, status: 'sent' as const } : m
         );
         this.messages.set(updated);
       } else {
         // Mark as error for retry
-        const updated = this.messages().map(m =>
-          m.localId === localId ? { ...m, status: 'error' as const } : m
-        );
+        const updated = this.messages().map((m) => (m.localId === localId ? { ...m, status: 'error' as const } : m));
         this.messages.set(updated);
       }
     } catch {
-      const updated = this.messages().map(m =>
-        m.localId === localId ? { ...m, status: 'error' as const } : m
-      );
+      const updated = this.messages().map((m) => (m.localId === localId ? { ...m, status: 'error' as const } : m));
       this.messages.set(updated);
     } finally {
       this.isSending.set(false);
@@ -286,21 +272,17 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   async retryMessage(msg: Mensaje): Promise<void> {
     if (!msg.localId) return;
 
-    const updated = this.messages().map(m =>
-      m.localId === msg.localId ? { ...m, status: 'sending' as const } : m
-    );
+    const updated = this.messages().map((m) => (m.localId === msg.localId ? { ...m, status: 'sending' as const } : m));
     this.messages.set(updated);
 
     const ack = await this.chatService.sendMessage(this.chatId(), msg.content);
     if (ack.ok && ack.message) {
-      const final = this.messages().map(m =>
+      const final = this.messages().map((m) =>
         m.localId === msg.localId ? { ...ack.message!, status: 'sent' as const } : m
       );
       this.messages.set(final);
     } else {
-      const errored = this.messages().map(m =>
-        m.localId === msg.localId ? { ...m, status: 'error' as const } : m
-      );
+      const errored = this.messages().map((m) => (m.localId === msg.localId ? { ...m, status: 'error' as const } : m));
       this.messages.set(errored);
     }
   }
@@ -348,7 +330,9 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
       const el = this.messagesContainer?.nativeElement;
       if (el) el.scrollTop = el.scrollHeight;
       this.showNewMessageBanner.set(false);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
 
   onKeydown(event: KeyboardEvent): void {

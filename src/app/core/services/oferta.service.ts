@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
 })
 export class OfertaService {
   private http = inject(HttpClient);
-  
+
   private apiUrl = `${environment.apiUrl}/api/ofertas`;
 
   getOfertas(excludeOwnerId?: string): Observable<Oferta[]> {

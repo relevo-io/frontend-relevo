@@ -12,7 +12,7 @@ import { OfertaFormComponent } from './oferta-form/oferta-form.component';
   standalone: true,
   imports: [CommonModule, SearchInputComponent, OfertaFormComponent],
   templateUrl: './ofertas.html',
-  styleUrl: './ofertas.css',
+  styleUrl: './ofertas.css'
 })
 export class Ofertas implements OnInit {
   private ofertaService = inject(OfertaService);
@@ -39,7 +39,7 @@ export class Ofertas implements OnInit {
   isAllSelected = computed(() => {
     const visible = this.paginatedOfertas();
     if (visible.length === 0) return false;
-    return visible.every(o => this.selectedIds().has(o._id!));
+    return visible.every((o) => this.selectedIds().has(o._id!));
   });
 
   someSelected = computed(() => this.selectedIds().size > 0);
@@ -54,9 +54,10 @@ export class Ofertas implements OnInit {
     }
 
     return all
-      .filter(o => {
+      .filter((o) => {
         const matchesSector = filter === 'ALL' || o.sector === filter;
-        const matchesSearch = !query ||
+        const matchesSearch =
+          !query ||
           o.sector.toLowerCase().includes(query) ||
           o.region.toLowerCase().includes(query) ||
           o.companyDescription.toLowerCase().includes(query);
@@ -83,9 +84,7 @@ export class Ofertas implements OnInit {
     return all.slice((page - 1) * size, page * size);
   });
 
-  totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredOfertas().length / this.pageSize()))
-  );
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredOfertas().length / this.pageSize())));
 
   pageNumbers = computed(() => {
     const total = this.totalPages();
@@ -122,11 +121,15 @@ export class Ofertas implements OnInit {
   }
 
   async confirmarEliminar(id: string): Promise<void> {
-    const confirmed = await this.confirmService.ask('Eliminar Oferta', '¿Estás seguro de que quieres eliminar esta oferta? Esta acción no se puede deshacer.', 'Eliminar');
+    const confirmed = await this.confirmService.ask(
+      'Eliminar Oferta',
+      '¿Estás seguro de que quieres eliminar esta oferta? Esta acción no se puede deshacer.',
+      'Eliminar'
+    );
     if (confirmed) {
       this.ofertaService.deleteOferta(id).subscribe({
         next: () => {
-          this.ofertas.update(actuales => actuales.filter(o => o._id !== id));
+          this.ofertas.update((actuales) => actuales.filter((o) => o._id !== id));
           this.ns.success('Oferta eliminada');
         },
         error: (err) => {
@@ -154,8 +157,12 @@ export class Ofertas implements OnInit {
     }
   }
 
-  prevPage(): void { this.goToPage(this.currentPage() - 1); }
-  nextPage(): void { this.goToPage(this.currentPage() + 1); }
+  prevPage(): void {
+    this.goToPage(this.currentPage() - 1);
+  }
+  nextPage(): void {
+    this.goToPage(this.currentPage() + 1);
+  }
 
   pageStart(): number {
     return (this.currentPage() - 1) * this.pageSize() + 1;
@@ -166,7 +173,7 @@ export class Ofertas implements OnInit {
   }
 
   toggleSelection(id: string): void {
-    this.selectedIds.update(prev => {
+    this.selectedIds.update((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -175,11 +182,11 @@ export class Ofertas implements OnInit {
   }
 
   toggleAll(): void {
-    const allPageIds = this.paginatedOfertas().map(o => o._id!);
-    this.selectedIds.update(prev => {
+    const allPageIds = this.paginatedOfertas().map((o) => o._id!);
+    this.selectedIds.update((prev) => {
       if (this.isAllSelected()) {
         const next = new Set(prev);
-        allPageIds.forEach(id => next.delete(id));
+        allPageIds.forEach((id) => next.delete(id));
         return next;
       } else {
         return new Set([...prev, ...allPageIds]);
@@ -189,11 +196,15 @@ export class Ofertas implements OnInit {
 
   async borrarSeleccionados(): Promise<void> {
     const ids = Array.from(this.selectedIds());
-    const confirmed = await this.confirmService.ask('Borrado Múltiple', `¿Estás seguro de que quieres eliminar ${ids.length} ofertas?`, 'Eliminar Todo');
+    const confirmed = await this.confirmService.ask(
+      'Borrado Múltiple',
+      `¿Estás seguro de que quieres eliminar ${ids.length} ofertas?`,
+      'Eliminar Todo'
+    );
     if (confirmed) {
       // Nota: En una app real haríamos un delete masivo en el backend.
       // Ya que no lo tenemos integrado nativamente para ofertas, lo hacemos en frontend
-      this.ofertas.update(actuales => actuales.filter(o => !this.selectedIds().has(o._id!)));
+      this.ofertas.update((actuales) => actuales.filter((o) => !this.selectedIds().has(o._id!)));
       this.clearSelection();
       this.ns.success(`${ids.length} ofertas eliminadas`);
     }
@@ -219,8 +230,8 @@ export class Ofertas implements OnInit {
 
   onOfertaGuardada(guardada: Oferta): void {
     let creacion = false;
-    this.ofertas.update(actuales => {
-      const idx = actuales.findIndex(o => o._id === guardada._id);
+    this.ofertas.update((actuales) => {
+      const idx = actuales.findIndex((o) => o._id === guardada._id);
       if (idx >= 0) {
         const copia = [...actuales];
         copia[idx] = guardada;

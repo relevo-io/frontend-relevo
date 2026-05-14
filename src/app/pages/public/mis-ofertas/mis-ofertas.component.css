@@ -2,7 +2,9 @@
   min-height: calc(100vh - 95px);
   padding: 120px 1rem 3rem;
   background-color: var(--surface-container-lowest);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .mailbox-container {
@@ -187,7 +189,7 @@
     position: static;
     margin-top: 1rem;
   }
-  
+
   .offer-stats-grid {
     grid-template-columns: 1fr;
   }

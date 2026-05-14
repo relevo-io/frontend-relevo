@@ -43,7 +43,7 @@ export class AuthService {
       }
     }
 
-    // 2. Background Sync 
+    // 2. Background Sync
     if (token) {
       this.fetchProfile().subscribe({
         error: () => {
@@ -56,7 +56,7 @@ export class AuthService {
 
   fetchProfile(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/auth/me`).pipe(
-      tap(usuario => {
+      tap((usuario) => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('user_data', JSON.stringify(usuario));
           this.currentUser.set(usuario);
@@ -67,7 +67,7 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials, { withCredentials: true }).pipe(
-      tap(res => {
+      tap((res) => {
         if (res.accessToken && res.usuario && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('access_token', res.accessToken);
           localStorage.setItem('user_data', JSON.stringify(res.usuario));
@@ -77,16 +77,13 @@ export class AuthService {
     );
   }
 
-
-
-
   register(userData: RegisterRequest): Observable<Usuario> {
     return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, userData);
   }
 
   refreshToken(): Observable<{ accessToken: string }> {
     return this.http.post<{ accessToken: string }>(`${this.apiUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
-      tap(res => {
+      tap((res) => {
         if (res.accessToken && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('access_token', res.accessToken);
         }

@@ -5,7 +5,13 @@
 }
 
 /* Forçar fons en contenidors de pàgina */
-main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace-home, .perfil-page {
+main,
+.login-page,
+.register-page,
+.legal-page,
+.offer-detail-page,
+.marketplace-home,
+.perfil-page {
   background-color: var(--surface) !important;
 }
 
@@ -22,7 +28,7 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-xl);
   padding: 2.5rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .basic-info {
@@ -73,10 +79,16 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   border-radius: var(--radius-full);
 }
 
-.badge.owner { background-color: var(--secondary); }
-.badge.interested { background-color: var(--primary); }
+.badge.owner {
+  background-color: var(--secondary);
+}
+.badge.interested {
+  background-color: var(--primary);
+}
 
-.upscale-action { margin-left: auto; }
+.upscale-action {
+  margin-left: auto;
+}
 
 .btn-upscale {
   background-color: transparent;
@@ -107,7 +119,10 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   padding-bottom: 1.5rem;
 }
 
-.card-header h2 { font-size: 1.5rem; color: var(--on-surface); }
+.card-header h2 {
+  font-size: 1.5rem;
+  color: var(--on-surface);
+}
 
 .btn-edit {
   background: var(--surface-container-highest);
@@ -123,7 +138,9 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   transition: background 0.2s;
 }
 
-.btn-edit:hover { background: #e0e0e0; }
+.btn-edit:hover {
+  background: #e0e0e0;
+}
 
 .edit-form {
   display: flex;
@@ -144,7 +161,8 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   margin-left: 0.25rem;
 }
 
-.form-group input, .form-group textarea {
+.form-group input,
+.form-group textarea {
   padding: 1.15rem;
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
@@ -154,7 +172,8 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   transition: all 0.2s;
 }
 
-.form-group input:focus, .form-group textarea:focus {
+.form-group input:focus,
+.form-group textarea:focus {
   outline: none;
   background-color: var(--surface-container-low) !important;
   border-color: var(--primary);
@@ -173,7 +192,9 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   align-self: flex-end;
   transition: transform 0.2s;
 }
-.btn-save:hover { transform: translateY(-2px); }
+.btn-save:hover {
+  transform: translateY(-2px);
+}
 
 /* Vistes només de lectura */
 .view-mode {
@@ -199,7 +220,8 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
 }
 
 /* Utils */
-.loading-state, .error-state {
+.loading-state,
+.error-state {
   text-align: center;
   padding: 3rem;
   color: var(--on-surface-variant);
@@ -217,7 +239,11 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   margin-right: 0.5rem;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ── Recent Chats Section ────────────────── */
 .recent-chats .card-header {
@@ -336,7 +362,6 @@ main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace
   font-size: 0.7rem;
   color: var(--on-surface-variant);
 }
-
 
 /* AGGRESSIVE DARK MODE OVERRIDES */
 body.dark-mode .profile-card {

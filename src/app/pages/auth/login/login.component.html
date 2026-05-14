@@ -7,7 +7,7 @@
         <h2>{{ 'AUTH.VISUAL.TITLE' | translate }}</h2>
         <p>{{ 'AUTH.VISUAL.SUBTITLE' | translate }}</p>
       </div>
-      
+
       <div class="visual-badge">
         <div class="badge-icon">
           <span class="material-symbols-outlined icon-fill">verified</span>
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Decoración -->
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -42,25 +42,25 @@
 
         <div class="form-group">
           <label for="email">{{ 'AUTH.EMAIL_LABEL' | translate }}</label>
-          <input 
-            type="email" 
-            id="email" 
-            formControlName="email" 
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
             [placeholder]="'AUTH.EMAIL_HINT' | translate"
             [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-          >
+          />
         </div>
 
         <div class="form-group">
           <label for="password">{{ 'AUTH.PASSWORD_LABEL' | translate }}</label>
           <div class="password-input">
-            <input 
-              [type]="showPassword() ? 'text' : 'password'" 
-              id="password" 
-              formControlName="password" 
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="password"
+              formControlName="password"
               [placeholder]="'AUTH.PASSWORD_HINT_LOGIN' | translate"
               [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-            >
+            />
             <button type="button" class="toggle-pass" (click)="togglePassword()">
               <span class="material-symbols-outlined">
                 {{ showPassword() ? 'visibility_off' : 'visibility' }}
@@ -79,7 +79,9 @@
       </form>
 
       <div class="form-footer">
-        <p>{{ 'AUTH.NO_ACCOUNT' | translate }} <a routerLink="/register">{{ 'AUTH.REGISTER_LINK' | translate }}</a></p>
+        <p>
+          {{ 'AUTH.NO_ACCOUNT' | translate }} <a routerLink="/register">{{ 'AUTH.REGISTER_LINK' | translate }}</a>
+        </p>
       </div>
     </div>
   </section>

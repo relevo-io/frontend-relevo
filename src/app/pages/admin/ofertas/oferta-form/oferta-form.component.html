@@ -85,7 +85,12 @@
 
       <div class="field-group" [class.invalid]="f['companyDescription'].invalid && f['companyDescription'].touched">
         <label for="companyDescription">Company Description <span class="required">*</span></label>
-        <textarea id="companyDescription" formControlName="companyDescription" rows="5" placeholder="Cuentanos sobre el negocio..."></textarea>
+        <textarea
+          id="companyDescription"
+          formControlName="companyDescription"
+          rows="5"
+          placeholder="Cuentanos sobre el negocio..."
+        ></textarea>
         @if (f['companyDescription'].invalid && f['companyDescription'].touched) {
           <span class="field-error">La descripcion es obligatoria (min. 10 chars).</span>
         }
@@ -93,7 +98,12 @@
 
       <div class="field-group" [class.invalid]="f['extendedDescription'].invalid && f['extendedDescription'].touched">
         <label for="extendedDescription">Extended Description <span class="required">*</span></label>
-        <textarea id="extendedDescription" formControlName="extendedDescription" rows="7" placeholder="Anade detalles ampliados para la ficha de oferta..."></textarea>
+        <textarea
+          id="extendedDescription"
+          formControlName="extendedDescription"
+          rows="7"
+          placeholder="Anade detalles ampliados para la ficha de oferta..."
+        ></textarea>
         @if (f['extendedDescription'].invalid && f['extendedDescription'].touched) {
           <span class="field-error">La descripcion extendida es obligatoria (min. 20 chars).</span>
         }

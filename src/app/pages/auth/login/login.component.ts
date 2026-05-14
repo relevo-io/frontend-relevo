@@ -10,7 +10,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrl: './login.component.css'
 })
 export class Login {
   private fb = inject(FormBuilder);
@@ -20,7 +20,7 @@ export class Login {
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
   isLoading = signal(false);
@@ -45,7 +45,7 @@ export class Login {
         this.isLoading.set(false);
         const msgKey = err.error?.message || 'ERRORS.INTERNAL_ERROR';
         this.errorMessage.set(this.translate.instant(msgKey));
-      },
+      }
     });
   }
 }

@@ -14,6 +14,6 @@ export class SolicitudAccesoService {
   }
 
   getSolicitudesPorUsuario(userId: string): Observable<SolicitudAcceso[]> {
-  return this.http.get<SolicitudAcceso[]>(this.apiUrl); 
-}
+    return this.http.get<SolicitudAcceso[]>(this.apiUrl);
+  }
 }

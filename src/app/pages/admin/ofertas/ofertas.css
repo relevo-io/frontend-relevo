@@ -119,9 +119,15 @@
   font-size: 0.8rem;
 }
 
-.location-cell span { font-size: 16px; }
+.location-cell span {
+  font-size: 16px;
+}
 
-.bg-interested { background: rgba(19, 109, 236, 0.2); color: #8293b5; border: 1px solid rgba(19, 109, 236, 0.3); }
+.bg-interested {
+  background: rgba(19, 109, 236, 0.2);
+  color: #8293b5;
+  border: 1px solid rgba(19, 109, 236, 0.3);
+}
 
 /* Actions */
 .action-group {

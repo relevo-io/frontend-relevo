@@ -13,7 +13,7 @@ import { ChatService } from '../../services/chat.service';
   standalone: true,
   imports: [RouterLink, FormsModule, LanguageSelectorComponent, TranslateModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css',
+  styleUrl: './navbar.component.css'
 })
 export class Navbar {
   public authService = inject(AuthService);
@@ -27,11 +27,11 @@ export class Navbar {
   unreadCount = signal(0);
 
   constructor() {
-    this.chatService.totalUnread$.subscribe(count => this.unreadCount.set(count));
+    this.chatService.totalUnread$.subscribe((count) => this.unreadCount.set(count));
   }
 
   toggleMenu() {
-    this.isMenuOpen.update(v => !v);
+    this.isMenuOpen.update((v) => !v);
   }
 
   closeMenu() {

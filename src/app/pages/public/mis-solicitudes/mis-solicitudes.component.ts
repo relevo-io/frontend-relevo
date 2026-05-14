@@ -45,9 +45,10 @@ export class MisSolicitudesComponent implements OnInit {
 
   cargarSolicitudes() {
     this.isLoading.set(true);
-    const request = this.activeTab() === 'received' 
-      ? this.solicitudService.getMisSolicitudesOwner()
-      : this.solicitudService.getMisSolicitudesEnviadas();
+    const request =
+      this.activeTab() === 'received'
+        ? this.solicitudService.getMisSolicitudesOwner()
+        : this.solicitudService.getMisSolicitudesEnviadas();
 
     request.subscribe({
       next: (data) => {
@@ -69,9 +70,7 @@ export class MisSolicitudesComponent implements OnInit {
   cambiarEstado(id: string, nuevoEstado: string) {
     this.solicitudService.updateStatus(id, nuevoEstado).subscribe({
       next: (actualizada) => {
-        this.solicitudes.update(list => 
-          list.map(s => s._id === id ? { ...s, status: actualizada.status } : s)
-        );
+        this.solicitudes.update((list) => list.map((s) => (s._id === id ? { ...s, status: actualizada.status } : s)));
       },
       error: (err) => {
         console.error('Error al actualizar estado:', err);
@@ -86,14 +85,14 @@ export class MisSolicitudesComponent implements OnInit {
       const isOwner = this.isOwner();
       // Si el que contacta és el propietari, hem de passar l'ID de l'interessat
       const interestedId = isOwner ? solicitud.interestedUser._id : undefined;
-      
+
       const chat = await firstValueFrom(this.chatService.getOrCreateChat(solicitud.opportunity._id, interestedId));
       if (chat?._id) {
         this.router.navigate(['/chats', chat._id]);
       }
     } catch (err) {
       console.error('Error iniciant xat:', err);
-      this.ns.error('No s\'ha pogut obrir el xat.');
+      this.ns.error("No s'ha pogut obrir el xat.");
     }
   }
 }

@@ -32,15 +32,15 @@ export class LanguageService {
       const savedLang = localStorage.getItem('preferred_language');
       const browserLang = this.translate.getBrowserLang() || 'es';
       const defaultLang = savedLang || (['es', 'ca', 'en'].includes(browserLang) ? browserLang : 'es');
-      
+
       this.setLanguage(defaultLang, false);
     }
   }
 
-  setLanguage(lang: string, updateBackend: boolean = true) {
+  setLanguage(lang: string, updateBackend = true) {
     this.translate.use(lang);
     this.languageCode.set(lang);
-    
+
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('preferred_language', lang);
     }

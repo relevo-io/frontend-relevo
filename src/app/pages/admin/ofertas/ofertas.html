@@ -18,9 +18,10 @@
   <!-- Control Bar -->
   <div class="control-panel tech-card">
     <div class="search-section">
-      <app-search-input 
+      <app-search-input
         [placeholder]="'Buscar por sector, región o descripción...'"
-        (onSearch)="updateSearch($event)">
+        (searchTerm)="updateSearch($event)"
+      >
       </app-search-input>
     </div>
 
@@ -86,7 +87,7 @@
                   </div>
                   <div class="user-info-text">
                     <span class="name">{{ o.sector }}</span>
-                    <span class="bio-snippet">{{ o.companyDescription | slice:0:50 }}...</span>
+                    <span class="bio-snippet">{{ o.companyDescription | slice: 0 : 50 }}...</span>
                   </div>
                 </div>
               </td>
@@ -127,14 +128,15 @@
       <!-- Tech Pagination -->
       <footer class="tech-pagination">
         <div class="pagination-info">
-          Mostrando <strong>{{ pageStart() }}–{{ pageEnd() }}</strong> de <strong>{{ filteredOfertas().length }}</strong> registros
+          Mostrando <strong>{{ pageStart() }}–{{ pageEnd() }}</strong> de
+          <strong>{{ filteredOfertas().length }}</strong> registros
         </div>
 
         <div class="pagination-controls">
           <div class="select-wrapper">
             <span>Filas:</span>
             <select (change)="pageSize.set(+$any($event.target).value); currentPage.set(1)" class="tech-select-mini">
-              <option value="5"  [selected]="pageSize() === 5">5</option>
+              <option value="5" [selected]="pageSize() === 5">5</option>
               <option value="10" [selected]="pageSize() === 10">10</option>
               <option value="20" [selected]="pageSize() === 20">20</option>
             </select>
@@ -157,23 +159,23 @@
   <!-- Floating Bulk Actions Bar -->
   @if (someSelected()) {
     <div class="bulk-actions-overlay">
-        <div class="bulk-actions-bar">
-            <div class="selection-info">
-                <span class="count">{{ selectedIds().size }}</span>
-                <span>seleccionados</span>
-            </div>
-
-            <div class="bulk-buttons">
-                <button (click)="borrarSeleccionados()" class="btn-bulk-delete" title="Borrar selección">
-                    <span class="material-symbols-outlined">delete</span>
-                </button>
-                <div class="bulk-divider"></div>
-                <button (click)="clearSelection()" class="btn-bulk-cancel">
-                    <span class="material-symbols-outlined">close</span>
-                    Cancelar
-                </button>
-            </div>
+      <div class="bulk-actions-bar">
+        <div class="selection-info">
+          <span class="count">{{ selectedIds().size }}</span>
+          <span>seleccionados</span>
         </div>
+
+        <div class="bulk-buttons">
+          <button (click)="borrarSeleccionados()" class="btn-bulk-delete" title="Borrar selección">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+          <div class="bulk-divider"></div>
+          <button (click)="clearSelection()" class="btn-bulk-cancel">
+            <span class="material-symbols-outlined">close</span>
+            Cancelar
+          </button>
+        </div>
+      </div>
     </div>
   }
 </div>
@@ -183,5 +185,6 @@
   [isOpen]="drawerOpen()"
   [oferta]="drawerOferta()"
   (saved)="onOfertaGuardada($event)"
-  (closed)="cerrarDrawer()">
+  (closed)="cerrarDrawer()"
+>
 </app-oferta-form>

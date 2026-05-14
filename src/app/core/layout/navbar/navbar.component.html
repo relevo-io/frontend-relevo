@@ -31,14 +31,18 @@
                 <strong>{{ authService.currentUser()?.fullName }}</strong>
                 <span class="user-email">{{ authService.currentUser()?.email }}</span>
               </div>
-              
+
               <div class="dropdown-divider"></div>
 
               <!-- Secció de Preferències (Tema i Idioma) -->
               <div class="dropdown-section">
                 <div class="dropdown-item-static">
-                  <span class="material-symbols-outlined">{{ themeService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode' }}</span>
-                  <span class="label">{{ (themeService.currentTheme() === 'light' ? 'NAVBAR.DARK_MODE' : 'NAVBAR.LIGHT_MODE') | translate }}</span>
+                  <span class="material-symbols-outlined">{{
+                    themeService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode'
+                  }}</span>
+                  <span class="label">{{
+                    (themeService.currentTheme() === 'light' ? 'NAVBAR.DARK_MODE' : 'NAVBAR.LIGHT_MODE') | translate
+                  }}</span>
                   <button (click)="themeService.toggleTheme()" class="btn-switch-theme">
                     <span class="material-symbols-outlined">sync</span>
                   </button>
@@ -91,13 +95,17 @@
           <button class="btn-user-trigger" (click)="toggleMenu()">
             <span class="material-symbols-outlined">settings</span>
           </button>
-          
+
           @if (isMenuOpen()) {
             <div class="dropdown-overlay" (click)="closeMenu()"></div>
             <div class="user-dropdown-menu animate-in">
               <div class="dropdown-item-static">
-                <span class="material-symbols-outlined">{{ themeService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode' }}</span>
-                <span class="label">{{ (themeService.currentTheme() === 'light' ? 'NAVBAR.DARK_MODE' : 'NAVBAR.LIGHT_MODE') | translate }}</span>
+                <span class="material-symbols-outlined">{{
+                  themeService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode'
+                }}</span>
+                <span class="label">{{
+                  (themeService.currentTheme() === 'light' ? 'NAVBAR.DARK_MODE' : 'NAVBAR.LIGHT_MODE') | translate
+                }}</span>
                 <button (click)="themeService.toggleTheme()" class="btn-switch-theme">
                   <span class="material-symbols-outlined">sync</span>
                 </button>

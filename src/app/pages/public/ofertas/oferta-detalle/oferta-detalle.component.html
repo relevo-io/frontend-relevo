@@ -17,7 +17,9 @@
         <header class="card-header">
           <span class="sector">{{ o.sector }}</span>
           @if (o.employeeRange) {
-            <span class="employees">{{ formatEmployees(o.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span>
+            <span class="employees"
+              >{{ formatEmployees(o.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
+            >
           }
         </header>
 
@@ -58,12 +60,7 @@
             </button>
           }
           @if (canChat()) {
-            <button
-              id="btn-contactar-owner"
-              class="btn-chat"
-              (click)="contactarOwner()"
-              [disabled]="isStartingChat()"
-            >
+            <button id="btn-contactar-owner" class="btn-chat" (click)="contactarOwner()" [disabled]="isStartingChat()">
               <span class="material-symbols-outlined">chat</span>
               @if (isStartingChat()) {
                 {{ 'OFFER_DETAIL.OPENING_CHAT' | translate }}
@@ -79,23 +76,45 @@
 
   @if (showRequestForm()) {
     <div class="modal-overlay" (click)="cerrarFormularioSolicitud()"></div>
-    <section class="request-modal" role="dialog" aria-modal="true" [attr.aria-label]="'OFFER_DETAIL.MODAL_TITLE' | translate">
+    <section
+      class="request-modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="'OFFER_DETAIL.MODAL_TITLE' | translate"
+    >
       <header class="modal-header">
         <h2>{{ 'OFFER_DETAIL.MODAL_TITLE' | translate }}</h2>
       </header>
 
       <form [formGroup]="requestForm" (ngSubmit)="enviarSolicitud()" class="request-form" novalidate>
-        <div class="field-group" [class.invalid]="requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched">
+        <div
+          class="field-group"
+          [class.invalid]="
+            requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched
+          "
+        >
           <label for="professionalBackground">{{ 'OFFER_DETAIL.BACKGROUND_LABEL' | translate }}</label>
           <textarea id="professionalBackground" rows="4" formControlName="professionalBackground"></textarea>
-          @if (requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched) {
+          @if (
+            requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched
+          ) {
             <span class="field-error">{{ 'OFFER_DETAIL.REQUIRED_FIELD' | translate }}</span>
           }
         </div>
 
-        <div class="field-group" [class.invalid]="requestForm.controls.preferredRegionsText.invalid && requestForm.controls.preferredRegionsText.touched">
+        <div
+          class="field-group"
+          [class.invalid]="
+            requestForm.controls.preferredRegionsText.invalid && requestForm.controls.preferredRegionsText.touched
+          "
+        >
           <label for="preferredRegionsText">{{ 'OFFER_DETAIL.ZONES_LABEL' | translate }}</label>
-          <input id="preferredRegionsText" type="text" formControlName="preferredRegionsText" [placeholder]="'OFFER_DETAIL.ZONES_PLACEHOLDER' | translate" />
+          <input
+            id="preferredRegionsText"
+            type="text"
+            formControlName="preferredRegionsText"
+            [placeholder]="'OFFER_DETAIL.ZONES_PLACEHOLDER' | translate"
+          />
           @if (requestForm.controls.preferredRegionsText.invalid && requestForm.controls.preferredRegionsText.touched) {
             <span class="field-error">{{ 'OFFER_DETAIL.ZONES_REQUIRED' | translate }}</span>
           }
@@ -118,7 +137,9 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-cancel" (click)="cerrarFormularioSolicitud()">{{ 'OFFER_CREATE.CANCEL' | translate }}</button>
+          <button type="button" class="btn-cancel" (click)="cerrarFormularioSolicitud()">
+            {{ 'OFFER_CREATE.CANCEL' | translate }}
+          </button>
           <button type="submit" class="btn-submit" [disabled]="isSending()">
             {{ (isSending() ? 'OFFER_DETAIL.SENDING' : 'OFFER_DETAIL.SAVE_REQUEST') | translate }}
           </button>

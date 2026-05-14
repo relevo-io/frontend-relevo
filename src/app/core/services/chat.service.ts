@@ -65,9 +65,9 @@ export class ChatService implements OnDestroy {
     if (this.socket) {
       const auth = this.socket.auth;
       const socketToken = typeof auth === 'object' ? (auth as any)?.['token'] : null;
-      
+
       if (socketToken === `Bearer ${token}`) return;
-      
+
       console.warn('[ChatService] Token mismatch detected, reconnecting socket...');
       this.disconnect();
     }
@@ -196,11 +196,7 @@ export class ChatService implements OnDestroy {
         resolve({ ok: false, error: 'No hay conexión' });
         return;
       }
-      this.socket.emit(
-        'send_message',
-        { chatId, content },
-        (ack: SendMessageAck) => resolve(ack)
-      );
+      this.socket.emit('send_message', { chatId, content }, (ack: SendMessageAck) => resolve(ack));
     });
   }
 

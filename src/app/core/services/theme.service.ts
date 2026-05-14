@@ -21,7 +21,12 @@ export class ThemeService {
     // Sincronizar con el usuario logeado si cambia
     effect(() => {
       const user = this.authService.currentUser();
-      if (user && user.theme && (user.theme === 'light' || user.theme === 'dark') && user.theme !== this.currentTheme()) {
+      if (
+        user &&
+        user.theme &&
+        (user.theme === 'light' || user.theme === 'dark') &&
+        user.theme !== this.currentTheme()
+      ) {
         this.setTheme(user.theme as 'light' | 'dark', false);
       }
     });
@@ -36,7 +41,7 @@ export class ThemeService {
   private initTheme() {
     if (isPlatformBrowser(this.platformId)) {
       const savedTheme = localStorage.getItem('preferred_theme') as 'light' | 'dark';
-      
+
       // Si no hay guardado, podemos intentar detectar preferencia del sistema
       let defaultTheme: 'light' | 'dark' = 'light';
       if (savedTheme === 'light' || savedTheme === 'dark') {
@@ -44,14 +49,14 @@ export class ThemeService {
       } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         defaultTheme = 'dark';
       }
-      
+
       this.setTheme(defaultTheme, false);
     }
   }
 
-  setTheme(theme: 'light' | 'dark', updateBackend: boolean = true) {
+  setTheme(theme: 'light' | 'dark', updateBackend = true) {
     this.currentTheme.set(theme);
-    
+
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('preferred_theme', theme);
     }

@@ -4,7 +4,6 @@
   <div class="grid-ofertas">
     @for (oferta of ofertas; track $index) {
       <div class="oferta-card">
-        
         <div class="card-header">
           <h3>{{ oferta.sector }} - {{ oferta.region }}</h3>
           <span class="badge" *ngIf="oferta.employeeRange">
@@ -14,15 +13,22 @@
 
         <div class="card-body">
           <p class="descripcion-corta">{{ oferta.companyDescription }}</p>
-          
+
           <ul class="detalles-lista">
-            <li><strong>{{ 'MARKETPLACE.SECTOR' | translate }}:</strong> {{ oferta.sector }}</li>
-            <li><strong>{{ 'MARKETPLACE.LOCATION' | translate }}:</strong> {{ oferta.region }}</li>
-            <li><strong>{{ 'MARKETPLACE.CREATION_YEAR' | translate }}:</strong> {{ oferta.creationYear }}</li>
-            <li *ngIf="oferta.revenueRange"><strong>{{ 'MARKETPLACE.REVENUE' | translate }}:</strong> {{ oferta.revenueRange }}</li>
+            <li>
+              <strong>{{ 'MARKETPLACE.SECTOR' | translate }}:</strong> {{ oferta.sector }}
+            </li>
+            <li>
+              <strong>{{ 'MARKETPLACE.LOCATION' | translate }}:</strong> {{ oferta.region }}
+            </li>
+            <li>
+              <strong>{{ 'MARKETPLACE.CREATION_YEAR' | translate }}:</strong> {{ oferta.creationYear }}
+            </li>
+            <li *ngIf="oferta.revenueRange">
+              <strong>{{ 'MARKETPLACE.REVENUE' | translate }}:</strong> {{ oferta.revenueRange }}
+            </li>
           </ul>
         </div>
-        
       </div>
     } @empty {
       <p class="cargando">{{ 'MARKETPLACE.NO_OFFERS' | translate }}</p>

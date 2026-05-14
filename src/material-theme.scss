@@ -7,16 +7,16 @@
 
 html {
   height: 100%;
-  
+
   // Light theme (default)
   @include mat.theme(
     (
       color: (
         primary: mat.$magenta-palette,
-        tertiary: mat.$violet-palette,
+        tertiary: mat.$violet-palette
       ),
       typography: Roboto,
-      density: 0,
+      density: 0
     )
   );
 }
@@ -32,8 +32,8 @@ body {
         color: (
           primary: mat.$magenta-palette,
           tertiary: mat.$violet-palette,
-          color-scheme: dark,
-        ),
+          color-scheme: dark
+        )
       )
     );
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Solicitud } from '../models/solicitud.model';
@@ -9,10 +9,7 @@ import { environment } from '../../../environments/environment';
 })
 export class SolicitudService {
   private API_URL = `${environment.apiUrl}/api/solicitudes`;
-
-  constructor(
-    private http: HttpClient,
-  ) {}
+  private http = inject(HttpClient);
 
   // Obtener todas las solicitudes
   getSolicitudes(): Observable<Solicitud[]> {
@@ -33,7 +30,7 @@ export class SolicitudService {
     return this.http.get<Solicitud[]>(`${this.API_URL}/me/enviadas`);
   }
 
-  crearSolicitud(data: { opportunityId: string, message: string }): Observable<Solicitud> {
+  crearSolicitud(data: { opportunityId: string; message: string }): Observable<Solicitud> {
     return this.http.post<Solicitud>(this.API_URL, data);
   }
 
@@ -46,5 +43,4 @@ export class SolicitudService {
   getMiSolicitudParaOferta(ofertaId: string): Observable<Solicitud | null> {
     return this.http.get<Solicitud | null>(`${this.API_URL}/oferta/${ofertaId}/me`);
   }
-
 }

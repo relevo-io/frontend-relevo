@@ -1,11 +1,8 @@
 <main class="perfil-page">
   <div class="perfil-container">
     @if (isLoading()) {
-      <div class="loading-state">
-        <span class="spinner"></span> {{ 'PROFILE_PAGE.LOADING' | translate }}
-      </div>
+      <div class="loading-state"><span class="spinner"></span> {{ 'PROFILE_PAGE.LOADING' | translate }}</div>
     } @else if (usuario(); as user) {
-      
       <div class="profile-card basic-info">
         <div class="avatar-circle">
           {{ user.fullName.charAt(0).toUpperCase() }}
@@ -34,34 +31,44 @@
 
         @if (isEditing()) {
           <form [formGroup]="profileForm" (ngSubmit)="guardarPerfil()" class="edit-form">
-            
             <div class="form-group">
               <label>{{ 'PROFILE_PAGE.LOCATION_LABEL' | translate }}</label>
-              <input type="text" formControlName="location" [placeholder]="'PROFILE_PAGE.LOCATION_PLACEHOLDER' | translate">
+              <input
+                type="text"
+                formControlName="location"
+                [placeholder]="'PROFILE_PAGE.LOCATION_PLACEHOLDER' | translate"
+              />
             </div>
 
             <div class="form-group">
               <label>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</label>
-              <textarea formControlName="bio" [placeholder]="'PROFILE_PAGE.BIO_PLACEHOLDER' | translate" rows="2"></textarea>
+              <textarea
+                formControlName="bio"
+                [placeholder]="'PROFILE_PAGE.BIO_PLACEHOLDER' | translate"
+                rows="2"
+              ></textarea>
             </div>
 
             <div class="form-group">
               <label>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</label>
-              <textarea formControlName="professionalBackground" [placeholder]="'PROFILE_PAGE.BACKGROUND_PLACEHOLDER' | translate" rows="4"></textarea>
+              <textarea
+                formControlName="professionalBackground"
+                [placeholder]="'PROFILE_PAGE.BACKGROUND_PLACEHOLDER' | translate"
+                rows="4"
+              ></textarea>
             </div>
 
             <button type="submit" class="btn-save" [disabled]="isSaving()">
               {{ (isSaving() ? 'PROFILE_PAGE.SAVING' : 'PROFILE_PAGE.SAVE_CHANGES') | translate }}
             </button>
           </form>
-
         } @else {
           <div class="view-mode">
             <div class="data-group">
               <h3>{{ 'PROFILE_PAGE.LOCATION_LABEL' | translate }}</h3>
               <p>{{ user.location || ('PROFILE_PAGE.NO_LOCATION' | translate) }}</p>
             </div>
-            
+
             <div class="data-group">
               <h3>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</h3>
               <p>{{ user.bio || ('PROFILE_PAGE.NO_BIO' | translate) }}</p>
@@ -79,31 +86,35 @@
       @if (user.roles.includes('OWNER')) {
         <div class="profile-card mailbox-card">
           <div class="card-header">
-            <h2 style="display: flex; align-items: center; gap: 8px;">
+            <h2 style="display: flex; align-items: center; gap: 8px">
               <span class="material-symbols-outlined">inbox</span>
               {{ 'MAILBOX.TITLE' | translate }}
             </h2>
             <a routerLink="/mis-solicitudes" class="btn-view-all">{{ 'COMMON.VIEW_ALL' | translate }}</a>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px;">{{ 'MAILBOX.SUBTITLE' | translate }}</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px">
+            {{ 'MAILBOX.SUBTITLE' | translate }}
+          </p>
         </div>
 
         <div class="profile-card offers-management-card">
           <div class="card-header">
-            <h2 style="display: flex; align-items: center; gap: 8px;">
+            <h2 style="display: flex; align-items: center; gap: 8px">
               <span class="material-symbols-outlined">business_center</span>
               {{ 'MY_OFFERS.TITLE' | translate }}
             </h2>
             <a routerLink="/mis-ofertas" class="btn-view-all">{{ 'COMMON.VIEW_ALL' | translate }}</a>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px;">{{ 'MY_OFFERS.SUBTITLE' | translate }}</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px">
+            {{ 'MY_OFFERS.SUBTITLE' | translate }}
+          </p>
         </div>
       }
 
       <!-- Chats Recientes -->
       <div class="profile-card recent-chats">
         <div class="card-header">
-          <h2 style="display: flex; align-items: center; gap: 8px;">
+          <h2 style="display: flex; align-items: center; gap: 8px">
             <span class="material-symbols-outlined">chat_bubble</span>
             {{ 'CHATS_PAGE.TITLE' | translate }}
             @if (getTotalUnread() > 0) {
@@ -128,7 +139,7 @@
                   </div>
                   <div class="chat-info-sm">
                     <span class="chat-name-sm">{{ getOtherParticipantName(chat) }}</span>
-                    <span class="chat-date-sm">{{ chat.updatedAt | date:'dd/MM HH:mm' }}</span>
+                    <span class="chat-date-sm">{{ chat.updatedAt | date: 'dd/MM HH:mm' }}</span>
                   </div>
                   @if (getUnreadCount(chat) > 0) {
                     <span class="unread-dot"></span>
@@ -139,7 +150,6 @@
           </ul>
         }
       </div>
-
     } @else {
       <div class="error-state">
         <span class="material-symbols-outlined">error</span> {{ 'PROFILE_PAGE.ERROR_LOADING' | translate }}

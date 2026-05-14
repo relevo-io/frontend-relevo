@@ -8,25 +8,19 @@
     <!-- Tabs -->
     <div class="mailbox-tabs">
       @if (isOwner()) {
-        <button 
-          [class.active]="activeTab() === 'received'" 
-          (click)="setTab('received')">
+        <button [class.active]="activeTab() === 'received'" (click)="setTab('received')">
           <span class="material-symbols-outlined">inbox</span>
           {{ 'MAILBOX.TAB_RECEIVED' | translate }}
         </button>
       }
-      <button 
-        [class.active]="activeTab() === 'sent'" 
-        (click)="setTab('sent')">
+      <button [class.active]="activeTab() === 'sent'" (click)="setTab('sent')">
         <span class="material-symbols-outlined">send</span>
         {{ 'MAILBOX.TAB_SENT' | translate }}
       </button>
     </div>
 
     @if (isLoading()) {
-      <div class="loading-state">
-        <span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}
-      </div>
+      <div class="loading-state"><span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}</div>
     } @else if (solicitudes().length === 0) {
       <div class="empty-state">
         <span class="material-symbols-outlined">inbox</span>
@@ -41,7 +35,7 @@
               <div class="offer-info">
                 <h3>{{ solicitud.opportunity.sector }} - {{ solicitud.opportunity.region }}</h3>
                 <p class="company-desc">{{ solicitud.opportunity.companyDescription }}</p>
-                <span class="date">{{ solicitud.createdAt | date:'shortDate' }}</span>
+                <span class="date">{{ solicitud.createdAt | date: 'shortDate' }}</span>
               </div>
               <span class="status-badge" [ngClass]="solicitud.status.toLowerCase()">
                 {{ 'STATUS.' + solicitud.status | translate }}
@@ -106,8 +100,10 @@
                 } @else {
                   <div class="resolution-container">
                     <p class="resolution-text">
-                      {{ 'MAILBOX.RESOLVED_AS' | translate }} 
-                      <span [ngClass]="solicitud.status.toLowerCase()">{{ 'STATUS.' + solicitud.status | translate }}</span>
+                      {{ 'MAILBOX.RESOLVED_AS' | translate }}
+                      <span [ngClass]="solicitud.status.toLowerCase()">{{
+                        'STATUS.' + solicitud.status | translate
+                      }}</span>
                     </p>
                     @if (solicitud.status === 'ACCEPTED') {
                       <button class="btn-contact" (click)="contactar(solicitud)">
@@ -128,8 +124,10 @@
                   </button>
                 } @else {
                   <p class="resolution-text">
-                    {{ 'MAILBOX.RESOLVED_AS' | translate }} 
-                    <span [ngClass]="solicitud.status.toLowerCase()">{{ 'STATUS.' + solicitud.status | translate }}</span>
+                    {{ 'MAILBOX.RESOLVED_AS' | translate }}
+                    <span [ngClass]="solicitud.status.toLowerCase()">{{
+                      'STATUS.' + solicitud.status | translate
+                    }}</span>
                   </p>
                 }
               }

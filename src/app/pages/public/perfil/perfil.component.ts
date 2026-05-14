@@ -62,7 +62,7 @@ export class PerfilComponent implements OnInit {
   }
 
   toggleEdit() {
-    this.isEditing.update(v => !v);
+    this.isEditing.update((v) => !v);
   }
 
   guardarPerfil() {
@@ -88,7 +88,9 @@ export class PerfilComponent implements OnInit {
   cargarChatsRecientes(): void {
     this.chatService.getMyChats().subscribe({
       next: (chats) => this.recentChats.set(chats.slice(0, 5)),
-      error: () => { /* silencioso */ }
+      error: () => {
+        /* silencioso */
+      }
     });
   }
 

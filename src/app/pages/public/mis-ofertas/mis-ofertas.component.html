@@ -3,7 +3,7 @@
     <div class="mailbox-header">
       <h1>{{ 'MY_OFFERS.TITLE' | translate }}</h1>
       <p class="subtitle">{{ 'MY_OFFERS.SUBTITLE' | translate }}</p>
-      
+
       <div class="header-actions">
         <a routerLink="/ofertas/crear" class="btn-primary-small">
           <span class="material-symbols-outlined">add</span>
@@ -13,9 +13,7 @@
     </div>
 
     @if (isLoading()) {
-      <div class="loading-state">
-        <span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}
-      </div>
+      <div class="loading-state"><span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}</div>
     } @else if (ofertas().length === 0) {
       <div class="empty-state">
         <span class="material-symbols-outlined">business_center</span>
@@ -34,7 +32,7 @@
                 <p class="company-desc">{{ o.companyDescription }}</p>
               </div>
               <div class="card-meta">
-                <span class="date">{{ o.createdAt | date:'mediumDate' }}</span>
+                <span class="date">{{ o.createdAt | date: 'mediumDate' }}</span>
               </div>
             </div>
 

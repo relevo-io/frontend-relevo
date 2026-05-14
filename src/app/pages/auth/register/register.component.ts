@@ -39,7 +39,7 @@ export class RegisterComponent {
   }
 
   togglePassword() {
-    this.showPassword.update(val => !val);
+    this.showPassword.update((val) => !val);
   }
 
   onSubmit() {
@@ -64,7 +64,10 @@ export class RegisterComponent {
     this.authService.register(requestData).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.ns.success(this.translate.instant('COMMON.NOTIF.REGISTER_SUCCESS') || 'Cuenta creada correctamente. Por favor, inicia sesión.');
+        this.ns.success(
+          this.translate.instant('COMMON.NOTIF.REGISTER_SUCCESS') ||
+            'Cuenta creada correctamente. Por favor, inicia sesión.'
+        );
         this.router.navigate(['/login']);
       },
       error: (err) => {

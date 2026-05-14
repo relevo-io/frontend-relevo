@@ -12,7 +12,7 @@
   </header>
 
   <!-- Create Request Form (Technical Style) -->
-  <div class="control-panel tech-card form-section" style="margin-bottom: 32px; display: block;">
+  <div class="control-panel tech-card form-section" style="margin-bottom: 32px; display: block">
     <h3 class="form-title">Nueva Solicitud Interna</h3>
     <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()" class="tech-form">
       <div class="form-grid">
@@ -38,7 +38,13 @@
 
         <div class="form-group span-2">
           <label for="message">Mensaje</label>
-          <input type="text" id="message" formControlName="message" placeholder="Escribe un mensaje de interés..." class="tech-input">
+          <input
+            type="text"
+            id="message"
+            formControlName="message"
+            placeholder="Escribe un mensaje de interés..."
+            class="tech-input"
+          />
         </div>
 
         <div class="form-actions">
@@ -54,9 +60,7 @@
   <!-- Filters Bar -->
   <div class="control-panel tech-card">
     <div class="search-section">
-      <app-search-input 
-        [placeholder]="'Buscar por email, mensaje o empresa...'"
-        (onSearch)="updateSearch($event)">
+      <app-search-input [placeholder]="'Buscar por email, mensaje o empresa...'" (searchTerm)="updateSearch($event)">
       </app-search-input>
     </div>
 
@@ -128,7 +132,7 @@
               </td>
               <td class="email-cell">
                 @if (s.message && s.message.length > 50) {
-                  {{ (s.message | slice:0:50) }}...
+                  {{ s.message | slice: 0 : 50 }}...
                 } @else {
                   {{ s.message || 'Sin mensaje' }}
                 }
@@ -175,14 +179,15 @@
       <!-- Tech Pagination -->
       <footer class="tech-pagination">
         <div class="pagination-info">
-          Mostrando <strong>{{ pageStart() }}–{{ pageEnd() }}</strong> de <strong>{{ filteredSolicitudes().length }}</strong> solicitudes
+          Mostrando <strong>{{ pageStart() }}–{{ pageEnd() }}</strong> de
+          <strong>{{ filteredSolicitudes().length }}</strong> solicitudes
         </div>
 
         <div class="pagination-controls">
           <div class="select-wrapper">
             <span>Filas:</span>
             <select (change)="pageSize.set(+$any($event.target).value); currentPage.set(1)" class="tech-select-mini">
-              <option value="5"  [selected]="pageSize() === 5">5</option>
+              <option value="5" [selected]="pageSize() === 5">5</option>
               <option value="10" [selected]="pageSize() === 10">10</option>
               <option value="20" [selected]="pageSize() === 20">20</option>
             </select>

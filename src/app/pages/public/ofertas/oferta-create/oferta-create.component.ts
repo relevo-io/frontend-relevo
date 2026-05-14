@@ -12,7 +12,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule],
   templateUrl: './oferta-create.component.html',
-  styleUrl: './oferta-create.component.css',
+  styleUrl: './oferta-create.component.css'
 })
 export class OfertaCreateComponent {
   private fb = inject(FormBuilder);
@@ -30,7 +30,7 @@ export class OfertaCreateComponent {
     extendedDescription: ['', [Validators.required, Validators.minLength(20)]],
     revenueRange: [''],
     creationYear: [new Date().getFullYear(), [Validators.min(1800), Validators.max(new Date().getFullYear())]],
-    employeeRange: [''],
+    employeeRange: ['']
   });
 
   get f() {
@@ -52,7 +52,7 @@ export class OfertaCreateComponent {
       extendedDescription: raw.extendedDescription?.trim() ?? '',
       creationYear: raw.creationYear ?? undefined,
       ...(raw.revenueRange ? { revenueRange: raw.revenueRange } : {}),
-      ...(raw.employeeRange ? { employeeRange: raw.employeeRange } : {}),
+      ...(raw.employeeRange ? { employeeRange: raw.employeeRange } : {})
     };
 
     this.ofertaService.createOferta(payload).subscribe({
@@ -68,7 +68,7 @@ export class OfertaCreateComponent {
       error: (err) => {
         console.error('Error al crear oferta:', err);
         this.isSaving.set(false);
-      },
+      }
     });
   }
 }

@@ -149,7 +149,9 @@ h1 {
 }
 
 @media (max-width: 760px) {
-  .meta-grid { grid-template-columns: 1fr; }
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* --- ESTILOS MODAL SOLICITUD (MATCHING CREATE-OFFER) --- */
@@ -177,7 +179,7 @@ h1 {
   border: 1px solid var(--outline-variant);
   border-radius: 16px;
   padding: 28px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   z-index: 1001;
 }
 
@@ -220,7 +222,7 @@ h1 {
   color: var(--on-surface);
 }
 
-.field-group input, 
+.field-group input,
 .field-group textarea {
   width: 100%;
   border: 1px solid var(--outline-variant);
@@ -232,7 +234,7 @@ h1 {
   color: var(--on-surface);
 }
 
-.field-group input:focus, 
+.field-group input:focus,
 .field-group textarea:focus {
   outline: none;
   border-color: var(--secondary);

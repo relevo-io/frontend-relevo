@@ -31,7 +31,7 @@ export class ConfirmDialogService {
       this.resolveFn = null;
     }
     this.isOpen.set(false);
-    
+
     setTimeout(() => {
       this.config.set(null);
     }, 200);

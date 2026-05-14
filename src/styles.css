@@ -8,22 +8,22 @@
   --on-primary: #ffffff;
   --primary-container: #1a2b48;
   --on-primary-container: #8293b5;
-  
+
   --secondary: #006d3d;
   --on-secondary: #ffffff;
   --secondary-container: #97f3b5;
   --on-secondary-container: #047240;
-  
+
   --surface: #f9f9f9;
   --on-surface: #1a1c1c;
   --surface-variant: #e2e2e2;
   --on-surface-variant: #44474d;
-  
+
   --navbar-bg: rgba(255, 255, 255, 0.92);
-  
+
   --outline: #75777e;
   --outline-variant: #c5c6ce;
-  
+
   --surface-container-low: #f3f3f3;
   --surface-container: #eeeeee;
   --surface-container-high: #e8e8e8;
@@ -39,9 +39,9 @@
   --radius-xl: 0.75rem;
   --radius-2xl: 1.25rem;
   --radius-full: 9999px;
-  
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-ambient: 0 20px 40px -15px rgba(3, 22, 50, 0.04);
 
   /* Technical/Admin Specific */
@@ -67,7 +67,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background-color: var(--surface) !important;
 }
@@ -81,11 +82,21 @@ body {
 }
 
 /* Forçar fons en contenidors de pàgina */
-main, .login-page, .register-page, .legal-page, .offer-detail-page, .marketplace-home {
+main,
+.login-page,
+.register-page,
+.legal-page,
+.offer-detail-page,
+.marketplace-home {
   background-color: var(--surface) !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-headline);
   font-weight: 800;
   color: var(--primary);
@@ -119,7 +130,7 @@ button {
   height: 1px;
   padding: 0;
   margin: -1px;
-  
+
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
@@ -217,7 +228,9 @@ button {
   margin: 0 8px;
 }
 
-.btn-bulk-action, .btn-bulk-delete, .btn-bulk-cancel {
+.btn-bulk-action,
+.btn-bulk-delete,
+.btn-bulk-cancel {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -229,7 +242,8 @@ button {
   transition: all 0.2s;
 }
 
-.btn-bulk-action:hover, .btn-bulk-cancel:hover {
+.btn-bulk-action:hover,
+.btn-bulk-cancel:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 
@@ -400,15 +414,24 @@ button {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-
 
 /* =========================================
    DARK MODE OVERRIDES (PRIORITY)
@@ -418,20 +441,20 @@ body.dark-mode {
   --on-primary: #020617;
   --primary-container: #1e293b;
   --on-primary-container: #94a3b8;
-  
+
   --secondary: #006d3d;
   --on-secondary: #ffffff;
   --secondary-container: rgba(0, 109, 61, 0.2);
   --on-secondary-container: #4ade80;
-  
+
   --surface: #0f172a;
   --on-surface: #f1f5f9;
   --surface-variant: #1e293b;
   --on-surface-variant: #94a3b8;
-  
+
   --outline: #334155;
   --outline-variant: #1e293b;
-  
+
   --surface-container-low: #0a1120;
   --surface-container: #1e293b;
   --surface-container-high: #334155;
@@ -442,21 +465,22 @@ body.dark-mode {
   --navbar-bg: rgba(2, 6, 23, 0.95) !important;
 }
 
-html.dark-mode, body.dark-mode {
+html.dark-mode,
+body.dark-mode {
   background-color: #0f172a !important;
 }
 
-body.dark-mode main, 
-body.dark-mode .login-page, 
-body.dark-mode .register-page, 
-body.dark-mode .legal-page, 
-body.dark-mode .offer-detail-page, 
-body.dark-mode .marketplace-home, 
+body.dark-mode main,
+body.dark-mode .login-page,
+body.dark-mode .register-page,
+body.dark-mode .legal-page,
+body.dark-mode .offer-detail-page,
+body.dark-mode .marketplace-home,
 body.dark-mode .perfil-page {
   background-color: #0f172a !important;
 }
 /* GLOBAL BLINDAGE AGAINST WHITE */
-html.dark-mode, 
+html.dark-mode,
 body.dark-mode,
 html.dark-mode body {
   background-color: #0f172a !important;
@@ -483,7 +507,7 @@ body.dark-mode .offer-card-large {
 body.dark-mode .meta-item {
   background-color: #1e293b !important;
   border: 1px solid #334155 !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
 body.dark-mode .meta-item strong {
@@ -606,7 +630,7 @@ body.dark-mode .btn-edit:hover,
 body.dark-mode .sector-chip:hover,
 body.dark-mode .btn-cancel:hover {
   background-color: #cbd5e1 !important; /* Gris-blau molt clar */
-  color: #031632 !important;            /* Blau profund original */
+  color: #031632 !important; /* Blau profund original */
 }
 
 body.dark-mode .btn-solid:hover,
@@ -702,9 +726,8 @@ body.dark-mode .chat-room-wrapper {
   background-color: #020617 !important; /* El punt més fosc */
   border: 1px solid #334155 !important;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.6) !important;
-   /* Més aire a dalt */
-   /* Arrodonim per separar-lo dels marges de la web */
-  
+  /* Més aire a dalt */
+  /* Arrodonim per separar-lo dels marges de la web */
 }
 
 body.dark-mode .chat-header {
@@ -742,7 +765,8 @@ body.dark-mode .hero-overlay {
 }
 
 body.dark-mode .hero-image {
-  background-image: linear-gradient(90deg, #020617 0%, rgba(2, 6, 23, 0.45) 60%, transparent 100%),
+  background-image:
+    linear-gradient(90deg, #020617 0%, rgba(2, 6, 23, 0.45) 60%, transparent 100%),
     url('/assets/images/abstract-blue.png') !important;
 }
 

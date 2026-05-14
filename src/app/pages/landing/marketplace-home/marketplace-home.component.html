@@ -7,7 +7,9 @@
         <p>{{ 'MARKETPLACE_HOME.HERO_SUBTITLE' | translate }}</p>
         <div class="hero-actions">
           <button class="btn-primary" routerLink="/ofertas/crear">{{ 'NAVBAR.SELL_NOW' | translate }}</button>
-          <button class="btn-secondary" routerLink="/como-funciona">{{ 'MARKETPLACE_HOME.HOW_IT_WORKS' | translate }}</button>
+          <button class="btn-secondary" routerLink="/como-funciona">
+            {{ 'MARKETPLACE_HOME.HOW_IT_WORKS' | translate }}
+          </button>
         </div>
       </div>
     </div>
@@ -34,7 +36,9 @@
           <button class="sector-chip" (click)="filtrarPorSector(sector)">{{ sector }}</button>
         }
         @if (searchQuery()) {
-          <button class="clear-filter" (click)="limpiarFiltro()">{{ 'MARKETPLACE_HOME.CLEAR_FILTER' | translate }}</button>
+          <button class="clear-filter" (click)="limpiarFiltro()">
+            {{ 'MARKETPLACE_HOME.CLEAR_FILTER' | translate }}
+          </button>
         }
       </div>
     }
@@ -61,7 +65,9 @@
             <header class="card-head">
               <span class="sector">{{ oferta.sector }}</span>
               @if (oferta.employeeRange) {
-                <span class="meta">{{ formatEmployees(oferta.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span>
+                <span class="meta"
+                  >{{ formatEmployees(oferta.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
+                >
               }
             </header>
 
@@ -70,10 +76,15 @@
 
             <div class="card-footer">
               @if (oferta.revenueRange) {
-                <span><strong>{{ 'OFFER_DETAIL.REVENUE' | translate }}:</strong> {{ formatRevenue(oferta.revenueRange) }}</span>
+                <span
+                  ><strong>{{ 'OFFER_DETAIL.REVENUE' | translate }}:</strong>
+                  {{ formatRevenue(oferta.revenueRange) }}</span
+                >
               }
               @if (oferta.creationYear) {
-                <span><strong>{{ 'OFFER_DETAIL.SINCE' | translate }}:</strong> {{ oferta.creationYear }}</span>
+                <span
+                  ><strong>{{ 'OFFER_DETAIL.SINCE' | translate }}:</strong> {{ oferta.creationYear }}</span
+                >
               }
             </div>
           </article>
