@@ -16,7 +16,7 @@ WORKDIR /app
 
 # Instalar solo dependencias de producción (más ligero y seguro)
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --ignore-scripts
 
 # Copiar artefactos construidos del stage anterior
 COPY --from=builder /app/dist ./dist
