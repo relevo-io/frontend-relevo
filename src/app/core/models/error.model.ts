@@ -6,8 +6,8 @@ export interface ApiErrorDetail {
 export interface ApiErrorResponse {
   success: false;
   statusCode: number;
-  errorCode: string; 
-  message: string;   
-  details?: ApiErrorDetail[]; 
+  errorCode: string;
+  message: string;
+  details?: ApiErrorDetail[];
   timestamp: string;
 }

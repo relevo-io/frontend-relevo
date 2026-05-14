@@ -12,8 +12,12 @@
 }
 
 @keyframes fadeOverlay {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ============================================
@@ -93,7 +97,9 @@
   color: #1e293b;
 }
 
-.btn-close-drawer .material-symbols-outlined { font-size: 20px; }
+.btn-close-drawer .material-symbols-outlined {
+  font-size: 20px;
+}
 
 /* ============================================
    FORM
@@ -120,7 +126,10 @@
   color: #374151;
 }
 
-.required { color: #dc2626; margin-left: 2px; }
+.required {
+  color: #dc2626;
+  margin-left: 2px;
+}
 
 .optional {
   font-size: 0.75rem;
@@ -140,13 +149,21 @@
   color: #1e293b;
   background: #f8fafc;
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
   font-family: inherit;
   box-sizing: border-box;
 }
 
-.field-group textarea { resize: vertical; min-height: 80px; }
-.form-select { cursor: pointer; }
+.field-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.form-select {
+  cursor: pointer;
+}
 
 .field-group input:focus,
 .field-group textarea:focus,
@@ -189,7 +206,9 @@
   font-weight: 500;
 }
 
-.save-error .material-symbols-outlined { font-size: 18px; }
+.save-error .material-symbols-outlined {
+  font-size: 18px;
+}
 
 /* ============================================
    DRAWER FOOTER
@@ -250,7 +269,9 @@
   transform: none;
 }
 
-.btn-save .material-symbols-outlined { font-size: 18px; }
+.btn-save .material-symbols-outlined {
+  font-size: 18px;
+}
 
 /* Spinner en el botón guardar */
 .spinning {
@@ -258,8 +279,12 @@
 }
 
 @keyframes spin-icon {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ============================================
@@ -267,5 +292,7 @@
    ============================================ */
 
 @media (max-width: 640px) {
-  .drawer { width: 100vw; }
+  .drawer {
+    width: 100vw;
+  }
 }

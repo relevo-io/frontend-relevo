@@ -1,5 +1,5 @@
 .marketplace-home {
-  padding-top: 80px;
+  padding-top: 52px; /* Mantenim la nova alçada de navbar */
   background: var(--surface);
 }
 
@@ -12,10 +12,19 @@
 .hero-image {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(90deg, rgba(3, 22, 50, 0.7) 0%, rgba(3, 22, 50, 0.35) 45%, rgba(3, 22, 50, 0.15) 100%),
-    url('https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=1800&q=80');
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, transparent 80%), url('/assets/images/abstract-blue.png');
   background-size: cover;
   background-position: center;
+  filter: brightness(1.2); /* Més llum en mode clar */
+  transition: all 0.5s ease;
+}
+
+body.dark-mode .hero-image {
+  filter: brightness(0.7) saturate(0.9);
+  background-image:
+    linear-gradient(90deg, #020617 0%, rgba(2, 6, 23, 0.7) 45%, transparent 100%),
+    url('/assets/images/abstract-blue.png') !important;
 }
 
 .hero-overlay {
@@ -27,11 +36,24 @@
 }
 
 .hero-card {
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 20px;
-  padding: 32px;
-  max-width: 460px;
-  box-shadow: var(--shadow-ambient);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 500px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  color: #031632;
+  z-index: 10;
+}
+
+body.dark-mode .hero-card {
+  background-color: #020617 !important; /* Blau de mitjanit gairebé negre */
+  background: rgba(2, 6, 23, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
+  color: #f1f5f9 !important;
 }
 
 .hero-card h1 {
@@ -59,7 +81,9 @@
   font-weight: 700;
   padding: 10px 18px;
   font-size: 0.95rem;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .btn-primary {
@@ -68,9 +92,9 @@
 }
 
 .btn-secondary {
-  background: transparent;
-  color: var(--primary);
-  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-low) !important;
+  color: var(--on-surface) !important;
+  border: 1px solid var(--outline-variant) !important;
 }
 
 .btn-primary:hover,
@@ -149,7 +173,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
   cursor: pointer;
 }
 
@@ -204,76 +231,25 @@
   color: var(--on-surface-variant);
 }
 
-.state-box {
-  border: 1px dashed var(--outline-variant);
-  border-radius: 14px;
-  background: var(--surface-container-lowest);
-  min-height: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--on-surface-variant);
+/* =========================================
+   DARK MODE
+   ========================================= */
+body.dark-mode .marketplace-home {
+  background: #020617;
 }
 
-.error-box {
-  color: #b91c1c;
+body.dark-mode .offer-card {
+  background: #0f172a;
+  border-color: #1e293b;
 }
 
-.state-box .material-symbols-outlined {
-  font-size: 30px;
+body.dark-mode .sector-chip {
+  background: #0f172a;
+  color: #f8fafc;
 }
 
-.loader {
-  width: 34px;
-  height: 34px;
-  border: 3px solid var(--outline-variant);
-  border-top-color: var(--secondary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (max-width: 1140px) {
-  .offers-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 900px) {
-  .hero {
-    min-height: 500px;
-  }
-
-  .hero-overlay {
-    min-height: 500px;
-  }
-
-  .offers-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .hero-card {
-    padding: 22px;
-  }
-
-  .offers-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .offers-grid {
-    grid-template-columns: 1fr;
-  }
+body.dark-mode .sector-chip:hover,
+body.dark-mode .sector-chip.active {
+  background-color: var(--secondary) !important;
+  color: white !important;
 }

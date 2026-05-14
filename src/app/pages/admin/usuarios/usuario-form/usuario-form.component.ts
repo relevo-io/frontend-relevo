@@ -1,11 +1,4 @@
-import {
-  Component,
-  inject,
-  input,
-  output,
-  effect,
-  signal,
-} from '@angular/core';
+import { Component, inject, input, output, effect, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UsuarioService } from '../../../../core/services/usuario.service';
@@ -17,7 +10,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './usuario-form.component.html',
-  styleUrl: './usuario-form.component.css',
+  styleUrl: './usuario-form.component.css'
 })
 export class UsuarioFormComponent {
   private fb = inject(FormBuilder);
@@ -27,9 +20,9 @@ export class UsuarioFormComponent {
   // --- INPUTS / OUTPUTS ---
   // null = modo crear | Usuario = modo editar
   usuario = input<Usuario | null>(null);
-  isOpen  = input<boolean>(false);
-  saved   = output<Usuario>();   // Emite el usuario guardado al padre
-  closed  = output<void>();      // Emite al cerrar sin guardar
+  isOpen = input<boolean>(false);
+  saved = output<Usuario>(); // Emite el usuario guardado al padre
+  closed = output<void>(); // Emite al cerrar sin guardar
 
   // --- ESTADO INTERNO ---
   isSaving = signal<boolean>(false);
@@ -38,11 +31,11 @@ export class UsuarioFormComponent {
   // --- FORMULARIO ---
   form = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
-    email:    ['', [Validators.required, Validators.email]],
-    password: [''],   // Solo requerido en modo crear (validación dinámica)
-    roles:    [['INTERESTED'] as Array<'OWNER' | 'INTERESTED' | 'ADMIN'>, Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: [''], // Solo requerido en modo crear (validación dinámica)
+    roles: [['INTERESTED'] as ('OWNER' | 'INTERESTED' | 'ADMIN')[], Validators.required],
     location: [''],
-    bio:      [''],
+    bio: ['']
   });
 
   // Precarga los datos cuando cambia el input `usuario` (modo editar)
@@ -52,11 +45,11 @@ export class UsuarioFormComponent {
       if (u) {
         this.form.patchValue({
           fullName: u.fullName,
-          email:    u.email,
-          roles:    u.roles && u.roles.length ? u.roles : ['INTERESTED'],
+          email: u.email,
+          roles: u.roles && u.roles.length ? u.roles : ['INTERESTED'],
           location: u.location ?? '',
-          bio:      u.bio ?? '',
-          password: '',
+          bio: u.bio ?? '',
+          password: ''
         });
         // En edición la contraseña es opcional
         this.form.get('password')?.clearValidators();
@@ -70,11 +63,17 @@ export class UsuarioFormComponent {
     });
   }
 
-  get modoCrear(): boolean { return !this.usuario(); }
-  get titulo(): string { return this.modoCrear ? 'Añadir Usuario' : 'Editar Usuario'; }
+  get modoCrear(): boolean {
+    return !this.usuario();
+  }
+  get titulo(): string {
+    return this.modoCrear ? 'Añadir Usuario' : 'Editar Usuario';
+  }
 
   // Getters para acceso rápido en el template
-  get f() { return this.form.controls; }
+  get f() {
+    return this.form.controls;
+  }
 
   cerrar(): void {
     this.form.reset({ roles: ['INTERESTED'] });
@@ -106,24 +105,24 @@ export class UsuarioFormComponent {
           const serverErrors = errorBody.errors || errorBody.details;
 
           if (err.status === 400 && Array.isArray(serverErrors)) {
-            serverErrors.forEach((e: { field: string, message: string }) => {
+            serverErrors.forEach((e: { field: string; message: string }) => {
               this.form.get(e.field)?.setErrors({ serverError: e.message.toLowerCase() });
             });
             this.saveError.set('please check marked fields');
           } else if (err.status === 409) {
             const msg = (errorBody.message || 'already exists').toLowerCase();
             this.saveError.set(msg);
-            
+
             if (msg.includes('email')) {
               this.form.get('email')?.setErrors({ serverError: 'email already in use' });
             }
           }
-        },
+        }
       });
     } else {
       const id = this.usuario()!._id!;
       if (!payload.password) delete payload.password;
-      
+
       this.usuarioService.updateUsuario(id, payload).subscribe({
         next: (actualizado) => {
           this.isSaving.set(false);
@@ -137,19 +136,19 @@ export class UsuarioFormComponent {
           const serverErrors = errorBody.errors || errorBody.details;
 
           if (err.status === 400 && Array.isArray(serverErrors)) {
-            serverErrors.forEach((e: { field: string, message: string }) => {
+            serverErrors.forEach((e: { field: string; message: string }) => {
               this.form.get(e.field)?.setErrors({ serverError: e.message.toLowerCase() });
             });
             this.saveError.set('validation failed');
           } else if (err.status === 409) {
             const msg = (errorBody.message || 'data already in use').toLowerCase();
             this.saveError.set(msg);
-            
+
             if (msg.includes('email')) {
               this.form.get('email')?.setErrors({ serverError: 'email already exists' });
             }
           }
-        },
+        }
       });
     }
   }

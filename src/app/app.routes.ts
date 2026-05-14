@@ -19,6 +19,10 @@ import { PerfilComponent } from './pages/public/perfil/perfil.component';
 import { AvisoLegalComponent } from './pages/legal/aviso-legal/aviso-legal.component';
 import { TerminosServicioComponent } from './pages/legal/terminos-servicio/terminos-servicio.component';
 import { PoliticaPrivacidadComponent } from './pages/legal/politica-privacidad/politica-privacidad.component';
+import { ChatRoomComponent } from './pages/public/chat/chat-room.component';
+import { MisChatsComponent } from './pages/public/mis-chats/mis-chats.component';
+import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-solicitudes.component';
+import { MisOfertasComponent } from './pages/public/mis-ofertas/mis-ofertas.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -43,11 +47,31 @@ export const routes: Routes = [
       { path: 'terminos-servicio', component: TerminosServicioComponent },
       { path: 'politica-privacidad', component: PoliticaPrivacidadComponent },
       { path: 'usuarios', component: UsuariosListComponent },
-      { 
-        path: 'perfil', 
+      {
+        path: 'perfil',
         component: PerfilComponent,
-        canActivate: [authGuard] // Protegemos el perfil
+        canActivate: [authGuard]
       },
+      {
+        path: 'chats',
+        component: MisChatsComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'chats/:chatId',
+        component: ChatRoomComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'mis-solicitudes',
+        component: MisSolicitudesComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'mis-ofertas',
+        component: MisOfertasComponent,
+        canActivate: [authGuard]
+      }
     ]
   },
 
@@ -68,4 +92,3 @@ export const routes: Routes = [
   // Fallback
   { path: '**', redirectTo: '' }
 ];
-

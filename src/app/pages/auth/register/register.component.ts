@@ -1,13 +1,17 @@
-﻿import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/auth.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -15,6 +19,9 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
+  private ns = inject(NotificationService);
+  private themeService = inject(ThemeService);
 
   registerForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
@@ -27,8 +34,12 @@ export class RegisterComponent {
   errorMessage = signal<string | null>(null);
   showPassword = signal(false);
 
+  get f() {
+    return this.registerForm.controls;
+  }
+
   togglePassword() {
-    this.showPassword.update(val => !val);
+    this.showPassword.update((val) => !val);
   }
 
   onSubmit() {
@@ -45,21 +56,26 @@ export class RegisterComponent {
       fullName: formValues.fullName,
       email: formValues.email,
       password: formValues.password,
-      roles: ['OWNER', 'INTERESTED']
+      roles: formValues.role === 'OWNER' ? ['OWNER'] : ['INTERESTED'],
+      theme: this.themeService.currentTheme(),
+      language: this.translate.currentLang || this.translate.defaultLang || 'es'
     };
 
     this.authService.register(requestData).subscribe({
       next: () => {
         this.isLoading.set(false);
-        // DesprÃ©s de registrar, els portem al login perquÃ¨ entrin.
+        this.ns.success(
+          this.translate.instant('COMMON.NOTIF.REGISTER_SUCCESS') ||
+            'Cuenta creada correctamente. Por favor, inicia sesión.'
+        );
         this.router.navigate(['/login']);
       },
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.error?.message || 'Error en el registro. Este email ya podrÃ­a estar en uso.');
+        const msgKey = err.error?.message || 'ERRORS.INTERNAL_ERROR';
+        const translatedMsg = this.translate.instant(msgKey);
+        this.errorMessage.set(translatedMsg);
       }
     });
   }
 }
-
-

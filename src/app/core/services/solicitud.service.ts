@@ -1,17 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Solicitud } from '../models/solicitud.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SolicitudService {
-  private API_URL = 'http://localhost:4000/api/solicitudes'; 
-
-  constructor(
-    private http: HttpClient,
-  ) {}
+  private API_URL = `${environment.apiUrl}/api/solicitudes`;
+  private http = inject(HttpClient);
 
   // Obtener todas las solicitudes
   getSolicitudes(): Observable<Solicitud[]> {
@@ -20,10 +18,19 @@ export class SolicitudService {
 
   // Actualizar el estado de una solicitud
   updateStatus(id: string, status: string): Observable<any> {
-  return this.http.patch(`${this.API_URL}/${id}/status`, { status });
+    return this.http.patch(`${this.API_URL}/${id}/status`, { status });
   }
 
-  crearSolicitud(data: { opportunityId: string, message: string }): Observable<Solicitud> {
+  // Obtener las solicitudes donde el usuario es el dueño de la oferta
+  getMisSolicitudesOwner(): Observable<Solicitud[]> {
+    return this.http.get<Solicitud[]>(`${this.API_URL}/me/recibidas`);
+  }
+
+  getMisSolicitudesEnviadas(): Observable<Solicitud[]> {
+    return this.http.get<Solicitud[]>(`${this.API_URL}/me/enviadas`);
+  }
+
+  crearSolicitud(data: { opportunityId: string; message: string }): Observable<Solicitud> {
     return this.http.post<Solicitud>(this.API_URL, data);
   }
 
@@ -33,4 +40,7 @@ export class SolicitudService {
     });
   }
 
+  getMiSolicitudParaOferta(ofertaId: string): Observable<Solicitud | null> {
+    return this.http.get<Solicitud | null>(`${this.API_URL}/oferta/${ofertaId}/me`);
+  }
 }

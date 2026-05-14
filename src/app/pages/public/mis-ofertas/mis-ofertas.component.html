@@ -1,0 +1,66 @@
+<main class="mailbox-page">
+  <div class="mailbox-container">
+    <div class="mailbox-header">
+      <h1>{{ 'MY_OFFERS.TITLE' | translate }}</h1>
+      <p class="subtitle">{{ 'MY_OFFERS.SUBTITLE' | translate }}</p>
+
+      <div class="header-actions">
+        <a routerLink="/ofertas/crear" class="btn-primary-small">
+          <span class="material-symbols-outlined">add</span>
+          {{ 'MY_OFFERS.CREATE_NEW' | translate }}
+        </a>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading-state"><span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}</div>
+    } @else if (ofertas().length === 0) {
+      <div class="empty-state">
+        <span class="material-symbols-outlined">business_center</span>
+        <h2>{{ 'MY_OFFERS.EMPTY_TITLE' | translate }}</h2>
+        <p>{{ 'MY_OFFERS.EMPTY_DESC' | translate }}</p>
+        <a routerLink="/ofertas/crear" class="btn-create-first">{{ 'OFFER_CREATE.PUBLISH' | translate }}</a>
+      </div>
+    } @else {
+      <div class="requests-list">
+        @for (o of ofertas(); track o._id) {
+          <div class="request-card">
+            <div class="request-header">
+              <div class="offer-info">
+                <span class="sector-badge">{{ o.sector }}</span>
+                <h3>{{ o.region }}</h3>
+                <p class="company-desc">{{ o.companyDescription }}</p>
+              </div>
+              <div class="card-meta">
+                <span class="date">{{ o.createdAt | date: 'mediumDate' }}</span>
+              </div>
+            </div>
+
+            <div class="offer-stats-grid">
+              <div class="stat-item">
+                <span class="label">{{ 'OFFER_DETAIL.REVENUE' | translate }}</span>
+                <strong>{{ formatRevenue(o.revenueRange) }}</strong>
+              </div>
+              <div class="stat-item">
+                <span class="label">{{ 'MARKETPLACE.EMPLOYEES' | translate }}</span>
+                <strong>{{ formatEmployees(o.employeeRange) }}</strong>
+              </div>
+              <div class="stat-item">
+                <span class="label">{{ 'OFFER_DETAIL.SINCE' | translate }}</span>
+                <strong>{{ o.creationYear || '---' }}</strong>
+              </div>
+            </div>
+
+            <div class="request-actions">
+              <a [routerLink]="['/ofertas', o._id]" class="btn-view">
+                <span class="material-symbols-outlined">visibility</span>
+                {{ 'COMMON.VIEW' | translate }}
+              </a>
+              <!-- Futura funcionalitat: Editar / Borrar -->
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</main>

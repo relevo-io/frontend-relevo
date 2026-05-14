@@ -1,17 +1,17 @@
-﻿<footer class="footer">
+<footer class="footer">
   <div class="footer-container">
     <div class="footer-brand">
       <span class="logo">Relevo</span>
     </div>
 
     <div class="footer-links">
-      <a routerLink="/aviso-legal">Aviso legal</a>
-      <a routerLink="/terminos-servicio">Terminos de servicio</a>
-      <a routerLink="/politica-privacidad">Politica de privacidad</a>
+      <a routerLink="/aviso-legal">{{ 'FOOTER.LEGAL_NOTICE' | translate }}</a>
+      <a routerLink="/terminos-servicio">{{ 'FOOTER.TERMS' | translate }}</a>
+      <a routerLink="/politica-privacidad">{{ 'FOOTER.PRIVACY' | translate }}</a>
     </div>
 
     <div class="footer-copy">
-      (c) 2026 Relevo. Todos los derechos reservados.
+      {{ 'FOOTER.COPYRIGHT' | translate }}
     </div>
   </div>
 </footer>

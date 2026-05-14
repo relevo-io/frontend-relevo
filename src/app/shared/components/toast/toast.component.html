@@ -1,16 +1,18 @@
 <!-- Contenedor general en la esquina (top-right) -->
 <div class="toast-container" *ngIf="notifications().length > 0">
-  
   <!-- Bucle sobre el signal de notificaciones -->
   @for (n of notifications(); track n.id) {
     <div class="toast-item" [ngClass]="n.type" role="alert">
-      
       <!-- Icono dinámico según el tipo -->
       <span class="material-symbols-outlined toast-icon">
-        {{ 
-          n.type === 'success' ? 'check_circle' : 
-          n.type === 'error' ? 'error' : 
-          n.type === 'warning' ? 'warning' : 'info' 
+        {{
+          n.type === 'success'
+            ? 'check_circle'
+            : n.type === 'error'
+              ? 'error'
+              : n.type === 'warning'
+                ? 'warning'
+                : 'info'
         }}
       </span>
 
@@ -23,8 +25,6 @@
 
       <!-- BARRA DE PROGRESO DINÁMICA -->
       <div class="progress-bar" [style.--duration.ms]="n.duration"></div>
-
     </div>
   }
-
 </div>

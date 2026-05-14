@@ -36,7 +36,7 @@ export class NotificationService {
     const id = Date.now();
 
     // Inmutabilidad: creamos un nuevo array con la notificación añadida.
-    this.notifications.update(prev => [...prev, { id, message, type, duration }]);
+    this.notifications.update((prev) => [...prev, { id, message, type, duration }]);
 
     // Temporizador para limpiar la notificación automáticamente
     setTimeout(() => {
@@ -48,12 +48,20 @@ export class NotificationService {
    * Elimina una notificación manualmente por su ID.
    */
   remove(id: number): void {
-    this.notifications.update(prev => prev.filter(n => n.id !== id));
+    this.notifications.update((prev) => prev.filter((n) => n.id !== id));
   }
 
   // Atajos semánticos para mayor comodidad en el resto de la app
-  success(msg: string) { this.show(msg, 'success'); }
-  error(msg: string) { this.show(msg, 'error', 3000); } // Errores duran un poco más
-  warn(msg: string) { this.show(msg, 'warning'); }
-  info(msg: string) { this.show(msg, 'info'); }
+  success(msg: string) {
+    this.show(msg, 'success');
+  }
+  error(msg: string) {
+    this.show(msg, 'error', 3000);
+  } // Errores duran un poco más
+  warn(msg: string) {
+    this.show(msg, 'warning');
+  }
+  info(msg: string) {
+    this.show(msg, 'info');
+  }
 }

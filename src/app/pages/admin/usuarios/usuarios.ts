@@ -12,13 +12,13 @@ import { ConfirmDialogService } from '../../../core/services/confirm-dialog.serv
   standalone: true,
   imports: [CommonModule, SearchInputComponent, UsuarioFormComponent],
   templateUrl: './usuarios.html',
-  styleUrl: './usuarios.css',
+  styleUrl: './usuarios.css'
 })
 export class Usuarios implements OnInit {
   private usuarioService = inject(UsuarioService);
   private ns = inject(NotificationService);
   private confirmService = inject(ConfirmDialogService);
-  
+
   // Base data signals
   usuarios = signal<Usuario[]>([]);
   isLoading = signal<boolean>(true);
@@ -32,14 +32,14 @@ export class Usuarios implements OnInit {
   selectedIds = signal<Set<string>>(new Set());
 
   // DRAWER STATE: null = cerrado | Usuario = editar | 'NEW' = crear
-  drawerOpen    = signal<boolean>(false);
+  drawerOpen = signal<boolean>(false);
   drawerUsuario = signal<Usuario | null>(null);
 
   // COMPUTEDS: Estado derivado de la selección
   isAllSelected = computed(() => {
     const visible = this.paginatedUsuarios();
     if (visible.length === 0) return false;
-    return visible.every(u => this.selectedIds().has(u._id!));
+    return visible.every((u) => this.selectedIds().has(u._id!));
   });
 
   someSelected = computed(() => this.selectedIds().size > 0);
@@ -51,7 +51,7 @@ export class Usuarios implements OnInit {
     const allUsers = this.usuarios();
 
     // Helper: los ocultos siempre al fondo (1 = al fondo, 0 = arriba)
-    const hiddenWeight = (u: Usuario) => u.visible === false ? 1 : 0;
+    const hiddenWeight = (u: Usuario) => (u.visible === false ? 1 : 0);
 
     if (!query && filter === 'ALL') {
       // Sin filtros: solo ordenamos por visibilidad
@@ -59,12 +59,11 @@ export class Usuarios implements OnInit {
     }
 
     return allUsers
-      .filter(u => {
+      .filter((u) => {
         const matchesRole = filter === 'ALL' || (u.roles && u.roles.includes(filter as any));
-        const matchesSearch = !query || 
-          u.fullName.toLowerCase().includes(query) || 
-          u.email.toLowerCase().includes(query);
-        
+        const matchesSearch =
+          !query || u.fullName.toLowerCase().includes(query) || u.email.toLowerCase().includes(query);
+
         return matchesRole && matchesSearch;
       })
       .sort((a, b) => {
@@ -100,9 +99,7 @@ export class Usuarios implements OnInit {
     return all.slice((page - 1) * size, page * size);
   });
 
-  totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredUsuarios().length / this.pageSize()))
-  );
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredUsuarios().length / this.pageSize())));
 
   // Devuelve números de página con -1 como marcador de ellipsis
   pageNumbers = computed(() => {
@@ -127,7 +124,7 @@ export class Usuarios implements OnInit {
   fetchUsuarios(): void {
     this.isLoading.set(true);
     this.error.set(null);
-    
+
     this.usuarioService.getUsuarios().subscribe({
       next: (data) => {
         this.usuarios.set(data);
@@ -143,11 +140,15 @@ export class Usuarios implements OnInit {
 
   // --- ACCIÓN FUNCIONAL: Eliminar Usuario ---
   async confirmarEliminar(id: string): Promise<void> {
-    const confirmed = await this.confirmService.ask('Eliminar Usuario', '¿Estás seguro de que quieres eliminar este usuario? Esta acción es irreversible.', 'Eliminar');
+    const confirmed = await this.confirmService.ask(
+      'Eliminar Usuario',
+      '¿Estás seguro de que quieres eliminar este usuario? Esta acción es irreversible.',
+      'Eliminar'
+    );
     if (confirmed) {
       this.usuarioService.deleteUsuario(id).subscribe({
         next: () => {
-          this.usuarios.update(actuales => actuales.filter(u => u._id !== id));
+          this.usuarios.update((actuales) => actuales.filter((u) => u._id !== id));
           this.ns.success('Usuario eliminado');
         },
         error: (err) => {
@@ -177,8 +178,12 @@ export class Usuarios implements OnInit {
     }
   }
 
-  prevPage(): void { this.goToPage(this.currentPage() - 1); }
-  nextPage(): void { this.goToPage(this.currentPage() + 1); }
+  prevPage(): void {
+    this.goToPage(this.currentPage() - 1);
+  }
+  nextPage(): void {
+    this.goToPage(this.currentPage() + 1);
+  }
 
   pageStart(): number {
     return (this.currentPage() - 1) * this.pageSize() + 1;
@@ -189,9 +194,9 @@ export class Usuarios implements OnInit {
   }
 
   // --- LÓGICA DE SELECCIÓN ---
-  
+
   toggleSelection(id: string): void {
-    this.selectedIds.update(prev => {
+    this.selectedIds.update((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
@@ -203,11 +208,11 @@ export class Usuarios implements OnInit {
   }
 
   toggleAll(): void {
-    const allPageIds = this.paginatedUsuarios().map(u => u._id!);
-    this.selectedIds.update(prev => {
+    const allPageIds = this.paginatedUsuarios().map((u) => u._id!);
+    this.selectedIds.update((prev) => {
       if (this.isAllSelected()) {
         const next = new Set(prev);
-        allPageIds.forEach(id => next.delete(id));
+        allPageIds.forEach((id) => next.delete(id));
         return next;
       } else {
         return new Set([...prev, ...allPageIds]);
@@ -217,17 +222,19 @@ export class Usuarios implements OnInit {
 
   async borrarSeleccionados(): Promise<void> {
     const ids = Array.from(this.selectedIds());
-    const confirmed = await this.confirmService.ask('Borrado Múltiple', `¿Estás seguro de que quieres eliminar ${ids.length} usuarios? Se perderán todos sus datos permanentemente.`, 'Eliminar Todo');
-    
+    const confirmed = await this.confirmService.ask(
+      'Borrado Múltiple',
+      `¿Estás seguro de que quieres eliminar ${ids.length} usuarios? Se perderán todos sus datos permanentemente.`,
+      'Eliminar Todo'
+    );
+
     if (confirmed) {
       this.isLoading.set(true); // Bloquear UI
 
       this.usuarioService.deleteUsuariosBatch(ids).subscribe({
         next: (res) => {
           // Si el backend lo confirma, actualizamos reactivamente el signal
-          this.usuarios.update(actuales => 
-            actuales.filter(u => !ids.includes(u._id!))
-          );
+          this.usuarios.update((actuales) => actuales.filter((u) => !ids.includes(u._id!)));
           this.clearSelection();
           this.isLoading.set(false);
           this.ns.success(`${res.deletedCount} usuarios eliminados`);
@@ -252,8 +259,8 @@ export class Usuarios implements OnInit {
     this.usuarioService.updateUsuarioVisibility(id, nextVisible).subscribe({
       next: (actualizado) => {
         // Actualizar el signal para reflejar el cambio visualmente
-        this.usuarios.update(actuales => 
-          actuales.map(u => u._id === id ? { ...u, visible: actualizado.visible } : u)
+        this.usuarios.update((actuales) =>
+          actuales.map((u) => (u._id === id ? { ...u, visible: actualizado.visible } : u))
         );
         this.ns.success(nextVisible ? 'user visible' : 'user hidden');
       },
@@ -267,21 +274,21 @@ export class Usuarios implements OnInit {
   bulkVisibility(visible: boolean): void {
     const ids = Array.from(this.selectedIds());
     this.isLoading.set(true);
-    
+
     this.usuarioService.updateUsuariosVisibilityBatch(ids, visible).subscribe({
       next: (res) => {
         // Actualizamos los signals para todos los IDs afectados
-        this.usuarios.update(actuales => 
-          actuales.map(u => ids.includes(u._id!) ? { ...u, visible } : u)
-        );
-        
+        this.usuarios.update((actuales) => actuales.map((u) => (ids.includes(u._id!) ? { ...u, visible } : u)));
+
         this.isLoading.set(false);
         this.clearSelection();
         this.ns.success(`${res.modifiedCount} ${visible ? 'visible' : 'hidden'}`);
 
         // Aviso parcial si algo no coincidió
         if (res.modifiedCount < res.requestedCount) {
-          console.warn(`Aviso: Se solicitaron ${res.requestedCount} cambios, pero se actualizaron ${res.modifiedCount}.`);
+          console.warn(
+            `Aviso: Se solicitaron ${res.requestedCount} cambios, pero se actualizaron ${res.modifiedCount}.`
+          );
         }
       },
       error: (err) => {
@@ -309,8 +316,8 @@ export class Usuarios implements OnInit {
   }
 
   onUsuarioGuardado(guardado: Usuario): void {
-    this.usuarios.update(actuales => {
-      const idx = actuales.findIndex(u => u._id === guardado._id);
+    this.usuarios.update((actuales) => {
+      const idx = actuales.findIndex((u) => u._id === guardado._id);
       if (idx >= 0) {
         // Edición: reemplazamos el elemento existente
         const copia = [...actuales];

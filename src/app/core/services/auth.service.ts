@@ -5,6 +5,7 @@ import { Observable, tap, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
 import { Usuario } from '../models/usuario.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,18 +14,20 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
-  private apiUrl = 'http://localhost:4000/api';
+  private apiUrl = `${environment.apiUrl}/api`;
 
   // --- SIGNALS ---
   public currentUser = signal<Usuario | null>(null);
   public isLoggedIn = computed(() => !!this.currentUser());
   public isAdmin = computed(() => this.currentUser()?.roles?.includes('ADMIN') ?? false);
+  public isOwner = computed(() => this.currentUser()?.roles?.includes('OWNER') ?? false);
   public isBrowser = isPlatformBrowser(this.platformId);
 
   constructor() {
-    afterNextRender(() => {
+    // Si estamos en el navegador, leemos la caché al instante, sin esperar al siguiente render
+    if (this.isBrowser) {
       this.checkToken();
-    });
+    }
   }
 
   private checkToken() {
@@ -40,7 +43,7 @@ export class AuthService {
       }
     }
 
-    // 2. Background Sync 
+    // 2. Background Sync
     if (token) {
       this.fetchProfile().subscribe({
         error: () => {
@@ -53,7 +56,7 @@ export class AuthService {
 
   fetchProfile(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/auth/me`).pipe(
-      tap(usuario => {
+      tap((usuario) => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.setItem('user_data', JSON.stringify(usuario));
           this.currentUser.set(usuario);
@@ -64,7 +67,7 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials, { withCredentials: true }).pipe(
-      tap(res => {
+      tap((res) => {
         if (res.accessToken && res.usuario && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('access_token', res.accessToken);
           localStorage.setItem('user_data', JSON.stringify(res.usuario));
@@ -74,16 +77,13 @@ export class AuthService {
     );
   }
 
-
-
-
   register(userData: RegisterRequest): Observable<Usuario> {
     return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, userData);
   }
 
   refreshToken(): Observable<{ accessToken: string }> {
     return this.http.post<{ accessToken: string }>(`${this.apiUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
-      tap(res => {
+      tap((res) => {
         if (res.accessToken && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('access_token', res.accessToken);
         }

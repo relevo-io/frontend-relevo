@@ -1,0 +1,113 @@
+<main class="mailbox-page">
+  <div class="mailbox-container">
+    <header class="mailbox-header">
+      <h1>
+        {{ 'CHATS_PAGE.TITLE' | translate }}
+        @if (getTotalUnread() > 0) {
+          <span class="unread-total-badge">{{ getTotalUnread() }}</span>
+        }
+      </h1>
+      <p class="subtitle">{{ 'CHATS_PAGE.SUBTITLE' | translate }}</p>
+    </header>
+
+    <!-- Loading -->
+    @if (isLoading()) {
+      <div class="loading-state"><span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}</div>
+    }
+
+    <!-- Error -->
+    @if (!isLoading() && error()) {
+      <div class="error-state">
+        <span class="material-symbols-outlined">error</span>
+        <p>{{ error() }}</p>
+        <button class="btn-retry" (click)="loadChats()">
+          <span class="material-symbols-outlined">refresh</span>
+          {{ 'COMMON.RETRY' | translate }}
+        </button>
+      </div>
+    }
+
+    <!-- Empty -->
+    @if (!isLoading() && !error() && chats().length === 0) {
+      <div class="empty-state">
+        <span class="material-symbols-outlined">chat_bubble</span>
+        <h2>{{ 'CHATS_PAGE.EMPTY_TITLE' | translate }}</h2>
+        <p>{{ 'CHATS_PAGE.EMPTY_DESC' | translate }}</p>
+        <a routerLink="/ofertas" class="btn-create-first">
+          {{ 'CHATS_PAGE.EXPLORE' | translate }}
+        </a>
+      </div>
+    }
+
+    <!-- Chat list -->
+    @if (!isLoading() && !error() && chats().length > 0) {
+      <ul class="chat-list" aria-label="Lista de conversaciones">
+        @for (chat of chats(); track chat._id) {
+          <li>
+            <a
+              [routerLink]="['/chats', chat._id]"
+              class="chat-card"
+              [class.unread]="getUnreadCount(chat) > 0"
+              [class.readonly]="chat.isReadOnly"
+            >
+              <!-- Avatar -->
+              <div class="chat-avatar">
+                {{ getOtherParticipantInitial(chat) }}
+                @if (chat.isReadOnly) {
+                  <span class="readonly-badge" title="Solo lectura">
+                    <span class="material-symbols-outlined">lock</span>
+                  </span>
+                }
+              </div>
+
+              <!-- Content -->
+              <div class="chat-content">
+                <div class="chat-top-row">
+                  <span class="chat-name">{{ getOtherParticipantName(chat) }}</span>
+                  <span class="chat-time">{{ chat.updatedAt | date: 'HH:mm' }}</span>
+                </div>
+                @if (getOfertaInfo(chat)) {
+                  <div class="chat-oferta">
+                    <span class="material-symbols-outlined">storefront</span>
+                    {{ getOfertaInfo(chat)!.sector }} · {{ getOfertaInfo(chat)!.region }}
+                  </div>
+                }
+                <div class="chat-preview-row">
+                  <p class="chat-preview" [class.unread-text]="getUnreadCount(chat) > 0">
+                    @if (isLastMessageMine(chat)) {
+                      <span class="material-symbols-outlined preview-check">done</span>
+                    }
+                    {{ getLastMessagePreview(chat) }}
+                  </p>
+                  @if (getUnreadCount(chat) > 0) {
+                    <span class="unread-badge">{{ getUnreadCount(chat) }}</span>
+                  }
+                </div>
+
+                <!-- Accions ràpides per a propietaris en xats pendents -->
+                @if (chat.status === 'PENDING_APPROVAL' && isOwnerOfOffer(chat)) {
+                  <div class="quick-actions">
+                    <button
+                      class="btn-quick-approve"
+                      (click)="updateChatStatus($event, chat, 'APPROVED')"
+                      title="Acceptar xat"
+                    >
+                      <span class="material-symbols-outlined">check_circle</span>
+                    </button>
+                    <button
+                      class="btn-quick-reject"
+                      (click)="updateChatStatus($event, chat, 'REJECTED')"
+                      title="Ignorar xat"
+                    >
+                      <span class="material-symbols-outlined">cancel</span>
+                    </button>
+                  </div>
+                }
+              </div>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</main>

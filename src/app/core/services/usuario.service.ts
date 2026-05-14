@@ -2,15 +2,16 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UsuarioService {
   private http = inject(HttpClient);
 
   // Confirma que esta sea la ruta correcta de tu backend para los usuarios
-  private apiUrl = 'http://localhost:4000/api/usuarios';
+  private apiUrl = `${environment.apiUrl}/api/usuarios`;
 
   // 1. Obtener la lista completa
   getUsuarios(): Observable<Usuario[]> {
@@ -52,5 +53,15 @@ export class UsuarioService {
   // 7. Cambiar visibilidad de múltiples usuarios (PATCH con body)
   updateUsuariosVisibilityBatch(ids: string[], visible: boolean): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/batch/visibility`, { ids, visible });
+  }
+
+  // 8. Cambiar idioma de un usuario (PATCH)
+  updateUsuarioLanguage(id: string, language: string): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiUrl}/${id}`, { language });
+  }
+
+  // 9. Cambiar tema de un usuario (PATCH)
+  updateUsuarioTheme(id: string, theme: string): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiUrl}/${id}`, { theme });
   }
 }

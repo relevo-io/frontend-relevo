@@ -1,5 +1,6 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { catchError, throwError } from 'rxjs';
 import { NotificationService } from '../services/notification.service';
 import { ApiErrorResponse } from '../models/error.model';
@@ -10,6 +11,7 @@ import { ApiErrorResponse } from '../models/error.model';
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const ns = inject(NotificationService);
+  const translate = inject(TranslateService);
 
   return next(req).pipe(
     catchError((response: HttpErrorResponse) => {
@@ -24,28 +26,29 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       // 1. Filtrar por tipo de error
       switch (apiError?.errorCode || 'UNKNOWN_ERROR') {
         case 'VALIDATION_ERROR':
-          // Dejamos pasar errores de validación para manejo local en el form
-          // O mandamos un log genérico
-          ns.error('Por favor, revisa los datos del formulario');
+          ns.error(translate.instant('ERRORS.VALIDATION_ERROR'));
           break;
 
         case 'UNAUTHORIZED':
-          // El auth interceptor ya maneja el logout real, aquí solo avisamos
           if (!req.url.includes('/auth/refresh')) {
-             ns.error('Sesión terminada o credenciales incorrectas');
+            ns.error(translate.instant('ERRORS.AUTH.UNAUTHORIZED'));
           }
           break;
 
         case 'FORBIDDEN':
         case 'NOT_FOUND':
         case 'INTERNAL_ERROR':
-          ns.error(errorMessage);
+        case 'CONFLICT':
+          // Traducimos el mensaje que viene del backend (que ahora es una clave)
+          ns.error(translate.instant(errorMessage));
           break;
 
-        default:
-          // Fallback final
-          ns.error(errorMessage);
+        default: {
+          // Fallback final: intentamos traducir por si es una clave, si no mostramos el original
+          const fallbackMsg = translate.instant(errorMessage || 'ERRORS.NETWORK_ERROR');
+          ns.error(fallbackMsg);
           break;
+        }
       }
 
       // Re-enviamos el error completo (ahora el componente podrá leer el apiError.details)

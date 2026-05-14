@@ -1,33 +1,34 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, TranslateModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrl: './login.component.css'
 })
 export class Login {
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
   private router = inject(Router);
-  public authService = inject(AuthService);
+  private translate = inject(TranslateService);
 
-  // --- UI SIGNALS ---
-  showPassword = signal(false);
-  errorMessage = signal<string | null>(null);
-  isLoading = signal(false);
-
-  // --- FORM ---
-  loginForm = this.fb.group({
+  loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
+  showPassword = signal(false);
+
   togglePassword() {
-    this.showPassword.update(v => !v);
+    this.showPassword.update((v) => !v);
   }
 
   onSubmit() {
@@ -36,20 +37,15 @@ export class Login {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    const { email, password } = this.loginForm.value;
-
-    this.authService.login({ email: email!, password: password! }).subscribe({
-      next: (res) => {
-        this.isLoading.set(false);
-
+    this.authService.login(this.loginForm.value).subscribe({
+      next: () => {
         this.router.navigate(['/']);
       },
-
       error: (err) => {
         this.isLoading.set(false);
-        this.errorMessage.set(err.error?.message || 'Error de autenticación. Verifica tus credenciales.');
+        const msgKey = err.error?.message || 'ERRORS.INTERNAL_ERROR';
+        this.errorMessage.set(this.translate.instant(msgKey));
       }
     });
   }
 }
-

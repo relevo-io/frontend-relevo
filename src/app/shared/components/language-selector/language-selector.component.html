@@ -1,0 +1,15 @@
+<button mat-button [matMenuTriggerFor]="menu" class="lang-button">
+  <mat-icon>language</mat-icon>
+  <span class="lang-text">{{ languageService.languageCode() | uppercase }}</span>
+</button>
+
+<mat-menu #menu="matMenu">
+  @for (lang of languages; track lang.code) {
+    <button mat-menu-item (click)="changeLanguage(lang.code)">
+      <mat-icon [color]="languageService.languageCode() === lang.code ? 'primary' : ''">
+        {{ languageService.languageCode() === lang.code ? 'check' : '' }}
+      </mat-icon>
+      <span>{{ lang.name }}</span>
+    </button>
+  }
+</mat-menu>

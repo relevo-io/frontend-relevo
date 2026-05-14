@@ -12,12 +12,12 @@ import { FormsModule } from '@angular/forms';
 export class SearchInputComponent {
   // Input: Placeholder personalizable para cada página
   placeholder = input<string>('Buscar...');
-  
+
   // Output: Emite el valor buscado al padre (nueva sintaxis output de Ng 18+)
-  onSearch = output<string>();
+  searchTerm = output<string>();
 
   onInputChange(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    this.onSearch.emit(value);
+    this.searchTerm.emit(value);
   }
 }

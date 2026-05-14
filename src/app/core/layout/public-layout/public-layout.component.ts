@@ -15,11 +15,19 @@ import { CommonModule } from '@angular/common';
     </main>
     <app-footer></app-footer>
   `,
-  styles: [`
-    main {
-      min-height: calc(100vh - 80px - 100px); /* Ajuste aproximado para Navbar y Footer */
-    }
-  `]
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background-color: var(--surface) !important;
+      }
+      main {
+        flex: 1;
+        background-color: var(--surface) !important;
+      }
+    `
+  ]
 })
 export class PublicLayoutComponent {}
-

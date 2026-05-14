@@ -8,7 +8,7 @@ describe('Perfil', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Perfil],
+      imports: [Perfil]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Perfil);

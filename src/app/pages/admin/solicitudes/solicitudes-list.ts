@@ -15,7 +15,7 @@ import { ConfirmDialogService } from '../../../core/services/confirm-dialog.serv
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SearchInputComponent],
   templateUrl: './solicitudes-list.html',
-  styleUrl: './solicitudes-list.css',
+  styleUrl: './solicitudes-list.css'
 })
 export class SolicitudesComponent implements OnInit {
   private solicitudService = inject(SolicitudService);
@@ -50,7 +50,7 @@ export class SolicitudesComponent implements OnInit {
   isAllSelected = computed(() => {
     const visible = this.paginatedSolicitudes();
     if (visible.length === 0) return false;
-    return visible.every(s => this.selectedIds().has(s._id!));
+    return visible.every((s) => this.selectedIds().has(s._id!));
   });
 
   someSelected = computed(() => this.selectedIds().size > 0);
@@ -64,16 +64,13 @@ export class SolicitudesComponent implements OnInit {
       return all;
     }
 
-    return all.filter(s => {
+    return all.filter((s) => {
       const matchesEstado = filter === 'ALL' || s.status === filter;
       const empresa = s.opportunity?.companyDescription?.toLowerCase() || '';
       const mensaje = s.message?.toLowerCase() || '';
       const email = s.interestedUser?.email?.toLowerCase() || '';
 
-      const matchesSearch = !query ||
-        empresa.includes(query) ||
-        mensaje.includes(query) ||
-        email.includes(query);
+      const matchesSearch = !query || empresa.includes(query) || mensaje.includes(query) || email.includes(query);
 
       return matchesEstado && matchesSearch;
     });
@@ -90,9 +87,7 @@ export class SolicitudesComponent implements OnInit {
     return all.slice((page - 1) * size, page * size);
   });
 
-  totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredSolicitudes().length / this.pageSize()))
-  );
+  totalPages = computed(() => Math.max(1, Math.ceil(this.filteredSolicitudes().length / this.pageSize())));
 
   pageNumbers = computed(() => {
     const total = this.totalPages();
@@ -141,7 +136,7 @@ export class SolicitudesComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe({
       next: (data) => {
         // Filtrar solo usuarios visibles
-        const visibles = data.filter(u => u.visible !== false);
+        const visibles = data.filter((u) => u.visible !== false);
         this.usuarios.set(visibles);
       },
       error: (err) => console.error('Error fetching usuarios:', err)
@@ -156,7 +151,7 @@ export class SolicitudesComponent implements OnInit {
       this.solicitudService.crearSolicitud(formData).subscribe({
         next: (nuevaSolicitud) => {
           // Añadimos al principio de la lista actualizando el signal
-          this.solicitudes.update(actuales => [nuevaSolicitud, ...actuales]);
+          this.solicitudes.update((actuales) => [nuevaSolicitud, ...actuales]);
           this.solicitudForm.reset({ opportunityId: '', message: '' });
           this.ns.success('Solicitud enviada exitosamente');
         },
@@ -172,9 +167,7 @@ export class SolicitudesComponent implements OnInit {
   actualizarEstado(id: string, nuevoEstado: string): void {
     this.solicitudService.updateStatus(id, nuevoEstado).subscribe({
       next: (solicitudActualizada) => {
-        this.solicitudes.update(actuales =>
-          actuales.map(s => s._id === id ? { ...s, status: nuevoEstado } : s)
-        );
+        this.solicitudes.update((actuales) => actuales.map((s) => (s._id === id ? { ...s, status: nuevoEstado } : s)));
         this.ns.success(`Solicitud marcada como ${nuevoEstado}`);
       },
       error: (err) => {
@@ -202,8 +195,12 @@ export class SolicitudesComponent implements OnInit {
     }
   }
 
-  prevPage(): void { this.goToPage(this.currentPage() - 1); }
-  nextPage(): void { this.goToPage(this.currentPage() + 1); }
+  prevPage(): void {
+    this.goToPage(this.currentPage() - 1);
+  }
+  nextPage(): void {
+    this.goToPage(this.currentPage() + 1);
+  }
 
   pageStart(): number {
     if (this.filteredSolicitudes().length === 0) return 0;
@@ -216,7 +213,7 @@ export class SolicitudesComponent implements OnInit {
 
   // --- MÉTODOS DE SELECCIÓN ---
   toggleSelection(id: string): void {
-    this.selectedIds.update(prev => {
+    this.selectedIds.update((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -225,11 +222,11 @@ export class SolicitudesComponent implements OnInit {
   }
 
   toggleAll(): void {
-    const allPageIds = this.paginatedSolicitudes().map(s => s._id!);
-    this.selectedIds.update(prev => {
+    const allPageIds = this.paginatedSolicitudes().map((s) => s._id!);
+    this.selectedIds.update((prev) => {
       if (this.isAllSelected()) {
         const next = new Set(prev);
-        allPageIds.forEach(id => next.delete(id));
+        allPageIds.forEach((id) => next.delete(id));
         return next;
       } else {
         return new Set([...prev, ...allPageIds]);
@@ -246,15 +243,17 @@ export class SolicitudesComponent implements OnInit {
 
     if (idsParaBorrar.length === 0) return;
 
-    const confirmed = await this.confirmService.ask('Eliminar Solicitudes', `¿Estás seguro de que quieres eliminar ${idsParaBorrar.length} solicitudes?`, 'Eliminar Todo');
+    const confirmed = await this.confirmService.ask(
+      'Eliminar Solicitudes',
+      `¿Estás seguro de que quieres eliminar ${idsParaBorrar.length} solicitudes?`,
+      'Eliminar Todo'
+    );
 
     if (confirmed) {
       this.solicitudService.deleteMultiple(idsParaBorrar).subscribe({
         next: () => {
           // 1. Quitamos los elementos de la tabla localmente
-          this.solicitudes.update(list =>
-            list.filter(s => !idsParaBorrar.includes(s._id))
-          );
+          this.solicitudes.update((list) => list.filter((s) => !idsParaBorrar.includes(s._id)));
 
           // 2. Limpiamos la selección para que el overlay desaparezca
           this.clearSelection();

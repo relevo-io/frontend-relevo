@@ -37,7 +37,7 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
       switchMap((tokenResponse) => {
         isRefreshing = false;
         // Soltamos el nuevo token para cualquier petición en espera
-        refreshTokenSubject.next(tokenResponse.accessToken); 
+        refreshTokenSubject.next(tokenResponse.accessToken);
         // Reintentamos la petición original que falló
         return next(addTokenHeader(request, tokenResponse.accessToken));
       }),
@@ -49,12 +49,12 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
       })
     );
   } else {
-    // Si ya hay un refresco en progreso por culpa de otra petición paralela, 
+    // Si ya hay un refresco en progreso por culpa de otra petición paralela,
     // esperamos a que `refreshTokenSubject` emita un valor que no sea nulo.
     return refreshTokenSubject.pipe(
-      filter(token => token !== null),
+      filter((token) => token !== null),
       take(1),
-      switchMap(token => {
+      switchMap((token) => {
         return next(addTokenHeader(request, token as string));
       })
     );

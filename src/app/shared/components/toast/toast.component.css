@@ -28,37 +28,47 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12),
-              0 4px 6px rgba(0, 0, 0, 0.04);
-  animation: slideInToast 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-             fadeToast 0.3s ease;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12),
+    0 4px 6px rgba(0, 0, 0, 0.04);
+  animation:
+    slideInToast 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    fadeToast 0.3s ease;
   transition: all 0.2s;
 }
 
 /* Tipos semánticos: Colores premium */
-.toast-item.success { 
+.toast-item.success {
   border-color: #22c55e;
   background-color: #f0fdf4;
 }
-.toast-item.success .toast-icon { color: #16a34a; }
+.toast-item.success .toast-icon {
+  color: #16a34a;
+}
 
-.toast-item.error { 
-  border-color: #ef4444; 
+.toast-item.error {
+  border-color: #ef4444;
   background-color: #fef2f2;
 }
-.toast-item.error .toast-icon { color: #dc2626; }
+.toast-item.error .toast-icon {
+  color: #dc2626;
+}
 
-.toast-item.warning { 
+.toast-item.warning {
   border-color: #f59e0b;
   background-color: #fffbeb;
 }
-.toast-item.warning .toast-icon { color: #d97706; }
+.toast-item.warning .toast-icon {
+  color: #d97706;
+}
 
-.toast-item.info { 
+.toast-item.info {
   border-color: #3b82f6;
   background-color: #eff6ff;
 }
-.toast-item.info .toast-icon { color: #2563eb; }
+.toast-item.info .toast-icon {
+  color: #2563eb;
+}
 
 /* Icono principal */
 .toast-icon {
@@ -94,7 +104,9 @@
   color: #1e293b;
 }
 
-.btn-close-toast .material-symbols-outlined { font-size: 18px; }
+.btn-close-toast .material-symbols-outlined {
+  font-size: 18px;
+}
 
 /* ============================================
    BARRA DE PROGRESO (AUTODESVANECIMIENTO)
@@ -124,15 +136,27 @@
 }
 
 @keyframes shrink {
-  from { transform: scaleX(1); }
-  to   { transform: scaleX(0); }
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
 }
 
 /* Ajuste de los items para mostrar la barra sobre el fondo de color */
-.toast-item.success { color: #16a34a; }
-.toast-item.error   { color: #dc2626; }
-.toast-item.warning { color: #d97706; }
-.toast-item.info    { color: #2563eb; }
+.toast-item.success {
+  color: #16a34a;
+}
+.toast-item.error {
+  color: #dc2626;
+}
+.toast-item.warning {
+  color: #d97706;
+}
+.toast-item.info {
+  color: #2563eb;
+}
 
 /* El toast-item tiene que ser relativo para la barra absoluta */
 .toast-item {
@@ -145,13 +169,21 @@
    ============================================ */
 
 @keyframes slideInToast {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes fadeToast {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Mejoramos la salida si el navegador soporta el auto-exit */
