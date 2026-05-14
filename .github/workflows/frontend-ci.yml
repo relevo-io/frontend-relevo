@@ -2,9 +2,9 @@ name: CI Pipeline Frontend
 
 on:
   push:
-    branches: ['dev', 'feature/devops2']
+    branches: ['dev']
   pull_request:
-    branches: ['dev', 'feature/devops2']
+    branches: ['dev', 'main']
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
