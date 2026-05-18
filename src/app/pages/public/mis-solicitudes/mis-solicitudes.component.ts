@@ -78,6 +78,18 @@ export class MisSolicitudesComponent implements OnInit {
     });
   }
 
+  verCv(solicitudId: string) {
+    this.solicitudService.getViewUrl(solicitudId).subscribe({
+      next: ({ viewUrl }) => {
+        window.open(viewUrl, '_blank', 'noopener,noreferrer');
+      },
+      error: (err) => {
+        console.error('Error obteniendo URL de CV:', err);
+        this.ns.error('No se pudo generar el enlace del CV.');
+      }
+    });
+  }
+
   async contactar(solicitud: Solicitud) {
     if (solicitud.status !== 'ACCEPTED') return;
 

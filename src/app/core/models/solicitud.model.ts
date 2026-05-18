@@ -21,6 +21,9 @@ export interface Solicitud {
   };
   status: string;
   message?: string;
+  cvKey?: string;
+  estadoAnalisis?: string;
+  resultadoIa?: Record<string, unknown>;
   createdAt: Date;
   updatedAt: Date;
 }

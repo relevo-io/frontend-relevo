@@ -90,6 +90,12 @@
             <div class="request-actions">
               <!-- Actions for Received Requests -->
               @if (activeTab() === 'received') {
+                @if (solicitud.cvKey) {
+                  <button class="btn-view-cv" (click)="verCv(solicitud._id)">
+                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                    Ver CV
+                  </button>
+                }
                 @if (solicitud.status === 'PENDING') {
                   <button class="btn-accept" (click)="cambiarEstado(solicitud._id, 'ACCEPTED')">
                     {{ 'MAILBOX.ACCEPT' | translate }}
@@ -117,6 +123,12 @@
 
               <!-- Actions for Sent Requests -->
               @if (activeTab() === 'sent') {
+                @if (solicitud.cvKey) {
+                  <button class="btn-view-cv" (click)="verCv(solicitud._id)">
+                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                    Mi CV
+                  </button>
+                }
                 @if (solicitud.status === 'ACCEPTED') {
                   <button class="btn-contact" (click)="contactar(solicitud)">
                     <span class="material-symbols-outlined">chat</span>

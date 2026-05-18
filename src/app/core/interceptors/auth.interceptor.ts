@@ -10,9 +10,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getToken();
 
+  // Skip auth header for direct S3 uploads (pre-signed URLs already contain auth)
+  const isS3Request = req.url.includes('amazonaws.com');
+
   let authReq = req;
   // Si hay token, clonamos la petición y añadimos el header Authorization
-  if (token) {
+  if (token && !isS3Request) {
     authReq = addTokenHeader(req, token);
   }
 

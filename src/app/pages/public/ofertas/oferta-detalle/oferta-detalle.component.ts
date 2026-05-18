@@ -42,9 +42,12 @@ export class OfertaDetalle {
   requestForm = this.fb.group({
     professionalBackground: ['', [Validators.required, Validators.minLength(10)]],
     preferredRegionsText: ['', [Validators.required, Validators.minLength(2)]],
-    bio: ['', [Validators.required, Validators.minLength(10)]],
-    cv: ['', [Validators.required, Validators.minLength(10)]]
+    bio: ['', [Validators.required, Validators.minLength(10)]]
   });
+
+  selectedCvFile = signal<File | null>(null);
+  isUploadingCv = signal<boolean>(false);
+  cvUploadError = signal<string | null>(null);
 
   isOwnOffer = computed(() => {
     const offer = this.oferta();
@@ -121,8 +124,7 @@ export class OfertaDetalle {
     this.requestForm.patchValue({
       professionalBackground: current?.professionalBackground ?? '',
       preferredRegionsText: (current?.preferredRegions ?? []).join(', '),
-      bio: current?.bio ?? '',
-      cv: current?.cv ?? ''
+      bio: current?.bio ?? ''
     });
 
     this.showRequestForm.set(true);
@@ -138,6 +140,11 @@ export class OfertaDetalle {
       return;
     }
 
+    if (!this.selectedCvFile()) {
+      this.cvUploadError.set('Debes adjuntar tu CV en formato PDF.');
+      return;
+    }
+
     const currentUser = this.authService.currentUser();
     const offer = this.oferta();
 
@@ -147,6 +154,7 @@ export class OfertaDetalle {
     }
 
     this.isSending.set(true);
+    this.cvUploadError.set(null);
 
     const formValue = this.requestForm.getRawValue();
     const preferredRegions = (formValue.preferredRegionsText ?? '')
@@ -154,26 +162,65 @@ export class OfertaDetalle {
       .map((v) => v.trim())
       .filter((v) => !!v);
 
+    // Step 1: Update profile data
     this.usuarioService
       .updateUsuario(currentUser._id, {
         professionalBackground: formValue.professionalBackground?.trim(),
         preferredRegions,
-        bio: formValue.bio?.trim(),
-        cv: formValue.cv?.trim()
+        bio: formValue.bio?.trim()
       })
       .subscribe({
         next: () => {
+          // Step 2: Create the solicitud first
           this.solicitudService
             .crearSolicitud({
               opportunityId: offer._id!,
               message: `Solicitud enviada por ${currentUser.fullName}.`
             })
             .subscribe({
-              next: () => {
-                this.isSending.set(false);
-                this.showRequestForm.set(false);
-                this.authService.fetchProfile().subscribe();
-                this.ns.success(this.translate.instant('COMMON.NOTIF.REQUEST_SENT_SUCCESS'));
+              next: (solicitud) => {
+                // Step 3: Get a pre-signed PUT URL from our backend
+                const file = this.selectedCvFile()!;
+                this.isUploadingCv.set(true);
+                this.solicitudService.getPresignedUploadUrl(file.name).subscribe({
+                  next: ({ uploadUrl, s3Key }) => {
+                    // Step 4: PUT the file directly to S3
+                    this.solicitudService.uploadCvToS3(uploadUrl, file).subscribe({
+                      next: () => {
+                        // Step 5: Notify Node to persist the s3Key in the Solicitud
+                        this.solicitudService.guardarCvKey(solicitud._id, s3Key).subscribe({
+                          next: () => {
+                            this.isSending.set(false);
+                            this.isUploadingCv.set(false);
+                            this.showRequestForm.set(false);
+                            this.solicitudStatus.set(solicitud.status);
+                            this.authService.fetchProfile().subscribe();
+                            this.ns.success(this.translate.instant('COMMON.NOTIF.REQUEST_SENT_SUCCESS'));
+                          },
+                          error: (err) => {
+                            console.error('Error guardando cvKey:', err);
+                            this.isSending.set(false);
+                            this.isUploadingCv.set(false);
+                            // Solicitud creada aunque el key no se guardó — informamos
+                            this.ns.error('CV subido, pero hubo un error al vincular la solicitud.');
+                          }
+                        });
+                      },
+                      error: (err) => {
+                        console.error('Error subiendo CV a S3:', err);
+                        this.isSending.set(false);
+                        this.isUploadingCv.set(false);
+                        this.cvUploadError.set('No se pudo subir el CV. Inténtalo de nuevo.');
+                      }
+                    });
+                  },
+                  error: (err) => {
+                    console.error('Error generando presigned URL:', err);
+                    this.isSending.set(false);
+                    this.isUploadingCv.set(false);
+                    this.cvUploadError.set('Error al preparar la subida. Inténtalo de nuevo.');
+                  }
+                });
               },
               error: (err) => {
                 console.error('Error creando solicitud:', err);
@@ -186,6 +233,31 @@ export class OfertaDetalle {
           this.isSending.set(false);
         }
       });
+  }
+
+  onCvFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    this.cvUploadError.set(null);
+
+    if (!file) {
+      this.selectedCvFile.set(null);
+      return;
+    }
+
+    if (file.type !== 'application/pdf') {
+      this.cvUploadError.set('Solo se admiten archivos PDF.');
+      this.selectedCvFile.set(null);
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5 MB max
+      this.cvUploadError.set('El archivo no puede superar los 5 MB.');
+      this.selectedCvFile.set(null);
+      return;
+    }
+
+    this.selectedCvFile.set(file);
   }
 
   formatRevenue(value?: string): string {

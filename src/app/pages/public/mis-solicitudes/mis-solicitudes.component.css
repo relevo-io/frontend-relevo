@@ -442,3 +442,30 @@ body.dark-mode .empty-state p {
     align-items: stretch;
   }
 }
+
+.btn-view-cv {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: 1.5px solid var(--secondary);
+  background: transparent;
+  color: var(--secondary);
+  transition: all 0.2s ease;
+}
+
+.btn-view-cv:hover {
+  background: var(--secondary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 109, 61, 0.25);
+}
+
+.btn-view-cv .material-symbols-outlined {
+  font-size: 1.1rem;
+}
+
