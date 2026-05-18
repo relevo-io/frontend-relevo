@@ -251,7 +251,8 @@ export class OfertaDetalle {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) { // 5 MB max
+    if (file.size > 5 * 1024 * 1024) {
+      // 5 MB max
       this.cvUploadError.set('El archivo no puede superar los 5 MB.');
       this.selectedCvFile.set(null);
       return;

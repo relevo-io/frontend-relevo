@@ -52,10 +52,9 @@ export class SolicitudService {
    * Returns { uploadUrl, s3Key }.
    */
   getPresignedUploadUrl(filename: string): Observable<{ uploadUrl: string; s3Key: string }> {
-    return this.http.get<{ uploadUrl: string; s3Key: string }>(
-      `${this.STORAGE_URL}/presigned-url`,
-      { params: { filename } }
-    );
+    return this.http.get<{ uploadUrl: string; s3Key: string }>(`${this.STORAGE_URL}/presigned-url`, {
+      params: { filename }
+    });
   }
 
   /**
@@ -66,7 +65,7 @@ export class SolicitudService {
    */
   uploadCvToS3(uploadUrl: string, file: File): Observable<void> {
     return this.http.put<void>(uploadUrl, file, {
-      headers: new HttpHeaders({ 'Content-Type': file.type || 'application/pdf' }),
+      headers: new HttpHeaders({ 'Content-Type': file.type || 'application/pdf' })
       // Skip our app's auth interceptor for this external S3 call
     });
   }

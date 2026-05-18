@@ -323,7 +323,9 @@ h1 {
   position: relative;
   border: 2px dashed var(--outline-variant);
   border-radius: 12px;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 }
 
 .cv-upload-area.has-file {
@@ -402,8 +404,12 @@ h1 {
 }
 
 @keyframes progress-slide {
-  0%   { left: -60%; }
-  100% { left: 110%; }
+  0% {
+    left: -60%;
+  }
+  100% {
+    left: 110%;
+  }
 }
 
 :host-context(.dark-mode) .cv-upload-area {
@@ -417,4 +423,3 @@ h1 {
 :host-context(.dark-mode) .cv-filename {
   color: #f1f5f9;
 }
-
