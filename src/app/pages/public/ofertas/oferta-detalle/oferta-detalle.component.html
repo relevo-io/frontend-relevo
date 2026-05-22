@@ -120,11 +120,37 @@
           }
         </div>
 
-        <div class="field-group" [class.invalid]="requestForm.controls.cv.invalid && requestForm.controls.cv.touched">
-          <label for="cv">{{ 'OFFER_DETAIL.CV_LABEL' | translate }}</label>
-          <textarea id="cv" rows="4" formControlName="cv"></textarea>
-          @if (requestForm.controls.cv.invalid && requestForm.controls.cv.touched) {
-            <span class="field-error">{{ 'OFFER_DETAIL.CV_REQUIRED' | translate }}</span>
+        <!-- CV Upload Field -->
+        <div class="field-group cv-upload-group" [class.invalid]="cvUploadError()">
+          <label for="cvFile">{{ 'OFFER_DETAIL.CV_LABEL' | translate }}</label>
+          <div class="cv-upload-area" [class.has-file]="selectedCvFile()">
+            <input
+              id="cvFile"
+              type="file"
+              accept=".pdf,application/pdf"
+              (change)="onCvFileSelected($event)"
+              class="cv-file-input"
+            />
+            <label for="cvFile" class="cv-upload-label">
+              @if (selectedCvFile()) {
+                <span class="material-symbols-outlined">description</span>
+                <span class="cv-filename">{{ selectedCvFile()!.name }}</span>
+                <span class="cv-change">{{ 'OFFER_DETAIL.CV_CHANGE' | translate }}</span>
+              } @else {
+                <span class="material-symbols-outlined">upload_file</span>
+                <span>{{ 'OFFER_DETAIL.CV_UPLOAD_PROMPT' | translate }}</span>
+                <small>PDF · máx. 5 MB</small>
+              }
+            </label>
+          </div>
+          @if (cvUploadError()) {
+            <span class="field-error">{{ cvUploadError() }}</span>
+          }
+          @if (isUploadingCv()) {
+            <div class="upload-progress">
+              <div class="progress-bar"></div>
+              <span>Subiendo CV...</span>
+            </div>
           }
         </div>
 

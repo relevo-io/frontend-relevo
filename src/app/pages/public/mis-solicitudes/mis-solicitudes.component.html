@@ -84,12 +84,172 @@
                     </div>
                   }
                 </div>
+
+                <!-- SECCIÓN DE ANÁLISIS DE IA (Premium UI Layout) -->
+                @if (solicitud.cvKey) {
+                  <div class="ai-analysis-wrapper">
+                    <!-- Estado: Pendiente -->
+                    @if (!solicitud.estadoAnalisis || solicitud.estadoAnalisis === 'PENDIENTE') {
+                      <div class="ai-status-panel pending">
+                        <div class="ai-info-text">
+                          <span class="material-symbols-outlined ai-sparkles">auto_awesome</span>
+                          <div>
+                            <span class="ai-title">Análisis de CV con Inteligencia Artificial disponible</span>
+                            <span class="ai-subtitle"
+                              >Analiza el currículum de este candidato para evaluar compatibilidad y experiencia.</span
+                            >
+                          </div>
+                        </div>
+                        <button
+                          class="btn-ai-action primary"
+                          (click)="analizarCv(solicitud._id)"
+                          [disabled]="isAnalizando(solicitud._id)"
+                        >
+                          <span class="material-symbols-outlined">psychology</span>
+                          Analizar con IA
+                        </button>
+                      </div>
+                    }
+
+                    <!-- Estado: En Proceso / Cargando -->
+                    @if (solicitud.estadoAnalisis === 'EN_PROCESO' || isAnalizando(solicitud._id)) {
+                      <div class="ai-status-panel processing">
+                        <div class="ai-loader-container">
+                          <div class="ai-loader-spinner"></div>
+                          <div class="ai-loading-text">
+                            <span class="ai-title animated-pulse">Analizando currículum con IA...</span>
+                            <span class="ai-subtitle">Evaluando perfil y experiencia, ¡falta muy poco!</span>
+                          </div>
+                        </div>
+                      </div>
+                    }
+
+                    <!-- Estado: Error -->
+                    @if (solicitud.estadoAnalisis === 'ERROR') {
+                      <div class="ai-status-panel error">
+                        <div class="ai-info-text">
+                          <span class="material-symbols-outlined ai-error-icon">warning</span>
+                          <div>
+                            <span class="ai-title">Error en el análisis de IA</span>
+                            <span class="ai-subtitle"
+                              >No se pudo completar el análisis automático del documento PDF.</span
+                            >
+                          </div>
+                        </div>
+                        <button class="btn-ai-action retry" (click)="analizarCv(solicitud._id)">
+                          <span class="material-symbols-outlined">refresh</span>
+                          Reintentar
+                        </button>
+                      </div>
+                    }
+
+                    <!-- Estado: Completado (Mostrar resumen e idoneidad) -->
+                    @if (solicitud.estadoAnalisis === 'COMPLETADO' && solicitud.resultadoIa) {
+                      <div class="ai-completed-container" [class.expanded]="isAiExpanded(solicitud._id)">
+                        <!-- Cabecera de estado IA -->
+                        <div class="ai-header" (click)="toggleAiExpansion(solicitud._id)">
+                          <div class="ai-header-left">
+                            <span class="material-symbols-outlined ai-badge-icon">auto_awesome</span>
+                            <span class="ai-header-title">Análisis de CV con IA Completado</span>
+                          </div>
+
+                          <div class="ai-header-right">
+                            <!-- Nota de Idoneidad -->
+                            <div
+                              class="ai-score-pill"
+                              [ngClass]="
+                                'score-' +
+                                (solicitud.resultadoIa.nota >= 8
+                                  ? 'high'
+                                  : solicitud.resultadoIa.nota >= 5
+                                    ? 'medium'
+                                    : 'low')
+                              "
+                            >
+                              <span class="score-label">Idoneidad:</span>
+                              <span class="score-value">{{ solicitud.resultadoIa.nota }}/10</span>
+                            </div>
+                            <button class="btn-toggle-ai">
+                              <span class="material-symbols-outlined">
+                                {{ isAiExpanded(solicitud._id) ? 'expand_less' : 'expand_more' }}
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Panel de información detallada (expandible) -->
+                        @if (isAiExpanded(solicitud._id)) {
+                          <div class="ai-details-panel">
+                            <!-- Resumen Ejecutivo -->
+                            <div class="ai-section">
+                              <h4 class="ai-sec-title">
+                                <span class="material-symbols-outlined text-purple">summarize</span>
+                                Resumen del Candidato
+                              </h4>
+                              <p class="ai-summary-text">{{ solicitud.resultadoIa.resumen }}</p>
+                            </div>
+
+                            <!-- Grid de Puntos Fuertes y Experiencia -->
+                            <div class="ai-grid">
+                              <!-- Puntos Fuertes -->
+                              <div class="ai-section">
+                                <h4 class="ai-sec-title">
+                                  <span class="material-symbols-outlined text-green">check_circle</span>
+                                  Fortalezas Detectadas
+                                </h4>
+                                <ul class="ai-bullets text-green">
+                                  @for (punto of solicitud.resultadoIa.puntosFuertes; track $index) {
+                                    <li>
+                                      <span class="material-symbols-outlined li-icon">check</span>
+                                      {{ punto }}
+                                    </li>
+                                  }
+                                </ul>
+                              </div>
+
+                              <!-- Experiencia Destacada -->
+                              <div class="ai-section">
+                                <h4 class="ai-sec-title">
+                                  <span class="material-symbols-outlined text-blue">work</span>
+                                  Hitos de Experiencia
+                                </h4>
+                                <ul class="ai-bullets text-blue">
+                                  @for (exp of solicitud.resultadoIa.experienciaDestacada; track $index) {
+                                    <li>
+                                      <span class="material-symbols-outlined li-icon">trending_flat</span>
+                                      {{ exp }}
+                                    </li>
+                                  }
+                                </ul>
+                              </div>
+                            </div>
+
+                            <!-- Comentario / Justificación de la nota -->
+                            <div class="ai-feedback-box">
+                              <h4 class="ai-sec-title">
+                                <span class="material-symbols-outlined text-orange">lightbulb</span>
+                                Feedback de Idoneidad
+                              </h4>
+                              <p class="ai-feedback-text">{{ solicitud.resultadoIa.comentarioNota }}</p>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
               }
             </div>
 
             <div class="request-actions">
               <!-- Actions for Received Requests -->
               @if (activeTab() === 'received') {
+                @if (solicitud.cvKey) {
+                  <button class="btn-view-cv" (click)="verCv(solicitud._id)">
+                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                    Ver CV
+                  </button>
+                }
                 @if (solicitud.status === 'PENDING') {
                   <button class="btn-accept" (click)="cambiarEstado(solicitud._id, 'ACCEPTED')">
                     {{ 'MAILBOX.ACCEPT' | translate }}
@@ -117,6 +277,12 @@
 
               <!-- Actions for Sent Requests -->
               @if (activeTab() === 'sent') {
+                @if (solicitud.cvKey) {
+                  <button class="btn-view-cv" (click)="verCv(solicitud._id)">
+                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                    Mi CV
+                  </button>
+                }
                 @if (solicitud.status === 'ACCEPTED') {
                   <button class="btn-contact" (click)="contactar(solicitud)">
                     <span class="material-symbols-outlined">chat</span>
