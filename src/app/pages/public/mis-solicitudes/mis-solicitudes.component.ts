@@ -28,6 +28,11 @@ export class MisSolicitudesComponent implements OnInit {
   activeTab = signal<'received' | 'sent'>('received');
   isLoading = signal<boolean>(true);
 
+  // Almacenar qué solicitudes tienen su panel de IA expandido
+  expandedAiIds = signal<Set<string>>(new Set());
+  // Almacenar qué solicitudes están en proceso de análisis para mostrar loaders locales
+  analizandoIds = signal<Set<string>>(new Set());
+
   userRoles = computed(() => this.authService.currentUser()?.roles || []);
   isOwner = computed(() => this.userRoles().includes('OWNER') || this.userRoles().includes('ADMIN'));
 
@@ -58,6 +63,76 @@ export class MisSolicitudesComponent implements OnInit {
       error: (err) => {
         console.error('Error carregant sol·licituds:', err);
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  toggleAiExpansion(solicitudId: string) {
+    this.expandedAiIds.update((set) => {
+      const next = new Set(set);
+      if (next.has(solicitudId)) next.delete(solicitudId);
+      else next.add(solicitudId);
+      return next;
+    });
+  }
+
+  isAiExpanded(solicitudId: string): boolean {
+    return this.expandedAiIds().has(solicitudId);
+  }
+
+  isAnalizando(solicitudId: string): boolean {
+    return this.analizandoIds().has(solicitudId);
+  }
+
+  analizarCv(solicitudId: string) {
+    // Añadimos a la lista de cargando local
+    this.analizandoIds.update((set) => new Set([...set, solicitudId]));
+
+    // Actualizamos localmente el estado de análisis a EN_PROCESO para feedback inmediato
+    this.solicitudes.update((list) =>
+      list.map((s) => (s._id === solicitudId ? { ...s, estadoAnalisis: 'EN_PROCESO' } : s))
+    );
+
+    this.solicitudService.analizarCvConIa(solicitudId).subscribe({
+      next: (solicitudActualizada) => {
+        // Actualizamos la solicitud en el listado local (mezclando los campos de IA para no perder las relaciones populadas)
+        this.solicitudes.update((list) =>
+          list.map((s) =>
+            s._id === solicitudId
+              ? {
+                  ...s,
+                  estadoAnalisis: solicitudActualizada.estadoAnalisis,
+                  resultadoIa: solicitudActualizada.resultadoIa
+                }
+              : s
+          )
+        );
+        // Quitamos del set de cargando
+        this.analizandoIds.update((set) => {
+          const next = new Set(set);
+          next.delete(solicitudId);
+          return next;
+        });
+        this.ns.success('Análisis de currículum completado con éxito');
+
+        // Auto-expandir el resultado
+        this.expandedAiIds.update((set) => new Set([...set, solicitudId]));
+      },
+      error: (err) => {
+        console.error('Error al analizar CV:', err);
+        // Actualizamos localmente el estado a ERROR
+        this.solicitudes.update((list) =>
+          list.map((s) => (s._id === solicitudId ? { ...s, estadoAnalisis: 'ERROR' } : s))
+        );
+        // Quitamos del set de cargando
+        this.analizandoIds.update((set) => {
+          const next = new Set(set);
+          next.delete(solicitudId);
+          return next;
+        });
+
+        const msg = err.error?.message || 'Error en el servicio de análisis de IA.';
+        this.ns.error(msg);
       }
     });
   }

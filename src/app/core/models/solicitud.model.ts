@@ -1,3 +1,11 @@
+export interface ResultadoIa {
+  resumen: string;
+  nota: number;
+  comentarioNota: string;
+  puntosFuertes: string[];
+  experienciaDestacada: string[];
+}
+
 export interface Solicitud {
   _id: string;
   interestedUser: {
@@ -23,7 +31,7 @@ export interface Solicitud {
   message?: string;
   cvKey?: string;
   estadoAnalisis?: string;
-  resultadoIa?: Record<string, unknown>;
+  resultadoIa?: ResultadoIa;
   createdAt: Date;
   updatedAt: Date;
 }

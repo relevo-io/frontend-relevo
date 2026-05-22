@@ -83,4 +83,11 @@ export class SolicitudService {
   getViewUrl(solicitudId: string): Observable<{ viewUrl: string }> {
     return this.http.get<{ viewUrl: string }>(`${this.API_URL}/${solicitudId}/ver-cv`);
   }
+
+  /**
+   * Inicia el proceso de análisis del CV con IA en el backend.
+   */
+  analizarCvConIa(solicitudId: string): Observable<Solicitud> {
+    return this.http.post<Solicitud>(`${this.API_URL}/${solicitudId}/analizar-cv`, {});
+  }
 }
