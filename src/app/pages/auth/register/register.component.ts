@@ -42,6 +42,39 @@ export class RegisterComponent {
     this.showPassword.update((val) => !val);
   }
 
+  registerWithGoogle() {
+    this.errorMessage.set(null);
+    this.authService.loginWithGoogle().subscribe({
+      next: () => this.router.navigate(['/']),
+      error: (error) => {
+        this.errorMessage.set(this.resolveSocialError(error, 'Google'));
+      }
+    });
+  }
+
+  registerWithGithub() {
+    this.errorMessage.set(null);
+    this.authService.loginWithGitHub().subscribe({
+      next: () => this.router.navigate(['/']),
+      error: (error) => {
+        this.errorMessage.set(this.resolveSocialError(error, 'GitHub'));
+      }
+    });
+  }
+
+  private resolveSocialError(error: any, providerLabel: 'Google' | 'GitHub'): string {
+    const backendMessage = error?.error?.message;
+    if (backendMessage) return backendMessage;
+
+    const code = error?.code as string | undefined;
+    if (code === 'auth/popup-closed-by-user') return `Has cerrado la ventana de ${providerLabel} antes de completar el acceso.`;
+    if (code === 'auth/account-exists-with-different-credential') {
+      return 'Ya existe una cuenta con ese email usando otro metodo de acceso.';
+    }
+
+    return `No se pudo iniciar sesion con ${providerLabel}.`;
+  }
+
   onSubmit() {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();

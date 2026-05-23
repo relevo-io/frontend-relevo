@@ -12,6 +12,17 @@ export interface RegisterRequest extends LoginRequest {
   language?: string;
 }
 
+export type OAuthProvider = 'google' | 'github';
+
+export interface OAuthLoginRequest {
+  code: string;
+  redirectUri: string;
+}
+
+export interface FirebaseLoginRequest {
+  idToken: string;
+}
+
 export interface AuthResponse {
   message: string;
   accessToken: string;

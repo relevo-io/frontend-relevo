@@ -27,6 +27,18 @@ export class OfertaService {
     return this.http.get<Oferta[]>(`${this.apiUrl}/me`);
   }
 
+  getMisFavoritas(): Observable<Oferta[]> {
+    return this.http.get<Oferta[]>(`${this.apiUrl}/favorites`);
+  }
+
+  addFavorita(ofertaId: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/${ofertaId}/favorite`, {});
+  }
+
+  removeFavorita(ofertaId: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${ofertaId}/favorite`);
+  }
+
   createOferta(oferta: Oferta): Observable<Oferta> {
     return this.http.post<Oferta>(this.apiUrl, oferta);
   }

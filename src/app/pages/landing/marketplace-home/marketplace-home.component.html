@@ -87,6 +87,20 @@
                 >
               }
             </div>
+
+            @if (authService.isLoggedIn()) {
+              <div class="favorite-actions">
+                <button
+                  type="button"
+                  class="favorite-btn"
+                  [class.active]="isFavorite(oferta._id)"
+                  (click)="toggleFavorite($event, oferta._id)"
+                  aria-label="Marcar favorito"
+                >
+                  <span class="material-symbols-outlined">favorite</span>
+                </button>
+              </div>
+            }
           </article>
         }
       </div>

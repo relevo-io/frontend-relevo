@@ -1,0 +1,55 @@
+﻿<main class="favorites-page">
+  <section class="favorites-wrap">
+    <header class="favorites-header">
+      <h1>Mis favoritos</h1>
+      <p>Ofertas guardadas para revisarlas cuando quieras.</p>
+    </header>
+
+    @if (isLoading()) {
+      <div class="state-box">Cargando favoritos...</div>
+    } @else if (favoritas().length === 0) {
+      <div class="state-box">Aun no tienes ofertas favoritas.</div>
+    } @else {
+      <div class="offers-grid">
+        @for (oferta of favoritas(); track oferta._id) {
+          <article class="offer-card" [routerLink]="['/ofertas', oferta._id]">
+            <header class="card-head">
+              <span class="sector">{{ oferta.sector }}</span>
+              @if (oferta.employeeRange) {
+                <span class="meta"
+                  >{{ formatEmployees(oferta.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
+                >
+              }
+            </header>
+
+            <h3>{{ oferta.region }}</h3>
+            <p class="description">{{ oferta.companyDescription }}</p>
+
+            <div class="card-footer">
+              @if (oferta.revenueRange) {
+                <span
+                  ><strong>{{ 'OFFER_DETAIL.REVENUE' | translate }}:</strong>
+                  {{ formatRevenue(oferta.revenueRange) }}</span
+                >
+              }
+              @if (oferta.creationYear) {
+                <span><strong>{{ 'OFFER_DETAIL.SINCE' | translate }}:</strong> {{ oferta.creationYear }}</span>
+              }
+            </div>
+
+            <div class="favorite-actions">
+              <button
+                type="button"
+                class="favorite-btn active"
+                (click)="$event.preventDefault(); $event.stopPropagation(); quitarFavorita(oferta._id)"
+                aria-label="Quitar favorito"
+              >
+                <span class="material-symbols-outlined">favorite</span>
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</main>

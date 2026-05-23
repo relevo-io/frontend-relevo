@@ -1,5 +1,5 @@
-.marketplace-home {
-  padding-top: 52px; /* Mantenim la nova alçada de navbar */
+﻿.marketplace-home {
+  padding-top: 52px; /* Mantenim la nova alÃ§ada de navbar */
   background: var(--surface);
 }
 
@@ -16,7 +16,7 @@
     linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, transparent 80%), url('/assets/images/abstract-blue.png');
   background-size: cover;
   background-position: center;
-  filter: brightness(1.2); /* Més llum en mode clar */
+  filter: brightness(1.2); /* MÃ©s llum en mode clar */
   transition: all 0.5s ease;
 }
 
@@ -49,7 +49,7 @@ body.dark-mode .hero-image {
 }
 
 body.dark-mode .hero-card {
-  background-color: #020617 !important; /* Blau de mitjanit gairebé negre */
+  background-color: #020617 !important; /* Blau de mitjanit gairebÃ© negre */
   background: rgba(2, 6, 23, 0.9) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
@@ -231,6 +231,40 @@ body.dark-mode .hero-card {
   color: var(--on-surface-variant);
 }
 
+.favorite-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.favorite-btn {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn:hover {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.favorite-btn.active {
+  color: #16a34a;
+  background: transparent;
+}
+
+.favorite-btn.active .material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
 /* =========================================
    DARK MODE
    ========================================= */
@@ -253,3 +287,5 @@ body.dark-mode .sector-chip.active {
   background-color: var(--secondary) !important;
   color: white !important;
 }
+
+
