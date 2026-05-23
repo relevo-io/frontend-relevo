@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OfertaService } from '../../../core/services/oferta.service';
 import { Oferta } from '../../../core/models/oferta.model';
+import { PaginationMeta } from '../../../core/models/pagination.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -18,6 +19,9 @@ export class MisFavoritosComponent implements OnInit {
 
   favoritas = signal<Oferta[]>([]);
   isLoading = signal<boolean>(true);
+  page = signal<number>(1);
+  pageSize = 8;
+  pagination = signal<PaginationMeta | null>(null);
 
   ngOnInit(): void {
     this.cargarFavoritas();
@@ -25,9 +29,10 @@ export class MisFavoritosComponent implements OnInit {
 
   cargarFavoritas(): void {
     this.isLoading.set(true);
-    this.ofertaService.getMisFavoritas().subscribe({
-      next: (data) => {
-        this.favoritas.set(data);
+    this.ofertaService.getMisFavoritasPaged(this.page(), this.pageSize).subscribe({
+      next: (result) => {
+        this.favoritas.set(result.items);
+        this.pagination.set(result.pagination);
         this.isLoading.set(false);
       },
       error: () => {
@@ -41,7 +46,7 @@ export class MisFavoritosComponent implements OnInit {
 
     this.ofertaService.removeFavorita(ofertaId).subscribe({
       next: () => {
-        this.favoritas.set(this.favoritas().filter((oferta) => oferta._id !== ofertaId));
+        this.cargarFavoritas();
       }
     });
   }
@@ -52,5 +57,19 @@ export class MisFavoritosComponent implements OnInit {
 
   formatEmployees(value?: string): string {
     return formatEmployeeRange(value);
+  }
+
+  prevPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasPrevPage) return;
+    this.page.set(meta.page - 1);
+    this.cargarFavoritas();
+  }
+
+  nextPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasNextPage) return;
+    this.page.set(meta.page + 1);
+    this.cargarFavoritas();
   }
 }

@@ -288,4 +288,28 @@ body.dark-mode .sector-chip.active {
   color: white !important;
 }
 
+.pager {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
 
+.pager-btn {
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-lowest);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+}
+
+.pager-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pager-info {
+  color: var(--on-surface-variant);
+  font-size: 0.9rem;
+}
