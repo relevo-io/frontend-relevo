@@ -158,123 +158,11 @@ body.dark-mode .hero-card {
   background: var(--surface-container-low);
 }
 
-.offers-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.offer-card {
-  background: var(--surface-container-lowest);
-  border: 1px solid var(--outline-variant);
-  border-radius: 14px;
-  padding: 16px;
-  min-height: 210px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-  cursor: pointer;
-}
-
-.offer-card:hover {
-  transform: translateY(-2px);
-  border-color: #a9b3c8;
-  box-shadow: var(--shadow-md);
-}
-
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.sector {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--secondary);
-  letter-spacing: 0.03em;
-}
-
-.meta {
-  font-size: 0.75rem;
-  color: var(--on-surface-variant);
-}
-
-.offer-card h3 {
-  font-size: 1.15rem;
-  margin: 0;
-}
-
-.description {
-  color: var(--on-surface-variant);
-  font-size: 0.92rem;
-  line-height: 1.45;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.card-footer {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.82rem;
-  color: var(--on-surface-variant);
-}
-
-.favorite-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.favorite-btn {
-  border: none;
-  background: transparent;
-  color: #94a3b8;
-  cursor: pointer;
-  border-radius: 999px;
-  padding: 0.2rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.favorite-btn:hover {
-  background: rgba(148, 163, 184, 0.2);
-}
-
-.favorite-btn.active {
-  color: #16a34a;
-  background: transparent;
-}
-
-.favorite-btn.active .material-symbols-outlined {
-  font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
 /* =========================================
-   DARK MODE
+   DARK MODE OVERRIDES
    ========================================= */
 body.dark-mode .marketplace-home {
   background: #020617;
-}
-
-body.dark-mode .offer-card {
-  background: #0f172a;
-  border-color: #1e293b;
 }
 
 body.dark-mode .sector-chip {
@@ -286,30 +174,4 @@ body.dark-mode .sector-chip:hover,
 body.dark-mode .sector-chip.active {
   background-color: var(--secondary) !important;
   color: white !important;
-}
-
-.pager {
-  margin-top: 18px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-}
-
-.pager-btn {
-  border: 1px solid var(--outline-variant);
-  background: var(--surface-container-lowest);
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-weight: 600;
-}
-
-.pager-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pager-info {
-  color: var(--on-surface-variant);
-  font-size: 0.9rem;
 }

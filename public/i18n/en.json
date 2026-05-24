@@ -17,7 +17,9 @@
       "CHAT_ERROR": "Could not start the chat. Please try again."
     },
     "VIEW": "View",
-    "VIEW_ALL": "View all"
+    "VIEW_ALL": "View all",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
   },
   "AUTH": {
     "LOGIN_TITLE": "Log In",
@@ -62,7 +64,9 @@
     "PROFILE": "Profile",
     "HOME": "Home",
     "DARK_MODE": "Dark mode",
-    "LIGHT_MODE": "Light mode"
+    "LIGHT_MODE": "Light mode",
+    "CHATS": "Chats",
+    "FAVORITES": "My favorites"
   },
   "PROFILE": {
     "TITLE": "My Profile",
@@ -194,8 +198,10 @@
     "ZONES_LABEL": "Preferred zones",
     "ZONES_PLACEHOLDER": "e.g. Madrid, Barcelona, Valencia",
     "ZONES_REQUIRED": "You must indicate at least one zone.",
-    "CV_LABEL": "CV (text)",
-    "CV_REQUIRED": "You must complete the CV in text format.",
+    "CV_LABEL": "CV (PDF)",
+    "CV_REQUIRED": "You must upload your CV in PDF format.",
+    "CV_CHANGE": "Change file",
+    "CV_UPLOAD_PROMPT": "Drag and drop your CV in PDF format or click to browse",
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "Bio is required.",
     "SENDING": "Sending...",
@@ -300,5 +306,12 @@
     "PENDING": "Pending",
     "ACCEPTED": "Accepted",
     "REJECTED": "Rejected"
+  },
+  "FAVORITES": {
+    "TITLE": "My Favorites",
+    "SUBTITLE": "Saved offers to review them whenever you want.",
+    "LOADING": "Loading favorites...",
+    "EMPTY": "You don't have any favorite offers yet.",
+    "PAGE_INFO": "Page {{ page }} of {{ total }}"
   }
 }

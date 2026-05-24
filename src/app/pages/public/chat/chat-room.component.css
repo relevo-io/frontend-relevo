@@ -237,9 +237,13 @@
 }
 
 .bubble-mine {
-  background: var(--primary);
-  color: white;
+  background: #e8f7ed;
+  color: #072714;
   border-bottom-right-radius: 4px;
+}
+
+.bubble-mine .bubble-text {
+  color: inherit;
 }
 
 .bubble-theirs {

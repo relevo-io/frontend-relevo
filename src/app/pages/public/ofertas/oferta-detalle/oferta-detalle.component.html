@@ -166,7 +166,7 @@
           <button type="button" class="btn-cancel" (click)="cerrarFormularioSolicitud()">
             {{ 'OFFER_CREATE.CANCEL' | translate }}
           </button>
-          <button type="submit" class="btn-submit" [disabled]="isSending()">
+          <button type="submit" class="btn-save" [disabled]="isSending()">
             {{ (isSending() ? 'OFFER_DETAIL.SENDING' : 'OFFER_DETAIL.SAVE_REQUEST') | translate }}
           </button>
         </div>

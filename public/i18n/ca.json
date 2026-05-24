@@ -17,7 +17,9 @@
       "CHAT_ERROR": "No s'ha pogut iniciar el xat. Torna-ho a provar."
     },
     "VIEW": "Veure",
-    "VIEW_ALL": "Veure-ho tot"
+    "VIEW_ALL": "Veure-ho tot",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Següent"
   },
   "AUTH": {
     "LOGIN_TITLE": "Iniciar Sessió",
@@ -62,7 +64,9 @@
     "PROFILE": "Perfil",
     "HOME": "Inici",
     "DARK_MODE": "Mode fosc",
-    "LIGHT_MODE": "Mode clar"
+    "LIGHT_MODE": "Mode clar",
+    "CHATS": "Xats",
+    "FAVORITES": "Els meus preferits"
   },
   "PROFILE": {
     "TITLE": "El Meu Perfil",
@@ -194,8 +198,10 @@
     "ZONES_LABEL": "Zones preferides",
     "ZONES_PLACEHOLDER": "Ex. Madrid, Barcelona, València",
     "ZONES_REQUIRED": "Has d'indicar almenys una zona.",
-    "CV_LABEL": "CV (text)",
-    "CV_REQUIRED": "Has de completar el CV en format text.",
+    "CV_LABEL": "CV (PDF)",
+    "CV_REQUIRED": "Has de pujar el teu CV en format PDF.",
+    "CV_CHANGE": "Canviar fitxer",
+    "CV_UPLOAD_PROMPT": "Arrossega i deixa anar el teu CV en format PDF o fes clic per examinar",
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "La bio és obligatòria.",
     "SENDING": "Enviant...",
@@ -300,5 +306,12 @@
     "PENDING": "Pendent",
     "ACCEPTED": "Acceptada",
     "REJECTED": "Denegada"
+  },
+  "FAVORITES": {
+    "TITLE": "Els Meus Favorits",
+    "SUBTITLE": "Ofertes guardades per revisar-les quan vulguis.",
+    "LOADING": "Carregant preferits...",
+    "EMPTY": "Encara no tens cap oferta preferida.",
+    "PAGE_INFO": "Pàgina {{ page }} de {{ total }}"
   }
 }

@@ -17,7 +17,9 @@
       "CHAT_ERROR": "No se pudo iniciar el chat. Reinténtalo."
     },
     "VIEW": "Ver",
-    "VIEW_ALL": "Ver todo"
+    "VIEW_ALL": "Ver todo",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente"
   },
   "AUTH": {
     "LOGIN_TITLE": "Iniciar Sesión",
@@ -62,7 +64,9 @@
     "PROFILE": "Perfil",
     "HOME": "Inicio",
     "DARK_MODE": "Modo oscuro",
-    "LIGHT_MODE": "Modo claro"
+    "LIGHT_MODE": "Modo claro",
+    "CHATS": "Chats",
+    "FAVORITES": "Mis favoritos"
   },
   "PROFILE": {
     "TITLE": "Mi Perfil",
@@ -194,8 +198,10 @@
     "ZONES_LABEL": "Zonas preferidas",
     "ZONES_PLACEHOLDER": "Ej. Madrid, Barcelona, Valencia",
     "ZONES_REQUIRED": "Debes indicar al menos una zona.",
-    "CV_LABEL": "CV (texto)",
-    "CV_REQUIRED": "Debes completar el CV en formato texto.",
+    "CV_LABEL": "CV (PDF)",
+    "CV_REQUIRED": "Debes subir tu CV en formato PDF.",
+    "CV_CHANGE": "Cambiar archivo",
+    "CV_UPLOAD_PROMPT": "Arrastra y suelta tu CV en formato PDF o haz clic para examinar",
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "La bio es obligatoria.",
     "SENDING": "Enviando...",
@@ -300,5 +306,12 @@
     "PENDING": "Pendiente",
     "ACCEPTED": "Aceptada",
     "REJECTED": "Denegada"
+  },
+  "FAVORITES": {
+    "TITLE": "Mis Favoritos",
+    "SUBTITLE": "Ofertas guardadas para revisarlas cuando quieras.",
+    "LOADING": "Cargando favoritos...",
+    "EMPTY": "Aún no tienes ofertas favoritas.",
+    "PAGE_INFO": "Página {{ page }} de {{ total }}"
   }
 }

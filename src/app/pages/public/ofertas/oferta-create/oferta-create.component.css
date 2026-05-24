@@ -1,3 +1,9 @@
+/* ==========================================================================
+   src/app/pages/public/ofertas/oferta-create/oferta-create.component.css
+   Estils exclusius del component Crear Oferta (Marketplace Públic)
+   ========================================================================== */
+
+/* 1. Layout i Distribució de la Pàgina */
 .create-offer-page {
   padding-top: 130px;
   padding-bottom: 48px;
@@ -17,126 +23,13 @@
   color: var(--on-surface-variant);
 }
 
-.offer-form {
-  background: var(--surface-container-lowest);
-  border: 1px solid var(--outline-variant);
-  border-radius: 16px;
-  padding: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: var(--shadow-ambient);
-}
-
 .field-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
-.field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.field-group label {
-  font-weight: 700;
-  color: var(--on-surface);
-}
-
-.required {
-  color: #ef4444;
-}
-
-.field-group input,
-.field-group textarea,
-.field-group select {
-  width: 100%;
-  border: 1px solid var(--outline-variant);
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  background: var(--surface-container-low);
-  color: var(--on-surface);
-}
-
-.field-group textarea {
-  resize: vertical;
-}
-
-.field-group input:focus,
-.field-group textarea:focus,
-.field-group select:focus {
-  outline: none;
-  border-color: var(--secondary);
-  box-shadow: 0 0 0 3px rgba(0, 109, 61, 0.2);
-}
-
-.field-group.invalid input,
-.field-group.invalid textarea,
-.field-group.invalid select {
-  border-color: #ef4444;
-}
-
-.field-error {
-  color: #ef4444;
-  font-size: 0.85rem;
-}
-
-.actions {
-  margin-top: 6px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.btn-cancel,
-.btn-save {
-  border-radius: 999px;
-  padding: 10px 18px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-cancel {
-  background: transparent;
-  border: 1px solid var(--outline-variant);
-  color: var(--on-surface);
-}
-
-.btn-save {
-  border: 1px solid var(--secondary);
-  background: var(--secondary);
-  color: #ffffff;
-}
-
-.btn-save:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* AGGRESSIVE DARK MODE OVERRIDES */
-body.dark-mode .offer-form {
-  background-color: #0a1120 !important;
-}
-
-body.dark-mode .field-group input,
-body.dark-mode .field-group textarea,
-body.dark-mode .field-group select {
-  background-color: #1e293b !important;
-  color: #f1f5f9 !important;
-  border-color: #334155 !important;
-}
-
-body.dark-mode .btn-cancel {
-  color: #94a3b8 !important;
-}
-
+/* 2. Responsivitat del Formulari */
 @media (max-width: 780px) {
   .field-row {
     grid-template-columns: 1fr;

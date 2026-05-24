@@ -1,16 +1,21 @@
-﻿<main class="favorites-page">
+<main class="favorites-page">
   <section class="favorites-wrap">
     <header class="favorites-header">
-      <h1>Mis favoritos</h1>
-      <p>Ofertas guardadas para revisarlas cuando quieras.</p>
+      <h1>{{ 'FAVORITES.TITLE' | translate }}</h1>
+      <p>{{ 'FAVORITES.SUBTITLE' | translate }}</p>
     </header>
 
-    @if (isLoading()) {
-      <div class="state-box">Cargando favoritos...</div>
-    } @else if (favoritas().length === 0) {
-      <div class="state-box">Aun no tienes ofertas favoritas.</div>
+    @if (isLoading() && favoritas().length === 0) {
+      <div class="state-box">{{ 'FAVORITES.LOADING' | translate }}</div>
+    } @else if (!isLoading() && favoritas().length === 0) {
+      <div class="state-box">{{ 'FAVORITES.EMPTY' | translate }}</div>
     } @else {
-      <div class="offers-grid">
+      <div
+        class="offers-grid"
+        [style.opacity]="isLoading() ? 0.6 : 1"
+        [style.pointer-events]="isLoading() ? 'none' : 'auto'"
+        [style.transition]="'opacity 0.2s ease'"
+      >
         @for (oferta of favoritas(); track oferta._id) {
           <article class="offer-card" [routerLink]="['/ofertas', oferta._id]">
             <header class="card-head">
@@ -56,11 +61,13 @@
       @if (pagination() && pagination()!.totalPages > 1) {
         <div class="pager">
           <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
-            Anterior
+            {{ 'COMMON.PREVIOUS' | translate }}
           </button>
-          <span class="pager-info">Pagina {{ pagination()!.page }} de {{ pagination()!.totalPages }}</span>
+          <span class="pager-info">
+            {{ 'FAVORITES.PAGE_INFO' | translate: { page: pagination()!.page, total: pagination()!.totalPages } }}
+          </span>
           <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
-            Siguiente
+            {{ 'COMMON.NEXT' | translate }}
           </button>
         </div>
       }

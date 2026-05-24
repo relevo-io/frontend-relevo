@@ -1,18 +1,12 @@
+/* ==========================================================================
+   src/app/pages/public/perfil/perfil.component.css
+   Estils exclusius del component Perfil d'Usuari (Marketplace)
+   ========================================================================== */
+
 .perfil-page {
   padding: 130px 1.5rem 3rem;
   background-color: var(--surface-container-lowest);
   min-height: calc(100vh - 95px);
-}
-
-/* Forçar fons en contenidors de pàgina */
-main,
-.login-page,
-.register-page,
-.legal-page,
-.offer-detail-page,
-.marketplace-home,
-.perfil-page {
-  background-color: var(--surface) !important;
 }
 
 .perfil-container {
@@ -82,6 +76,7 @@ main,
 .badge.owner {
   background-color: var(--secondary);
 }
+
 .badge.interested {
   background-color: var(--primary);
 }
@@ -109,7 +104,7 @@ main,
   color: white;
 }
 
-/* Contingut Secundari */
+/* 2. Capsalera de targetes i edició */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -148,55 +143,7 @@ main,
   gap: 1.5rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  font-weight: 600;
-  color: var(--on-surface-variant);
-  font-size: 0.875rem;
-  margin-left: 0.25rem;
-}
-
-.form-group input,
-.form-group textarea {
-  padding: 1.15rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid transparent;
-  font-family: inherit;
-  font-size: 1rem;
-  background-color: var(--surface-container-highest);
-  transition: all 0.2s;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  background-color: var(--surface-container-low) !important;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.2);
-}
-
-.btn-save {
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: var(--radius-full);
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  align-self: flex-end;
-  transition: transform 0.2s;
-}
-.btn-save:hover {
-  transform: translateY(-2px);
-}
-
-/* Vistes només de lectura */
+/* 3. Vistes de Lectura (View Mode) */
 .view-mode {
   display: flex;
   flex-direction: column;
@@ -219,33 +166,7 @@ main,
   font-size: 1rem;
 }
 
-/* Utils */
-.loading-state,
-.error-state {
-  text-align: center;
-  padding: 3rem;
-  color: var(--on-surface-variant);
-  font-weight: 600;
-}
-
-.spinner {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  border: 3px solid rgba(0, 109, 61, 0.3);
-  border-radius: 50%;
-  border-top-color: var(--primary);
-  animation: spin 0.8s linear infinite;
-  margin-right: 0.5rem;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ── Recent Chats Section ────────────────── */
+/* 4. Recent Chats Section (Resum de Converses) */
 .recent-chats .card-header {
   margin-bottom: 1.5rem;
   border-bottom: none;
@@ -256,20 +177,6 @@ main,
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.unread-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  background: var(--secondary);
-  color: white;
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 700;
 }
 
 .btn-view-all {
@@ -363,7 +270,7 @@ main,
   color: var(--on-surface-variant);
 }
 
-/* AGGRESSIVE DARK MODE OVERRIDES */
+/* 5. Dark Mode overrides particulars d'aquesta vista */
 body.dark-mode .profile-card {
   background-color: #1e293b !important;
   border-color: #334155 !important;

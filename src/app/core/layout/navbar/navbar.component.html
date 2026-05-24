@@ -62,7 +62,7 @@
 
               <a routerLink="/chats" (click)="closeMenu()" class="dropdown-item">
                 <span class="material-symbols-outlined">chat_bubble</span>
-                <span>Chats</span>
+                <span>{{ 'NAVBAR.CHATS' | translate }}</span>
                 @if (unreadCount() > 0) {
                   <span class="unread-badge">{{ unreadCount() }}</span>
                 }
@@ -75,7 +75,7 @@
 
               <a routerLink="/mis-favoritos" (click)="closeMenu()" class="dropdown-item">
                 <span class="material-symbols-outlined">favorite</span>
-                <span>Mis favoritos</span>
+                <span>{{ 'NAVBAR.FAVORITES' | translate }}</span>
               </a>
 
               @if (authService.currentUser()?.roles?.includes('OWNER')) {

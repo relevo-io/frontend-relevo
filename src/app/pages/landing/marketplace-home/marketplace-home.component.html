@@ -48,18 +48,23 @@
         <span class="material-symbols-outlined">error</span>
         <p>{{ error() }}</p>
       </div>
-    } @else if (isLoading()) {
+    } @else if (isLoading() && ofertas().length === 0) {
       <div class="state-box">
         <div class="loader"></div>
         <p>{{ 'MARKETPLACE_HOME.LOADING_BACKEND' | translate }}</p>
       </div>
-    } @else if (ofertas().length === 0) {
+    } @else if (!isLoading() && ofertas().length === 0) {
       <div class="state-box">
         <span class="material-symbols-outlined">search_off</span>
         <p>{{ 'MARKETPLACE_HOME.NO_RESULTS' | translate }}</p>
       </div>
     } @else {
-      <div class="offers-grid">
+      <div
+        class="offers-grid"
+        [style.opacity]="isLoading() ? 0.6 : 1"
+        [style.pointer-events]="isLoading() ? 'none' : 'auto'"
+        [style.transition]="'opacity 0.2s ease'"
+      >
         @for (oferta of ofertas(); track oferta._id) {
           <article class="offer-card" [routerLink]="['/ofertas', oferta._id]">
             <header class="card-head">
@@ -108,11 +113,13 @@
       @if (pagination() && pagination()!.totalPages > 1) {
         <div class="pager">
           <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
-            Anterior
+            {{ 'COMMON.PREVIOUS' | translate }}
           </button>
-          <span class="pager-info">Pagina {{ pagination()!.page }} de {{ pagination()!.totalPages }}</span>
+          <span class="pager-info">
+            {{ 'FAVORITES.PAGE_INFO' | translate: { page: pagination()!.page, total: pagination()!.totalPages } }}
+          </span>
           <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
-            Siguiente
+            {{ 'COMMON.NEXT' | translate }}
           </button>
         </div>
       }
