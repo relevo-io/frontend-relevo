@@ -73,6 +73,11 @@
                 {{ 'MAILBOX.TITLE' | translate }}
               </a>
 
+              <a routerLink="/mis-favoritos" (click)="closeMenu()" class="dropdown-item">
+                <span class="material-symbols-outlined">favorite</span>
+                <span>Mis favoritos</span>
+              </a>
+
               @if (authService.currentUser()?.roles?.includes('OWNER')) {
                 <a routerLink="/mis-ofertas" (click)="closeMenu()" class="dropdown-item">
                   <span class="material-symbols-outlined">business_center</span>

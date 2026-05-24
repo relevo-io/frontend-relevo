@@ -18,10 +18,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export class MarketplaceHomeComponent {
   private ofertaService = inject(OfertaService);
   private marketplaceSearchService = inject(MarketplaceSearchService);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
   private translate = inject(TranslateService);
 
   ofertas = signal<Oferta[]>([]);
+  favoriteOfferIds = signal<Set<string>>(new Set());
   isLoading = signal<boolean>(true);
   error = signal<string | null>(null);
 
@@ -79,6 +80,19 @@ export class MarketplaceHomeComponent {
         }
       });
 
+      if (this.authService.isLoggedIn()) {
+        this.ofertaService.getMisFavoritas().subscribe({
+          next: (favoritas) => {
+            this.favoriteOfferIds.set(new Set(favoritas.map((item) => item._id).filter((id): id is string => !!id)));
+          },
+          error: () => {
+            this.favoriteOfferIds.set(new Set());
+          }
+        });
+      } else {
+        this.favoriteOfferIds.set(new Set());
+      }
+
       // 3. Si el usuario cambia mientras la petición 1 estaba en vuelo,
       // Angular cancelará la petición 1 antes de lanzar la petición 2.
       onCleanup(() => {
@@ -101,5 +115,40 @@ export class MarketplaceHomeComponent {
 
   formatEmployees(value?: string): string {
     return formatEmployeeRange(value);
+  }
+
+  isFavorite(ofertaId?: string): boolean {
+    if (!ofertaId) return false;
+    return this.favoriteOfferIds().has(ofertaId);
+  }
+
+  toggleFavorite(event: Event, ofertaId?: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!ofertaId || !this.authService.isLoggedIn()) {
+      return;
+    }
+
+    const currentlyFavorite = this.favoriteOfferIds().has(ofertaId);
+
+    if (currentlyFavorite) {
+      this.ofertaService.removeFavorita(ofertaId).subscribe({
+        next: () => {
+          const updated = new Set(this.favoriteOfferIds());
+          updated.delete(ofertaId);
+          this.favoriteOfferIds.set(updated);
+        }
+      });
+      return;
+    }
+
+    this.ofertaService.addFavorita(ofertaId).subscribe({
+      next: () => {
+        const updated = new Set(this.favoriteOfferIds());
+        updated.add(ofertaId);
+        this.favoriteOfferIds.set(updated);
+      }
+    });
   }
 }

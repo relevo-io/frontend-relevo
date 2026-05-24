@@ -1,9 +1,16 @@
-import { Injectable, inject, signal, computed, PLATFORM_ID, afterNextRender } from '@angular/core';
+import { Injectable, inject, signal, computed, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, map } from 'rxjs';
+import { from, Observable, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
+import {
+  AuthResponse,
+  FirebaseLoginRequest,
+  LoginRequest,
+  OAuthLoginRequest,
+  OAuthProvider,
+  RegisterRequest
+} from '../models/auth.model';
 import { Usuario } from '../models/usuario.model';
 import { environment } from '../../../environments/environment';
 
@@ -81,6 +88,64 @@ export class AuthService {
     return this.http.post<Usuario>(`${this.apiUrl}/usuarios`, userData);
   }
 
+  loginWithFirebaseProvider(provider: OAuthProvider): Observable<AuthResponse> {
+    if (!this.isBrowser) {
+      throw new Error('Firebase login solo disponible en navegador');
+    }
+
+    const firebaseLoginPromise = (async () => {
+      const [{ getApp, getApps, initializeApp }, firebaseAuthModule] = await Promise.all([
+        import('firebase/app'),
+        import('firebase/auth')
+      ]);
+
+      const app = getApps().find((item) => item.name === 'relevo-firebase-auth')
+        ? getApp('relevo-firebase-auth')
+        : initializeApp(environment.firebase, 'relevo-firebase-auth');
+      const auth = firebaseAuthModule.getAuth(app);
+      const authProvider =
+        provider === 'google' ? new firebaseAuthModule.GoogleAuthProvider() : new firebaseAuthModule.GithubAuthProvider();
+
+      const credential = await firebaseAuthModule.signInWithPopup(auth, authProvider);
+      return credential.user.getIdToken(true);
+    })();
+
+    return from(firebaseLoginPromise).pipe(
+      switchMap((idToken) => {
+        const body: FirebaseLoginRequest = { idToken };
+        return this.http.post<AuthResponse>(`${this.apiUrl}/auth/firebase`, body, { withCredentials: true });
+      }),
+      tap((res) => {
+        if (res.accessToken && res.usuario && isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('access_token', res.accessToken);
+          localStorage.setItem('user_data', JSON.stringify(res.usuario));
+          this.currentUser.set(res.usuario);
+        }
+      })
+    );
+  }
+
+  loginWithGoogle(): Observable<AuthResponse> {
+    return this.loginWithFirebaseProvider('google');
+  }
+
+  loginWithGitHub(): Observable<AuthResponse> {
+    return this.loginWithFirebaseProvider('github');
+  }
+
+  // Compatibilidad temporal con el callback OAuth existente.
+  completeOAuthLogin(provider: OAuthProvider, payload: OAuthLoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/oauth/${provider}`, payload, { withCredentials: true }).pipe(
+      tap((res) => {
+        if (res.accessToken && res.usuario && isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('access_token', res.accessToken);
+          localStorage.setItem('user_data', JSON.stringify(res.usuario));
+          this.currentUser.set(res.usuario);
+        }
+      })
+    );
+  }
+
   refreshToken(): Observable<{ accessToken: string }> {
     return this.http.post<{ accessToken: string }>(`${this.apiUrl}/auth/refresh`, {}, { withCredentials: true }).pipe(
       tap((res) => {
@@ -92,6 +157,12 @@ export class AuthService {
   }
 
   logout() {
+    import('firebase/auth')
+      .then(async (firebaseAuthModule) => {
+        const auth = firebaseAuthModule.getAuth();
+        await firebaseAuthModule.signOut(auth);
+      })
+      .catch(() => undefined);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('user_data');

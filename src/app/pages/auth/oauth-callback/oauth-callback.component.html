@@ -1,0 +1,7 @@
+<main class="oauth-callback-page">
+  @if (isLoading()) {
+    <p>Conectando con tu cuenta...</p>
+  } @else if (errorMessage()) {
+    <p>{{ errorMessage() }}</p>
+  }
+</main>
