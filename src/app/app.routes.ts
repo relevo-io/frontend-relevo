@@ -45,7 +45,7 @@ export const routes: Routes = [
       { path: 'oauth/callback/:provider', component: OAuthCallbackComponent },
       { path: 'ofertas', component: OfertaListComponent },
       { path: 'ofertas/crear', component: OfertaCreateComponent, canActivate: [authGuard] },
-      { path: 'ofertas/:id', component: OfertaDetalle },
+      { path: 'ofertas/:id', component: OfertaDetalle, canActivate: [authGuard] },
       { path: 'aviso-legal', component: AvisoLegalComponent },
       { path: 'terminos-servicio', component: TerminosServicioComponent },
       { path: 'politica-privacidad', component: PoliticaPrivacidadComponent },
