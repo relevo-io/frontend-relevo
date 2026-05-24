@@ -56,7 +56,8 @@ export class Login {
     if (backendMessage) return backendMessage;
 
     const code = error?.code as string | undefined;
-    if (code === 'auth/popup-closed-by-user') return `Has cerrado la ventana de ${providerLabel} antes de completar el acceso.`;
+    if (code === 'auth/popup-closed-by-user')
+      return `Has cerrado la ventana de ${providerLabel} antes de completar el acceso.`;
     if (code === 'auth/account-exists-with-different-credential') {
       return 'Ya existe una cuenta con ese email usando otro metodo de acceso.';
     }

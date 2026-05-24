@@ -104,7 +104,9 @@ export class AuthService {
         : initializeApp(environment.firebase, 'relevo-firebase-auth');
       const auth = firebaseAuthModule.getAuth(app);
       const authProvider =
-        provider === 'google' ? new firebaseAuthModule.GoogleAuthProvider() : new firebaseAuthModule.GithubAuthProvider();
+        provider === 'google'
+          ? new firebaseAuthModule.GoogleAuthProvider()
+          : new firebaseAuthModule.GithubAuthProvider();
 
       const credential = await firebaseAuthModule.signInWithPopup(auth, authProvider);
       return credential.user.getIdToken(true);
@@ -135,15 +137,17 @@ export class AuthService {
 
   // Compatibilidad temporal con el callback OAuth existente.
   completeOAuthLogin(provider: OAuthProvider, payload: OAuthLoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/oauth/${provider}`, payload, { withCredentials: true }).pipe(
-      tap((res) => {
-        if (res.accessToken && res.usuario && isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('access_token', res.accessToken);
-          localStorage.setItem('user_data', JSON.stringify(res.usuario));
-          this.currentUser.set(res.usuario);
-        }
-      })
-    );
+    return this.http
+      .post<AuthResponse>(`${this.apiUrl}/auth/oauth/${provider}`, payload, { withCredentials: true })
+      .pipe(
+        tap((res) => {
+          if (res.accessToken && res.usuario && isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('access_token', res.accessToken);
+            localStorage.setItem('user_data', JSON.stringify(res.usuario));
+            this.currentUser.set(res.usuario);
+          }
+        })
+      );
   }
 
   refreshToken(): Observable<{ accessToken: string }> {
