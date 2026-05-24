@@ -219,7 +219,13 @@
     "CLEAR_FILTER": "Clear filter",
     "NO_RESULTS": "No offers match your search.",
     "LOADING_BACKEND": "Loading offers from the server...",
-    "LOADING_ERROR": "Could not load offers. Try again."
+    "LOADING_ERROR": "Could not load offers. Try again.",
+    "CTA_REGISTER_TITLE": "Want to explore more opportunities?",
+    "CTA_REGISTER_DESC_START": "Join Relevo to view the",
+    "CTA_REGISTER_FALLBACK": "dozens of",
+    "CTA_REGISTER_DESC_END": "available businesses and access all their details.",
+    "CTA_REGISTER_BTN": "Register to view all",
+    "VIEW_DETAILS": "View details"
   },
   "LEGAL": {
     "PRIVACY_TITLE": "RELEVO PRIVACY POLICY",

@@ -1,5 +1,5 @@
 ﻿import { CommonModule } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Oferta } from '../../../core/models/oferta.model';
 import { OfertaService } from '../../../core/services/oferta.service';
@@ -29,6 +29,8 @@ export class MarketplaceHomeComponent {
   page = signal<number>(1);
   pageSize = 12;
   pagination = signal<PaginationMeta | null>(null);
+
+  displayedOfertas = computed(() => (this.authService.isLoggedIn() ? this.ofertas() : this.ofertas().slice(0, 4)));
 
   searchQuery = this.marketplaceSearchService.query;
   sectoresDestacados = signal<string[]>([]);

@@ -219,7 +219,13 @@
     "CLEAR_FILTER": "Netejar filtre",
     "NO_RESULTS": "No hi ha ofertes que coincideixin amb la teva cerca.",
     "LOADING_BACKEND": "Carregant ofertes des del servidor...",
-    "LOADING_ERROR": "No s'han pogut carregar les ofertes. Torna-ho a provar."
+    "LOADING_ERROR": "No s'han pogut carregar les ofertes. Torna-ho a provar.",
+    "CTA_REGISTER_TITLE": "Vols explorar més oportunitats?",
+    "CTA_REGISTER_DESC_START": "Uneix-te a Relevo per veure les",
+    "CTA_REGISTER_FALLBACK": "desenes de",
+    "CTA_REGISTER_DESC_END": "empreses disponibles i accedir a tots els seus detalls.",
+    "CTA_REGISTER_BTN": "Registra't per veure-ho tot",
+    "VIEW_DETAILS": "Veure detalls"
   },
   "LEGAL": {
     "PRIVACY_TITLE": "POLÍTICA DE PRIVACITAT DE RELEVO",

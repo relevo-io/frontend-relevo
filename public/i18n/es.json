@@ -219,7 +219,13 @@
     "CLEAR_FILTER": "Limpiar filtro",
     "NO_RESULTS": "No hay ofertas que coincidan con tu búsqueda.",
     "LOADING_BACKEND": "Cargando ofertas desde el servidor...",
-    "LOADING_ERROR": "No se pudieron cargar las ofertas. Inténtalo de nuevo."
+    "LOADING_ERROR": "No se pudieron cargar las ofertas. Inténtalo de nuevo.",
+    "CTA_REGISTER_TITLE": "¿Quieres explorar más oportunidades?",
+    "CTA_REGISTER_DESC_START": "Únete a Relevo para ver las",
+    "CTA_REGISTER_FALLBACK": "decenas de",
+    "CTA_REGISTER_DESC_END": "empresas disponibles y acceder a todos sus detalles.",
+    "CTA_REGISTER_BTN": "Regístrate para ver todo",
+    "VIEW_DETAILS": "Ver detalles"
   },
   "LEGAL": {
     "PRIVACY_TITLE": "POLÍTICA DE PRIVACIDAD DE RELEVO",
