@@ -52,6 +52,18 @@
           </article>
         }
       </div>
+
+      @if (pagination() && pagination()!.totalPages > 1) {
+        <div class="pager">
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
+            Anterior
+          </button>
+          <span class="pager-info">Pagina {{ pagination()!.page }} de {{ pagination()!.totalPages }}</span>
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
+            Siguiente
+          </button>
+        </div>
+      }
     }
   </section>
 </main>

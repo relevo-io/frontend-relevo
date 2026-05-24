@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Oferta } from '../../../core/models/oferta.model';
 import { OfertaService } from '../../../core/services/oferta.service';
@@ -7,6 +7,7 @@ import { MarketplaceSearchService } from '../../../core/services/marketplace-sea
 import { AuthService } from '../../../core/services/auth.service';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PaginationMeta } from '../../../core/models/pagination.model';
 
 @Component({
   selector: 'app-marketplace-home',
@@ -25,60 +26,42 @@ export class MarketplaceHomeComponent {
   favoriteOfferIds = signal<Set<string>>(new Set());
   isLoading = signal<boolean>(true);
   error = signal<string | null>(null);
+  page = signal<number>(1);
+  pageSize = 12;
+  pagination = signal<PaginationMeta | null>(null);
 
   searchQuery = this.marketplaceSearchService.query;
-
-  filteredOfertas = computed(() => {
-    const query = this.searchQuery().trim().toLowerCase();
-    if (!query) {
-      return this.ofertas();
-    }
-
-    return this.ofertas().filter((oferta) => {
-      const sector = oferta.sector?.toLowerCase() ?? '';
-      const region = oferta.region?.toLowerCase() ?? '';
-      const description = oferta.companyDescription?.toLowerCase() ?? '';
-      const revenue = oferta.revenueRange?.toLowerCase() ?? '';
-      const employees = oferta.employeeRange?.toLowerCase() ?? '';
-      return (
-        sector.includes(query) ||
-        region.includes(query) ||
-        description.includes(query) ||
-        revenue.includes(query) ||
-        employees.includes(query)
-      );
-    });
-  });
-
-  sectoresDestacados = computed(() => {
-    const uniques = new Set(
-      this.ofertas()
-        .map((oferta) => oferta.sector)
-        .filter((sector): sector is string => !!sector?.trim())
-    );
-    return Array.from(uniques).slice(0, 6);
-  });
+  sectoresDestacados = signal<string[]>([]);
 
   constructor() {
+    effect(() => {
+      this.searchQuery();
+      this.page.set(1);
+    });
+
     effect((onCleanup) => {
-      // 1. Al leer currentUser(), el effect se queda escuchando sus cambios
       const currentUserId = this.authService.currentUser()?._id;
+      const currentPage = this.page();
+      const currentSearch = this.searchQuery();
 
       this.isLoading.set(true);
       this.error.set(null);
 
-      // 2. Lanzamos la petición HTTP y la guardamos en una variable
-      const peticion = this.ofertaService.getOfertas(currentUserId).subscribe({
-        next: (datosDelServidor) => {
-          this.ofertas.set(datosDelServidor);
-          this.isLoading.set(false);
-        },
-        error: (backendError) => {
-          console.error('Error al conectar con el backend:', backendError);
-          this.error.set(this.translate.instant('MARKETPLACE_HOME.LOADING_ERROR'));
-          this.isLoading.set(false);
-        }
-      });
+      const peticion = this.ofertaService
+        .getOfertasPaged(currentPage, this.pageSize, currentUserId, currentSearch)
+        .subscribe({
+          next: (result) => {
+            this.ofertas.set(result.items);
+            this.pagination.set(result.pagination);
+            this.refreshFeaturedSectors();
+            this.isLoading.set(false);
+          },
+          error: (backendError) => {
+            console.error('Error al conectar con el backend:', backendError);
+            this.error.set(this.translate.instant('MARKETPLACE_HOME.LOADING_ERROR'));
+            this.isLoading.set(false);
+          }
+        });
 
       if (this.authService.isLoggedIn()) {
         this.ofertaService.getMisFavoritas().subscribe({
@@ -93,12 +76,19 @@ export class MarketplaceHomeComponent {
         this.favoriteOfferIds.set(new Set());
       }
 
-      // 3. Si el usuario cambia mientras la petición 1 estaba en vuelo,
-      // Angular cancelará la petición 1 antes de lanzar la petición 2.
       onCleanup(() => {
         peticion.unsubscribe();
       });
     });
+  }
+
+  private refreshFeaturedSectors(): void {
+    const uniques = new Set(
+      this.ofertas()
+        .map((oferta) => oferta.sector)
+        .filter((sector): sector is string => !!sector?.trim())
+    );
+    this.sectoresDestacados.set(Array.from(uniques).slice(0, 6));
   }
 
   filtrarPorSector(sector: string): void {
@@ -150,5 +140,17 @@ export class MarketplaceHomeComponent {
         this.favoriteOfferIds.set(updated);
       }
     });
+  }
+
+  prevPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasPrevPage) return;
+    this.page.set(meta.page - 1);
+  }
+
+  nextPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasNextPage) return;
+    this.page.set(meta.page + 1);
   }
 }

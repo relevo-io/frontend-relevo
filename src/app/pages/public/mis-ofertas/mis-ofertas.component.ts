@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { OfertaService } from '../../../core/services/oferta.service';
 import { Oferta } from '../../../core/models/oferta.model';
+import { PaginationMeta } from '../../../core/models/pagination.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
 
 @Component({
@@ -18,6 +19,9 @@ export class MisOfertasComponent implements OnInit {
 
   ofertas = signal<Oferta[]>([]);
   isLoading = signal<boolean>(true);
+  page = signal<number>(1);
+  pageSize = 8;
+  pagination = signal<PaginationMeta | null>(null);
 
   ngOnInit() {
     this.cargarOfertas();
@@ -25,9 +29,10 @@ export class MisOfertasComponent implements OnInit {
 
   cargarOfertas() {
     this.isLoading.set(true);
-    this.ofertaService.getMisOfertas().subscribe({
-      next: (data) => {
-        this.ofertas.set(data);
+    this.ofertaService.getMisOfertasPaged(this.page(), this.pageSize).subscribe({
+      next: (result) => {
+        this.ofertas.set(result.items);
+        this.pagination.set(result.pagination);
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -43,5 +48,19 @@ export class MisOfertasComponent implements OnInit {
 
   formatEmployees(val?: string) {
     return formatEmployeeRange(val);
+  }
+
+  prevPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasPrevPage) return;
+    this.page.set(meta.page - 1);
+    this.cargarOfertas();
+  }
+
+  nextPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasNextPage) return;
+    this.page.set(meta.page + 1);
+    this.cargarOfertas();
   }
 }

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Oferta } from '../models/oferta.model';
+import { PaginatedResponse } from '../models/pagination.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -19,6 +20,27 @@ export class OfertaService {
     return this.http.get<Oferta[]>(this.apiUrl);
   }
 
+  getOfertasPaged(
+    page: number,
+    limit: number,
+    excludeOwnerId?: string,
+    search?: string
+  ): Observable<PaginatedResponse<Oferta>> {
+    const query = new URLSearchParams({
+      page: String(page),
+      limit: String(limit)
+    });
+
+    if (excludeOwnerId) {
+      query.set('excludeOwnerId', excludeOwnerId);
+    }
+    if (search?.trim()) {
+      query.set('search', search.trim());
+    }
+
+    return this.http.get<PaginatedResponse<Oferta>>(`${this.apiUrl}?${query.toString()}`);
+  }
+
   getOfertaById(id: string): Observable<Oferta> {
     return this.http.get<Oferta>(`${this.apiUrl}/${id}`);
   }
@@ -27,8 +49,16 @@ export class OfertaService {
     return this.http.get<Oferta[]>(`${this.apiUrl}/me`);
   }
 
+  getMisOfertasPaged(page: number, limit: number): Observable<PaginatedResponse<Oferta>> {
+    return this.http.get<PaginatedResponse<Oferta>>(`${this.apiUrl}/me?page=${page}&limit=${limit}`);
+  }
+
   getMisFavoritas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(`${this.apiUrl}/favorites`);
+  }
+
+  getMisFavoritasPaged(page: number, limit: number): Observable<PaginatedResponse<Oferta>> {
+    return this.http.get<PaginatedResponse<Oferta>>(`${this.apiUrl}/favorites?page=${page}&limit=${limit}`);
   }
 
   addFavorita(ofertaId: string): Observable<{ message: string }> {

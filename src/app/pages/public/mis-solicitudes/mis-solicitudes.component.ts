@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 import { SolicitudService } from '../../../core/services/solicitud.service';
 import { Solicitud } from '../../../core/models/solicitud.model';
+import { PaginationMeta } from '../../../core/models/pagination.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ChatService } from '../../../core/services/chat.service';
@@ -27,6 +28,9 @@ export class MisSolicitudesComponent implements OnInit {
   solicitudes = signal<Solicitud[]>([]);
   activeTab = signal<'received' | 'sent'>('received');
   isLoading = signal<boolean>(true);
+  page = signal<number>(1);
+  pageSize = 8;
+  pagination = signal<PaginationMeta | null>(null);
 
   // Almacenar qué solicitudes tienen su panel de IA expandido
   expandedAiIds = signal<Set<string>>(new Set());
@@ -52,12 +56,13 @@ export class MisSolicitudesComponent implements OnInit {
     this.isLoading.set(true);
     const request =
       this.activeTab() === 'received'
-        ? this.solicitudService.getMisSolicitudesOwner()
-        : this.solicitudService.getMisSolicitudesEnviadas();
+        ? this.solicitudService.getMisSolicitudesOwnerPaged(this.page(), this.pageSize)
+        : this.solicitudService.getMisSolicitudesEnviadasPaged(this.page(), this.pageSize);
 
     request.subscribe({
-      next: (data) => {
-        this.solicitudes.set(data);
+      next: (result) => {
+        this.solicitudes.set(result.items);
+        this.pagination.set(result.pagination);
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -139,6 +144,7 @@ export class MisSolicitudesComponent implements OnInit {
 
   setTab(tab: 'received' | 'sent') {
     this.activeTab.set(tab);
+    this.page.set(1);
     this.cargarSolicitudes();
   }
 
@@ -181,5 +187,19 @@ export class MisSolicitudesComponent implements OnInit {
       console.error('Error iniciant xat:', err);
       this.ns.error("No s'ha pogut obrir el xat.");
     }
+  }
+
+  prevPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasPrevPage) return;
+    this.page.set(meta.page - 1);
+    this.cargarSolicitudes();
+  }
+
+  nextPage(): void {
+    const meta = this.pagination();
+    if (!meta?.hasNextPage) return;
+    this.page.set(meta.page + 1);
+    this.cargarSolicitudes();
   }
 }
