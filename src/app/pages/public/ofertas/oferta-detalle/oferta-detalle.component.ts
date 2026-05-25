@@ -62,7 +62,6 @@ export class OfertaDetalle {
     const offer = this.oferta();
     const currentUserId = this.authService.currentUser()?._id;
     if (!offer || !currentUserId) return false;
-
     const ownerId = this.extractOwnerId(offer.owner);
     return ownerId === currentUserId;
   });
