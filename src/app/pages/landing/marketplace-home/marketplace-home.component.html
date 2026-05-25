@@ -143,20 +143,11 @@
           </div>
         }
       } @else {
-        <div
-          class="register-cta"
-          style="
-            text-align: center;
-            margin-top: 4rem;
-            padding: 3rem 1rem;
-            background: var(--bg-light, #f8f9fa);
-            border-radius: 12px;
-          "
-        >
-          <h3 style="margin-bottom: 1rem; font-size: 1.5rem">
+        <div class="register-cta">
+          <h3>
             {{ 'MARKETPLACE_HOME.CTA_REGISTER_TITLE' | translate }}
           </h3>
-          <p style="margin-bottom: 2rem; color: var(--text-secondary, #666)">
+          <p>
             {{ 'MARKETPLACE_HOME.CTA_REGISTER_DESC_START' | translate }}
             <strong>{{ pagination()?.totalItems || ('MARKETPLACE_HOME.CTA_REGISTER_FALLBACK' | translate) }}</strong>
             {{ 'MARKETPLACE_HOME.CTA_REGISTER_DESC_END' | translate }}
