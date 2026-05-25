@@ -14,12 +14,21 @@
       </div>
     } @else if (oferta(); as o) {
       <article class="offer-card-large">
-        <header class="card-header">
-          <span class="sector">{{ o.sector }}</span>
-          @if (o.employeeRange) {
-            <span class="employees"
-              >{{ formatEmployees(o.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
-            >
+        <header class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="sector">{{ o.sector }}</span>
+            @if (o.employeeRange) {
+              <span class="employees"
+                >{{ formatEmployees(o.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
+              >
+            }
+          </div>
+          
+          @if (ownerName()) {
+            <span class="owner-badge" style="display: flex; align-items: center; gap: 4px; color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; background: var(--bg-light); padding: 4px 12px; border-radius: 16px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">person</span>
+              {{ ownerName() }}
+            </span>
           }
         </header>
 

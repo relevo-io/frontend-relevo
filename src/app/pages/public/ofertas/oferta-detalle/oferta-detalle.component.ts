@@ -49,6 +49,15 @@ export class OfertaDetalle {
   isUploadingCv = signal<boolean>(false);
   cvUploadError = signal<string | null>(null);
 
+  ownerName = computed(() => {
+    const offer = this.oferta();
+    if (!offer || !offer.owner) return null;
+    if (typeof offer.owner === 'object' && 'fullName' in offer.owner) {
+      return (offer.owner as { fullName: string }).fullName;
+    }
+    return null;
+  });
+
   isOwnOffer = computed(() => {
     const offer = this.oferta();
     const currentUserId = this.authService.currentUser()?._id;
@@ -294,9 +303,15 @@ export class OfertaDetalle {
   private extractOwnerId(owner: unknown): string | null {
     if (!owner) return null;
     if (typeof owner === 'string') return owner;
-    if (typeof owner === 'object' && owner !== null && '_id' in owner) {
+    if (typeof owner === 'object' && owner !== null) {
+      // Intentamos extraer el _id
       const maybeId = (owner as { _id?: unknown })._id;
-      return typeof maybeId === 'string' ? maybeId : null;
+      if (typeof maybeId === 'string') {
+        return maybeId;
+      }
+      if (typeof maybeId === 'object' && maybeId !== null && '$oid' in maybeId) {
+        return (maybeId as { $oid: string }).$oid;
+      }
     }
     return null;
   }
