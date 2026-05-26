@@ -74,23 +74,75 @@
   line-height: 1.5;
 }
 
-.resolution-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.75rem;
-}
-
-@media (max-width: 600px) {
-  .resolution-container {
-    align-items: stretch;
-  }
-}
-
-.resolution-text {
-  color: var(--on-surface-variant);
-  font-size: 0.95rem;
+/* 2. Estandardització dels botons d'acció de la sol·licitud a la bústia */
+.request-actions .btn-view-cv,
+.request-actions .btn-contact,
+.request-actions .btn-accept,
+.request-actions .btn-reject {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 999px; /* Modern pill shape matching details buttons */
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   margin: 0;
+}
+
+.request-actions .btn-view-cv {
+  border: 2px solid var(--secondary) !important;
+  background: transparent !important;
+  color: var(--secondary) !important;
+}
+
+.request-actions .btn-view-cv:hover {
+  background: rgba(0, 109, 61, 0.06) !important;
+  transform: translateY(-1.5px);
+  box-shadow: var(--shadow-sm);
+}
+
+.request-actions .btn-contact {
+  border: 2px solid var(--secondary) !important;
+  background: var(--secondary) !important;
+  color: white !important;
+}
+
+.request-actions .btn-contact:hover {
+  background-color: #047240 !important;
+  border-color: #047240 !important;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.2);
+}
+
+.request-actions .btn-accept {
+  border: 2px solid #10b981 !important;
+  background: #10b981 !important;
+  color: white !important;
+}
+
+.request-actions .btn-accept:hover {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.request-actions .btn-reject {
+  border: 2px solid #ef4444 !important;
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+.request-actions .btn-reject:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 /* Les regles visuals de l'anàlisi de CV d'IA s'hereten de _shared-components.css globalment per estalviar duplicats locals. */

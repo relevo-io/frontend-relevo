@@ -258,20 +258,12 @@
                     {{ 'MAILBOX.REJECT' | translate }}
                   </button>
                 } @else {
-                  <div class="resolution-container">
-                    <p class="resolution-text">
-                      {{ 'MAILBOX.RESOLVED_AS' | translate }}
-                      <span [ngClass]="solicitud.status.toLowerCase()">{{
-                        'STATUS.' + solicitud.status | translate
-                      }}</span>
-                    </p>
-                    @if (solicitud.status === 'ACCEPTED') {
-                      <button class="btn-contact" (click)="contactar(solicitud)">
-                        <span class="material-symbols-outlined">chat</span>
-                        {{ 'MAILBOX.CONTACT_INTERESTED' | translate }}
-                      </button>
-                    }
-                  </div>
+                  @if (solicitud.status === 'ACCEPTED') {
+                    <button class="btn-contact" (click)="contactar(solicitud)">
+                      <span class="material-symbols-outlined">chat</span>
+                      {{ 'MAILBOX.CONTACT_INTERESTED' | translate }}
+                    </button>
+                  }
                 }
               }
 

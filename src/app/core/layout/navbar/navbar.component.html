@@ -4,15 +4,17 @@
       <a routerLink="/" class="logo">Relevo</a>
     </div>
 
-    <div class="navbar-search">
-      <span class="material-symbols-outlined">search</span>
-      <input
-        type="text"
-        [placeholder]="'NAVBAR.SEARCH_PLACEHOLDER' | translate"
-        [ngModel]="searchQuery()"
-        (ngModelChange)="onSearchInput($event)"
-      />
-    </div>
+    @if (authService.isLoggedIn()) {
+      <div class="navbar-search">
+        <span class="material-symbols-outlined">search</span>
+        <input
+          type="text"
+          [placeholder]="'NAVBAR.SEARCH_PLACEHOLDER' | translate"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="onSearchInput($event)"
+        />
+      </div>
+    }
 
     <div class="navbar-actions">
       @if (authService.isLoggedIn()) {
