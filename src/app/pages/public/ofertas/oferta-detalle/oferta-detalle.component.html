@@ -62,13 +62,33 @@
           </div>
         }
 
+        <!-- Bànners d'estat de la sol·licitud -->
+        @if (!isOwnOffer() && solicitudStatus()) {
+          @if (solicitudStatus() === 'PENDING') {
+            <div class="status-banner pending">
+              <span class="material-symbols-outlined">info</span>
+              <span>{{ 'SOLICITUD_STATUS.PENDING_BANNER' | translate }}</span>
+            </div>
+          } @else if (solicitudStatus() === 'ACCEPTED') {
+            <div class="status-banner accepted">
+              <span class="material-symbols-outlined">check_circle</span>
+              <span>{{ 'SOLICITUD_STATUS.ACCEPTED_BANNER' | translate }}</span>
+            </div>
+          } @else if (solicitudStatus() === 'REJECTED') {
+            <div class="status-banner rejected">
+              <span class="material-symbols-outlined">block</span>
+              <span>{{ 'SOLICITUD_STATUS.REJECTED_BANNER' | translate }}</span>
+            </div>
+          }
+        }
+
         <div class="actions">
-          @if (!isOwnOffer()) {
+          @if (!isOwnOffer() && !solicitudStatus()) {
             <button (click)="abrirFormularioSolicitud()" class="btn-interest" [disabled]="isSending()">
               {{ 'OFFER_DETAIL.REQUEST_BUTTON' | translate }}
             </button>
           }
-          @if (canChat()) {
+          @if (canChat() && (solicitudStatus() === 'ACCEPTED' || !solicitudStatus())) {
             <button id="btn-contactar-owner" class="btn-chat" (click)="contactarOwner()" [disabled]="isStartingChat()">
               <span class="material-symbols-outlined">chat</span>
               @if (isStartingChat()) {

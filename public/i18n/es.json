@@ -53,7 +53,10 @@
       "BADGE_TITLE": "Plataforma Segura",
       "BADGE_SUB": "Garantizamos privacidad total."
     },
-    "REGISTER_BUTTON": "Crear Cuenta"
+    "REGISTER_BUTTON": "Crear Cuenta",
+    "OR_CONTINUE_WITH": "O continúa con",
+    "CONTINUE_WITH_GOOGLE": "Continuar con Google",
+    "CONTINUE_WITH_GITHUB": "Continuar con GitHub"
   },
   "NAVBAR": {
     "LOGOUT": "Cerrar Sesión",
@@ -319,5 +322,13 @@
     "LOADING": "Cargando favoritos...",
     "EMPTY": "Aún no tienes ofertas favoritas.",
     "PAGE_INFO": "Página {{ page }} de {{ total }}"
+  },
+  "SOLICITUD_STATUS": {
+    "PENDING_BANNER": "Solicitud pendiente de revisión. El propietario está valorando tu perfil para darte acceso.",
+    "ACCEPTED_BANNER": "¡Solicitud aceptada! El proceso de negociación ya está en marcha.",
+    "REJECTED_BANNER": "Solicitud denegada. Este negocio ha rechazado tu perfil para esta oferta y no puedes interactuar más con ella.",
+    "PENDING_BADGE": "Pendiente",
+    "ACCEPTED_BADGE": "Proceso en marcha",
+    "REJECTED_BADGE": "Denegada"
   }
 }

@@ -71,7 +71,9 @@
             [routerLink]="authService.isLoggedIn() ? ['/ofertas', oferta._id] : ['/register']"
           >
             <header class="card-head">
-              <span class="sector">{{ oferta.sector }}</span>
+              <div class="card-head-left">
+                <span class="sector">{{ oferta.sector }}</span>
+              </div>
               @if (authService.isLoggedIn() && oferta.employeeRange) {
                 <span class="meta"
                   >{{ formatEmployees(oferta.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
@@ -104,16 +106,29 @@
             </div>
 
             @if (authService.isLoggedIn()) {
-              <div class="favorite-actions">
-                <button
-                  type="button"
-                  class="favorite-btn"
-                  [class.active]="isFavorite(oferta._id)"
-                  (click)="toggleFavorite($event, oferta._id)"
-                  aria-label="Marcar favorito"
-                >
-                  <span class="material-symbols-outlined">favorite</span>
-                </button>
+              <div class="card-bottom-row">
+                <div class="status-badge-container">
+                  @if (solicitudesMap().get(oferta._id!); as status) {
+                    @if (status === 'PENDING') {
+                      <span class="status-badge pending sm">{{ 'SOLICITUD_STATUS.PENDING_BADGE' | translate }}</span>
+                    } @else if (status === 'ACCEPTED') {
+                      <span class="status-badge accepted sm">{{ 'SOLICITUD_STATUS.ACCEPTED_BADGE' | translate }}</span>
+                    } @else if (status === 'REJECTED') {
+                      <span class="status-badge rejected sm">{{ 'SOLICITUD_STATUS.REJECTED_BADGE' | translate }}</span>
+                    }
+                  }
+                </div>
+                <div class="favorite-actions">
+                  <button
+                    type="button"
+                    class="favorite-btn"
+                    [class.active]="isFavorite(oferta._id)"
+                    (click)="toggleFavorite($event, oferta._id)"
+                    aria-label="Marcar favorito"
+                  >
+                    <span class="material-symbols-outlined">favorite</span>
+                  </button>
+                </div>
               </div>
             }
           </article>

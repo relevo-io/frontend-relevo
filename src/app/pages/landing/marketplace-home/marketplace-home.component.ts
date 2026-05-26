@@ -1,4 +1,4 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, effect, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Oferta } from '../../../core/models/oferta.model';
@@ -8,6 +8,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaginationMeta } from '../../../core/models/pagination.model';
+import { SolicitudService } from '../../../core/services/solicitud.service';
 
 @Component({
   selector: 'app-marketplace-home',
@@ -21,9 +22,11 @@ export class MarketplaceHomeComponent {
   private marketplaceSearchService = inject(MarketplaceSearchService);
   public authService = inject(AuthService);
   private translate = inject(TranslateService);
+  private solicitudService = inject(SolicitudService);
 
   ofertas = signal<Oferta[]>([]);
   favoriteOfferIds = signal<Set<string>>(new Set());
+  solicitudesMap = signal<Map<string, string>>(new Map());
   isLoading = signal<boolean>(true);
   error = signal<string | null>(null);
   page = signal<number>(1);
@@ -74,8 +77,24 @@ export class MarketplaceHomeComponent {
             this.favoriteOfferIds.set(new Set());
           }
         });
+
+        this.solicitudService.getMisSolicitudesEnviadas().subscribe({
+          next: (solicitudes) => {
+            const map = new Map<string, string>();
+            for (const sol of solicitudes) {
+              if (sol.opportunity?._id) {
+                map.set(sol.opportunity._id, sol.status);
+              }
+            }
+            this.solicitudesMap.set(map);
+          },
+          error: () => {
+            this.solicitudesMap.set(new Map());
+          }
+        });
       } else {
         this.favoriteOfferIds.set(new Set());
+        this.solicitudesMap.set(new Map());
       }
 
       onCleanup(() => {

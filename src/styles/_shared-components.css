@@ -17,6 +17,11 @@
   white-space: nowrap;
 }
 
+.status-badge.sm {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+}
+
 .status-badge.pending {
   background-color: #fef3c7;
   color: #92400e;
@@ -662,4 +667,60 @@ body.dark-mode .ai-score-pill.score-low {
 body.dark-mode .ai-feedback-box {
   background-color: rgba(245, 158, 11, 0.08);
   border-color: rgba(245, 158, 11, 0.25);
+}
+
+/* 8. Bànners d'Estat (Status Banners / Alerts) */
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+}
+
+.status-banner .material-symbols-outlined {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.status-banner.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.status-banner.accepted {
+  background-color: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.status-banner.rejected {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+/* Mode Fosc de Bànners d'Estat */
+body.dark-mode .status-banner.pending {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+body.dark-mode .status-banner.accepted {
+  background-color: rgba(6, 78, 59, 0.2) !important;
+  color: #a7f3d0 !important;
+  border-color: rgba(6, 78, 59, 0.4) !important;
+}
+
+body.dark-mode .status-banner.rejected {
+  background-color: rgba(127, 29, 29, 0.2) !important;
+  color: #fecaca !important;
+  border-color: rgba(127, 29, 29, 0.4) !important;
 }

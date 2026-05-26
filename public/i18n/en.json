@@ -53,7 +53,10 @@
     "ROLE_INTERESTED_DESC": "I want to buy or manage a business",
     "ROLE_OWNER": "I want to transfer my business",
     "ROLE_OWNER_DESC": "I am an owner seeking succession",
-    "REGISTER_BUTTON": "Create Account"
+    "REGISTER_BUTTON": "Create Account",
+    "OR_CONTINUE_WITH": "Or continue with",
+    "CONTINUE_WITH_GOOGLE": "Continue with Google",
+    "CONTINUE_WITH_GITHUB": "Continue with GitHub"
   },
   "NAVBAR": {
     "LOGOUT": "Log Out",
@@ -319,5 +322,13 @@
     "LOADING": "Loading favorites...",
     "EMPTY": "You don't have any favorite offers yet.",
     "PAGE_INFO": "Page {{ page }} of {{ total }}"
+  },
+  "SOLICITUD_STATUS": {
+    "PENDING_BANNER": "Request pending review. The owner is evaluating your profile to grant you access.",
+    "ACCEPTED_BANNER": "Request accepted! The negotiation process is underway.",
+    "REJECTED_BANNER": "Request denied. This business has rejected your profile for this offer and you can no longer interact with it.",
+    "PENDING_BADGE": "Pending",
+    "ACCEPTED_BADGE": "In progress",
+    "REJECTED_BADGE": "Denied"
   }
 }

@@ -53,7 +53,10 @@
       "BADGE_TITLE": "Plataforma Segura",
       "BADGE_SUB": "Garantim privacitat total."
     },
-    "REGISTER_BUTTON": "Crear Compte"
+    "REGISTER_BUTTON": "Crear Compte",
+    "OR_CONTINUE_WITH": "O continua amb",
+    "CONTINUE_WITH_GOOGLE": "Continua amb Google",
+    "CONTINUE_WITH_GITHUB": "Continua amb GitHub"
   },
   "NAVBAR": {
     "LOGOUT": "Tancar Sessió",
@@ -319,5 +322,13 @@
     "LOADING": "Carregant preferits...",
     "EMPTY": "Encara no tens cap oferta preferida.",
     "PAGE_INFO": "Pàgina {{ page }} de {{ total }}"
+  },
+  "SOLICITUD_STATUS": {
+    "PENDING_BANNER": "Sol·licitud pendent de revisió. El propietari està valorant el teu perfil per donar-te accés.",
+    "ACCEPTED_BANNER": "Sol·licitud acceptada! El procés de negociació ja està en marxa.",
+    "REJECTED_BANNER": "Sol·licitud denegada. Aquest negoci ha rebutjat el teu perfil per a aquesta oferta i no pots interactuar-hi més.",
+    "PENDING_BADGE": "Pendent",
+    "ACCEPTED_BADGE": "Procés en marxa",
+    "REJECTED_BADGE": "Denegada"
   }
 }
