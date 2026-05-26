@@ -762,7 +762,7 @@
   border-top: 1px solid var(--admin-border);
 }
 
-.btn-cancel {
+.drawer-footer .btn-cancel {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--admin-border);
   color: white;
@@ -774,13 +774,13 @@
   transition: all 0.15s;
 }
 
-.btn-cancel:hover {
+.drawer-footer .btn-cancel:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: var(--secondary);
   color: white;
 }
 
-.btn-save {
+.drawer-footer .btn-save {
   background: var(--secondary);
   color: white;
   border: none;
@@ -796,18 +796,18 @@
   box-shadow: 0 4px 12px rgba(0, 109, 61, 0.25);
 }
 
-.btn-save:hover:not(:disabled) {
+.drawer-footer .btn-save:hover:not(:disabled) {
   background: #047240;
   transform: translateY(-1px);
 }
 
-.btn-save:disabled {
+.drawer-footer .btn-save:disabled {
   opacity: 0.65;
   cursor: not-allowed;
   transform: none;
 }
 
-.btn-save .material-symbols-outlined {
+.drawer-footer .btn-save .material-symbols-outlined {
   font-size: 18px;
 }
 

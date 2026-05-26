@@ -34,6 +34,33 @@
   margin-bottom: 12px;
 }
 
+.header-left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.owner-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--on-surface-variant);
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--surface-container-low);
+  padding: 4px 12px;
+  border-radius: 16px;
+}
+
+.owner-badge .material-symbols-outlined {
+  font-size: 16px;
+}
+
+:host-context(.dark-mode) .owner-badge {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .sector {
   font-size: 0.75rem;
   text-transform: uppercase;

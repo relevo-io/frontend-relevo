@@ -4,8 +4,7 @@
    ========================================================================== */
 
 /* 1. Targeta del Formulari (Form Card) */
-.form-card,
-.offer-form {
+.form-card {
   background: var(--surface-container-lowest);
   border: 1px solid var(--outline-variant);
   border-radius: 16px;
@@ -14,6 +13,17 @@
   flex-direction: column;
   gap: 14px;
   box-shadow: var(--shadow-ambient);
+}
+
+.offer-form {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.12);
 }
 
 /* 2. Disposició de Camps (Fields Layout) */
@@ -264,9 +274,10 @@ body.dark-mode .btn-cancel:hover {
   color: #ef4444;
 }
 
-/* Premium Light Mode fields inside request-modal and form-modal */
+/* Premium Light Mode fields inside request-modal, form-modal, and offer-form */
 .request-modal .field-group label,
-.form-modal .field-group label {
+.form-modal .field-group label,
+.offer-form .field-group label {
   font-size: 0.8rem;
   font-weight: 700;
   color: #475569;
@@ -277,8 +288,13 @@ body.dark-mode .btn-cancel:hover {
 
 .request-modal .field-group input,
 .request-modal .field-group textarea,
+.request-modal .field-group select,
 .form-modal .field-group input,
-.form-modal .field-group textarea {
+.form-modal .field-group textarea,
+.form-modal .field-group select,
+.offer-form .field-group input,
+.offer-form .field-group textarea,
+.offer-form .field-group select {
   background: #ffffff;
   border: 1.5px solid #cbd5e1;
   border-radius: 12px;
@@ -290,8 +306,13 @@ body.dark-mode .btn-cancel:hover {
 
 .request-modal .field-group input:focus,
 .request-modal .field-group textarea:focus,
+.request-modal .field-group select:focus,
 .form-modal .field-group input:focus,
-.form-modal .field-group textarea:focus {
+.form-modal .field-group textarea:focus,
+.form-modal .field-group select:focus,
+.offer-form .field-group input:focus,
+.offer-form .field-group textarea:focus,
+.offer-form .field-group select:focus {
   outline: none;
   border-color: var(--secondary);
   background: #ffffff;
@@ -472,4 +493,10 @@ body.dark-mode .cv-upload-area.has-file {
 
 body.dark-mode .cv-filename {
   color: #f1f5f9;
+}
+
+body.dark-mode .request-modal .field-group label,
+body.dark-mode .form-modal .field-group label,
+body.dark-mode .offer-form .field-group label {
+  color: #cbd5e1 !important;
 }

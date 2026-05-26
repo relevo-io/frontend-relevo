@@ -175,3 +175,19 @@ body.dark-mode .sector-chip.active {
   background-color: var(--secondary) !important;
   color: white !important;
 }
+
+.locked-details {
+  color: var(--secondary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.locked-details .material-symbols-outlined {
+  font-size: 18px;
+}
+
+body.dark-mode .locked-details {
+  color: var(--on-secondary-container) !important;
+}

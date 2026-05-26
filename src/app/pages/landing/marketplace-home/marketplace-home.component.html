@@ -96,16 +96,8 @@
                   >
                 }
               } @else {
-                <span
-                  style="
-                    color: var(--primary-color, #0f4c3a);
-                    font-weight: 600;
-                    display: flex;
-                    align-items: center;
-                    gap: 4px;
-                  "
-                >
-                  <span class="material-symbols-outlined" style="font-size: 18px">lock</span>
+                <span class="locked-details">
+                  <span class="material-symbols-outlined">lock</span>
                   {{ 'MARKETPLACE_HOME.VIEW_DETAILS' | translate }}
                 </span>
               }
