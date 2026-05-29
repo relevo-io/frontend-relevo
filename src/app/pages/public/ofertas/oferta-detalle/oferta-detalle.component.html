@@ -62,7 +62,6 @@
           </div>
         }
 
-        <!-- Bànners d'estat de la sol·licitud -->
         @if (!isOwnOffer() && solicitudStatus()) {
           @if (solicitudStatus() === 'PENDING') {
             <div class="status-banner pending">
@@ -119,22 +118,35 @@
         <div
           class="field-group"
           [class.invalid]="
-            requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched
+            requestForm.controls.professionalBackground.invalid &&
+            (requestForm.controls.professionalBackground.dirty || requestForm.controls.professionalBackground.touched)
           "
         >
           <label for="professionalBackground">{{ 'OFFER_DETAIL.BACKGROUND_LABEL' | translate }}</label>
           <textarea id="professionalBackground" rows="4" formControlName="professionalBackground"></textarea>
           @if (
-            requestForm.controls.professionalBackground.invalid && requestForm.controls.professionalBackground.touched
+            requestForm.controls.professionalBackground.invalid &&
+            (requestForm.controls.professionalBackground.dirty || requestForm.controls.professionalBackground.touched)
           ) {
-            <span class="field-error">{{ 'OFFER_DETAIL.REQUIRED_FIELD' | translate }}</span>
+            @if (requestForm.controls.professionalBackground.errors?.['required']) {
+              <span class="field-error">{{ 'OFFER_DETAIL.REQUIRED_FIELD' | translate }}</span>
+            }
+            @if (requestForm.controls.professionalBackground.errors?.['minlength']) {
+              <span class="field-error">
+                {{
+                  'OFFER_DETAIL.MIN_LENGTH_ERROR'
+                    | translate: { min: 10, current: requestForm.controls.professionalBackground.value?.length || 0 }
+                }}
+              </span>
+            }
           }
         </div>
 
         <div
           class="field-group"
           [class.invalid]="
-            requestForm.controls.preferredRegionsText.invalid && requestForm.controls.preferredRegionsText.touched
+            requestForm.controls.preferredRegionsText.invalid &&
+            (requestForm.controls.preferredRegionsText.dirty || requestForm.controls.preferredRegionsText.touched)
           "
         >
           <label for="preferredRegionsText">{{ 'OFFER_DETAIL.ZONES_LABEL' | translate }}</label>
@@ -144,8 +156,21 @@
             formControlName="preferredRegionsText"
             [placeholder]="'OFFER_DETAIL.ZONES_PLACEHOLDER' | translate"
           />
-          @if (requestForm.controls.preferredRegionsText.invalid && requestForm.controls.preferredRegionsText.touched) {
-            <span class="field-error">{{ 'OFFER_DETAIL.ZONES_REQUIRED' | translate }}</span>
+          @if (
+            requestForm.controls.preferredRegionsText.invalid &&
+            (requestForm.controls.preferredRegionsText.dirty || requestForm.controls.preferredRegionsText.touched)
+          ) {
+            @if (requestForm.controls.preferredRegionsText.errors?.['required']) {
+              <span class="field-error">{{ 'OFFER_DETAIL.ZONES_REQUIRED' | translate }}</span>
+            }
+            @if (requestForm.controls.preferredRegionsText.errors?.['minlength']) {
+              <span class="field-error">
+                {{
+                  'OFFER_DETAIL.MIN_LENGTH_ERROR'
+                    | translate: { min: 2, current: requestForm.controls.preferredRegionsText.value?.length || 0 }
+                }}
+              </span>
+            }
           }
         </div>
 
@@ -183,11 +208,92 @@
           }
         </div>
 
-        <div class="field-group" [class.invalid]="requestForm.controls.bio.invalid && requestForm.controls.bio.touched">
+        <div
+          class="field-group"
+          [class.invalid]="
+            requestForm.controls.bio.invalid && (requestForm.controls.bio.dirty || requestForm.controls.bio.touched)
+          "
+        >
           <label for="bio">{{ 'OFFER_DETAIL.BIO_LABEL' | translate }}</label>
           <textarea id="bio" rows="3" formControlName="bio"></textarea>
-          @if (requestForm.controls.bio.invalid && requestForm.controls.bio.touched) {
-            <span class="field-error">{{ 'OFFER_DETAIL.BIO_REQUIRED' | translate }}</span>
+          @if (
+            requestForm.controls.bio.invalid && (requestForm.controls.bio.dirty || requestForm.controls.bio.touched)
+          ) {
+            @if (requestForm.controls.bio.errors?.['required']) {
+              <span class="field-error">{{ 'OFFER_DETAIL.BIO_REQUIRED' | translate }}</span>
+            }
+            @if (requestForm.controls.bio.errors?.['minlength']) {
+              <span class="field-error">
+                {{
+                  'OFFER_DETAIL.MIN_LENGTH_ERROR'
+                    | translate: { min: 10, current: requestForm.controls.bio.value?.length || 0 }
+                }}
+              </span>
+            }
+          }
+        </div>
+
+        <div
+          class="field-group"
+          [class.invalid]="
+            requestForm.controls.availableCapital.invalid &&
+            (requestForm.controls.availableCapital.dirty || requestForm.controls.availableCapital.touched)
+          "
+        >
+          <label for="availableCapital">{{ 'OFFER_DETAIL.CAPITAL_LABEL' | translate }}</label>
+          <input
+            id="availableCapital"
+            type="number"
+            formControlName="availableCapital"
+            placeholder="Ex. 50000"
+            min="0"
+          />
+          @if (
+            requestForm.controls.availableCapital.invalid &&
+            (requestForm.controls.availableCapital.dirty || requestForm.controls.availableCapital.touched)
+          ) {
+            <span class="field-error">{{ 'OFFER_DETAIL.CAPITAL_REQUIRED' | translate }}</span>
+          }
+        </div>
+
+        <div
+          class="field-group"
+          [class.invalid]="
+            requestForm.controls.financingNeeded.invalid &&
+            (requestForm.controls.financingNeeded.dirty || requestForm.controls.financingNeeded.touched)
+          "
+        >
+          <label for="financingNeeded">{{ 'OFFER_DETAIL.FINANCING_LABEL' | translate }}</label>
+          <select id="financingNeeded" formControlName="financingNeeded" class="form-select">
+            <option [value]="false">{{ 'OFFER_DETAIL.FINANCING_NO' | translate }}</option>
+            <option [value]="true">{{ 'OFFER_DETAIL.FINANCING_YES' | translate }}</option>
+          </select>
+          @if (
+            requestForm.controls.financingNeeded.invalid &&
+            (requestForm.controls.financingNeeded.dirty || requestForm.controls.financingNeeded.touched)
+          ) {
+            <span class="field-error">{{ 'OFFER_DETAIL.FINANCING_REQUIRED' | translate }}</span>
+          }
+        </div>
+
+        <div
+          class="field-group nda-field-group"
+          [class.invalid]="
+            requestForm.controls.ndaAccepted.invalid &&
+            (requestForm.controls.ndaAccepted.dirty || requestForm.controls.ndaAccepted.touched)
+          "
+        >
+          <div class="nda-row">
+            <input id="ndaAccepted" type="checkbox" formControlName="ndaAccepted" class="nda-checkbox" />
+            <label for="ndaAccepted" class="nda-label">
+              {{ 'OFFER_DETAIL.NDA_LABEL' | translate }}
+            </label>
+          </div>
+          @if (
+            requestForm.controls.ndaAccepted.invalid &&
+            (requestForm.controls.ndaAccepted.dirty || requestForm.controls.ndaAccepted.touched)
+          ) {
+            <span class="field-error">{{ 'OFFER_DETAIL.NDA_REQUIRED' | translate }}</span>
           }
         </div>
 

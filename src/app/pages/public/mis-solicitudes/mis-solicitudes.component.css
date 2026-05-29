@@ -146,3 +146,56 @@
 }
 
 /* Les regles visuals de l'anàlisi de CV d'IA s'hereten de _shared-components.css globalment per estalviar duplicats locals. */
+
+/* 3. M&A Financial & Security Details */
+.financial-security-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+  padding: 12px;
+  background: rgba(124, 58, 237, 0.05);
+  border-radius: 8px;
+  border: 1px dashed rgba(124, 58, 237, 0.2);
+}
+
+.financial-security-details .detail-item h4 {
+  margin: 0 0 5px 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+}
+
+.financial-security-details .detail-item strong {
+  font-size: 1.1rem;
+  color: #10b981;
+}
+
+.financing-value {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #3b82f6;
+}
+
+.nda-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  background: #d1fae5;
+  color: #065f46;
+  width: fit-content;
+}
+
+.nda-badge .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.nda-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}

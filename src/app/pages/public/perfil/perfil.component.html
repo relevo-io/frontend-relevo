@@ -86,26 +86,26 @@
       @if (user.roles.includes('OWNER')) {
         <div class="profile-card mailbox-card">
           <div class="card-header">
-            <h2 style="display: flex; align-items: center; gap: 8px">
+            <h2 class="card-header-title">
               <span class="material-symbols-outlined">inbox</span>
               {{ 'MAILBOX.TITLE' | translate }}
             </h2>
             <a routerLink="/mis-solicitudes" class="btn-view-all">{{ 'COMMON.VIEW_ALL' | translate }}</a>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px">
+          <p class="card-subtitle">
             {{ 'MAILBOX.SUBTITLE' | translate }}
           </p>
         </div>
 
         <div class="profile-card offers-management-card">
           <div class="card-header">
-            <h2 style="display: flex; align-items: center; gap: 8px">
+            <h2 class="card-header-title">
               <span class="material-symbols-outlined">business_center</span>
               {{ 'MY_OFFERS.TITLE' | translate }}
             </h2>
             <a routerLink="/mis-ofertas" class="btn-view-all">{{ 'COMMON.VIEW_ALL' | translate }}</a>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: -10px">
+          <p class="card-subtitle">
             {{ 'MY_OFFERS.SUBTITLE' | translate }}
           </p>
         </div>
@@ -114,7 +114,7 @@
       <!-- Chats Recientes -->
       <div class="profile-card recent-chats">
         <div class="card-header">
-          <h2 style="display: flex; align-items: center; gap: 8px">
+          <h2 class="card-header-title">
             <span class="material-symbols-outlined">chat_bubble</span>
             {{ 'CHATS_PAGE.TITLE' | translate }}
             @if (getTotalUnread() > 0) {

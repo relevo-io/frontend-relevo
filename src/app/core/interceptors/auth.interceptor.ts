@@ -47,6 +47,7 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
       catchError((err) => {
         // El refresh ha fallado (tu sesión ha caducado por completo)
         isRefreshing = false;
+        refreshTokenSubject.next(''); // Emitimos vacío para notificar y liberar las peticiones en cola
         authService.logout();
         return throwError(() => err);
       })
@@ -58,6 +59,9 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
       filter((token) => token !== null),
       take(1),
       switchMap((token) => {
+        if (token === '') {
+          return throwError(() => new Error('Authentication/Session refresh failed'));
+        }
         return next(addTokenHeader(request, token as string));
       })
     );

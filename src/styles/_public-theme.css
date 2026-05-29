@@ -550,6 +550,12 @@ body.dark-mode .offer-card:hover {
   font-size: 1.25rem;
 }
 
+.roles-container {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
 .role-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;

@@ -40,7 +40,16 @@ export class SolicitudService {
     return this.http.get<PaginatedResponse<Solicitud>>(`${this.API_URL}/me/enviadas?page=${page}&limit=${limit}`);
   }
 
-  crearSolicitud(data: { opportunityId: string; message: string }): Observable<Solicitud> {
+  crearSolicitud(data: {
+    opportunityId: string;
+    message: string;
+    bio: string;
+    professionalBackground: string;
+    preferredRegions: string[];
+    availableCapital: number;
+    financingNeeded: boolean;
+    ndaAccepted: boolean;
+  }): Observable<Solicitud> {
     return this.http.post<Solicitud>(this.API_URL, data);
   }
 

@@ -53,6 +53,12 @@
   padding: 16px 24px !important;
 }
 
+/* Variant per als panels que contenen formularis (display: block en comptes de flex) */
+.control-panel.form-section {
+  display: block;
+  margin-bottom: 32px;
+}
+
 .search-section {
   flex: 1;
   max-width: 400px;

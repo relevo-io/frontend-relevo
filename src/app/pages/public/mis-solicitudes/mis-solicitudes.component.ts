@@ -41,12 +41,14 @@ export class MisSolicitudesComponent implements OnInit {
   isOwner = computed(() => this.userRoles().includes('OWNER') || this.userRoles().includes('ADMIN'));
 
   constructor() {
-    this.cargarSolicitudes();
+    if (this.authService.isBrowser) {
+      this.cargarSolicitudes();
+    }
   }
 
   ngOnInit() {
     // Si l'usuari no és owner, anem directament a la pestanya d'enviades
-    if (!this.isOwner()) {
+    if (this.authService.isBrowser && !this.isOwner()) {
       this.activeTab.set('sent');
       this.cargarSolicitudes();
     }

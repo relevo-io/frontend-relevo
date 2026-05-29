@@ -29,6 +29,12 @@ export interface Solicitud {
   };
   status: string;
   message?: string;
+  bio?: string;
+  professionalBackground?: string;
+  preferredRegions?: string[];
+  availableCapital?: number;
+  financingNeeded?: boolean;
+  ndaAccepted?: boolean;
   cvKey?: string;
   estadoAnalisis?: string;
   resultadoIa?: ResultadoIa;

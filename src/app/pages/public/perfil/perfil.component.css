@@ -119,6 +119,22 @@
   color: var(--on-surface);
 }
 
+/* Títol de capçalera amb icona (flex inline) */
+.card-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+  color: var(--on-surface);
+}
+
+/* Subtítol de targeta sota la capçalera */
+.card-subtitle {
+  color: var(--on-surface-variant);
+  font-size: 0.95rem;
+  margin-top: -10px;
+}
+
 .btn-edit {
   background: var(--surface-container-highest);
   border: none;
