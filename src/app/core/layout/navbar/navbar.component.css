@@ -395,3 +395,132 @@ body.dark-mode .btn-switch-theme:hover {
 body.dark-mode .unread-badge {
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
 }
+
+.btn-navbar-bell {
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-navbar-bell:hover {
+  border-color: var(--primary);
+  background-color: var(--surface-container-high);
+}
+
+.btn-navbar-bell.active {
+  color: var(--primary);
+  background-color: var(--primary-container);
+  border-color: var(--primary);
+}
+
+.btn-navbar-bell.denied {
+  color: #ef4444;
+  opacity: 0.6;
+}
+
+/* Custom Notifications Modal Styles */
+.notifications-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(2, 6, 23, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.notifications-modal-card {
+  background-color: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: 24px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.notifications-modal-icon-container {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-container));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 20px rgba(98, 114, 241, 0.3);
+}
+
+.notifications-modal-icon-container .material-symbols-outlined {
+  font-size: 36px;
+}
+
+.notifications-modal-card h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--on-surface);
+}
+
+.notifications-modal-card p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--on-surface-variant);
+  margin-bottom: 1.75rem;
+}
+
+.notifications-modal-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.notifications-modal-actions button {
+  flex: 1;
+}
+
+body.dark-mode .notifications-modal-card {
+  background-color: #0f172a;
+  border-color: #1e293b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.9) translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}

@@ -3,11 +3,12 @@ export const environment = {
   googleClientId: '',
   githubClientId: '',
   firebase: {
-    apiKey: 'AIzaSyC_8gPfUuXVi3Nqx8B1sG9wivNXnyGz8mw',
-    authDomain: 'relevo-87605.firebaseapp.com',
-    projectId: 'relevo-87605',
-    storageBucket: 'relevo-87605.firebasestorage.app',
-    messagingSenderId: '310565851012',
-    appId: '1:310565851012:web:b8e03869a242c046f657d1'
+    apiKey: 'AIzaSyAQ7oQbl6aoYFejywxKMKXT6XuJ53zTKwI',
+    authDomain: 'relevo-minimo2.firebaseapp.com',
+    projectId: 'relevo-minimo2',
+    storageBucket: 'relevo-minimo2.firebasestorage.app',
+    messagingSenderId: '889003247844',
+    appId: '1:889003247844:web:7d0fd703a04a77c36404f1',
+    vapidKey: 'BKah7TDnfZwzHTsW01BBRB3tFpJcvPRYB_qvm4U3p9mKKuix6-vc11yO12QyLnYaJdPUMvlAFC1AmyjsjTP0I_s'
   }
 };

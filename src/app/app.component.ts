@@ -4,6 +4,7 @@ import { ToastComponent } from './shared/components/toast/toast.component';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog';
 import { LanguageService } from './core/services/language.service';
 import { ThemeService } from './core/services/theme.service';
+import { FcmService } from './core/services/fcm.service';
 
 @Component({
   selector: 'app-root',
@@ -15,5 +16,6 @@ import { ThemeService } from './core/services/theme.service';
 export class App {
   private languageService = inject(LanguageService);
   private themeService = inject(ThemeService);
+  private fcmService = inject(FcmService);
   title = 'RELEVO';
 }

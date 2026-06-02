@@ -18,6 +18,17 @@
 
     <div class="navbar-actions">
       @if (authService.isLoggedIn()) {
+        <!-- Botón de campana de notificaciones -->
+        <button
+          class="btn-navbar-bell"
+          [class.active]="fcmService.permissionState() === 'granted'"
+          [class.denied]="fcmService.permissionState() === 'denied'"
+          (click)="onBellClick()"
+          [title]="'Notificaciones'"
+        >
+          <span class="material-symbols-outlined">{{ getBellIcon() }}</span>
+        </button>
+
         <div class="user-dropdown-container">
           <button class="btn-user-trigger" (click)="toggleMenu()">
             <div class="user-avatar-sm">
@@ -130,3 +141,48 @@
     </div>
   </div>
 </nav>
+
+<!-- Modal de confirmación para activar notificaciones (Pre-permission dialog) -->
+@if (isNotificationModalOpen()) {
+  <div class="notifications-modal-overlay" (click)="closeNotificationModal()">
+    <div class="notifications-modal-card" (click)="$event.stopPropagation()">
+      <div class="notifications-modal-icon-container">
+        <span class="material-symbols-outlined">notifications_active</span>
+      </div>
+      <h3>¿Activar notificaciones?</h3>
+      <p>
+        Recibe alertas en tiempo real de nuevos mensajes de chat y actualizaciones sobre tus solicitudes de ofertas.
+      </p>
+      <div class="notifications-modal-actions">
+        <button class="btn-outline" (click)="closeNotificationModal()">Quizás más tarde</button>
+        <button class="btn-solid" (click)="activateNotifications()">Sí, activar</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal de confirmación para desactivar notificaciones -->
+@if (isDeactivateModalOpen()) {
+  <div class="notifications-modal-overlay" (click)="closeDeactivateModal()">
+    <div class="notifications-modal-card" (click)="$event.stopPropagation()">
+      <div class="notifications-modal-icon-container" style="background: linear-gradient(135deg, #f43f5e, #be123c)">
+        <span class="material-symbols-outlined">notifications_off</span>
+      </div>
+      <h3>¿Desactivar notificaciones?</h3>
+      <p>
+        Dejarás de recibir alertas en tiempo real en este navegador. Puedes volver a activarlas en cualquier momento
+        pulsando la campana.
+      </p>
+      <div class="notifications-modal-actions">
+        <button class="btn-outline" (click)="closeDeactivateModal()">Cancelar</button>
+        <button
+          class="btn-solid"
+          style="background-color: #ef4444; border-color: #ef4444"
+          (click)="deactivateNotifications()"
+        >
+          Sí, desactivar
+        </button>
+      </div>
+    </div>
+  </div>
+}
