@@ -18,6 +18,7 @@ export class AnalyticsService {
   private document = inject(DOCUMENT);
   private platformId = inject(PLATFORM_ID);
   private router = inject(Router);
+  private isRedVariation = false;
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
@@ -36,6 +37,33 @@ export class AnalyticsService {
     queue.push(['setTrackerUrl', 'https://upcmin2.matomo.cloud/matomo.php']); //indico dirección a donde se deben enviar las métricas
     queue.push(['setSiteId', '1']); //el subdominio para ver las analytics no es SOLAMENTE para 1 web, te permite recoger datos de varias. con site id aquí indicas d q web
 
+    queue.push([
+      'AbTesting::create',
+      {
+        name: 'relevo_rojo',
+        percentage: 100,
+        includedTargets: [{ attribute: 'url', inverted: '0', type: 'equals_simple', value: 'http://localhost:4200' }],
+        excludedTargets: [],
+        variations: [
+          {
+            name: 'original',
+            activate: () => {
+              this.isRedVariation = false;
+              this.updateAbTestStyle();
+            }
+          },
+          {
+            name: 'Rojo',
+            activate: () => {
+              this.isRedVariation = true;
+              this.updateAbTestStyle();
+            }
+          }
+        ],
+        trigger: () => true
+      }
+    ]);
+
     const script = this.document.createElement('script'); //vamos a inyectar un js q nos bajamos de matomo en nuestro html
     script.async = true;
     script.src = 'https://cdn.matomo.cloud/upcmin2.matomo.cloud/matomo.js';
@@ -52,9 +80,16 @@ export class AnalyticsService {
         distinctUntilChanged() //si llega 2 veces misma url repetida, cuento 1 en evz de 2
       )
       .subscribe((url) => {
+        this.updateAbTestStyle();
         window._paq?.push(['setCustomUrl', url]);
         window._paq?.push(['setDocumentTitle', this.document.title]);
         window._paq?.push(['trackPageView']);
       });
+  }
+
+  private updateAbTestStyle(): void {
+    const isLandingPage = window.location.pathname === '/';
+    this.document.documentElement.style.filter =
+      this.isRedVariation && isLandingPage ? 'sepia(1) saturate(15) hue-rotate(305deg)' : '';
   }
 }
