@@ -25,6 +25,7 @@ import { MisChatsComponent } from './pages/public/mis-chats/mis-chats.component'
 import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-solicitudes.component';
 import { MisOfertasComponent } from './pages/public/mis-ofertas/mis-ofertas.component';
 import { MisFavoritosComponent } from './pages/public/mis-favoritos/mis-favoritos.component';
+import { AssistantComponent } from './pages/public/assistant/assistant.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -44,6 +45,7 @@ export const routes: Routes = [
       { path: 'register', component: RegisterComponent },
       { path: 'oauth/callback/:provider', component: OAuthCallbackComponent },
       { path: 'ofertas', component: OfertaListComponent },
+      { path: 'assistant', component: AssistantComponent },
       { path: 'ofertas/crear', component: OfertaCreateComponent, canActivate: [authGuard] },
       { path: 'ofertas/:id', component: OfertaDetalle, canActivate: [authGuard] },
       { path: 'aviso-legal', component: AvisoLegalComponent },

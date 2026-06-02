@@ -1,0 +1,66 @@
+<section class="assistant-page">
+  <div class="assistant-shell">
+    <header class="assistant-header">
+      <div>
+        <p class="eyebrow">Asistente IA</p>
+        <h1>Pregunta sobre Relevo</h1>
+      </div>
+      <div class="mode-pill">
+        <span class="material-symbols-outlined">{{ authService.isLoggedIn() ? 'lock_open' : 'public' }}</span>
+        {{ authService.isLoggedIn() ? 'Modo usuario' : 'Modo publico' }}
+      </div>
+    </header>
+
+    <main class="assistant-messages" #messagesContainer aria-label="Conversacion con el asistente">
+      @for (message of messages(); track message.id) {
+        <article class="message-row" [class.user]="message.role === 'user'">
+          <div class="avatar">
+            <span class="material-symbols-outlined">{{ message.role === 'user' ? 'person' : 'auto_awesome' }}</span>
+          </div>
+          <div class="message-bubble">
+            <p>{{ message.content }}</p>
+            <time>{{ message.createdAt | date: 'HH:mm' }}</time>
+          </div>
+        </article>
+      }
+
+      @if (isSending()) {
+        <article class="message-row">
+          <div class="avatar">
+            <span class="material-symbols-outlined">auto_awesome</span>
+          </div>
+          <div class="message-bubble typing">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </article>
+      }
+    </main>
+
+    <footer class="assistant-footer">
+      <textarea
+        class="assistant-input"
+        [value]="messageInput()"
+        (input)="onInputChange($any($event.target).value)"
+        (keydown)="onKeydown($event)"
+        [disabled]="isSending()"
+        maxlength="1000"
+        rows="1"
+        placeholder="Pregunta por ofertas, owners, favoritos o como funciona Relevo"
+        aria-label="Escribir pregunta al asistente"
+      ></textarea>
+      <button class="send-button" (click)="sendMessage()" [disabled]="!messageInput().trim() || isSending()">
+        <span class="material-symbols-outlined">send</span>
+      </button>
+    </footer>
+
+    @if (!authService.isLoggedIn()) {
+      <div class="login-hint">
+        <span class="material-symbols-outlined">info</span>
+        <span>Inicia sesion para recibir respuestas con tus favoritos, solicitudes y chats.</span>
+        <a routerLink="/login">Entrar</a>
+      </div>
+    }
+  </div>
+</section>
