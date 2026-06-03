@@ -38,6 +38,15 @@ export class FcmService {
         this.notificationsEnabled.set(false);
       }
 
+      // Escuchar eventos de navegación provenientes del Service Worker (una sola vez)
+      if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          if (event.data && event.data.type === 'NAVIGATE') {
+            this.router.navigateByUrl(event.data.url);
+          }
+        });
+      }
+
       // Reaccionamos de forma reactiva al estado de login del usuario
       effect(() => {
         const loggedIn = this.authService.isLoggedIn();
@@ -54,6 +63,10 @@ export class FcmService {
    * Inicializa Firebase Cloud Messaging (FCM)
    */
   private async initFCM(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId) || typeof window === 'undefined') {
+      return;
+    }
+
     if (!('serviceWorker' in navigator)) {
       console.warn('[FCM] Los Service Workers no estan soportados en este navegador.');
       return;
@@ -87,7 +100,8 @@ export class FcmService {
       }
 
       // Si el permiso ya está concedido y el usuario las quiere activar, adquirimos el token automáticamente
-      if (Notification.permission === 'granted' && this.notificationsEnabled()) {
+      const hasNotificationSupport = typeof window !== 'undefined' && 'Notification' in window;
+      if (hasNotificationSupport && Notification.permission === 'granted' && this.notificationsEnabled()) {
         await this.acquireToken(registration);
       }
 
@@ -104,13 +118,6 @@ export class FcmService {
           const title = payload.notification.title || 'Notificacion';
           const body = payload.notification.body || '';
           this.toastService.info(`${title}: ${body}`);
-        }
-      });
-
-      // Escuchar eventos de navegación provenientes del Service Worker
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'NAVIGATE') {
-          this.router.navigateByUrl(event.data.url);
         }
       });
     } catch (error) {

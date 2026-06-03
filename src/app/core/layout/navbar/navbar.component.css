@@ -418,7 +418,13 @@ body.dark-mode .unread-badge {
 
 .btn-navbar-bell.active {
   color: var(--primary);
-  background-color: var(--primary-container);
+  background-color: rgba(3, 22, 50, 0.08); /* Fondo claro de alta legibilidad en modo claro */
+  border-color: var(--primary);
+}
+
+body.dark-mode .btn-navbar-bell.active {
+  color: var(--primary);
+  background-color: var(--primary-container); /* Mantiene el fondo oscuro adecuado en modo oscuro */
   border-color: var(--primary);
 }
 
