@@ -2,6 +2,13 @@
 export const userRoles = ['OWNER', 'INTERESTED', 'ADMIN'] as const;
 export const authProviders = ['local', 'google', 'github'] as const;
 
+export interface NotificationPreferences {
+  newMessages: boolean;
+  applicationStatus: boolean;
+  newApplications: boolean;
+  cvAnalysis: boolean;
+}
+
 export interface Usuario {
   _id?: string; // Opcional igual que en IUsuario del backend
   roles: (typeof userRoles)[number][];
@@ -18,6 +25,8 @@ export interface Usuario {
   visible?: boolean;
   language?: string;
   theme?: string;
+  fcmTokens?: string[];
+  notificationPreferences?: NotificationPreferences;
   createdAt?: string;
   updatedAt?: string;
 }

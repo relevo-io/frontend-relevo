@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 import { NotificationService } from './notification.service';
 import type { Messaging, MessagePayload } from 'firebase/messaging';
+import { NotificationPreferences } from '../models/usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -227,5 +228,10 @@ export class FcmService {
         console.error('[FCM] Error al invalidar token en Firebase SDK:', err);
       }
     }
+  }
+
+  public updateNotificationPreferences(prefs: NotificationPreferences) {
+    const url = `${environment.apiUrl}/api/usuarios/me/notification-preferences`;
+    return this.http.patch<{ success: boolean; user: any }>(url, prefs);
   }
 }

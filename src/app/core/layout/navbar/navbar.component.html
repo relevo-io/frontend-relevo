@@ -186,3 +186,77 @@
     </div>
   </div>
 }
+
+<!-- Modal de ajustes de preferencias de notificación -->
+@if (isPreferencesModalOpen()) {
+  <div class="notifications-modal-overlay" (click)="closePreferencesModal()">
+    <div class="notifications-modal-card" (click)="$event.stopPropagation()">
+      <div class="notifications-modal-icon-container icon-container-green">
+        <span class="material-symbols-outlined">tune</span>
+      </div>
+      <h3>Ajustes de Notificaciones</h3>
+      <p>Elige qué notificaciones quieres recibir en tus dispositivos</p>
+
+      <div class="preferences-header">
+        <span class="preferences-title">Canales de alerta</span>
+        <button type="button" class="btn-toggle-all" (click)="toggleSelectAll()">
+          {{ hasAllSelected() ? 'Desmarcar todo' : 'Seleccionar todo' }}
+        </button>
+      </div>
+
+      <div class="preferences-options-container">
+        <label class="preference-option-item">
+          <span>Mensajes de chat</span>
+          <input
+            type="checkbox"
+            [ngModel]="prefNewMessages()"
+            (ngModelChange)="prefNewMessages.set($event)"
+            class="preference-checkbox"
+          />
+        </label>
+
+        <label class="preference-option-item">
+          <span>Estado de mis solicitudes</span>
+          <input
+            type="checkbox"
+            [ngModel]="prefApplicationStatus()"
+            (ngModelChange)="prefApplicationStatus.set($event)"
+            class="preference-checkbox"
+          />
+        </label>
+
+        <label class="preference-option-item">
+          <span>Nuevas solicitudes recibidas</span>
+          <input
+            type="checkbox"
+            [ngModel]="prefNewApplications()"
+            (ngModelChange)="prefNewApplications.set($event)"
+            class="preference-checkbox"
+          />
+        </label>
+
+        <label class="preference-option-item">
+          <span>Análisis de CV por IA</span>
+          <input
+            type="checkbox"
+            [ngModel]="prefCvAnalysis()"
+            (ngModelChange)="prefCvAnalysis.set($event)"
+            class="preference-checkbox"
+          />
+        </label>
+      </div>
+
+      <div class="notifications-modal-actions-column">
+        <div class="actions-row">
+          <button class="btn-outline" (click)="closePreferencesModal()">Cancelar</button>
+          <button class="btn-solid" (click)="savePreferences()">Guardar</button>
+        </div>
+
+        <button class="btn-outline btn-deactivate-all" (click)="deactivateNotifications()">
+          <span class="material-symbols-outlined icon-small">notifications_off</span>
+          Desactivar notificaciones por completo
+        </button>
+      </div>
+    </div>
+  </div>
+}
