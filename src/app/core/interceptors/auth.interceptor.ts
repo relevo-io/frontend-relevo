@@ -31,7 +31,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
-function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authService: AuthService) {
+function handle401Error(request: HttpRequest<unknown>, next: HttpHandlerFn, authService: AuthService) {
   if (!isRefreshing) {
     isRefreshing = true;
     refreshTokenSubject.next(null); // Bloquemos las demás peticiones temporalmente
@@ -45,10 +45,14 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
         return next(addTokenHeader(request, tokenResponse.accessToken));
       }),
       catchError((err) => {
-        // El refresh ha fallado (tu sesión ha caducado por completo)
+        // El refresh ha fallado
         isRefreshing = false;
-        refreshTokenSubject.next(''); // Emitimos vacío para notificar y liberar las peticiones en cola
-        authService.logout();
+        refreshTokenSubject.next(''); // Emitimos vacío para liberar las peticiones en cola
+
+        // Solo deslogueamos si el error indica de forma explícita que las credenciales no son válidas (400, 401, 403)
+        if (err && (err.status === 400 || err.status === 401 || err.status === 403)) {
+          authService.logout();
+        }
         return throwError(() => err);
       })
     );
@@ -68,7 +72,7 @@ function handle401Error(request: HttpRequest<any>, next: HttpHandlerFn, authServ
   }
 }
 
-function addTokenHeader(request: HttpRequest<any>, token: string): HttpRequest<any> {
+function addTokenHeader(request: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
   return request.clone({
     headers: request.headers.set('Authorization', `Bearer ${token}`)
   });

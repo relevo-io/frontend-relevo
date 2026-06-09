@@ -1,19 +1,12 @@
-import { Injectable, inject, PLATFORM_ID, OnDestroy, NgZone } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID, OnDestroy, NgZone, effect } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject, fromEvent, merge, tap } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, tap } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
-import {
-  Chat,
-  Mensaje,
-  SendMessageAck,
-  JoinChatAck,
-  ConnectionStatus,
-  PresenceStatus,
-  ChatStatus
-} from '../models/chat.model';
+import { Chat, Mensaje, SendMessageAck, JoinChatAck, ConnectionStatus, PresenceStatus } from '../models/chat.model';
+import { NotificationHistory } from '../models/notification.model';
 
 const API_URL = `${environment.apiUrl}/api`;
 const SOCKET_URL = new URL(environment.apiUrl).origin;
@@ -27,6 +20,19 @@ export class ChatService implements OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private ngZone = inject(NgZone);
 
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      effect(() => {
+        const loggedIn = this.authService.isLoggedIn();
+        if (loggedIn) {
+          this.connect();
+        } else {
+          this.disconnect();
+        }
+      });
+    }
+  }
+
   // ── Socket instance ─────────────────────────
   private socket: Socket | null = null;
   private activeChatId: string | null = null;
@@ -38,6 +44,7 @@ export class ChatService implements OnDestroy {
   private presenceSubject = new BehaviorSubject<PresenceStatus>('offline');
   private notificationsSubject = new Subject<{ chatId: string; message: Mensaje }>();
   private totalUnreadSubject = new BehaviorSubject<number>(0);
+  private newNotificationSubject = new Subject<NotificationHistory>();
 
   /** Stream de mensajes nuevos entrantes */
   readonly messages$ = this.messagesSubject.asObservable();
@@ -45,6 +52,8 @@ export class ChatService implements OnDestroy {
   readonly notifications$ = this.notificationsSubject.asObservable();
   /** Conteo total de mensajes no leídos */
   readonly totalUnread$ = this.totalUnreadSubject.asObservable();
+  /** Notificaciones de historial en tiempo real */
+  readonly newNotification$ = this.newNotificationSubject.asObservable();
   /** Stream del userId que está escribiendo (null si no hay nadie) */
   readonly typing$ = this.typingSubject.asObservable();
   /** Estado de la conexión socket */
@@ -64,7 +73,7 @@ export class ChatService implements OnDestroy {
     // Si el socket ja existeix però el token ha canviat (canvi d'usuari), desconnectem
     if (this.socket) {
       const auth = this.socket.auth;
-      const socketToken = typeof auth === 'object' ? (auth as any)?.['token'] : null;
+      const socketToken = typeof auth === 'object' && auth !== null ? (auth as Record<string, unknown>)['token'] : null;
 
       if (socketToken === `Bearer ${token}`) return;
 
@@ -149,6 +158,12 @@ export class ChatService implements OnDestroy {
       this.ngZone.run(() => {
         this.notificationsSubject.next(data);
         this.totalUnreadSubject.next(this.totalUnreadSubject.value + 1);
+      });
+    });
+
+    this.socket.on('new_notification', (notif: NotificationHistory) => {
+      this.ngZone.run(() => {
+        this.newNotificationSubject.next(notif);
       });
     });
 

@@ -1,20 +1,24 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, DestroyRef, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MarketplaceSearchService } from '../../services/marketplace-search.service';
 import { LanguageSelectorComponent } from '../../../shared/components/language-selector/language-selector.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../services/theme.service';
 import { ChatService } from '../../services/chat.service';
 import { FcmService } from '../../services/fcm.service';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationPreferences } from '../../models/usuario.model';
+import { NotificationHistoryService } from '../../services/notification-history.service';
+import { NotificationHistory } from '../../models/notification.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, FormsModule, LanguageSelectorComponent, TranslateModule],
+  imports: [RouterLink, FormsModule, LanguageSelectorComponent, TranslateModule, DatePipe],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -26,6 +30,8 @@ export class Navbar {
   private toastService = inject(NotificationService);
   private router = inject(Router);
   private marketplaceSearchService = inject(MarketplaceSearchService);
+  private translate = inject(TranslateService);
+  private notificationHistoryService = inject(NotificationHistoryService);
 
   searchQuery = this.marketplaceSearchService.query;
   isMenuOpen = signal(false);
@@ -33,6 +39,15 @@ export class Navbar {
   isNotificationModalOpen = signal(false);
   isDeactivateModalOpen = signal(false);
   isPreferencesModalOpen = signal(false);
+
+  // Historial de notificaciones
+  isHistoryOpen = signal(false);
+  notifications = signal<NotificationHistory[]>([]);
+  unreadNotifCount = signal(0);
+  currentPage = signal(1);
+  totalPages = signal(1);
+  hasMore = signal(false);
+  isLoadingNotifications = signal(false);
 
   prefNewMessages = signal(true);
   prefApplicationStatus = signal(true);
@@ -47,27 +62,12 @@ export class Navbar {
       this.isNotificationModalOpen.set(true);
     } else if (permission === 'granted') {
       if (enabled) {
-        // Cargar preferencias actuales del usuario
-        const user = this.authService.currentUser();
-        if (user && user.notificationPreferences) {
-          this.prefNewMessages.set(user.notificationPreferences.newMessages !== false);
-          this.prefApplicationStatus.set(user.notificationPreferences.applicationStatus !== false);
-          this.prefNewApplications.set(user.notificationPreferences.newApplications !== false);
-          this.prefCvAnalysis.set(user.notificationPreferences.cvAnalysis !== false);
-        } else {
-          this.prefNewMessages.set(true);
-          this.prefApplicationStatus.set(true);
-          this.prefNewApplications.set(true);
-          this.prefCvAnalysis.set(true);
-        }
-        this.isPreferencesModalOpen.set(true);
+        this.toggleHistory();
       } else {
         this.activateNotifications();
       }
     } else if (permission === 'denied') {
-      this.toastService.warn(
-        'Has bloqueado las notificaciones. Actívalas haciendo clic en el icono del candado junto a la barra de direcciones de tu navegador.'
-      );
+      this.toastService.warn(this.translate.instant('NOTIFICATIONS.TOAST_BLOCKED'));
     }
   }
 
@@ -77,7 +77,7 @@ export class Navbar {
     this.closePreferencesModal();
     this.fcmService.requestNotificationPermission().then((permission) => {
       if (permission === 'granted') {
-        this.toastService.success('¡Notificaciones activadas con éxito!');
+        this.toastService.success(this.translate.instant('NOTIFICATIONS.TOAST_ACTIVATED'));
         // Cargar preferencias actuales del usuario y abrir modal de ajustes inmediatamente
         const user = this.authService.currentUser();
         if (user && user.notificationPreferences) {
@@ -93,7 +93,7 @@ export class Navbar {
         }
         this.isPreferencesModalOpen.set(true);
       } else if (permission === 'denied') {
-        this.toastService.warn('Permiso denegado.');
+        this.toastService.warn(this.translate.instant('NOTIFICATIONS.TOAST_DENIED'));
       }
     });
   }
@@ -102,7 +102,9 @@ export class Navbar {
     this.closeDeactivateModal();
     this.closePreferencesModal();
     this.fcmService.disableNotifications().then(() => {
-      this.toastService.info('Notificaciones desactivadas en este navegador.');
+      this.toastService.info(this.translate.instant('NOTIFICATIONS.TOAST_DEACTIVATED'));
+      this.unreadNotifCount.set(0);
+      this.notifications.set([]);
     });
   }
 
@@ -142,13 +144,13 @@ export class Navbar {
               localStorage.setItem('user_data', JSON.stringify(updatedUser));
             }
           }
-          this.toastService.success('Ajustes de notificación actualizados');
+          this.toastService.success(this.translate.instant('NOTIFICATIONS.TOAST_UPDATED'));
         }
         this.closePreferencesModal();
       },
       error: (err) => {
         console.error('[Navbar] Error al guardar preferencias:', err);
-        this.toastService.error('Error al guardar las preferencias.');
+        this.toastService.error(this.translate.instant('NOTIFICATIONS.TOAST_ERROR'));
       }
     });
   }
@@ -175,7 +177,220 @@ export class Navbar {
   }
 
   constructor() {
-    this.chatService.totalUnread$.subscribe((count) => this.unreadCount.set(count));
+    const destroyRef = inject(DestroyRef);
+    this.chatService.totalUnread$
+      .pipe(takeUntilDestroyed(destroyRef))
+      .subscribe((count) => this.unreadCount.set(count));
+
+    // Si el usuario cambia su estado de login, cargar o limpiar notificaciones
+    effect(() => {
+      if (this.authService.isLoggedIn()) {
+        this.loadInitialUnreadCount();
+      } else {
+        this.unreadNotifCount.set(0);
+        this.notifications.set([]);
+      }
+    });
+
+    // Escuchar notificaciones en tiempo real del socket
+    this.chatService.newNotification$.pipe(takeUntilDestroyed(destroyRef)).subscribe((notif) => {
+      this.notifications.update((prev) => [notif, ...prev]);
+      this.unreadNotifCount.update((count) => count + 1);
+    });
+
+    // Escuchar notificaciones marcadas como leídas en cualquier parte (incluido clics de push)
+    this.notificationHistoryService.notificationRead$.pipe(takeUntilDestroyed(destroyRef)).subscribe((id) => {
+      let found = false;
+      let wasUnread = false;
+
+      this.notifications.update((prev) =>
+        prev.map((n) => {
+          if (n._id === id) {
+            found = true;
+            if (!n.read) wasUnread = true;
+            return { ...n, read: true };
+          }
+          return n;
+        })
+      );
+
+      if (wasUnread || !found) {
+        this.unreadNotifCount.update((count) => Math.max(0, count - 1));
+      }
+    });
+
+    // Escuchar notificaciones de un tipo específico marcadas como leídas contextualmente
+    this.notificationHistoryService.notificationsReadByType$.pipe(takeUntilDestroyed(destroyRef)).subscribe((type) => {
+      this.notifications.update((prev) => prev.map((n) => (n.type === type ? { ...n, read: true } : n)));
+      this.loadInitialUnreadCount();
+    });
+
+    // Escuchar cambios de ruta para marcar notificaciones como leídas automáticamente
+    this.router.events.pipe(takeUntilDestroyed(destroyRef)).subscribe((event) => {
+      if (!(event instanceof NavigationEnd)) return;
+      if (!this.authService.isLoggedIn()) return;
+      const url = this.router.url;
+
+      // Caso 1: Si entra a un chat, el backend ya marca el chat y sus notificaciones como leídas.
+      // Recargamos el conteo tras un leve delay para asegurar sincronización.
+      if (url.startsWith('/chats/')) {
+        const parts = url.split('/');
+        const chatId = parts[parts.length - 1]?.split('?')[0];
+        if (chatId && chatId !== 'chats') {
+          setTimeout(() => {
+            this.loadInitialUnreadCount();
+            this.notifications.update((prev) =>
+              prev.map((n) => (n.type === 'chat' && n.metadata?.['chatId'] === chatId ? { ...n, read: true } : n))
+            );
+          }, 1000);
+        }
+      }
+
+      // Caso 2: Si entra a solicitudes, marcar solicitudes y análisis de CV como leídas
+      if (url.startsWith('/mis-solicitudes')) {
+        this.notificationHistoryService.markReadByType('solicitud').subscribe();
+        this.notificationHistoryService.markReadByType('cv_analysis').subscribe();
+      }
+    });
+  }
+
+  loadInitialUnreadCount(): void {
+    this.notificationHistoryService.getNotifications(1, 1).subscribe({
+      next: (res) => {
+        this.unreadNotifCount.set(res.unreadCount || 0);
+      },
+      error: (err) => console.error('[Navbar] Error al cargar conteo inicial:', err)
+    });
+  }
+
+  toggleHistory(): void {
+    this.isMenuOpen.set(false); // cierra el dropdown de usuario si está abierto
+    const nextState = !this.isHistoryOpen();
+    this.isHistoryOpen.set(nextState);
+
+    if (nextState) {
+      this.loadNotifications(1, false);
+    }
+  }
+
+  closeHistory(): void {
+    this.isHistoryOpen.set(false);
+  }
+
+  loadNotifications(page: number, append: boolean): void {
+    this.isLoadingNotifications.set(true);
+    this.notificationHistoryService.getNotifications(page, 15).subscribe({
+      next: (res) => {
+        if (append) {
+          this.notifications.update((prev) => [...prev, ...res.items]);
+        } else {
+          this.notifications.set(res.items);
+        }
+
+        this.unreadNotifCount.set(res.unreadCount || 0);
+        this.currentPage.set(res.pagination.page);
+        this.totalPages.set(res.pagination.totalPages);
+        this.hasMore.set(res.pagination.hasNextPage);
+        this.isLoadingNotifications.set(false);
+      },
+      error: (err) => {
+        console.error('[Navbar] Error al cargar historial:', err);
+        this.isLoadingNotifications.set(false);
+      }
+    });
+  }
+
+  loadMoreNotifications(): void {
+    if (this.hasMore() && !this.isLoadingNotifications()) {
+      this.loadNotifications(this.currentPage() + 1, true);
+    }
+  }
+
+  markAsRead(notif: NotificationHistory): void {
+    if (notif.read) return;
+    this.notificationHistoryService.markAsRead(notif._id).subscribe({
+      error: (err) => console.error('[Navbar] Error al marcar como leída:', err)
+    });
+  }
+
+  markAllAsRead(): void {
+    this.notificationHistoryService.markAllAsRead().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.notifications.update((prev) => prev.map((n) => ({ ...n, read: true })));
+          this.unreadNotifCount.set(0);
+          this.toastService.success(this.translate.instant('NOTIFICATIONS.TOAST_MARKED_ALL_READ'));
+        }
+      },
+      error: (err) => console.error('[Navbar] Error al marcar todo como leído:', err)
+    });
+  }
+
+  deleteNotification(event: Event, notif: NotificationHistory): void {
+    event.stopPropagation(); // Evita navegar o marcar como leído
+    this.notificationHistoryService.deleteNotification(notif._id).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.notifications.update((prev) => prev.filter((n) => n._id !== notif._id));
+          if (!notif.read) {
+            this.unreadNotifCount.update((count) => Math.max(0, count - 1));
+          }
+        }
+      },
+      error: (err) => console.error('[Navbar] Error al borrar notificación:', err)
+    });
+  }
+
+  clearAllNotifications(): void {
+    this.notificationHistoryService.clearAll().subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.notifications.set([]);
+          this.unreadNotifCount.set(0);
+          this.isHistoryOpen.set(false);
+          this.toastService.success(this.translate.instant('NOTIFICATIONS.TOAST_CLEARED_ALL'));
+        }
+      },
+      error: (err) => console.error('[Navbar] Error al vaciar historial:', err)
+    });
+  }
+
+  readAndNavigate(notif: NotificationHistory): void {
+    this.markAsRead(notif);
+    this.closeHistory();
+
+    const targetUrl = notif.metadata?.['click_action'] || '/';
+    this.router.navigateByUrl(targetUrl);
+  }
+
+  getNotificationIcon(type: 'chat' | 'solicitud' | 'cv_analysis'): string {
+    switch (type) {
+      case 'chat':
+        return 'chat_bubble';
+      case 'solicitud':
+        return 'inbox';
+      case 'cv_analysis':
+        return 'tune';
+      default:
+        return 'notifications';
+    }
+  }
+
+  openPreferencesModal(): void {
+    const user = this.authService.currentUser();
+    if (user && user.notificationPreferences) {
+      this.prefNewMessages.set(user.notificationPreferences.newMessages !== false);
+      this.prefApplicationStatus.set(user.notificationPreferences.applicationStatus !== false);
+      this.prefNewApplications.set(user.notificationPreferences.newApplications !== false);
+      this.prefCvAnalysis.set(user.notificationPreferences.cvAnalysis !== false);
+    } else {
+      this.prefNewMessages.set(true);
+      this.prefApplicationStatus.set(true);
+      this.prefNewApplications.set(true);
+      this.prefCvAnalysis.set(true);
+    }
+    this.isPreferencesModalOpen.set(true);
+    this.isHistoryOpen.set(false); // Cierra el desplegable
   }
 
   toggleMenu() {

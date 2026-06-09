@@ -10,10 +10,10 @@ import {
   AfterViewChecked,
   PLATFORM_ID
 } from '@angular/core';
-import { isPlatformBrowser, AsyncPipe, DatePipe } from '@angular/common';
+import { isPlatformBrowser, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { ChatService } from '../../../core/services/chat.service';
@@ -37,6 +37,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   private platformId = inject(PLATFORM_ID);
 
   private destroy$ = new Subject<void>();
+  private chatChanged$ = new Subject<void>();
   private typingInput$ = new Subject<string>();
   private subscriptions: Subscription[] = [];
 
@@ -98,12 +99,53 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private shouldScrollToBottom = false;
 
+  private handleVisibilityChange = (): void => {
+    if (document.hidden) {
+      if (this.chatId()) {
+        this.chatService.sendTypingStop(this.chatId());
+        this.chatService.leaveChat(this.chatId());
+      }
+    } else {
+      if (this.chatId()) {
+        this.chatService.joinChat(this.chatId());
+        this.chatService.markAsRead(this.chatId());
+      }
+    }
+  };
+
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('chatId') ?? '';
-    this.chatId.set(id);
-    this.loadChatAndHistory(id);
-    this.subscribeToRealtime(id);
-    this.setupTypingDebounce(id);
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const id = params.get('chatId') ?? '';
+      const oldId = this.chatId();
+
+      if (id !== oldId) {
+        if (oldId) {
+          this.chatService.sendTypingStop(oldId);
+          this.chatService.leaveChat(oldId);
+        }
+
+        this.chatChanged$.next();
+
+        // Reset state before loading new chat
+        this.chatId.set(id);
+        this.messages.set([]);
+        this.chat.set(null);
+        this.typingUserId.set(null);
+        this.presenceStatus.set('offline');
+        this.showNewMessageBanner.set(false);
+        this.hasMoreMessages.set(true);
+
+        if (id) {
+          this.loadChatAndHistory(id);
+          this.subscribeToRealtime(id);
+          this.setupTypingDebounce(id);
+        }
+      }
+    });
+
+    if (isPlatformBrowser(this.platformId)) {
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -114,9 +156,15 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    }
     if (this.chatId()) {
+      this.chatService.sendTypingStop(this.chatId());
       this.chatService.leaveChat(this.chatId());
     }
+    this.chatChanged$.next();
+    this.chatChanged$.complete();
     this.destroy$.next();
     this.destroy$.complete();
     this.subscriptions.forEach((s) => s.unsubscribe());
@@ -131,11 +179,15 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     try {
       // Load chat metadata
       const chats = await this.chatService.getMyChats().toPromise();
+      if (this.chatId() !== chatId) return;
+
       const chat = chats?.find((c) => c._id === chatId);
       this.chat.set(chat ?? null);
 
       // Load initial message history (last 30)
       const msgs = await this.chatService.getMessages(chatId).toPromise();
+      if (this.chatId() !== chatId) return;
+
       this.messages.set(msgs ?? []);
       this.hasMoreMessages.set((msgs?.length ?? 0) >= 30);
 
@@ -148,18 +200,22 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     } catch (err) {
       console.error('[ChatRoom] Failed to load chat:', err);
     } finally {
-      this.isLoading.set(false);
+      if (this.chatId() === chatId) {
+        this.isLoading.set(false);
+      }
     }
   }
 
   private subscribeToRealtime(chatId: string): void {
+    const until$ = merge(this.destroy$, this.chatChanged$);
+
     // Incoming messages
-    this.chatService.messages$.pipe(takeUntil(this.destroy$)).subscribe((msg) => {
+    this.chatService.messages$.pipe(takeUntil(until$)).subscribe((msg) => {
       // Filter messages for this chat only
       if (msg.chat !== chatId) return;
 
       // Replace optimistic message if it matches localId
-      const existing = this.messages().findIndex((m) => m.localId && m.localId === (msg as any).localId);
+      const existing = this.messages().findIndex((m) => m.localId && m.localId === msg.localId);
       if (existing !== -1) {
         const updated = [...this.messages()];
         updated[existing] = { ...msg, status: 'sent' };
@@ -178,19 +234,18 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
 
     // Typing
-    this.chatService.typing$.pipe(takeUntil(this.destroy$)).subscribe((userId) => this.typingUserId.set(userId));
+    this.chatService.typing$.pipe(takeUntil(until$)).subscribe((userId) => this.typingUserId.set(userId));
 
     // Connection status
-    this.chatService.connectionStatus$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((status) => this.connectionStatus.set(status));
+    this.chatService.connectionStatus$.pipe(takeUntil(until$)).subscribe((status) => this.connectionStatus.set(status));
 
     // Presence
-    this.chatService.presence$.pipe(takeUntil(this.destroy$)).subscribe((status) => this.presenceStatus.set(status));
+    this.chatService.presence$.pipe(takeUntil(until$)).subscribe((status) => this.presenceStatus.set(status));
   }
 
   private setupTypingDebounce(chatId: string): void {
-    this.typingInput$.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((value) => {
+    const until$ = merge(this.destroy$, this.chatChanged$);
+    this.typingInput$.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(until$)).subscribe((value) => {
       if (value.length > 0) {
         this.chatService.sendTypingStart(chatId);
       } else {
@@ -326,13 +381,15 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   scrollToBottom(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    try {
-      const el = this.messagesContainer?.nativeElement;
-      if (el) el.scrollTop = el.scrollHeight;
-      this.showNewMessageBanner.set(false);
-    } catch {
-      /* ignore */
-    }
+    setTimeout(() => {
+      try {
+        const el = this.messagesContainer?.nativeElement;
+        if (el) el.scrollTop = el.scrollHeight;
+        this.showNewMessageBanner.set(false);
+      } catch {
+        /* ignore */
+      }
+    }, 50);
   }
 
   onKeydown(event: KeyboardEvent): void {

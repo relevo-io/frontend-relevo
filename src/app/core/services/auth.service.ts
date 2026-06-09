@@ -45,7 +45,7 @@ export class AuthService {
     if (token && userData) {
       try {
         this.currentUser.set(JSON.parse(userData));
-      } catch (e) {
+      } catch (_e) {
         // Fallará la caché pero fetchProfile lo arregla
       }
     }
@@ -53,9 +53,12 @@ export class AuthService {
     // 2. Background Sync
     if (token) {
       this.fetchProfile().subscribe({
-        error: () => {
-          // Si el Backend rechaza el JWT (ej: expirado), limpiamos la sesión
-          this.logout();
+        error: (err) => {
+          // Si el Backend rechaza el JWT (ej: expirado o inválido), limpiamos la sesión
+          // Omitimos desloguear si es un problema de red (status 0) o error de servidor (500)
+          if (err && (err.status === 401 || err.status === 403)) {
+            this.logout();
+          }
         }
       });
     }

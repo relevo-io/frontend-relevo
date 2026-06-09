@@ -18,16 +18,107 @@
 
     <div class="navbar-actions">
       @if (authService.isLoggedIn()) {
-        <!-- Botón de campana de notificaciones -->
-        <button
-          class="btn-navbar-bell"
-          [class.active]="fcmService.permissionState() === 'granted'"
-          [class.denied]="fcmService.permissionState() === 'denied'"
-          (click)="onBellClick()"
-          [title]="'Notificaciones'"
-        >
-          <span class="material-symbols-outlined">{{ getBellIcon() }}</span>
-        </button>
+        <!-- Botón de campana de notificaciones con dropdown de historial -->
+        <div class="bell-dropdown-container">
+          <button
+            class="btn-navbar-bell"
+            [class.active]="fcmService.permissionState() === 'granted'"
+            [class.denied]="fcmService.permissionState() === 'denied'"
+            (click)="onBellClick()"
+            [title]="'NOTIFICATIONS.SETTINGS_TITLE' | translate"
+          >
+            <span class="material-symbols-outlined">{{ getBellIcon() }}</span>
+            @if (unreadNotifCount() > 0) {
+              <span class="bell-badge-unread">{{ unreadNotifCount() }}</span>
+            }
+          </button>
+
+          <!-- Dropdown del historial de notificaciones -->
+          @if (isHistoryOpen()) {
+            <div class="dropdown-overlay" (click)="closeHistory()"></div>
+            <div class="notifications-history-dropdown animate-in">
+              <div class="history-dropdown-header">
+                <span class="history-title-text">{{ 'NOTIFICATIONS.TITLE' | translate }}</span>
+                <div class="header-actions">
+                  @if (notifications().length > 0) {
+                    <button
+                      type="button"
+                      class="btn-text-action"
+                      (click)="markAllAsRead()"
+                      [title]="'NOTIFICATIONS.MARK_ALL_READ' | translate"
+                    >
+                      <span class="material-symbols-outlined icon-small">done_all</span>
+                    </button>
+                    <span class="divider-v"></span>
+                    <button
+                      type="button"
+                      class="btn-text-action btn-delete-all"
+                      (click)="clearAllNotifications()"
+                      [title]="'NOTIFICATIONS.CLEAR_ALL' | translate"
+                    >
+                      <span class="material-symbols-outlined icon-small">delete_sweep</span>
+                    </button>
+                    <span class="divider-v"></span>
+                  }
+                  <button
+                    type="button"
+                    class="btn-text-action"
+                    (click)="openPreferencesModal()"
+                    [title]="'PROFILE.SETTINGS' | translate"
+                  >
+                    <span class="material-symbols-outlined icon-small">settings</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="history-dropdown-body">
+                @for (notif of notifications(); track notif._id) {
+                  <div class="history-item" [class.unread]="!notif.read" (click)="readAndNavigate(notif)">
+                    <div
+                      class="item-icon-container"
+                      [class.chat]="notif.type === 'chat'"
+                      [class.solicitud]="notif.type === 'solicitud'"
+                      [class.ia]="notif.type === 'cv_analysis'"
+                    >
+                      <span class="material-symbols-outlined">{{ getNotificationIcon(notif.type) }}</span>
+                    </div>
+                    <div class="item-content">
+                      <h4 class="item-title">{{ notif.title }}</h4>
+                      <p class="item-body">{{ notif.body }}</p>
+                      <span class="item-date">{{ notif.createdAt | date: 'short' }}</span>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn-delete-item"
+                      (click)="deleteNotification($event, notif)"
+                      title="Borrar"
+                    >
+                      <span class="material-symbols-outlined icon-small">close</span>
+                    </button>
+                  </div>
+                } @empty {
+                  <div class="history-empty">
+                    <span class="material-symbols-outlined empty-icon">notifications_off</span>
+                    <p>{{ 'NOTIFICATIONS.EMPTY_STATE' | translate }}</p>
+                  </div>
+                }
+              </div>
+
+              @if (hasMore()) {
+                <div class="history-dropdown-footer">
+                  <button
+                    type="button"
+                    class="btn-load-more"
+                    (click)="loadMoreNotifications()"
+                    [disabled]="isLoadingNotifications()"
+                  >
+                    {{ (isLoadingNotifications() ? 'NOTIFICATIONS.LOADING' : 'NOTIFICATIONS.LOAD_MORE') | translate }}
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
 
         <div class="user-dropdown-container">
           <button class="btn-user-trigger" (click)="toggleMenu()">
@@ -149,13 +240,17 @@
       <div class="notifications-modal-icon-container">
         <span class="material-symbols-outlined">notifications_active</span>
       </div>
-      <h3>¿Activar notificaciones?</h3>
+      <h3>{{ 'NOTIFICATIONS.PRE_ACTIVATE_TITLE' | translate }}</h3>
       <p>
-        Recibe alertas en tiempo real de nuevos mensajes de chat y actualizaciones sobre tus solicitudes de ofertas.
+        {{ 'NOTIFICATIONS.PRE_ACTIVATE_DESC' | translate }}
       </p>
       <div class="notifications-modal-actions">
-        <button class="btn-outline" (click)="closeNotificationModal()">Quizás más tarde</button>
-        <button class="btn-solid" (click)="activateNotifications()">Sí, activar</button>
+        <button class="btn-outline" (click)="closeNotificationModal()">
+          {{ 'NOTIFICATIONS.PRE_ACTIVATE_LATER' | translate }}
+        </button>
+        <button class="btn-solid" (click)="activateNotifications()">
+          {{ 'NOTIFICATIONS.PRE_ACTIVATE_YES' | translate }}
+        </button>
       </div>
     </div>
   </div>
@@ -165,22 +260,19 @@
 @if (isDeactivateModalOpen()) {
   <div class="notifications-modal-overlay" (click)="closeDeactivateModal()">
     <div class="notifications-modal-card" (click)="$event.stopPropagation()">
-      <div class="notifications-modal-icon-container" style="background: linear-gradient(135deg, #f43f5e, #be123c)">
+      <div class="notifications-modal-icon-container icon-container-red">
         <span class="material-symbols-outlined">notifications_off</span>
       </div>
-      <h3>¿Desactivar notificaciones?</h3>
+      <h3>{{ 'NOTIFICATIONS.DEACTIVATE_TITLE' | translate }}</h3>
       <p>
-        Dejarás de recibir alertas en tiempo real en este navegador. Puedes volver a activarlas en cualquier momento
-        pulsando la campana.
+        {{ 'NOTIFICATIONS.DEACTIVATE_DESC' | translate }}
       </p>
       <div class="notifications-modal-actions">
-        <button class="btn-outline" (click)="closeDeactivateModal()">Cancelar</button>
-        <button
-          class="btn-solid"
-          style="background-color: #ef4444; border-color: #ef4444"
-          (click)="deactivateNotifications()"
-        >
-          Sí, desactivar
+        <button class="btn-outline" (click)="closeDeactivateModal()">
+          {{ 'NOTIFICATIONS.DEACTIVATE_CANCEL' | translate }}
+        </button>
+        <button class="btn-solid btn-solid-danger" (click)="deactivateNotifications()">
+          {{ 'NOTIFICATIONS.DEACTIVATE_YES' | translate }}
         </button>
       </div>
     </div>
@@ -194,19 +286,19 @@
       <div class="notifications-modal-icon-container icon-container-green">
         <span class="material-symbols-outlined">tune</span>
       </div>
-      <h3>Ajustes de Notificaciones</h3>
-      <p>Elige qué notificaciones quieres recibir en tus dispositivos</p>
+      <h3>{{ 'NOTIFICATIONS.SETTINGS_TITLE' | translate }}</h3>
+      <p>{{ 'NOTIFICATIONS.SETTINGS_SUBTITLE' | translate }}</p>
 
       <div class="preferences-header">
-        <span class="preferences-title">Canales de alerta</span>
+        <span class="preferences-title">{{ 'NOTIFICATIONS.CHANNELS_HEADER' | translate }}</span>
         <button type="button" class="btn-toggle-all" (click)="toggleSelectAll()">
-          {{ hasAllSelected() ? 'Desmarcar todo' : 'Seleccionar todo' }}
+          {{ hasAllSelected() ? ('NOTIFICATIONS.DESELECT_ALL' | translate) : ('NOTIFICATIONS.SELECT_ALL' | translate) }}
         </button>
       </div>
 
       <div class="preferences-options-container">
         <label class="preference-option-item">
-          <span>Mensajes de chat</span>
+          <span>{{ 'NOTIFICATIONS.CHANNEL_CHAT' | translate }}</span>
           <input
             type="checkbox"
             [ngModel]="prefNewMessages()"
@@ -216,7 +308,7 @@
         </label>
 
         <label class="preference-option-item">
-          <span>Estado de mis solicitudes</span>
+          <span>{{ 'NOTIFICATIONS.CHANNEL_STATUS' | translate }}</span>
           <input
             type="checkbox"
             [ngModel]="prefApplicationStatus()"
@@ -226,7 +318,7 @@
         </label>
 
         <label class="preference-option-item">
-          <span>Nuevas solicitudes recibidas</span>
+          <span>{{ 'NOTIFICATIONS.CHANNEL_APPLICATIONS' | translate }}</span>
           <input
             type="checkbox"
             [ngModel]="prefNewApplications()"
@@ -236,7 +328,7 @@
         </label>
 
         <label class="preference-option-item">
-          <span>Análisis de CV por IA</span>
+          <span>{{ 'NOTIFICATIONS.CHANNEL_IA' | translate }}</span>
           <input
             type="checkbox"
             [ngModel]="prefCvAnalysis()"
@@ -248,13 +340,15 @@
 
       <div class="notifications-modal-actions-column">
         <div class="actions-row">
-          <button class="btn-outline" (click)="closePreferencesModal()">Cancelar</button>
-          <button class="btn-solid" (click)="savePreferences()">Guardar</button>
+          <button class="btn-outline" (click)="closePreferencesModal()">
+            {{ 'NOTIFICATIONS.CANCEL' | translate }}
+          </button>
+          <button class="btn-solid" (click)="savePreferences()">{{ 'NOTIFICATIONS.SAVE' | translate }}</button>
         </div>
 
         <button class="btn-outline btn-deactivate-all" (click)="deactivateNotifications()">
           <span class="material-symbols-outlined icon-small">notifications_off</span>
-          Desactivar notificaciones por completo
+          {{ 'NOTIFICATIONS.DEACTIVATE_COMPLETELY' | translate }}
         </button>
       </div>
     </div>
