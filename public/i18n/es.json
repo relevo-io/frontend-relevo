@@ -403,5 +403,113 @@
     "EMPTY_STATE": "No tienes notificaciones",
     "LOAD_MORE": "Ver anteriores",
     "LOADING": "Cargando..."
+  },
+  "mentoring": {
+    "title": "Acompañamiento y Mentoring",
+    "subtitle": "Aprende las mejores prácticas para vender tu empresa o comprar una con éxito.",
+    "progress": "Tu progreso global",
+    "no_modules": "No hay módulos de mentoring activos en este momento.",
+    "start_step": "Comenzar",
+    "completed": "Completado",
+    "mark_completed": "Marcar como completado",
+    "tabs": {
+      "buy": "Comprar empresa",
+      "sell": "Vender empresa"
+    },
+    "seller": {
+      "m1": {
+        "title": "Preparar el negocio",
+        "description": "Organiza la información clave antes de publicar tu traspaso.",
+        "i1": {
+          "title": "Preparar la información"
+        }
+      },
+      "m2": {
+        "title": "Definir el precio",
+        "description": "Criterios para valorar y poner un precio de salida realista.",
+        "i1": {
+          "title": "Valoración del negocio"
+        }
+      },
+      "m3": {
+        "title": "Crear el anuncio",
+        "description": "Cómo redactar una descripción atractiva y confidencial.",
+        "i1": {
+          "title": "Redacción confidencial"
+        }
+      },
+      "m4": {
+        "title": "Filtrar compradores",
+        "description": "Cómo gestionar las peticiones de información de forma segura.",
+        "i1": {
+          "title": "Gestión de solicitudes"
+        }
+      },
+      "m5": {
+        "title": "Negociación de venta",
+        "description": "Consejos para llegar a un acuerdo mutuo de traspaso de negocio.",
+        "i1": {
+          "title": "El proceso de negociación"
+        }
+      },
+      "m6": {
+        "title": "Contrato y traspaso",
+        "description": "Redacción de contratos, inventario y trámites legales.",
+        "i1": {
+          "title": "Cierre de la venta"
+        }
+      }
+    },
+    "buyer": {
+      "m1": {
+        "title": "Definir objetivos de compra",
+        "description": "Aprende a establecer tus criterios de búsqueda de negocio.",
+        "i1": {
+          "title": "Definir criterios"
+        }
+      },
+      "m2": {
+        "title": "Buscar negocios",
+        "description": "Cómo encontrar las mejores oportunidades de traspaso.",
+        "i1": {
+          "title": "Búsqueda de oportunidades"
+        }
+      },
+      "m3": {
+        "title": "Analizar la viabilidad",
+        "description": "Recomendaciones para evaluar la rentabilidad del negocio.",
+        "i1": {
+          "title": "Análisis financiero"
+        }
+      },
+      "m4": {
+        "title": "Negociación y oferta",
+        "description": "Consejos para hacer una oferta de compra inicial atractiva.",
+        "i1": {
+          "title": "Presentación de la oferta"
+        }
+      },
+      "m5": {
+        "title": "Due Diligence",
+        "description": "Cómo hacer la auditoría y revisión del negocio antes de firmar.",
+        "i1": {
+          "title": "Auditoría del negocio"
+        }
+      },
+      "m6": {
+        "title": "Financiación",
+        "description": "Opciones para conseguir el capital necesario para el traspaso.",
+        "i1": {
+          "title": "Estructuras de financiación"
+        }
+      },
+      "m7": {
+        "title": "Transición y cierre",
+        "description": "Los pasos finals para firmar el contrato e iniciar la gestión.",
+        "i1": {
+          "title": "Traspaso de poderes"
+        }
+      }
+    }
   }
 }

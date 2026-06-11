@@ -403,5 +403,113 @@
     "EMPTY_STATE": "No tens notificacions",
     "LOAD_MORE": "Veure anteriors",
     "LOADING": "Carregant..."
+  },
+  "mentoring": {
+    "title": "Acompanyament i Mentoring",
+    "subtitle": "Aprèn les millors pràctiques per vendre la teva empresa o comprar-ne una amb èxit.",
+    "progress": "El teu progrés global",
+    "no_modules": "No hi ha mòduls de mentoring actius en aquest moment.",
+    "start_step": "Començar",
+    "completed": "Completat",
+    "mark_completed": "Marcar com a completat",
+    "tabs": {
+      "buy": "Comprar empresa",
+      "sell": "Vendre empresa"
+    },
+    "seller": {
+      "m1": {
+        "title": "Preparar el negoci",
+        "description": "Organitza la informació clau abans de publicar el teu traspàs.",
+        "i1": {
+          "title": "Preparar la informació"
+        }
+      },
+      "m2": {
+        "title": "Definir el preu",
+        "description": "Criteris per valorar i posar un preu de sortida realista.",
+        "i1": {
+          "title": "Valoració del negoci"
+        }
+      },
+      "m3": {
+        "title": "Crear l'anunci",
+        "description": "Com redactar una descripció atractiva i confidencial.",
+        "i1": {
+          "title": "Redacció confidencial"
+        }
+      },
+      "m4": {
+        "title": "Filtrar compradors",
+        "description": "Com gestionar les peticions d'informació de forma segura.",
+        "i1": {
+          "title": "Gestió de sol·licituds"
+        }
+      },
+      "m5": {
+        "title": "Negociació de venda",
+        "description": "Consells per arribar a un acord mutu de traspàs de negoci.",
+        "i1": {
+          "title": "El procés de negociació"
+        }
+      },
+      "m6": {
+        "title": "Contracte i traspàs",
+        "description": "Redacció de contractes, inventari i tràmits legals.",
+        "i1": {
+          "title": "Tancament de la venda"
+        }
+      }
+    },
+    "buyer": {
+      "m1": {
+        "title": "Definir els objectius de compra",
+        "description": "Aprèn a establir els teus criteris de cerca de negoci.",
+        "i1": {
+          "title": "Definir criteris"
+        }
+      },
+      "m2": {
+        "title": "Cercar negocis",
+        "description": "Com trobar les millors oportunitats de traspàs.",
+        "i1": {
+          "title": "Cerca d'oportunitats"
+        }
+      },
+      "m3": {
+        "title": "Analitzar la viabilitat",
+        "description": "Recomanacions per avaluar la rentabilitat del negoci.",
+        "i1": {
+          "title": "Anàlisi financera"
+        }
+      },
+      "m4": {
+        "title": "Negociació i oferta",
+        "description": "Consells per fer una oferta de compra inicial atractiva.",
+        "i1": {
+          "title": "Presentació de l'oferta"
+        }
+      },
+      "m5": {
+        "title": "Due Diligence",
+        "description": "Com fer l'auditoria i revisió del negoci abans de signar.",
+        "i1": {
+          "title": "Auditoria del negoci"
+        }
+      },
+      "m6": {
+        "title": "Finançament",
+        "description": "Opcions per aconseguir el capital necessari per al traspàs.",
+        "i1": {
+          "title": "Estructures de finançament"
+        }
+      },
+      "m7": {
+        "title": "Transició i tancament",
+        "description": "Els passos finals per signar el contracte i iniciar la gestió.",
+        "i1": {
+          "title": "Traspàs de poders"
+        }
+      }
+    }
   }
 }

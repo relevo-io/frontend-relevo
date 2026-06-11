@@ -56,7 +56,7 @@ export class AuthService {
         error: (err) => {
           // Si el Backend rechaza el JWT (ej: expirado o inválido), limpiamos la sesión
           // Omitimos desloguear si es un problema de red (status 0) o error de servidor (500)
-          if (err && (err.status === 401 || err.status === 403)) {
+          if (err && (err.status === 401 || err.status === 403 || err.status === 404)) {
             this.logout();
           }
         }

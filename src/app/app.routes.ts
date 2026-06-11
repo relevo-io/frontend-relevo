@@ -25,6 +25,7 @@ import { MisChatsComponent } from './pages/public/mis-chats/mis-chats.component'
 import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-solicitudes.component';
 import { MisOfertasComponent } from './pages/public/mis-ofertas/mis-ofertas.component';
 import { MisFavoritosComponent } from './pages/public/mis-favoritos/mis-favoritos.component';
+import { MentoringComponent } from './pages/public/mentoring/mentoring.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -78,6 +79,11 @@ export const routes: Routes = [
       {
         path: 'mis-favoritos',
         component: MisFavoritosComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'mentoring',
+        component: MentoringComponent,
         canActivate: [authGuard]
       }
     ]

@@ -182,6 +182,11 @@
                 <span>{{ 'NAVBAR.FAVORITES' | translate }}</span>
               </a>
 
+              <a routerLink="/mentoring" (click)="closeMenu()" class="dropdown-item">
+                <span class="material-symbols-outlined">school</span>
+                <span>{{ 'profileMentoring' | translate }}</span>
+              </a>
+
               @if (authService.currentUser()?.roles?.includes('OWNER')) {
                 <a routerLink="/mis-ofertas" (click)="closeMenu()" class="dropdown-item">
                   <span class="material-symbols-outlined">business_center</span>

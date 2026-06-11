@@ -403,5 +403,113 @@
     "EMPTY_STATE": "No notifications yet",
     "LOAD_MORE": "Load previous",
     "LOADING": "Loading..."
+  },
+  "mentoring": {
+    "title": "Guidance & Mentoring",
+    "subtitle": "Learn the best practices to sell your company or buy one successfully.",
+    "progress": "Your overall progress",
+    "no_modules": "No mentoring modules are active at this moment.",
+    "start_step": "Start",
+    "completed": "Completed",
+    "mark_completed": "Mark as completed",
+    "tabs": {
+      "buy": "Buy business",
+      "sell": "Sell business"
+    },
+    "seller": {
+      "m1": {
+        "title": "Prepare the business",
+        "description": "Organize key information before listing your transfer.",
+        "i1": {
+          "title": "Prepare information"
+        }
+      },
+      "m2": {
+        "title": "Set the price",
+        "description": "Criteria to value and set a realistic asking price.",
+        "i1": {
+          "title": "Business valuation"
+        }
+      },
+      "m3": {
+        "title": "Create the listing",
+        "description": "How to write an attractive and confidential description.",
+        "i1": {
+          "title": "Confidential writing"
+        }
+      },
+      "m4": {
+        "title": "Screen buyers",
+        "description": "How to securely manage requests for information.",
+        "i1": {
+          "title": "Managing requests"
+        }
+      },
+      "m5": {
+        "title": "Selling negotiation",
+        "description": "Tips to reach a mutual agreement for the business transfer.",
+        "i1": {
+          "title": "The negotiation process"
+        }
+      },
+      "m6": {
+        "title": "Contract and transfer",
+        "description": "Writing contracts, inventory, and legal paperwork.",
+        "i1": {
+          "title": "Closing the sale"
+        }
+      }
+    },
+    "buyer": {
+      "m1": {
+        "title": "Define buying objectives",
+        "description": "Learn to set your business search criteria.",
+        "i1": {
+          "title": "Define criteria"
+        }
+      },
+      "m2": {
+        "title": "Search businesses",
+        "description": "How to find the best transfer opportunities.",
+        "i1": {
+          "title": "Searching for opportunities"
+        }
+      },
+      "m3": {
+        "title": "Analyze viability",
+        "description": "Recommendations to evaluate business profitability.",
+        "i1": {
+          "title": "Financial analysis"
+        }
+      },
+      "m4": {
+        "title": "Negotiation and offer",
+        "description": "Tips to make an attractive initial buying offer.",
+        "i1": {
+          "title": "Presenting the offer"
+        }
+      },
+      "m5": {
+        "title": "Due Diligence",
+        "description": "How to audit and review the business before signing.",
+        "i1": {
+          "title": "Auditing the business"
+        }
+      },
+      "m6": {
+        "title": "Financing",
+        "description": "Options to secure the necessary capital for the transfer.",
+        "i1": {
+          "title": "Financing structures"
+        }
+      },
+      "m7": {
+        "title": "Transition and closing",
+        "description": "The final steps to sign the contract and start managing.",
+        "i1": {
+          "title": "Transfer of powers"
+        }
+      }
+    }
   }
 }
