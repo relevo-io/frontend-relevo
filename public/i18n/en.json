@@ -418,43 +418,43 @@
     },
     "seller": {
       "m1": {
-        "title": "Prepare the business",
-        "description": "Organize key information before listing your transfer.",
+        "title": "Preparing the company for sale",
+        "description": "Learn to identify the best time to sell, understand the common reasons for selling, and avoid frequent mistakes before publishing the offer.",
         "i1": {
-          "title": "Prepare information"
+          "title": "Preparation and common mistakes"
         }
       },
       "m2": {
-        "title": "Set the price",
-        "description": "Criteria to value and set a realistic asking price.",
+        "title": "Organizing the documentation",
+        "description": "Prepare the financial, legal, and operational documentation necessary to build trust with potential buyers.",
         "i1": {
-          "title": "Business valuation"
+          "title": "Organizing documentation"
         }
       },
       "m3": {
-        "title": "Create the listing",
-        "description": "How to write an attractive and confidential description.",
+        "title": "Valuing the company",
+        "description": "Understand what factors determine a company's value, such as profitability, assets, and growth potential.",
         "i1": {
-          "title": "Confidential writing"
+          "title": "Company valuation"
         }
       },
       "m4": {
-        "title": "Screen buyers",
-        "description": "How to securely manage requests for information.",
+        "title": "Creating an attractive offer",
+        "description": "Learn to present the business professionally, highlighting strengths while protecting confidential information.",
         "i1": {
-          "title": "Managing requests"
+          "title": "Creating an offer"
         }
       },
       "m5": {
-        "title": "Selling negotiation",
-        "description": "Tips to reach a mutual agreement for the business transfer.",
+        "title": "Managing contacts and negotiations",
+        "description": "Filter potential buyers, share information progressively, and manage negotiations professionally.",
         "i1": {
-          "title": "The negotiation process"
+          "title": "Managing contacts"
         }
       },
       "m6": {
-        "title": "Contract and transfer",
-        "description": "Writing contracts, inventory, and legal paperwork.",
+        "title": "Closing the sale",
+        "description": "Complete the final stages of the process, including Due Diligence, signing contracts, and preparing for the transition.",
         "i1": {
           "title": "Closing the sale"
         }
@@ -462,52 +462,52 @@
     },
     "buyer": {
       "m1": {
-        "title": "Define buying objectives",
-        "description": "Learn to set your business search criteria.",
+        "title": "Defining purchase objectives",
+        "description": "Determine the budget, sectors of interest, and key characteristics that the ideal company should have.",
         "i1": {
-          "title": "Define criteria"
+          "title": "Defining objectives"
         }
       },
       "m2": {
-        "title": "Search businesses",
-        "description": "How to find the best transfer opportunities.",
+        "title": "Searching for opportunities",
+        "description": "Learn where to find companies for sale and how to perform an initial screening of potential opportunities.",
         "i1": {
           "title": "Searching for opportunities"
         }
       },
       "m3": {
-        "title": "Analyze viability",
-        "description": "Recommendations to evaluate business profitability.",
+        "title": "Analyzing the financial situation",
+        "description": "Interpret the financial information of the company, including revenue, profits, debt, and liquidity.",
         "i1": {
           "title": "Financial analysis"
         }
       },
       "m4": {
-        "title": "Negotiation and offer",
-        "description": "Tips to make an attractive initial buying offer.",
+        "title": "Assessing if the price is right",
+        "description": "Analyze whether the valuation proposed by the seller is consistent with the reality and potential of the business.",
         "i1": {
-          "title": "Presenting the offer"
+          "title": "Assessing the price"
         }
       },
       "m5": {
-        "title": "Due Diligence",
-        "description": "How to audit and review the business before signing.",
+        "title": "Negotiating the purchase",
+        "description": "Prepare to negotiate the price and conditions of the transaction, identifying risks and opportunities.",
         "i1": {
-          "title": "Auditing the business"
+          "title": "Negotiating the purchase"
         }
       },
       "m6": {
-        "title": "Financing",
-        "description": "Options to secure the necessary capital for the transfer.",
+        "title": "Formalizing the acquisition",
+        "description": "Review legal documentation, complete Due Diligence, and formalize the purchase through the corresponding contracts.",
         "i1": {
-          "title": "Financing structures"
+          "title": "Formalizing the acquisition"
         }
       },
       "m7": {
-        "title": "Transition and closing",
-        "description": "The final steps to sign the contract and start managing.",
+        "title": "Managing the company",
+        "description": "Plan the transition, maintain the trust of the team and clients, and lay the foundations for future business growth.",
         "i1": {
-          "title": "Transfer of powers"
+          "title": "Post-purchase management"
         }
       }
     }

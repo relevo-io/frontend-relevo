@@ -418,43 +418,43 @@
     },
     "seller": {
       "m1": {
-        "title": "Preparar el negoci",
-        "description": "Organitza la informació clau abans de publicar el teu traspàs.",
+        "title": "Preparar l’empresa per a la venda",
+        "description": "Aprendre a identificar el millor moment per vendre, entendre els motius habituals de venda i evitar errors freqüents abans de publicar l’oferta.",
         "i1": {
-          "title": "Preparar la informació"
+          "title": "Preparació i errors freqüents"
         }
       },
       "m2": {
-        "title": "Definir el preu",
-        "description": "Criteris per valorar i posar un preu de sortida realista.",
+        "title": "Organitzar la documentació",
+        "description": "Preparar la documentació financera, legal i operativa necessària per transmetre confiança als possibles compradors.",
         "i1": {
-          "title": "Valoració del negoci"
+          "title": "Organització de documentació"
         }
       },
       "m3": {
-        "title": "Crear l'anunci",
-        "description": "Com redactar una descripció atractiva i confidencial.",
+        "title": "Valorar l’empresa",
+        "description": "Comprendre quins factors determinen el valor d’una empresa, com la rendibilitat, els actius i el potencial de creixement.",
         "i1": {
-          "title": "Redacció confidencial"
+          "title": "Valoració de l'empresa"
         }
       },
       "m4": {
-        "title": "Filtrar compradors",
-        "description": "Com gestionar les peticions d'informació de forma segura.",
+        "title": "Crear una oferta atractiva",
+        "description": "Aprendre a presentar el negoci de manera professional, destacant els punts forts i protegint la informació confidencial.",
         "i1": {
-          "title": "Gestió de sol·licituds"
+          "title": "Creació d'oferta"
         }
       },
       "m5": {
-        "title": "Negociació de venda",
-        "description": "Consells per arribar a un acord mutu de traspàs de negoci.",
+        "title": "Gestionar contactes i negociacions",
+        "description": "Filtrar possibles compradors, compartir informació de manera progressiva i gestionar les negociacions amb professionalitat.",
         "i1": {
-          "title": "El procés de negociació"
+          "title": "Gestió de contactes"
         }
       },
       "m6": {
-        "title": "Contracte i traspàs",
-        "description": "Redacció de contractes, inventari i tràmits legals.",
+        "title": "Tancar la venda",
+        "description": "Completar les fases finals del procés, incloent la Due Diligence, la signatura dels contractes i la preparació de la transició.",
         "i1": {
           "title": "Tancament de la venda"
         }
@@ -463,51 +463,51 @@
     "buyer": {
       "m1": {
         "title": "Definir els objectius de compra",
-        "description": "Aprèn a establir els teus criteris de cerca de negoci.",
+        "description": "Determinar el pressupost disponible, els sectors d’interès i les característiques que hauria de tenir l’empresa ideal.",
         "i1": {
-          "title": "Definir criteris"
+          "title": "Definir objectius"
         }
       },
       "m2": {
-        "title": "Cercar negocis",
-        "description": "Com trobar les millors oportunitats de traspàs.",
+        "title": "Buscar oportunitats",
+        "description": "Aprendre on trobar empreses en venda i com realitzar un primer filtratge d’oportunitats potencials.",
         "i1": {
           "title": "Cerca d'oportunitats"
         }
       },
       "m3": {
-        "title": "Analitzar la viabilitat",
-        "description": "Recomanacions per avaluar la rentabilitat del negoci.",
+        "title": "Analitzar la situació financera",
+        "description": "Interpretar la informació financera de l’empresa, incloent facturació, beneficis, endeutament i liquiditat.",
         "i1": {
           "title": "Anàlisi financera"
         }
       },
       "m4": {
-        "title": "Negociació i oferta",
-        "description": "Consells per fer una oferta de compra inicial atractiva.",
+        "title": "Valorar si el preu és correcte",
+        "description": "Analitzar si la valoració proposada pel venedor és coherent amb la realitat i el potencial del negoci.",
         "i1": {
-          "title": "Presentació de l'oferta"
+          "title": "Valoració del preu"
         }
       },
       "m5": {
-        "title": "Due Diligence",
-        "description": "Com fer l'auditoria i revisió del negoci abans de signar.",
+        "title": "Negociar la compra",
+        "description": "Preparar-se per negociar el preu i les condicions de l’operació, identificant riscos i oportunitats.",
         "i1": {
-          "title": "Auditoria del negoci"
+          "title": "Negociació de compra"
         }
       },
       "m6": {
-        "title": "Finançament",
-        "description": "Opcions per aconseguir el capital necessari per al traspàs.",
+        "title": "Formalitzar l’adquisició",
+        "description": "Revisar la documentació legal, completar la Due Diligence i formalitzar la compra mitjançant els contractes corresponents.",
         "i1": {
-          "title": "Estructures de finançament"
+          "title": "Formalitzar adquisició"
         }
       },
       "m7": {
-        "title": "Transició i tancament",
-        "description": "Els passos finals per signar el contracte i iniciar la gestió.",
+        "title": "Gestionar l’empresa",
+        "description": "Planificar la transició, mantenir la confiança de l’equip i dels clients, i establir les bases per al futur creixement del negoci.",
         "i1": {
-          "title": "Traspàs de poders"
+          "title": "Gestió post-compra"
         }
       }
     }

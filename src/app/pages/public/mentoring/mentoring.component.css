@@ -289,7 +289,7 @@ body.dark-mode .mentoring-header {
 
 .module-title {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   font-weight: 750;
   color: var(--on-surface);
@@ -305,6 +305,8 @@ body.dark-mode .mentoring-header {
   border-radius: var(--radius-lg);
   font-size: 0.8rem;
   font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .module-desc-summary {
