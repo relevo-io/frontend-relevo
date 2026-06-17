@@ -5,7 +5,15 @@ import { Observable, Subject, BehaviorSubject, tap } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
-import { Chat, Mensaje, SendMessageAck, JoinChatAck, ConnectionStatus, PresenceStatus } from '../models/chat.model';
+import {
+  Chat,
+  Mensaje,
+  SendMessageAck,
+  JoinChatAck,
+  ConnectionStatus,
+  PresenceStatus,
+  MessageType
+} from '../models/chat.model';
 import { NotificationHistory } from '../models/notification.model';
 
 const API_URL = `${environment.apiUrl}/api`;
@@ -202,16 +210,38 @@ export class ChatService implements OnDestroy {
   }
 
   /**
-   * Envía un mensaje. Devuelve una Promise con el ack del servidor.
-   * El llamador puede mostrar el mensaje en modo 'sending' y actualizar según el ack.
+   * Envía un mensaje (puede contener texto y/o metadatos de un archivo).
    */
-  sendMessage(chatId: string, content: string): Promise<SendMessageAck> {
+  sendMessage(
+    chatId: string,
+    content: string,
+    fileData?: {
+      messageType: MessageType;
+      s3Key: string;
+      fileName: string;
+      fileSize: number;
+      mimeType: string;
+    }
+  ): Promise<SendMessageAck> {
     return new Promise((resolve) => {
       if (!this.socket?.connected) {
         resolve({ ok: false, error: 'No hay conexión' });
         return;
       }
-      this.socket.emit('send_message', { chatId, content }, (ack: SendMessageAck) => resolve(ack));
+      this.socket.emit('send_message', { chatId, content, ...fileData }, (ack: SendMessageAck) => resolve(ack));
+    });
+  }
+
+  /** Obtiene la URL pre-firmada para subir un archivo adjunto del chat */
+  getPresignedChatUrl(filename: string, mimeType: string): Observable<{ uploadUrl: string; s3Key: string }> {
+    const params = new HttpParams().set('filename', filename).set('mimeType', mimeType);
+    return this.http.get<{ uploadUrl: string; s3Key: string }>(`${API_URL}/storage/chat-presigned-url`, { params });
+  }
+
+  /** Sube un archivo binario directamente a S3 omitiendo la cabecera JWT */
+  uploadFileToS3(uploadUrl: string, file: File): Observable<void> {
+    return this.http.put<void>(uploadUrl, file, {
+      headers: { skipAuth: 'true' }
     });
   }
 
