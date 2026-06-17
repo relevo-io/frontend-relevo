@@ -82,8 +82,55 @@ h1 {
   font-size: 2.5rem;
   font-weight: 850;
   letter-spacing: -0.03em;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   color: var(--on-surface);
+}
+
+.detail-map-block {
+  position: relative;
+  height: 360px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  border: 1px solid var(--outline-variant);
+  border-radius: 24px;
+  background: var(--surface-container-low);
+}
+
+.detail-map-block iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.detail-map-label {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 36px);
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #031632;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(3, 22, 50, 0.18);
+}
+
+.detail-map-label .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--secondary);
+}
+
+:host-context(.dark-mode) .detail-map-block {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #0f172a;
+}
+
+:host-context(.dark-mode) .detail-map-block iframe {
+  filter: saturate(0.75) brightness(0.82);
 }
 
 .meta-grid {
@@ -195,6 +242,16 @@ h1 {
 @media (max-width: 760px) {
   .meta-grid {
     grid-template-columns: 1fr;
+  }
+
+  .offer-card-large {
+    padding: 24px;
+    border-radius: 20px;
+  }
+
+  .detail-map-block {
+    height: 260px;
+    border-radius: 18px;
   }
 }
 

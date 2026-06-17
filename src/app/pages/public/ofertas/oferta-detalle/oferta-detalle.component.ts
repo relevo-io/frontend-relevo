@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OfertaService } from '../../../../core/services/oferta.service';
 import { Oferta } from '../../../../core/models/oferta.model';
@@ -30,6 +31,8 @@ export class OfertaDetalle {
   private chatService = inject(ChatService);
   private fb = inject(FormBuilder);
   private translate = inject(TranslateService);
+  private sanitizer = inject(DomSanitizer);
+  private mapUrlCache = new Map<string, SafeResourceUrl>();
 
   oferta = signal<Oferta | null>(null);
   isLoading = signal<boolean>(true);
@@ -276,6 +279,19 @@ export class OfertaDetalle {
 
   formatEmployees(value?: string): string {
     return formatEmployeeRange(value);
+  }
+
+  mapUrl(region?: string): SafeResourceUrl {
+    const location = region?.trim() || 'Espana';
+    const cached = this.mapUrlCache.get(location);
+    if (cached) return cached;
+
+    const query = encodeURIComponent(`${location}, Espana`);
+    const url = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://maps.google.com/maps?q=${query}&z=12&output=embed`
+    );
+    this.mapUrlCache.set(location, url);
+    return url;
   }
 
   async contactarOwner(): Promise<void> {

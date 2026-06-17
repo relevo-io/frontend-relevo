@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, signal, computed } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { Oferta } from '../../../core/models/oferta.model';
 import { OfertaService } from '../../../core/services/oferta.service';
@@ -23,6 +24,8 @@ export class MarketplaceHomeComponent {
   public authService = inject(AuthService);
   private translate = inject(TranslateService);
   private solicitudService = inject(SolicitudService);
+  private sanitizer = inject(DomSanitizer);
+  private mapUrlCache = new Map<string, SafeResourceUrl>();
 
   ofertas = signal<Oferta[]>([]);
   favoriteOfferIds = signal<Set<string>>(new Set());
@@ -126,6 +129,19 @@ export class MarketplaceHomeComponent {
 
   formatEmployees(value?: string): string {
     return formatEmployeeRange(value);
+  }
+
+  mapUrl(region?: string): SafeResourceUrl {
+    const location = region?.trim() || 'Espana';
+    const cached = this.mapUrlCache.get(location);
+    if (cached) return cached;
+
+    const query = encodeURIComponent(`${location}, Espana`);
+    const url = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://maps.google.com/maps?q=${query}&z=12&output=embed`
+    );
+    this.mapUrlCache.set(location, url);
+    return url;
   }
 
   isFavorite(ofertaId?: string): boolean {

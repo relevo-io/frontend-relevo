@@ -84,6 +84,19 @@
             <h3>{{ oferta.region }}</h3>
             <p class="description">{{ oferta.companyDescription }}</p>
 
+            <div class="card-map" aria-hidden="true">
+              <iframe
+                [src]="mapUrl(oferta.region)"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                tabindex="-1"
+              ></iframe>
+              <span class="map-label">
+                <span class="material-symbols-outlined">location_on</span>
+                {{ oferta.region }}
+              </span>
+            </div>
+
             <div class="card-footer">
               @if (authService.isLoggedIn()) {
                 @if (oferta.revenueRange) {

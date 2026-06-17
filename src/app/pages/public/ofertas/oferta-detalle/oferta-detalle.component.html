@@ -34,6 +34,19 @@
 
         <h1>{{ o.region }}</h1>
 
+        <section class="detail-map-block" [attr.aria-label]="'Mapa de ' + o.region">
+          <iframe
+            [src]="mapUrl(o.region)"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
+          <div class="detail-map-label">
+            <span class="material-symbols-outlined">location_on</span>
+            <span>{{ o.region }}</span>
+          </div>
+        </section>
+
         <div class="meta-grid">
           <div class="meta-item">
             <span class="meta-label">{{ 'OFFER_DETAIL.REVENUE' | translate }}</span>

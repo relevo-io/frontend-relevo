@@ -4,12 +4,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging-com
 
 // NOTA: Reemplaza estos valores con las credenciales de tu proyecto UNIFICADO de Firebase
 firebase.initializeApp({
-  apiKey: "AIzaSyAQ7oQbl6aoYFejywxKMKXT6XuJ53zTKwI",
-  authDomain: "relevo-minimo2.firebaseapp.com",
-  projectId: "relevo-minimo2",
-  storageBucket: "relevo-minimo2.firebasestorage.app",
-  messagingSenderId: "889003247844",
-  appId: "1:889003247844:web:7d0fd703a04a77c36404f1"
+  apiKey: 'AIzaSyAQ7oQbl6aoYFejywxKMKXT6XuJ53zTKwI',
+  authDomain: 'relevo-minimo2.firebaseapp.com',
+  projectId: 'relevo-minimo2',
+  storageBucket: 'relevo-minimo2.firebasestorage.app',
+  messagingSenderId: '889003247844',
+  appId: '1:889003247844:web:7d0fd703a04a77c36404f1'
 });
 
 const messaging = firebase.messaging();
@@ -17,7 +17,7 @@ const messaging = firebase.messaging();
 // Escuchar notificaciones en segundo plano (Background)
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Mensaje recibido en segundo plano: ', payload);
-  
+
   const title = payload.notification?.title || 'Relevo';
   const options = {
     body: payload.notification?.body || '',
@@ -32,9 +32,9 @@ messaging.onBackgroundMessage((payload) => {
 // Manejar el clic en la notificación
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  
+
   const clickAction = event.notification.data?.click_action || '/';
-  
+
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
       // Si la app ya está abierta en alguna pestaña, navegar y hacer focus
