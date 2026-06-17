@@ -741,3 +741,347 @@ body.dark-mode .waiting-banner .material-symbols-outlined {
     transform: rotate(360deg);
   }
 }
+
+/* ── Attach File Button ────────────────────── */
+.attach-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  border: 1px solid var(--outline-variant);
+  cursor: pointer;
+}
+
+.attach-btn:hover:not(:disabled) {
+  background: var(--surface-container-highest);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.attach-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Media Message Styling ────────────────── */
+.bubble-media {
+  padding: 4px !important;
+  max-width: 280px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.media-container {
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* ── Image Message ────────────────────────── */
+.image-message {
+  aspect-ratio: 4/3;
+  width: 100%;
+}
+
+.chat-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.chat-image:hover {
+  opacity: 0.9;
+}
+
+.media-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  color: var(--on-surface-variant);
+  font-size: 0.8rem;
+  background: var(--surface-container);
+}
+
+.media-placeholder .mini-spinner {
+  border-top-color: var(--primary);
+}
+
+/* ── File Message ─────────────────────────── */
+.file-message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-container);
+  border: 1px solid var(--outline-variant);
+  min-width: 220px;
+}
+
+.bubble-mine .file-message {
+  background: rgba(7, 39, 20, 0.05);
+  border-color: rgba(7, 39, 20, 0.1);
+}
+
+.file-icon {
+  font-size: 32px !important;
+  color: var(--on-primary-container);
+  background: var(--primary-container);
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.file-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--on-surface);
+}
+
+.file-size {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.file-download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-container-highest);
+  color: var(--primary);
+  transition: all 0.2s;
+  border: 1px solid var(--outline-variant);
+}
+
+.file-download-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* ── Dark Mode Adjustments ─────────────────── */
+body.dark-mode .attach-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+body.dark-mode .attach-btn:hover:not(:disabled) {
+  background: #334155;
+  color: #38bdf8;
+  border-color: #38bdf8;
+}
+
+body.dark-mode .file-message {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .bubble-mine .file-message {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+body.dark-mode .file-icon {
+  background: #334155;
+  color: #38bdf8;
+}
+
+body.dark-mode .file-name {
+  color: #f1f5f9;
+}
+
+body.dark-mode .file-download-btn {
+  background: #334155;
+  border-color: #475569;
+  color: #38bdf8;
+}
+
+body.dark-mode .file-download-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+/* ── Microphone Button ─────────────────────── */
+.mic-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(3, 22, 50, 0.25);
+  cursor: pointer;
+  border: none;
+}
+
+.mic-btn:hover:not(:disabled) {
+  background: #11284a;
+  transform: scale(1.05);
+}
+
+.mic-btn:disabled {
+  background: var(--outline-variant);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ── Recording Panel ───────────────────────── */
+.recording-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--surface-container-low);
+  border: 1.5px solid var(--outline-variant);
+  border-radius: 22px;
+  animation: slideDown 0.2s ease;
+}
+
+.recording-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rec-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.rec-time {
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.recording-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-cancel-rec,
+.btn-send-rec {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-cancel-rec {
+  background: transparent;
+  color: #ef4444;
+}
+
+.btn-cancel-rec:hover {
+  background: #fef2f2;
+}
+
+.btn-send-rec {
+  background: var(--secondary);
+  color: white;
+}
+
+.btn-send-rec:hover {
+  background: #047240;
+  transform: scale(1.05);
+}
+
+/* ── Audio Message Bubble ─────────────────── */
+.audio-message {
+  padding: 8px 10px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: 14px;
+}
+
+.bubble-mine .audio-message {
+  background: rgba(7, 39, 20, 0.05);
+  border-color: rgba(7, 39, 20, 0.1);
+}
+
+.chat-audio {
+  max-width: 240px;
+  height: 36px;
+  outline: none;
+  display: block;
+}
+
+.audio-uploading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--on-surface-variant);
+  font-size: 0.82rem;
+}
+
+/* ── Dark Mode Recording overrides ────────── */
+body.dark-mode .mic-btn {
+  background: #38bdf8;
+  color: #020617;
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
+}
+
+body.dark-mode .mic-btn:hover:not(:disabled) {
+  background: #7dd3fc;
+}
+
+body.dark-mode .recording-panel {
+  background: #0a1120;
+  border-color: #334155;
+}
+
+body.dark-mode .btn-cancel-rec:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+body.dark-mode .audio-message {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .bubble-mine .audio-message {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.2);
+}

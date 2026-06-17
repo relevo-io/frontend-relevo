@@ -10,7 +10,7 @@ import {
   AfterViewChecked,
   PLATFORM_ID
 } from '@angular/core';
-import { isPlatformBrowser, DatePipe } from '@angular/common';
+import { isPlatformBrowser, DatePipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject, Subscription, merge } from 'rxjs';
@@ -18,12 +18,12 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { ChatService } from '../../../core/services/chat.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Mensaje, Chat, ConnectionStatus, PresenceStatus } from '../../../core/models/chat.model';
+import { Mensaje, Chat, ConnectionStatus, PresenceStatus, MessageType } from '../../../core/models/chat.model';
 
 @Component({
   selector: 'app-chat-room',
   standalone: true,
-  imports: [DatePipe, FormsModule, RouterLink, TranslateModule],
+  imports: [DatePipe, DecimalPipe, FormsModule, RouterLink, TranslateModule],
   templateUrl: './chat-room.component.html',
   styleUrl: './chat-room.component.css'
 })
@@ -48,10 +48,19 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   isLoading = signal(true);
   isLoadingMore = signal(false);
   isSending = signal(false);
+  isUploadingFile = signal(false);
+  isRecording = signal(false);
+  recordingDuration = signal(0);
   hasMoreMessages = signal(true);
   showNewMessageBanner = signal(false);
   isAtBottom = signal(true);
   chatId = signal('');
+
+  // ── MediaRecorder properties ────────────────
+  private mediaRecorder: any = null;
+  private audioChunks: Blob[] = [];
+  private recordingTimer: any = null;
+  private audioStream: MediaStream | null = null;
 
   // ── Real-time signals ────────────────────────
   connectionStatus = signal<ConnectionStatus>('disconnected');
@@ -159,6 +168,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (isPlatformBrowser(this.platformId)) {
       document.removeEventListener('visibilitychange', this.handleVisibilityChange);
     }
+    this.cleanupRecordingResources();
     if (this.chatId()) {
       this.chatService.sendTypingStop(this.chatId());
       this.chatService.leaveChat(this.chatId());
@@ -330,15 +340,132 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     const updated = this.messages().map((m) => (m.localId === msg.localId ? { ...m, status: 'sending' as const } : m));
     this.messages.set(updated);
 
-    const ack = await this.chatService.sendMessage(this.chatId(), msg.content);
-    if (ack.ok && ack.message) {
-      const final = this.messages().map((m) =>
-        m.localId === msg.localId ? { ...ack.message!, status: 'sent' as const } : m
-      );
-      this.messages.set(final);
-    } else {
+    try {
+      let ack;
+      if (msg.s3Key && msg.messageType) {
+        ack = await this.chatService.sendMessage(this.chatId(), msg.content, {
+          messageType: msg.messageType,
+          s3Key: msg.s3Key,
+          fileName: msg.fileName || '',
+          fileSize: msg.fileSize || 0,
+          mimeType: msg.mimeType || ''
+        });
+      } else {
+        ack = await this.chatService.sendMessage(this.chatId(), msg.content);
+      }
+
+      if (ack.ok && ack.message) {
+        const final = this.messages().map((m) =>
+          m.localId === msg.localId ? { ...ack.message!, status: 'sent' as const } : m
+        );
+        this.messages.set(final);
+      } else {
+        const errored = this.messages().map((m) =>
+          m.localId === msg.localId ? { ...m, status: 'error' as const } : m
+        );
+        this.messages.set(errored);
+      }
+    } catch {
       const errored = this.messages().map((m) => (m.localId === msg.localId ? { ...m, status: 'error' as const } : m));
       this.messages.set(errored);
+    }
+  }
+
+  async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const maxSizeBytes = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSizeBytes) {
+      alert('El archivo supera el límite de 10 MB');
+      return;
+    }
+
+    let messageType: MessageType = 'file';
+    if (file.type.startsWith('image/')) {
+      messageType = 'image';
+    } else if (file.type.startsWith('video/')) {
+      messageType = 'video';
+    } else if (file.type.startsWith('audio/')) {
+      messageType = 'audio';
+    }
+
+    this.isUploadingFile.set(true);
+
+    try {
+      // Step 1: Request S3 pre-signed upload URL (PUT)
+      const res = await this.chatService.getPresignedChatUrl(file.name, file.type).toPromise();
+
+      if (!res || !res.uploadUrl || !res.s3Key) {
+        throw new Error('No se pudo obtener la URL de subida de S3');
+      }
+
+      const { uploadUrl, s3Key } = res;
+
+      // Step 2: Upload binary file directly to S3
+      await this.chatService.uploadFileToS3(uploadUrl, file).toPromise();
+
+      // Step 3: Send message metadata via WebSockets
+      await this.sendAttachmentMessage(messageType, s3Key, file.name, file.size, file.type);
+    } catch (err) {
+      console.error('[ChatRoom] Error subiendo archivo a S3:', err);
+      alert('Error al subir el archivo');
+    } finally {
+      this.isUploadingFile.set(false);
+      input.value = ''; // Reset input selection
+    }
+  }
+
+  async sendAttachmentMessage(
+    messageType: MessageType,
+    s3Key: string,
+    fileName: string,
+    fileSize: number,
+    mimeType: string
+  ): Promise<void> {
+    const chatId = this.chatId();
+    const localId = `local_${Date.now()}`;
+    const userId = this.currentUserId();
+
+    const optimisticMsg: Mensaje = {
+      localId,
+      chat: chatId,
+      sender: userId,
+      content: '',
+      messageType,
+      s3Key,
+      fileName,
+      fileSize,
+      mimeType,
+      status: 'sending',
+      createdAt: new Date().toISOString()
+    };
+
+    this.messages.set([...this.messages(), optimisticMsg]);
+    this.shouldScrollToBottom = true;
+
+    try {
+      const ack = await this.chatService.sendMessage(chatId, '', {
+        messageType,
+        s3Key,
+        fileName,
+        fileSize,
+        mimeType
+      });
+
+      if (ack.ok && ack.message) {
+        const updated = this.messages().map((m) =>
+          m.localId === localId ? { ...ack.message!, status: 'sent' as const } : m
+        );
+        this.messages.set(updated);
+      } else {
+        const updated = this.messages().map((m) => (m.localId === localId ? { ...m, status: 'error' as const } : m));
+        this.messages.set(updated);
+      }
+    } catch {
+      const updated = this.messages().map((m) => (m.localId === localId ? { ...m, status: 'error' as const } : m));
+      this.messages.set(updated);
     }
   }
 
@@ -407,5 +534,103 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   getSenderName(msg: Mensaje): string {
     if (typeof msg.sender === 'object') return (msg.sender as { fullName: string }).fullName;
     return '';
+  }
+
+  async startRecording(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert('Tu dispositivo o navegador no soporta el acceso al micrófono.');
+      return;
+    }
+
+    if (!(window as any).MediaRecorder) {
+      alert('Tu navegador no soporta la grabación de audio.');
+      return;
+    }
+
+    try {
+      this.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.audioChunks = [];
+      this.mediaRecorder = new (window as any).MediaRecorder(this.audioStream);
+
+      this.mediaRecorder.ondataavailable = (event: any) => {
+        if (event.data.size > 0) {
+          this.audioChunks.push(event.data);
+        }
+      };
+
+      this.mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+        const file = new File([audioBlob], `voice-note-${Date.now()}.webm`, {
+          type: 'audio/webm'
+        });
+
+        this.isUploadingFile.set(true);
+
+        try {
+          const res = await this.chatService.getPresignedChatUrl(file.name, file.type).toPromise();
+          if (!res || !res.uploadUrl || !res.s3Key) {
+            throw new Error('No se pudo obtener la URL de S3');
+          }
+          const { uploadUrl, s3Key } = res;
+
+          await this.chatService.uploadFileToS3(uploadUrl, file).toPromise();
+          await this.sendAttachmentMessage('audio', s3Key, 'Nota de voz.webm', file.size, file.type);
+        } catch (err) {
+          console.error('[ChatRoom] Error enviando nota de voz:', err);
+          alert('Error al enviar la nota de voz');
+        } finally {
+          this.isUploadingFile.set(false);
+        }
+      };
+
+      this.mediaRecorder.start();
+      this.isRecording.set(true);
+      this.recordingDuration.set(0);
+
+      this.recordingTimer = setInterval(() => {
+        this.recordingDuration.set(this.recordingDuration() + 1);
+      }, 1000);
+    } catch (err) {
+      console.error('[ChatRoom] Error al acceder al micrófono:', err);
+      alert('No se pudo acceder al micrófono. Por favor, concede los permisos correspondientes.');
+    }
+  }
+
+  stopRecording(): void {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+      this.mediaRecorder.stop();
+    }
+    this.cleanupRecordingResources();
+  }
+
+  cancelRecording(): void {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+      this.mediaRecorder.onstop = null;
+      this.mediaRecorder.stop();
+    }
+    this.cleanupRecordingResources();
+  }
+
+  private cleanupRecordingResources(): void {
+    this.isRecording.set(false);
+    this.recordingDuration.set(0);
+
+    if (this.recordingTimer) {
+      clearInterval(this.recordingTimer);
+      this.recordingTimer = null;
+    }
+
+    if (this.audioStream) {
+      this.audioStream.getTracks().forEach((track: any) => track.stop());
+      this.audioStream = null;
+    }
+  }
+
+  formatDuration(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }
 }
