@@ -35,7 +35,7 @@ export class NotificationHistoryService {
       );
   }
 
-  public notificationsReadByType$ = new Subject<'solicitud' | 'cv_analysis' | 'chat'>();
+  public notificationsReadByType$ = new Subject<'solicitud' | 'cv_analysis' | 'chat' | 'alerta'>();
 
   /**
    * Marca todas las notificaciones como leídas
@@ -53,7 +53,9 @@ export class NotificationHistoryService {
   /**
    * Marca todas las notificaciones de un tipo como leídas
    */
-  public markReadByType(type: 'solicitud' | 'cv_analysis' | 'chat'): Observable<{ success: boolean; message: string }> {
+  public markReadByType(
+    type: 'solicitud' | 'cv_analysis' | 'chat' | 'alerta'
+  ): Observable<{ success: boolean; message: string }> {
     return this.http.patch<{ success: boolean; message: string }>(`${this.apiUrl}/read-by-type`, { type }).pipe(
       tap((res) => {
         if (res.success) {

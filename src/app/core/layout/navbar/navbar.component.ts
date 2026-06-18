@@ -12,6 +12,10 @@ import { NotificationService } from '../../services/notification.service';
 import { NotificationPreferences } from '../../models/usuario.model';
 import { NotificationHistoryService } from '../../services/notification-history.service';
 import { NotificationHistory } from '../../models/notification.model';
+import { AlertaService } from '../../services/alerta.service';
+import { AlertaOferta } from '../../models/alerta.model';
+import { Oferta } from '../../models/oferta.model';
+import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 
@@ -32,6 +36,7 @@ export class Navbar {
   private marketplaceSearchService = inject(MarketplaceSearchService);
   private translate = inject(TranslateService);
   private notificationHistoryService = inject(NotificationHistoryService);
+  private alertaService = inject(AlertaService);
 
   searchQuery = this.marketplaceSearchService.query;
   isMenuOpen = signal(false);
@@ -53,6 +58,36 @@ export class Navbar {
   prefApplicationStatus = signal(true);
   prefNewApplications = signal(true);
   prefCvAnalysis = signal(true);
+  prefOfferAlerts = signal(true);
+
+  offerAlerts = signal<AlertaOferta[]>([]);
+  isLoadingOfferAlerts = signal(false);
+  isSavingOfferAlert = signal(false);
+  alertName = signal('');
+  alertRegion = signal('');
+  alertRevenueRange = signal('');
+  alertEmployeeRange = signal('');
+
+  revenueRangeOptions = ['UNDER_100K', 'BETWEEN_100K_500K', 'BETWEEN_500K_1M', 'BETWEEN_1M_5M', 'OVER_5M'];
+  employeeRangeOptions = ['1_5', '6_10', '11_25', '26_50', '51_100', '100_PLUS'];
+
+  private syncPreferenceSignals(): void {
+    const user = this.authService.currentUser();
+    if (user && user.notificationPreferences) {
+      this.prefNewMessages.set(user.notificationPreferences.newMessages !== false);
+      this.prefApplicationStatus.set(user.notificationPreferences.applicationStatus !== false);
+      this.prefNewApplications.set(user.notificationPreferences.newApplications !== false);
+      this.prefCvAnalysis.set(user.notificationPreferences.cvAnalysis !== false);
+      this.prefOfferAlerts.set(user.notificationPreferences.offerAlerts !== false);
+      return;
+    }
+
+    this.prefNewMessages.set(true);
+    this.prefApplicationStatus.set(true);
+    this.prefNewApplications.set(true);
+    this.prefCvAnalysis.set(true);
+    this.prefOfferAlerts.set(true);
+  }
 
   onBellClick(): void {
     const permission = this.fcmService.permissionState();
@@ -78,19 +113,8 @@ export class Navbar {
     this.fcmService.requestNotificationPermission().then((permission) => {
       if (permission === 'granted') {
         this.toastService.success(this.translate.instant('NOTIFICATIONS.TOAST_ACTIVATED'));
-        // Cargar preferencias actuales del usuario y abrir modal de ajustes inmediatamente
-        const user = this.authService.currentUser();
-        if (user && user.notificationPreferences) {
-          this.prefNewMessages.set(user.notificationPreferences.newMessages !== false);
-          this.prefApplicationStatus.set(user.notificationPreferences.applicationStatus !== false);
-          this.prefNewApplications.set(user.notificationPreferences.newApplications !== false);
-          this.prefCvAnalysis.set(user.notificationPreferences.cvAnalysis !== false);
-        } else {
-          this.prefNewMessages.set(true);
-          this.prefApplicationStatus.set(true);
-          this.prefNewApplications.set(true);
-          this.prefCvAnalysis.set(true);
-        }
+        this.syncPreferenceSignals();
+        this.loadOfferAlerts();
         this.isPreferencesModalOpen.set(true);
       } else if (permission === 'denied') {
         this.toastService.warn(this.translate.instant('NOTIFICATIONS.TOAST_DENIED'));
@@ -110,7 +134,11 @@ export class Navbar {
 
   hasAllSelected(): boolean {
     return (
-      this.prefNewMessages() && this.prefApplicationStatus() && this.prefNewApplications() && this.prefCvAnalysis()
+      this.prefNewMessages() &&
+      this.prefApplicationStatus() &&
+      this.prefNewApplications() &&
+      this.prefCvAnalysis() &&
+      this.prefOfferAlerts()
     );
   }
 
@@ -120,6 +148,7 @@ export class Navbar {
     this.prefApplicationStatus.set(targetState);
     this.prefNewApplications.set(targetState);
     this.prefCvAnalysis.set(targetState);
+    this.prefOfferAlerts.set(targetState);
   }
 
   savePreferences(): void {
@@ -127,7 +156,8 @@ export class Navbar {
       newMessages: this.prefNewMessages(),
       applicationStatus: this.prefApplicationStatus(),
       newApplications: this.prefNewApplications(),
-      cvAnalysis: this.prefCvAnalysis()
+      cvAnalysis: this.prefCvAnalysis(),
+      offerAlerts: this.prefOfferAlerts()
     };
 
     this.fcmService.updateNotificationPreferences(prefs).subscribe({
@@ -363,7 +393,7 @@ export class Navbar {
     this.router.navigateByUrl(targetUrl);
   }
 
-  getNotificationIcon(type: 'chat' | 'solicitud' | 'cv_analysis'): string {
+  getNotificationIcon(type: 'chat' | 'solicitud' | 'cv_analysis' | 'alerta'): string {
     switch (type) {
       case 'chat':
         return 'chat_bubble';
@@ -371,26 +401,102 @@ export class Navbar {
         return 'inbox';
       case 'cv_analysis':
         return 'tune';
+      case 'alerta':
+        return 'storefront';
       default:
         return 'notifications';
     }
   }
 
   openPreferencesModal(): void {
-    const user = this.authService.currentUser();
-    if (user && user.notificationPreferences) {
-      this.prefNewMessages.set(user.notificationPreferences.newMessages !== false);
-      this.prefApplicationStatus.set(user.notificationPreferences.applicationStatus !== false);
-      this.prefNewApplications.set(user.notificationPreferences.newApplications !== false);
-      this.prefCvAnalysis.set(user.notificationPreferences.cvAnalysis !== false);
-    } else {
-      this.prefNewMessages.set(true);
-      this.prefApplicationStatus.set(true);
-      this.prefNewApplications.set(true);
-      this.prefCvAnalysis.set(true);
-    }
+    this.syncPreferenceSignals();
+    this.loadOfferAlerts();
     this.isPreferencesModalOpen.set(true);
     this.isHistoryOpen.set(false); // Cierra el desplegable
+  }
+
+  loadOfferAlerts(): void {
+    this.isLoadingOfferAlerts.set(true);
+    this.alertaService.getAlertas().subscribe({
+      next: (alertas) => {
+        this.offerAlerts.set(alertas);
+        this.isLoadingOfferAlerts.set(false);
+      },
+      error: (err) => {
+        console.error('[Navbar] Error al cargar alertas de ofertas:', err);
+        this.isLoadingOfferAlerts.set(false);
+      }
+    });
+  }
+
+  createOfferAlert(): void {
+    if (!this.alertRegion().trim() && !this.alertRevenueRange() && !this.alertEmployeeRange()) {
+      this.toastService.warn(this.translate.instant('NOTIFICATIONS.OFFER_ALERT_CRITERIA_REQUIRED'));
+      return;
+    }
+
+    this.isSavingOfferAlert.set(true);
+    this.alertaService
+      .createAlerta({
+        name: this.alertName().trim() || undefined,
+        region: this.alertRegion().trim() || undefined,
+        revenueRange: this.alertRevenueRange() || undefined,
+        employeeRange: this.alertEmployeeRange() || undefined
+      })
+      .subscribe({
+        next: (alerta) => {
+          this.offerAlerts.update((prev) => [alerta, ...prev]);
+          this.alertName.set('');
+          this.alertRegion.set('');
+          this.alertRevenueRange.set('');
+          this.alertEmployeeRange.set('');
+          this.isSavingOfferAlert.set(false);
+          this.toastService.success(this.translate.instant('NOTIFICATIONS.OFFER_ALERT_CREATED'));
+        },
+        error: (err) => {
+          console.error('[Navbar] Error al crear alerta de ofertas:', err);
+          this.isSavingOfferAlert.set(false);
+          this.toastService.error(this.translate.instant('NOTIFICATIONS.OFFER_ALERT_ERROR'));
+        }
+      });
+  }
+
+  deleteOfferAlert(alerta: AlertaOferta): void {
+    if (!alerta._id) return;
+    this.alertaService.deleteAlerta(alerta._id).subscribe({
+      next: () => {
+        this.offerAlerts.update((prev) => prev.filter((item) => item._id !== alerta._id));
+      },
+      error: (err) => console.error('[Navbar] Error al eliminar alerta de ofertas:', err)
+    });
+  }
+
+  getAlertOffer(matchOffer: string | Oferta): Oferta | null {
+    return typeof matchOffer === 'object' ? matchOffer : null;
+  }
+
+  getAlertTitle(alerta: AlertaOferta): string {
+    return alerta.name?.trim() || this.translate.instant('NOTIFICATIONS.OFFER_ALERT_DEFAULT_NAME');
+  }
+
+  getAlertCriteria(alerta: AlertaOferta): string {
+    const criteria = [
+      alerta.region,
+      alerta.employeeRange
+        ? `${this.translate.instant('NOTIFICATIONS.OFFER_ALERT_EMPLOYEES_SHORT')} ${this.formatEmployees(alerta.employeeRange)}`
+        : '',
+      alerta.revenueRange ? this.formatRevenue(alerta.revenueRange) : ''
+    ].filter(Boolean);
+
+    return criteria.join(' · ');
+  }
+
+  formatRevenue(value?: string): string {
+    return formatRevenueRange(value);
+  }
+
+  formatEmployees(value?: string): string {
+    return formatEmployeeRange(value);
   }
 
   toggleMenu() {

@@ -7,6 +7,7 @@ export interface NotificationPreferences {
   applicationStatus: boolean;
   newApplications: boolean;
   cvAnalysis: boolean;
+  offerAlerts: boolean;
 }
 
 export interface RatingSummary {

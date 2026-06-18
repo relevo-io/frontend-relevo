@@ -5,7 +5,7 @@ export interface NotificationHistory {
   userId: string;
   title: string;
   body: string;
-  type: 'chat' | 'solicitud' | 'cv_analysis';
+  type: 'chat' | 'solicitud' | 'cv_analysis' | 'alerta';
   metadata?: Record<string, string>;
   read: boolean;
   createdAt: string;

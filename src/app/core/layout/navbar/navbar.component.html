@@ -79,6 +79,7 @@
                       [class.chat]="notif.type === 'chat'"
                       [class.solicitud]="notif.type === 'solicitud'"
                       [class.ia]="notif.type === 'cv_analysis'"
+                      [class.alerta]="notif.type === 'alerta'"
                     >
                       <span class="material-symbols-outlined">{{ getNotificationIcon(notif.type) }}</span>
                     </div>
@@ -341,7 +342,103 @@
             class="preference-checkbox"
           />
         </label>
+
+        <label class="preference-option-item">
+          <span>{{ 'NOTIFICATIONS.CHANNEL_OFFERS' | translate }}</span>
+          <input
+            type="checkbox"
+            [ngModel]="prefOfferAlerts()"
+            (ngModelChange)="prefOfferAlerts.set($event)"
+            class="preference-checkbox"
+          />
+        </label>
       </div>
+
+      <section class="offer-alerts-panel">
+        <div class="offer-alerts-header">
+          <div>
+            <strong>{{ 'NOTIFICATIONS.OFFER_ALERTS_TITLE' | translate }}</strong>
+            <p>{{ 'NOTIFICATIONS.OFFER_ALERTS_SUBTITLE' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="offer-alert-form">
+          <input
+            type="text"
+            [placeholder]="'NOTIFICATIONS.OFFER_ALERT_NAME' | translate"
+            [ngModel]="alertName()"
+            (ngModelChange)="alertName.set($event)"
+          />
+          <input
+            type="text"
+            [placeholder]="'NOTIFICATIONS.OFFER_ALERT_REGION' | translate"
+            [ngModel]="alertRegion()"
+            (ngModelChange)="alertRegion.set($event)"
+          />
+          <select [ngModel]="alertEmployeeRange()" (ngModelChange)="alertEmployeeRange.set($event)">
+            <option value="">{{ 'NOTIFICATIONS.OFFER_ALERT_EMPLOYEES' | translate }}</option>
+            @for (option of employeeRangeOptions; track option) {
+              <option [value]="option">{{ formatEmployees(option) }}</option>
+            }
+          </select>
+          <select [ngModel]="alertRevenueRange()" (ngModelChange)="alertRevenueRange.set($event)">
+            <option value="">{{ 'NOTIFICATIONS.OFFER_ALERT_REVENUE' | translate }}</option>
+            @for (option of revenueRangeOptions; track option) {
+              <option [value]="option">{{ formatRevenue(option) }}</option>
+            }
+          </select>
+          <button
+            type="button"
+            class="btn-add-offer-alert"
+            (click)="createOfferAlert()"
+            [disabled]="isSavingOfferAlert()"
+          >
+            {{ (isSavingOfferAlert() ? 'NOTIFICATIONS.LOADING' : 'NOTIFICATIONS.OFFER_ALERT_CREATE') | translate }}
+          </button>
+        </div>
+
+        <div class="offer-alerts-list">
+          @if (isLoadingOfferAlerts()) {
+            <p class="offer-alert-empty">{{ 'NOTIFICATIONS.LOADING' | translate }}</p>
+          } @else {
+            @for (alerta of offerAlerts(); track alerta._id) {
+              <article class="offer-alert-item">
+                <div class="offer-alert-main">
+                  <div>
+                    <strong>{{ getAlertTitle(alerta) }}</strong>
+                    <span>{{ getAlertCriteria(alerta) }}</span>
+                  </div>
+                  <button type="button" class="btn-text-action btn-delete-all" (click)="deleteOfferAlert(alerta)">
+                    <span class="material-symbols-outlined icon-small">delete</span>
+                  </button>
+                </div>
+
+                <div class="offer-alert-matches">
+                  @for (match of alerta.matchedOffers || []; track match.matchedAt) {
+                    @if (getAlertOffer(match.offerId); as oferta) {
+                      <a
+                        class="offer-alert-match"
+                        [routerLink]="['/ofertas', oferta._id]"
+                        (click)="closePreferencesModal()"
+                      >
+                        <span class="material-symbols-outlined">storefront</span>
+                        <span>
+                          <strong>{{ oferta.region }}</strong>
+                          <small>{{ oferta.sector }} · {{ match.matchedAt | date: 'short' }}</small>
+                        </span>
+                      </a>
+                    }
+                  } @empty {
+                    <p class="offer-alert-empty">{{ 'NOTIFICATIONS.OFFER_ALERT_NO_MATCHES' | translate }}</p>
+                  }
+                </div>
+              </article>
+            } @empty {
+              <p class="offer-alert-empty">{{ 'NOTIFICATIONS.OFFER_ALERT_EMPTY' | translate }}</p>
+            }
+          }
+        </div>
+      </section>
 
       <div class="notifications-modal-actions-column">
         <div class="actions-row">
