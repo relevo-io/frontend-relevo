@@ -417,6 +417,26 @@ body.dark-mode .pager-btn:hover:not(:disabled) {
   color: var(--on-surface-variant);
 }
 
+.offer-public-metrics {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--on-surface-variant);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.offer-public-metrics span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.offer-public-metrics .material-symbols-outlined {
+  font-size: 20px;
+  color: currentColor;
+}
+
 .card-bottom-row {
   display: flex;
   justify-content: space-between;

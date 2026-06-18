@@ -98,6 +98,16 @@
             </div>
 
             <div class="card-footer">
+              <div class="offer-public-metrics">
+                <span>
+                  <span class="material-symbols-outlined">visibility</span>
+                  {{ oferta.detailViewCount || 0 }}
+                </span>
+                <span>
+                  <span class="material-symbols-outlined">favorite</span>
+                  {{ oferta.favoriteCount || 0 }}
+                </span>
+              </div>
               @if (authService.isLoggedIn()) {
                 @if (oferta.revenueRange) {
                   <span

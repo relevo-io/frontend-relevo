@@ -219,7 +219,12 @@
     "SENDING": "Enviant...",
     "SAVE_REQUEST": "Guardar i sol·licitar",
     "OPENING_CHAT": "Obrint xat...",
-    "CONTACT_OWNER": "Contactar amb el propietari"
+    "CONTACT_OWNER": "Contactar amb el propietari",
+    "ANALYTICS_TITLE": "Estadístiques de l'oferta",
+    "VIEWS": "Visites",
+    "FAVORITES": "Preferits",
+    "REQUESTS": "Sol·licituds",
+    "CONVERSION": "Conversió"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "Llest per vendre la teva empresa o prendre el relleu?",
@@ -326,7 +331,14 @@
     "SUBTITLE": "Gestiona els teus negocis publicats a Relevo",
     "EMPTY_TITLE": "No has publicat cap oferta",
     "EMPTY_DESC": "Comença ara a buscar el relleu ideal per al teu negoci.",
-    "CREATE_NEW": "Publicar nova oferta"
+    "CREATE_NEW": "Publicar nova oferta",
+    "PUBLISHED_OFFERS": "Ofertes publicades",
+    "TOTAL_VIEWS": "Visites totals",
+    "TOTAL_FAVORITES": "Preferits totals",
+    "TOTAL_REQUESTS": "Sol·licituds totals",
+    "GLOBAL_CONVERSION": "Conversió global",
+    "VIEWS": "Visites",
+    "FAVORITES": "Preferits"
   },
   "CHATS_PAGE": {
     "TITLE": "Les meves Converses",

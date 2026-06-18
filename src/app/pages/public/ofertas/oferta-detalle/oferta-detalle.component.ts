@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OfertaService } from '../../../../core/services/oferta.service';
-import { Oferta } from '../../../../core/models/oferta.model';
+import { Oferta, OfertaAnalytics } from '../../../../core/models/oferta.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../../shared/utils/oferta-formatters';
 import { SolicitudService } from '../../../../core/services/solicitud.service';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -41,6 +41,7 @@ export class OfertaDetalle {
   showRequestForm = signal<boolean>(false);
   error = signal<string | null>(null);
   solicitudStatus = signal<string | null>(null);
+  analytics = signal<OfertaAnalytics | null>(null);
 
   requestForm = this.fb.group({
     professionalBackground: ['', [Validators.required, Validators.minLength(10)]],
@@ -100,6 +101,12 @@ export class OfertaDetalle {
       next: (data) => {
         this.oferta.set(data);
         this.isLoading.set(false);
+        this.registrarVistaDetalle(id);
+        if (this.isOwnOffer()) {
+          this.cargarAnalytics(id);
+        } else {
+          this.analytics.set(null);
+        }
         this.verificarEstadoSolicitud(id);
       },
       error: (err) => {
@@ -107,6 +114,37 @@ export class OfertaDetalle {
         this.error.set(this.translate.instant('OFFER_DETAIL.LOADING_ERROR') || 'No se pudo cargar la oferta.');
         this.isLoading.set(false);
       }
+    });
+  }
+
+  registrarVistaDetalle(ofertaId: string): void {
+    const storageKey = `relevo_offer_viewed_${ofertaId}`;
+    if (typeof sessionStorage === 'undefined') {
+      return;
+    }
+
+    if (sessionStorage.getItem(storageKey)) {
+      return;
+    }
+
+    sessionStorage.setItem(storageKey, '1');
+    this.ofertaService.registerView(ofertaId).subscribe({
+      next: ({ detailViewCount }) => {
+        const current = this.oferta();
+        if (current) {
+          this.oferta.set({ ...current, detailViewCount });
+        }
+      },
+      error: (err) => console.error('Error registrando visita:', err)
+    });
+  }
+
+  cargarAnalytics(ofertaId: string): void {
+    this.ofertaService.getOfertaAnalytics(ofertaId).subscribe({
+      next: (analytics) => {
+        this.analytics.set(analytics);
+      },
+      error: (err) => console.error('Error cargando analytics de oferta:', err)
     });
   }
 

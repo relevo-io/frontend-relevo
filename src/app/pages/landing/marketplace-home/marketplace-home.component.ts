@@ -161,22 +161,30 @@ export class MarketplaceHomeComponent {
 
     if (currentlyFavorite) {
       this.ofertaService.removeFavorita(ofertaId).subscribe({
-        next: () => {
+        next: ({ favoriteCount }) => {
           const updated = new Set(this.favoriteOfferIds());
           updated.delete(ofertaId);
           this.favoriteOfferIds.set(updated);
+          this.updateOfferFavoriteCount(ofertaId, favoriteCount);
         }
       });
       return;
     }
 
     this.ofertaService.addFavorita(ofertaId).subscribe({
-      next: () => {
+      next: ({ favoriteCount }) => {
         const updated = new Set(this.favoriteOfferIds());
         updated.add(ofertaId);
         this.favoriteOfferIds.set(updated);
+        this.updateOfferFavoriteCount(ofertaId, favoriteCount);
       }
     });
+  }
+
+  private updateOfferFavoriteCount(ofertaId: string, favoriteCount: number): void {
+    this.ofertas.update((ofertas) =>
+      ofertas.map((oferta) => (oferta._id === ofertaId ? { ...oferta, favoriteCount } : oferta))
+    );
   }
 
   prevPage(): void {

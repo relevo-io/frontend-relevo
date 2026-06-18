@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { OfertaService } from '../../../core/services/oferta.service';
-import { Oferta } from '../../../core/models/oferta.model';
+import { Oferta, OwnerAnalyticsSummary } from '../../../core/models/oferta.model';
 import { PaginationMeta } from '../../../core/models/pagination.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
 
@@ -18,6 +18,7 @@ export class MisOfertasComponent implements OnInit {
   private ofertaService = inject(OfertaService);
 
   ofertas = signal<Oferta[]>([]);
+  analyticsSummary = signal<OwnerAnalyticsSummary | null>(null);
   isLoading = signal<boolean>(true);
   page = signal<number>(1);
   pageSize = 8;
@@ -25,6 +26,7 @@ export class MisOfertasComponent implements OnInit {
 
   ngOnInit() {
     this.cargarOfertas();
+    this.cargarResumenAnalytics();
   }
 
   cargarOfertas() {
@@ -38,6 +40,17 @@ export class MisOfertasComponent implements OnInit {
       error: (err) => {
         console.error('Error carregant les teves ofertes:', err);
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  cargarResumenAnalytics() {
+    this.ofertaService.getMisOfertasAnalyticsSummary().subscribe({
+      next: (summary) => {
+        this.analyticsSummary.set(summary);
+      },
+      error: (err) => {
+        console.error('Error carregant resum analytics:', err);
       }
     });
   }

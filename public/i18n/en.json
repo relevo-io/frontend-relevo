@@ -219,7 +219,12 @@
     "SENDING": "Sending...",
     "SAVE_REQUEST": "Save and request",
     "OPENING_CHAT": "Opening chat...",
-    "CONTACT_OWNER": "Contact the owner"
+    "CONTACT_OWNER": "Contact the owner",
+    "ANALYTICS_TITLE": "Offer statistics",
+    "VIEWS": "Views",
+    "FAVORITES": "Favorites",
+    "REQUESTS": "Requests",
+    "CONVERSION": "Conversion"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "Ready to sell your company or take over?",
@@ -326,7 +331,14 @@
     "SUBTITLE": "Manage your businesses published on Relevo",
     "EMPTY_TITLE": "You haven't published any offers",
     "EMPTY_DESC": "Start now to find the ideal successor for your business.",
-    "CREATE_NEW": "Publish new offer"
+    "CREATE_NEW": "Publish new offer",
+    "PUBLISHED_OFFERS": "Published offers",
+    "TOTAL_VIEWS": "Total views",
+    "TOTAL_FAVORITES": "Total favorites",
+    "TOTAL_REQUESTS": "Total requests",
+    "GLOBAL_CONVERSION": "Global conversion",
+    "VIEWS": "Views",
+    "FAVORITES": "Favorites"
   },
   "CHATS_PAGE": {
     "TITLE": "My Conversations",

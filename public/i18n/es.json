@@ -219,7 +219,12 @@
     "SENDING": "Enviando...",
     "SAVE_REQUEST": "Guardar y solicitar",
     "OPENING_CHAT": "Abriendo chat...",
-    "CONTACT_OWNER": "Contactar con el propietario"
+    "CONTACT_OWNER": "Contactar con el propietario",
+    "ANALYTICS_TITLE": "Estadísticas de la oferta",
+    "VIEWS": "Visitas",
+    "FAVORITES": "Favoritos",
+    "REQUESTS": "Solicitudes",
+    "CONVERSION": "Conversión"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "¿Listo para vender tu empresa o tomar el relevo?",
@@ -326,7 +331,14 @@
     "SUBTITLE": "Gestiona tus negocios publicados en Relevo",
     "EMPTY_TITLE": "No has publicado ninguna oferta",
     "EMPTY_DESC": "Comienza ahora a buscar el relevo ideal para tu negocio.",
-    "CREATE_NEW": "Publicar nueva oferta"
+    "CREATE_NEW": "Publicar nueva oferta",
+    "PUBLISHED_OFFERS": "Ofertas publicadas",
+    "TOTAL_VIEWS": "Visitas totales",
+    "TOTAL_FAVORITES": "Favoritos totales",
+    "TOTAL_REQUESTS": "Solicitudes totales",
+    "GLOBAL_CONVERSION": "Conversión global",
+    "VIEWS": "Visitas",
+    "FAVORITES": "Favoritos"
   },
   "CHATS_PAGE": {
     "TITLE": "Mis Conversaciones",

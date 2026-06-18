@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Oferta } from '../models/oferta.model';
+import { Oferta, OfertaAnalytics, OwnerAnalyticsSummary } from '../models/oferta.model';
 import { PaginatedResponse } from '../models/pagination.model';
 import { environment } from '../../../environments/environment';
 
@@ -45,6 +45,18 @@ export class OfertaService {
     return this.http.get<Oferta>(`${this.apiUrl}/${id}`);
   }
 
+  registerView(id: string): Observable<{ detailViewCount: number }> {
+    return this.http.post<{ detailViewCount: number }>(`${this.apiUrl}/${id}/view`, {});
+  }
+
+  getOfertaAnalytics(id: string): Observable<OfertaAnalytics> {
+    return this.http.get<OfertaAnalytics>(`${this.apiUrl}/${id}/analytics`);
+  }
+
+  getMisOfertasAnalyticsSummary(): Observable<OwnerAnalyticsSummary> {
+    return this.http.get<OwnerAnalyticsSummary>(`${this.apiUrl}/me/analytics-summary`);
+  }
+
   getMisOfertas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(`${this.apiUrl}/me`);
   }
@@ -61,19 +73,19 @@ export class OfertaService {
     return this.http.get<PaginatedResponse<Oferta>>(`${this.apiUrl}/favorites?page=${page}&limit=${limit}`);
   }
 
-  addFavorita(ofertaId: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/${ofertaId}/favorite`, {});
+  addFavorita(ofertaId: string): Observable<{ message: string; favoriteCount: number }> {
+    return this.http.post<{ message: string; favoriteCount: number }>(`${this.apiUrl}/${ofertaId}/favorite`, {});
   }
 
-  removeFavorita(ofertaId: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/${ofertaId}/favorite`);
+  removeFavorita(ofertaId: string): Observable<{ message: string; favoriteCount: number }> {
+    return this.http.delete<{ message: string; favoriteCount: number }>(`${this.apiUrl}/${ofertaId}/favorite`);
   }
 
-  createOferta(oferta: Oferta): Observable<Oferta> {
+  createOferta(oferta: Partial<Oferta>): Observable<Oferta> {
     return this.http.post<Oferta>(this.apiUrl, oferta);
   }
 
-  updateOferta(id: string, oferta: Oferta): Observable<Oferta> {
+  updateOferta(id: string, oferta: Partial<Oferta>): Observable<Oferta> {
     return this.http.put<Oferta>(`${this.apiUrl}/${id}`, oferta);
   }
 

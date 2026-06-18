@@ -73,6 +73,42 @@
             <span class="material-symbols-outlined">check_circle</span>
             <span>{{ 'OFFER_DETAIL.OWN_OFFER_NOTICE' | translate }}</span>
           </div>
+
+          @if (analytics(); as stats) {
+            <section class="owner-analytics-block">
+              <h2>{{ 'OFFER_DETAIL.ANALYTICS_TITLE' | translate }}</h2>
+              <div class="meta-grid analytics-grid">
+                <div class="meta-item">
+                  <span class="meta-label">{{ 'OFFER_DETAIL.VIEWS' | translate }}</span>
+                  <strong>{{ stats.detailViewCount }}</strong>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">{{ 'OFFER_DETAIL.FAVORITES' | translate }}</span>
+                  <strong>{{ stats.favoriteCount }}</strong>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">{{ 'OFFER_DETAIL.REQUESTS' | translate }}</span>
+                  <strong>{{ stats.requestCount }}</strong>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">{{ 'OFFER_DETAIL.CONVERSION' | translate }}</span>
+                  <strong>{{ stats.requestConversionRate }}%</strong>
+                </div>
+              </div>
+
+              <div class="status-breakdown">
+                <span class="status-badge pending sm"
+                  >{{ 'STATUS.PENDING' | translate }}: {{ stats.requestsByStatus.pending }}</span
+                >
+                <span class="status-badge accepted sm"
+                  >{{ 'STATUS.ACCEPTED' | translate }}: {{ stats.requestsByStatus.accepted }}</span
+                >
+                <span class="status-badge rejected sm"
+                  >{{ 'STATUS.REJECTED' | translate }}: {{ stats.requestsByStatus.rejected }}</span
+                >
+              </div>
+            </section>
+          }
         }
 
         @if (!isOwnOffer() && solicitudStatus()) {

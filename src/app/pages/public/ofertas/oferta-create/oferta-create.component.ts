@@ -45,7 +45,7 @@ export class OfertaCreateComponent {
 
     this.isSaving.set(true);
     const raw = this.form.getRawValue();
-    const payload: Oferta = {
+    const payload: Partial<Oferta> = {
       region: raw.region?.trim() ?? '',
       sector: raw.sector?.trim() ?? '',
       companyDescription: raw.companyDescription?.trim() ?? '',

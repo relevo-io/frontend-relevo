@@ -12,6 +12,34 @@
       </div>
     </div>
 
+    <div class="owner-kpi-grid">
+      <div class="owner-kpi-card">
+        <span class="material-symbols-outlined">inventory_2</span>
+        <strong>{{ analyticsSummary()?.publishedOffers || 0 }}</strong>
+        <span>{{ 'MY_OFFERS.PUBLISHED_OFFERS' | translate }}</span>
+      </div>
+      <div class="owner-kpi-card">
+        <span class="material-symbols-outlined">visibility</span>
+        <strong>{{ analyticsSummary()?.totalViews || 0 }}</strong>
+        <span>{{ 'MY_OFFERS.TOTAL_VIEWS' | translate }}</span>
+      </div>
+      <div class="owner-kpi-card">
+        <span class="material-symbols-outlined">favorite</span>
+        <strong>{{ analyticsSummary()?.totalFavorites || 0 }}</strong>
+        <span>{{ 'MY_OFFERS.TOTAL_FAVORITES' | translate }}</span>
+      </div>
+      <div class="owner-kpi-card">
+        <span class="material-symbols-outlined">assignment</span>
+        <strong>{{ analyticsSummary()?.totalRequests || 0 }}</strong>
+        <span>{{ 'MY_OFFERS.TOTAL_REQUESTS' | translate }}</span>
+      </div>
+      <div class="owner-kpi-card">
+        <span class="material-symbols-outlined">percent</span>
+        <strong>{{ analyticsSummary()?.averageConversionRate || 0 }}%</strong>
+        <span>{{ 'MY_OFFERS.GLOBAL_CONVERSION' | translate }}</span>
+      </div>
+    </div>
+
     @if (isLoading()) {
       <div class="loading-state"><span class="spinner"></span> {{ 'COMMON.LOADING' | translate }}</div>
     } @else if (ofertas().length === 0) {
@@ -37,6 +65,14 @@
             </div>
 
             <div class="offer-stats-grid">
+              <div class="stat-item">
+                <span class="label">{{ 'MY_OFFERS.VIEWS' | translate }}</span>
+                <strong>{{ o.detailViewCount || 0 }}</strong>
+              </div>
+              <div class="stat-item">
+                <span class="label">{{ 'MY_OFFERS.FAVORITES' | translate }}</span>
+                <strong>{{ o.favoriteCount || 0 }}</strong>
+              </div>
               <div class="stat-item">
                 <span class="label">{{ 'OFFER_DETAIL.REVENUE' | translate }}</span>
                 <strong>{{ formatRevenue(o.revenueRange) }}</strong>

@@ -239,6 +239,26 @@ h1 {
   font-weight: 600;
 }
 
+.owner-analytics-block {
+  margin-top: 18px;
+  margin-bottom: 20px;
+}
+
+.owner-analytics-block h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.analytics-grid {
+  margin-bottom: 14px;
+}
+
+.status-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 @media (max-width: 760px) {
   .meta-grid {
     grid-template-columns: 1fr;

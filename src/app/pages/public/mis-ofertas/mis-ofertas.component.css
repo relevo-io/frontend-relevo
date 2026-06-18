@@ -4,9 +4,47 @@
    ========================================================================== */
 
 /* 1. Disseny de la graella d'estadístiques de l'oferta */
+.owner-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.owner-kpi-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.1rem;
+  padding: 1rem;
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+}
+
+.owner-kpi-card .material-symbols-outlined {
+  grid-row: span 2;
+  color: var(--secondary);
+  font-size: 1.4rem;
+}
+
+.owner-kpi-card strong {
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.owner-kpi-card span:last-child {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--on-surface-variant);
+  line-height: 1.15;
+}
+
 .offer-stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1.5rem;
   padding: 1.5rem;
   background-color: var(--surface-container-lowest);
@@ -62,7 +100,15 @@
   box-shadow: 0 4px 12px rgba(0, 109, 61, 0.25);
 }
 
+@media (max-width: 900px) {
+  .owner-kpi-grid,
+  .offer-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 600px) {
+  .owner-kpi-grid,
   .offer-stats-grid {
     grid-template-columns: 1fr;
   }
@@ -73,6 +119,12 @@ body.dark-mode .offer-stats-grid {
   background: #1e293b;
 }
 
-body.dark-mode .stat-item strong {
+body.dark-mode .owner-kpi-card {
+  background: #0f172a;
+  border-color: #1e293b;
+}
+
+body.dark-mode .stat-item strong,
+body.dark-mode .owner-kpi-card strong {
   color: #f1f5f9;
 }
