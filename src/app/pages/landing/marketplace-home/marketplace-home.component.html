@@ -68,6 +68,7 @@
         @for (oferta of displayedOfertas(); track oferta._id) {
           <article
             class="offer-card"
+            data-tour="offer-card"
             [routerLink]="authService.isLoggedIn() ? ['/ofertas', oferta._id] : ['/register']"
           >
             <header class="card-head">
@@ -103,7 +104,7 @@
                   <span class="material-symbols-outlined">visibility</span>
                   {{ oferta.detailViewCount || 0 }}
                 </span>
-                <span>
+                <span class="rating-metric">
                   <span class="material-symbols-outlined">favorite</span>
                   {{ oferta.favoriteCount || 0 }}
                 </span>

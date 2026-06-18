@@ -9,6 +9,26 @@ export interface NotificationPreferences {
   cvAnalysis: boolean;
 }
 
+export interface RatingSummary {
+  average: number;
+  count: number;
+}
+
+export interface UserRating {
+  _id?: string;
+  ratedRole: 'OWNER' | 'INTERESTED';
+  score: number;
+  comment?: string;
+  fromUser?: string | { _id?: string; fullName?: string };
+  createdAt?: string;
+}
+
+export interface MyRatingsResponse {
+  asOwner: RatingSummary;
+  asInterested: RatingSummary;
+  ratings: UserRating[];
+}
+
 export interface Usuario {
   _id?: string; // Opcional igual que en IUsuario del backend
   roles: (typeof userRoles)[number][];
@@ -27,6 +47,8 @@ export interface Usuario {
   theme?: string;
   fcmTokens?: string[];
   notificationPreferences?: NotificationPreferences;
+  ratingAsOwner?: RatingSummary;
+  ratingAsInterested?: RatingSummary;
   createdAt?: string;
   updatedAt?: string;
 }

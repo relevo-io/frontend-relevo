@@ -1,0 +1,33 @@
+@if (tour.isActive()) {
+  <div class="tour-overlay" aria-hidden="true"></div>
+  @if (rect()) {
+    <div class="tour-highlight" [ngStyle]="highlightStyle()"></div>
+  }
+
+  <section class="tour-card" [ngStyle]="cardStyle()" role="dialog" aria-modal="true">
+    <header class="tour-card-header">
+      <span>{{ step().eyebrow | translate }}</span>
+      <small>{{ progress() }}</small>
+    </header>
+    <h2>{{ step().title | translate }}</h2>
+    <p>{{ step().body | translate }}</p>
+
+    <div class="tour-dots">
+      @for (_ of tour.steps; track $index) {
+        <span [class.active]="$index === tour.currentIndex()"></span>
+      }
+    </div>
+
+    <div class="tour-actions">
+      <button type="button" class="btn-ghost" (click)="tour.skip()">{{ 'ONBOARDING.SKIP' | translate }}</button>
+      <div>
+        <button type="button" class="btn-ghost" (click)="tour.previous()" [disabled]="tour.currentIndex() === 0">
+          {{ 'ONBOARDING.PREVIOUS' | translate }}
+        </button>
+        <button type="button" class="btn-primary" (click)="tour.next()">
+          {{ (isLast() ? 'ONBOARDING.FINISH' : 'ONBOARDING.NEXT') | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
+}

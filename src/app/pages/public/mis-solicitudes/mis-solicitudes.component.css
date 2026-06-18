@@ -48,6 +48,27 @@
   color: var(--on-surface-variant);
 }
 
+.user-rating-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  color: var(--on-surface-variant);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.user-rating-line .material-symbols-outlined {
+  font-size: 17px;
+  color: #f59e0b;
+  font-variation-settings: 'FILL' 1;
+}
+
+.user-rating-line small {
+  color: var(--on-surface-variant);
+  font-weight: 600;
+}
+
 .applicant-details {
   background-color: var(--surface-container-low);
   padding: 1.25rem;

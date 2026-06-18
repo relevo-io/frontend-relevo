@@ -1,11 +1,11 @@
 <nav class="navbar">
   <div class="navbar-container">
     <div class="navbar-brand">
-      <a routerLink="/" class="logo">Relevo</a>
+      <a routerLink="/" class="logo" data-tour="brand">Relevo</a>
     </div>
 
     @if (authService.isLoggedIn()) {
-      <div class="navbar-search">
+      <div class="navbar-search" data-tour="search">
         <span class="material-symbols-outlined">search</span>
         <input
           type="text"
@@ -233,7 +233,7 @@
         </div>
         <button routerLink="/register" class="btn-outline">{{ 'NAVBAR.LOGIN_REGISTER' | translate }}</button>
       }
-      <button (click)="goToSell()" class="btn-solid">{{ 'NAVBAR.SELL_NOW' | translate }}</button>
+      <button (click)="goToSell()" class="btn-solid" data-tour="sell-now">{{ 'NAVBAR.SELL_NOW' | translate }}</button>
     </div>
   </div>
 </nav>

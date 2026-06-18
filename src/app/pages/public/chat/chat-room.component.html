@@ -185,7 +185,53 @@
 
   <!-- Input Area -->
   <footer class="chat-footer">
-    @if (isReadOnly()) {
+    @if (canRateClosedDeal()) {
+      <div class="deal-rating-panel">
+        <div class="deal-rating-copy">
+          <span class="material-symbols-outlined icon-main">workspace_premium</span>
+          <div>
+            <h4>{{ 'CHAT.RATING_TITLE' | translate }}</h4>
+            <p>{{ 'CHAT.RATING_DESC' | translate: { name: otherParticipantName() } }}</p>
+          </div>
+        </div>
+        <div class="stars-row" aria-label="Valoracion">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+            <button
+              type="button"
+              class="star-btn"
+              [class.active]="star <= (ratingHover() || ratingScore())"
+              (mouseenter)="ratingHover.set(star)"
+              (mouseleave)="ratingHover.set(0)"
+              (click)="setRating(star)"
+              [attr.aria-label]="star + ' estrellas'"
+            >
+              <span class="material-symbols-outlined">star</span>
+            </button>
+          }
+        </div>
+        <textarea
+          class="rating-comment"
+          [value]="ratingComment()"
+          (input)="ratingComment.set($any($event.target).value)"
+          [placeholder]="'CHAT.RATING_COMMENT_PLACEHOLDER' | translate"
+          rows="2"
+          maxlength="600"
+        ></textarea>
+        <button
+          class="btn-approve rating-submit"
+          (click)="submitRating()"
+          [disabled]="!ratingScore() || isSendingRating()"
+        >
+          <span class="material-symbols-outlined">send</span>
+          {{ (isSendingRating() ? 'CHAT.RATING_SENDING' : 'CHAT.RATING_SEND') | translate }}
+        </button>
+      </div>
+    } @else if (myRating()) {
+      <div class="readonly-notice rating-sent">
+        <span class="material-symbols-outlined">verified</span>
+        {{ 'CHAT.RATING_SENT' | translate }}
+      </div>
+    } @else if (isReadOnly()) {
       <div class="readonly-notice">
         <span class="material-symbols-outlined">lock</span>
         {{ 'CHAT.READ_ONLY_NOTICE' | translate }}
@@ -223,6 +269,31 @@
         <p>{{ (isOwnerOfOffer() ? 'CHAT.REJECTED_NOTICE_OWNER' : 'CHAT.REJECTED_NOTICE') | translate }}</p>
       </div>
     } @else {
+      @if (canShowDealClosePanel()) {
+        <div class="deal-close-panel">
+          <div class="deal-close-copy">
+            <span class="material-symbols-outlined">handshake</span>
+            <div>
+              <strong>{{ 'CHAT.DEAL_CLOSE_TITLE' | translate }}</strong>
+              <p>{{ 'CHAT.DEAL_CLOSE_DESC' | translate }}</p>
+            </div>
+          </div>
+          @if (hasConfirmedDeal()) {
+            <span class="deal-status-pill">
+              <span class="material-symbols-outlined">check_circle</span>
+              {{
+                (isWaitingOtherDealConfirmation() ? 'CHAT.DEAL_WAITING_OTHER' : 'CHAT.DEAL_CONFIRMED_BY_YOU')
+                  | translate
+              }}
+            </span>
+          } @else {
+            <button class="btn-close-deal" (click)="closeDeal()" [disabled]="isClosingDeal()">
+              <span class="material-symbols-outlined">done_all</span>
+              {{ (isClosingDeal() ? 'CHAT.DEAL_CLOSING' : 'CHAT.DEAL_CLOSE_BUTTON') | translate }}
+            </button>
+          }
+        </div>
+      }
       <div class="input-row">
         @if (isRecording()) {
           <div class="recording-panel">

@@ -40,7 +40,8 @@
   align-items: center;
 }
 
-.owner-badge {
+.owner-badge,
+.owner-rating-badge {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -52,11 +53,27 @@
   border-radius: 16px;
 }
 
-.owner-badge .material-symbols-outlined {
+.owner-badge .material-symbols-outlined,
+.owner-rating-badge .material-symbols-outlined {
   font-size: 16px;
 }
 
-:host-context(.dark-mode) .owner-badge {
+.owner-rating-badge .material-symbols-outlined {
+  color: #f59e0b;
+  font-variation-settings: 'FILL' 1;
+}
+
+.owner-rating-badge small {
+  color: var(--on-surface-variant);
+}
+
+.owner-rating-label {
+  color: var(--on-surface-variant);
+  font-weight: 600;
+}
+
+:host-context(.dark-mode) .owner-badge,
+:host-context(.dark-mode) .owner-rating-badge {
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.7);
 }

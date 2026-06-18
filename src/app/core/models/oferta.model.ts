@@ -1,3 +1,5 @@
+import { RatingSummary } from './usuario.model';
+
 export interface Oferta {
   _id?: string;
   region: string;
@@ -10,6 +12,7 @@ export interface Oferta {
   extendedDescription?: string;
   detailViewCount: number;
   favoriteCount: number;
+  ownerRating?: RatingSummary;
   publishedAt?: string;
   createdAt?: string;
   updatedAt?: string;

@@ -1,0 +1,126 @@
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: rgba(8, 20, 39, 0.72);
+  backdrop-filter: blur(1px);
+}
+
+.tour-highlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9991;
+  border: 2px solid rgba(205, 220, 255, 0.95);
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 5px rgba(70, 104, 190, 0.28),
+    0 12px 32px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  transition:
+    transform 0.22s ease,
+    width 0.22s ease,
+    height 0.22s ease;
+}
+
+.tour-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9992;
+  background: var(--surface-container-lowest);
+  border: 1px solid rgba(205, 220, 255, 0.75);
+  border-radius: 16px;
+  padding: 22px 24px 20px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  transition: transform 0.22s ease;
+}
+
+.tour-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.tour-card-header span {
+  color: var(--secondary);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.tour-card-header small {
+  color: var(--on-surface-variant);
+  font-size: 0.86rem;
+}
+
+.tour-card h2 {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+
+.tour-card p {
+  margin: 0;
+  color: var(--on-surface-variant);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.tour-dots {
+  display: flex;
+  gap: 7px;
+  margin: 20px 0 18px;
+}
+
+.tour-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--outline-variant);
+}
+
+.tour-dots span.active {
+  width: 26px;
+  background: var(--secondary);
+}
+
+.tour-actions,
+.tour-actions div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tour-actions button {
+  border: 0;
+  border-radius: 10px;
+  min-height: 38px;
+  padding: 0 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tour-actions button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tour-actions .btn-ghost {
+  background: transparent;
+  color: var(--on-surface-variant);
+}
+
+.tour-actions .btn-primary {
+  background: var(--secondary);
+  color: white;
+}
+
+body.dark-mode .tour-card {
+  background: #0f172a;
+  border-color: rgba(148, 163, 184, 0.35);
+}

@@ -18,7 +18,14 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { ChatService } from '../../../core/services/chat.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Mensaje, Chat, ConnectionStatus, PresenceStatus, MessageType } from '../../../core/models/chat.model';
+import {
+  Mensaje,
+  Chat,
+  ChatRating,
+  ConnectionStatus,
+  PresenceStatus,
+  MessageType
+} from '../../../core/models/chat.model';
 
 @Component({
   selector: 'app-chat-room',
@@ -55,6 +62,12 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   showNewMessageBanner = signal(false);
   isAtBottom = signal(true);
   chatId = signal('');
+  myRating = signal<ChatRating | null>(null);
+  ratingScore = signal(0);
+  ratingHover = signal(0);
+  ratingComment = signal('');
+  isClosingDeal = signal(false);
+  isSendingRating = signal(false);
 
   // ── MediaRecorder properties ────────────────
   private mediaRecorder: any = null;
@@ -71,6 +84,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   currentUserId = computed(() => this.authService.currentUser()?._id ?? '');
   isReadOnly = computed(() => this.chat()?.isReadOnly ?? false);
   isPendingApproval = computed(() => this.chat()?.status === 'PENDING_APPROVAL');
+  isDealClosed = computed(() => Boolean(this.chat()?.closedAt));
 
   isOwnerOfOffer = computed(() => {
     const c = this.chat();
@@ -87,6 +101,28 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (c.status === 'REJECTED') return false;
     return true;
   });
+
+  hasConfirmedDeal = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    return this.isOwnerOfOffer() ? Boolean(c.closedByOwner) : Boolean(c.closedByInterested);
+  });
+
+  isWaitingOtherDealConfirmation = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    if (this.isDealClosed()) return false;
+    if (!this.hasConfirmedDeal()) return false;
+    return this.isOwnerOfOffer() ? !c.closedByInterested : !c.closedByOwner;
+  });
+
+  canShowDealClosePanel = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    return c.status === 'APPROVED' && !this.isDealClosed();
+  });
+
+  canRateClosedDeal = computed(() => this.isDealClosed() && !this.myRating());
 
   otherParticipantName = computed(() => {
     const c = this.chat();
@@ -139,6 +175,10 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.chatId.set(id);
         this.messages.set([]);
         this.chat.set(null);
+        this.myRating.set(null);
+        this.ratingScore.set(0);
+        this.ratingHover.set(0);
+        this.ratingComment.set('');
         this.typingUserId.set(null);
         this.presenceStatus.set('offline');
         this.showNewMessageBanner.set(false);
@@ -193,6 +233,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
       const chat = chats?.find((c) => c._id === chatId);
       this.chat.set(chat ?? null);
+      await this.loadMyRating(chatId);
 
       // Load initial message history (last 30)
       const msgs = await this.chatService.getMessages(chatId).toPromise();
@@ -331,6 +372,55 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
       console.error('[ChatRoom] Error updating status:', err);
     } finally {
       this.isLoading.set(false);
+    }
+  }
+
+  private async loadMyRating(chatId: string): Promise<void> {
+    try {
+      const response = await this.chatService.getMyChatRating(chatId).toPromise();
+      if (this.chatId() === chatId) {
+        this.myRating.set(response?.rating ?? null);
+      }
+    } catch {
+      this.myRating.set(null);
+    }
+  }
+
+  async closeDeal(): Promise<void> {
+    const id = this.chatId();
+    if (!id || this.isClosingDeal() || this.hasConfirmedDeal()) return;
+
+    this.isClosingDeal.set(true);
+    try {
+      const updated = await this.chatService.closeDeal(id).toPromise();
+      if (updated) {
+        this.chat.set(updated);
+      }
+    } catch (err) {
+      console.error('[ChatRoom] Error closing deal:', err);
+    } finally {
+      this.isClosingDeal.set(false);
+    }
+  }
+
+  setRating(score: number): void {
+    this.ratingScore.set(score);
+  }
+
+  async submitRating(): Promise<void> {
+    const score = this.ratingScore();
+    if (!score || this.isSendingRating()) return;
+
+    this.isSendingRating.set(true);
+    try {
+      const rating = await this.chatService.rateChat(this.chatId(), score, this.ratingComment().trim()).toPromise();
+      if (rating) {
+        this.myRating.set(rating);
+      }
+    } catch (err) {
+      console.error('[ChatRoom] Error sending rating:', err);
+    } finally {
+      this.isSendingRating.set(false);
     }
   }
 

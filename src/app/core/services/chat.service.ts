@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import {
   Chat,
+  ChatRating,
   Mensaje,
   SendMessageAck,
   JoinChatAck,
@@ -303,6 +304,18 @@ export class ChatService implements OnDestroy {
   /** Actualiza el estado de aprobación de un chat (APPROVED / REJECTED) */
   updateChatStatus(chatId: string, status: 'APPROVED' | 'REJECTED'): Observable<Chat> {
     return this.http.patch<Chat>(`${API_URL}/chats/${chatId}/status`, { status });
+  }
+
+  closeDeal(chatId: string): Observable<Chat> {
+    return this.http.post<Chat>(`${API_URL}/chats/${chatId}/close`, {});
+  }
+
+  getMyChatRating(chatId: string): Observable<{ rating: ChatRating | null }> {
+    return this.http.get<{ rating: ChatRating | null }>(`${API_URL}/chats/${chatId}/my-rating`);
+  }
+
+  rateChat(chatId: string, score: number, comment?: string): Observable<ChatRating> {
+    return this.http.post<ChatRating>(`${API_URL}/chats/${chatId}/rating`, { score, comment });
   }
 
   // ─────────────────────────────────────────────

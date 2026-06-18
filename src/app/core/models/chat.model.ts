@@ -20,6 +20,21 @@ export interface Chat {
   unreadInterested: number;
   isReadOnly: boolean;
   status: ChatStatus;
+  closedByOwner?: boolean;
+  closedByInterested?: boolean;
+  closedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ChatRating {
+  _id?: string;
+  chat: string;
+  fromUser: string;
+  toUser: string;
+  ratedRole: 'OWNER' | 'INTERESTED';
+  score: number;
+  comment?: string;
   createdAt?: string;
   updatedAt?: string;
 }

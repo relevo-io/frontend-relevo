@@ -27,6 +27,7 @@ export interface AuthResponse {
   message: string;
   accessToken: string;
   usuario: Usuario;
+  isNewUser?: boolean;
   refreshToken?: string; // Por si lo implementas en el futuro
 }
 

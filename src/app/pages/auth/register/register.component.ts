@@ -7,6 +7,7 @@ import { RegisterRequest } from '../../../core/models/auth.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { OnboardingService } from '../../../core/services/onboarding.service';
 
 @Component({
   selector: 'app-register',
@@ -22,6 +23,7 @@ export class RegisterComponent {
   private translate = inject(TranslateService);
   private ns = inject(NotificationService);
   private themeService = inject(ThemeService);
+  private onboardingService = inject(OnboardingService);
 
   registerForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
@@ -45,7 +47,12 @@ export class RegisterComponent {
   registerWithGoogle() {
     this.errorMessage.set(null);
     this.authService.loginWithGoogle().subscribe({
-      next: () => this.router.navigate(['/']),
+      next: (res) => {
+        if (res.isNewUser) {
+          this.onboardingService.markPending();
+        }
+        this.router.navigate(['/']);
+      },
       error: (error) => {
         this.errorMessage.set(this.resolveSocialError(error, 'Google'));
       }
@@ -55,7 +62,12 @@ export class RegisterComponent {
   registerWithGithub() {
     this.errorMessage.set(null);
     this.authService.loginWithGitHub().subscribe({
-      next: () => this.router.navigate(['/']),
+      next: (res) => {
+        if (res.isNewUser) {
+          this.onboardingService.markPending();
+        }
+        this.router.navigate(['/']);
+      },
       error: (error) => {
         this.errorMessage.set(this.resolveSocialError(error, 'GitHub'));
       }
@@ -98,6 +110,7 @@ export class RegisterComponent {
     this.authService.register(requestData).subscribe({
       next: () => {
         this.isLoading.set(false);
+        this.onboardingService.markPending();
         this.ns.success(
           this.translate.instant('COMMON.NOTIF.REGISTER_SUCCESS') ||
             'Cuenta creada correctamente. Por favor, inicia sesión.'

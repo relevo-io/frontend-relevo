@@ -437,6 +437,15 @@ body.dark-mode .pager-btn:hover:not(:disabled) {
   color: currentColor;
 }
 
+.offer-public-metrics .rating-metric .material-symbols-outlined {
+  color: #e11d48;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
 .card-bottom-row {
   display: flex;
   justify-content: space-between;
@@ -453,7 +462,7 @@ body.dark-mode .pager-btn:hover:not(:disabled) {
 .favorite-btn {
   border: none;
   background: transparent;
-  color: #94a3b8;
+  color: #e11d48;
   cursor: pointer;
   border-radius: 999px;
   padding: 0.2rem;
@@ -462,12 +471,20 @@ body.dark-mode .pager-btn:hover:not(:disabled) {
   justify-content: center;
 }
 
+.favorite-btn .material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
 .favorite-btn:hover {
   background: rgba(148, 163, 184, 0.2);
 }
 
 .favorite-btn.active {
-  color: #16a34a;
+  color: #e11d48;
   background: transparent;
 }
 

@@ -1,3 +1,5 @@
+import { RatingSummary } from './usuario.model';
+
 export interface ResultadoIa {
   resumen: string;
   nota: number;
@@ -15,11 +17,13 @@ export interface Solicitud {
     bio?: string;
     professionalBackground?: string;
     cv?: string;
+    ratingAsInterested?: RatingSummary;
   };
   owner: {
     _id: string;
     fullName: string;
     email: string;
+    ratingAsOwner?: RatingSummary;
   };
   opportunity: {
     _id: string;
