@@ -11,6 +11,7 @@ import { Home as LandingComponent } from './pages/landing/home.component';
 import { MarketplaceHomeComponent } from './pages/landing/marketplace-home/marketplace-home.component';
 import { Login as LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
+import { OAuthCallbackComponent } from './pages/auth/oauth-callback/oauth-callback.component';
 import { OfertaListComponent } from './pages/public/ofertas/oferta-list/oferta-list.component';
 import { OfertaDetalle } from './pages/public/ofertas/oferta-detalle/oferta-detalle.component';
 import { OfertaCreateComponent } from './pages/public/ofertas/oferta-create/oferta-create.component';
@@ -23,6 +24,8 @@ import { ChatRoomComponent } from './pages/public/chat/chat-room.component';
 import { MisChatsComponent } from './pages/public/mis-chats/mis-chats.component';
 import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-solicitudes.component';
 import { MisOfertasComponent } from './pages/public/mis-ofertas/mis-ofertas.component';
+import { MisFavoritosComponent } from './pages/public/mis-favoritos/mis-favoritos.component';
+import { MentoringComponent } from './pages/public/mentoring/mentoring.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -40,9 +43,10 @@ export const routes: Routes = [
       { path: 'como-funciona', component: LandingComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
+      { path: 'oauth/callback/:provider', component: OAuthCallbackComponent },
       { path: 'ofertas', component: OfertaListComponent },
       { path: 'ofertas/crear', component: OfertaCreateComponent, canActivate: [authGuard] },
-      { path: 'ofertas/:id', component: OfertaDetalle },
+      { path: 'ofertas/:id', component: OfertaDetalle, canActivate: [authGuard] },
       { path: 'aviso-legal', component: AvisoLegalComponent },
       { path: 'terminos-servicio', component: TerminosServicioComponent },
       { path: 'politica-privacidad', component: PoliticaPrivacidadComponent },
@@ -70,6 +74,16 @@ export const routes: Routes = [
       {
         path: 'mis-ofertas',
         component: MisOfertasComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'mis-favoritos',
+        component: MisFavoritosComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'mentoring',
+        component: MentoringComponent,
         canActivate: [authGuard]
       }
     ]

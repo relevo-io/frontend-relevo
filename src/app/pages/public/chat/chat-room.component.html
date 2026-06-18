@@ -71,8 +71,65 @@
               [class.bubble-theirs]="!isMine(msg)"
               [class.bubble-sending]="msg.status === 'sending'"
               [class.bubble-error]="msg.status === 'error'"
+              [class.bubble-media]="msg.messageType === 'image'"
             >
-              <p class="bubble-text">{{ msg.content }}</p>
+              <!-- Render File Content -->
+              @if (msg.messageType === 'image') {
+                <div class="media-container image-message">
+                  @if (msg.fileUrl) {
+                    <a [href]="msg.fileUrl" target="_blank" rel="noopener">
+                      <img [src]="msg.fileUrl" [alt]="msg.fileName || 'Imagen'" class="chat-image" />
+                    </a>
+                  } @else {
+                    <div class="media-placeholder image-uploading">
+                      <div class="mini-spinner"></div>
+                      <span>Enviando imagen...</span>
+                    </div>
+                  }
+                </div>
+              } @else if (msg.messageType === 'file') {
+                <div class="media-container file-message">
+                  <span class="material-symbols-outlined file-icon">description</span>
+                  <div class="file-info">
+                    <span class="file-name" [title]="msg.fileName">{{ msg.fileName }}</span>
+                    @if (msg.fileSize) {
+                      <span class="file-size">{{ msg.fileSize / 1024 / 1024 | number: '1.0-2' }} MB</span>
+                    }
+                  </div>
+                  @if (msg.fileUrl) {
+                    <a
+                      [href]="msg.fileUrl"
+                      target="_blank"
+                      download
+                      class="file-download-btn"
+                      aria-label="Descargar archivo"
+                    >
+                      <span class="material-symbols-outlined">download</span>
+                    </a>
+                  } @else {
+                    <div class="mini-spinner"></div>
+                  }
+                </div>
+              } @else if (msg.messageType === 'audio') {
+                <div class="media-container audio-message">
+                  @if (msg.fileUrl) {
+                    <audio controls class="chat-audio" preload="metadata">
+                      <source [src]="msg.fileUrl" [type]="msg.mimeType || 'audio/webm'" />
+                      Tu navegador no soporta audios.
+                    </audio>
+                  } @else {
+                    <div class="media-placeholder audio-uploading">
+                      <div class="mini-spinner"></div>
+                      <span>Enviando audio...</span>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Render Text (if present) -->
+              @if (msg.content) {
+                <p class="bubble-text">{{ msg.content }}</p>
+              }
               <div class="bubble-meta">
                 <span class="bubble-time">{{ msg.createdAt | date: 'HH:mm' }}</span>
                 @if (isMine(msg)) {
@@ -128,7 +185,53 @@
 
   <!-- Input Area -->
   <footer class="chat-footer">
-    @if (isReadOnly()) {
+    @if (canRateClosedDeal()) {
+      <div class="deal-rating-panel">
+        <div class="deal-rating-copy">
+          <span class="material-symbols-outlined icon-main">workspace_premium</span>
+          <div>
+            <h4>{{ 'CHAT.RATING_TITLE' | translate }}</h4>
+            <p>{{ 'CHAT.RATING_DESC' | translate: { name: otherParticipantName() } }}</p>
+          </div>
+        </div>
+        <div class="stars-row" aria-label="Valoracion">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+            <button
+              type="button"
+              class="star-btn"
+              [class.active]="star <= (ratingHover() || ratingScore())"
+              (mouseenter)="ratingHover.set(star)"
+              (mouseleave)="ratingHover.set(0)"
+              (click)="setRating(star)"
+              [attr.aria-label]="star + ' estrellas'"
+            >
+              <span class="material-symbols-outlined">star</span>
+            </button>
+          }
+        </div>
+        <textarea
+          class="rating-comment"
+          [value]="ratingComment()"
+          (input)="ratingComment.set($any($event.target).value)"
+          [placeholder]="'CHAT.RATING_COMMENT_PLACEHOLDER' | translate"
+          rows="2"
+          maxlength="600"
+        ></textarea>
+        <button
+          class="btn-approve rating-submit"
+          (click)="submitRating()"
+          [disabled]="!ratingScore() || isSendingRating()"
+        >
+          <span class="material-symbols-outlined">send</span>
+          {{ (isSendingRating() ? 'CHAT.RATING_SENDING' : 'CHAT.RATING_SEND') | translate }}
+        </button>
+      </div>
+    } @else if (myRating()) {
+      <div class="readonly-notice rating-sent">
+        <span class="material-symbols-outlined">verified</span>
+        {{ 'CHAT.RATING_SENT' | translate }}
+      </div>
+    } @else if (isReadOnly()) {
       <div class="readonly-notice">
         <span class="material-symbols-outlined">lock</span>
         {{ 'CHAT.READ_ONLY_NOTICE' | translate }}
@@ -166,28 +269,107 @@
         <p>{{ (isOwnerOfOffer() ? 'CHAT.REJECTED_NOTICE_OWNER' : 'CHAT.REJECTED_NOTICE') | translate }}</p>
       </div>
     } @else {
+      @if (canShowDealClosePanel()) {
+        <div class="deal-close-panel">
+          <div class="deal-close-copy">
+            <span class="material-symbols-outlined">handshake</span>
+            <div>
+              <strong>{{ 'CHAT.DEAL_CLOSE_TITLE' | translate }}</strong>
+              <p>{{ 'CHAT.DEAL_CLOSE_DESC' | translate }}</p>
+            </div>
+          </div>
+          @if (hasConfirmedDeal()) {
+            <span class="deal-status-pill">
+              <span class="material-symbols-outlined">check_circle</span>
+              {{
+                (isWaitingOtherDealConfirmation() ? 'CHAT.DEAL_WAITING_OTHER' : 'CHAT.DEAL_CONFIRMED_BY_YOU')
+                  | translate
+              }}
+            </span>
+          } @else {
+            <button class="btn-close-deal" (click)="closeDeal()" [disabled]="isClosingDeal()">
+              <span class="material-symbols-outlined">done_all</span>
+              {{ (isClosingDeal() ? 'CHAT.DEAL_CLOSING' : 'CHAT.DEAL_CLOSE_BUTTON') | translate }}
+            </button>
+          }
+        </div>
+      }
       <div class="input-row">
-        <textarea
-          id="message-input"
-          class="message-input"
-          [value]="messageInput()"
-          (input)="onInputChange($any($event.target).value)"
-          (keydown)="onKeydown($event)"
-          placeholder="Escribe un mensaje..."
-          rows="1"
-          [disabled]="!canReply() || isSending()"
-          aria-label="Escribir mensaje"
-          maxlength="2000"
-        ></textarea>
-        <button
-          id="send-message-btn"
-          class="send-btn"
-          (click)="sendMessage()"
-          [disabled]="!messageInput().trim() || isSending()"
-          aria-label="Enviar mensaje"
-        >
-          <span class="material-symbols-outlined">send</span>
-        </button>
+        @if (isRecording()) {
+          <div class="recording-panel">
+            <div class="recording-info">
+              <span class="rec-dot"></span>
+              <span class="rec-time">{{ formatDuration(recordingDuration()) }}</span>
+            </div>
+            <div class="recording-actions">
+              <button class="btn-cancel-rec" (click)="cancelRecording()" aria-label="Cancelar grabación">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+              <button class="btn-send-rec" (click)="stopRecording()" aria-label="Enviar nota de voz">
+                <span class="material-symbols-outlined">send</span>
+              </button>
+            </div>
+          </div>
+        } @else {
+          <!-- Hidden input for file selection -->
+          <input
+            #fileInput
+            type="file"
+            id="chat-file-input"
+            style="display: none"
+            (change)="onFileSelected($event)"
+            accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+          />
+
+          <!-- Button to trigger file input -->
+          <button
+            class="attach-btn"
+            (click)="fileInput.click()"
+            [disabled]="!canReply() || isSending() || isUploadingFile()"
+            aria-label="Adjuntar archivo"
+          >
+            @if (isUploadingFile()) {
+              <div class="mini-spinner"></div>
+            } @else {
+              <span class="material-symbols-outlined">attach_file</span>
+            }
+          </button>
+
+          <textarea
+            id="message-input"
+            class="message-input"
+            [value]="messageInput()"
+            (input)="onInputChange($any($event.target).value)"
+            (keydown)="onKeydown($event)"
+            placeholder="Escribe un mensaje..."
+            rows="1"
+            [disabled]="!canReply() || isSending() || isUploadingFile()"
+            aria-label="Escribir mensaje"
+            maxlength="2000"
+          ></textarea>
+
+          <!-- Mic button to record voice note -->
+          @if (!messageInput().trim()) {
+            <button
+              class="mic-btn"
+              (click)="startRecording()"
+              [disabled]="!canReply() || isSending() || isUploadingFile()"
+              aria-label="Grabar audio"
+            >
+              <span class="material-symbols-outlined">mic</span>
+            </button>
+          } @else {
+            <button
+              id="send-message-btn"
+              class="send-btn"
+              (click)="sendMessage()"
+              [disabled]="isSending() || isUploadingFile()"
+              aria-label="Enviar mensaje"
+            >
+              <span class="material-symbols-outlined">send</span>
+            </button>
+          }
+        }
       </div>
     }
   </footer>

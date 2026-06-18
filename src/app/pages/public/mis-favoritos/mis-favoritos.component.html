@@ -1,0 +1,76 @@
+<main class="favorites-page">
+  <section class="favorites-wrap">
+    <header class="favorites-header">
+      <h1>{{ 'FAVORITES.TITLE' | translate }}</h1>
+      <p>{{ 'FAVORITES.SUBTITLE' | translate }}</p>
+    </header>
+
+    @if (isLoading() && favoritas().length === 0) {
+      <div class="state-box">{{ 'FAVORITES.LOADING' | translate }}</div>
+    } @else if (!isLoading() && favoritas().length === 0) {
+      <div class="state-box">{{ 'FAVORITES.EMPTY' | translate }}</div>
+    } @else {
+      <div
+        class="offers-grid"
+        [style.opacity]="isLoading() ? 0.6 : 1"
+        [style.pointer-events]="isLoading() ? 'none' : 'auto'"
+        [style.transition]="'opacity 0.2s ease'"
+      >
+        @for (oferta of favoritas(); track oferta._id) {
+          <article class="offer-card" [routerLink]="['/ofertas', oferta._id]">
+            <header class="card-head">
+              <span class="sector">{{ oferta.sector }}</span>
+              @if (oferta.employeeRange) {
+                <span class="meta"
+                  >{{ formatEmployees(oferta.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
+                >
+              }
+            </header>
+
+            <h3>{{ oferta.region }}</h3>
+            <p class="description">{{ oferta.companyDescription }}</p>
+
+            <div class="card-footer">
+              @if (oferta.revenueRange) {
+                <span
+                  ><strong>{{ 'OFFER_DETAIL.REVENUE' | translate }}:</strong>
+                  {{ formatRevenue(oferta.revenueRange) }}</span
+                >
+              }
+              @if (oferta.creationYear) {
+                <span
+                  ><strong>{{ 'OFFER_DETAIL.SINCE' | translate }}:</strong> {{ oferta.creationYear }}</span
+                >
+              }
+            </div>
+
+            <div class="favorite-actions">
+              <button
+                type="button"
+                class="favorite-btn active"
+                (click)="$event.preventDefault(); $event.stopPropagation(); quitarFavorita(oferta._id)"
+                aria-label="Quitar favorito"
+              >
+                <span class="material-symbols-outlined">favorite</span>
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (pagination() && pagination()!.totalPages > 1) {
+        <div class="pager">
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
+            {{ 'COMMON.PREVIOUS' | translate }}
+          </button>
+          <span class="pager-info">
+            {{ 'FAVORITES.PAGE_INFO' | translate: { page: pagination()!.page, total: pagination()!.totalPages } }}
+          </span>
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
+            {{ 'COMMON.NEXT' | translate }}
+          </button>
+        </div>
+      }
+    }
+  </section>
+</main>

@@ -2,8 +2,9 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { TranslateLoader, provideTranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader, provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideMarkdown } from 'ngx-markdown';
 
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideTranslateHttpLoader({
       prefix: '/i18n/',
       suffix: '.json'
-    })
+    }),
+    provideMarkdown()
   ]
 };

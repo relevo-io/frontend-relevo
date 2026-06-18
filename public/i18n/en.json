@@ -17,7 +17,9 @@
       "CHAT_ERROR": "Could not start the chat. Please try again."
     },
     "VIEW": "View",
-    "VIEW_ALL": "View all"
+    "VIEW_ALL": "View all",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
   },
   "AUTH": {
     "LOGIN_TITLE": "Log In",
@@ -51,7 +53,10 @@
     "ROLE_INTERESTED_DESC": "I want to buy or manage a business",
     "ROLE_OWNER": "I want to transfer my business",
     "ROLE_OWNER_DESC": "I am an owner seeking succession",
-    "REGISTER_BUTTON": "Create Account"
+    "REGISTER_BUTTON": "Create Account",
+    "OR_CONTINUE_WITH": "Or continue with",
+    "CONTINUE_WITH_GOOGLE": "Continue with Google",
+    "CONTINUE_WITH_GITHUB": "Continue with GitHub"
   },
   "NAVBAR": {
     "LOGOUT": "Log Out",
@@ -62,7 +67,9 @@
     "PROFILE": "Profile",
     "HOME": "Home",
     "DARK_MODE": "Dark mode",
-    "LIGHT_MODE": "Light mode"
+    "LIGHT_MODE": "Light mode",
+    "CHATS": "Chats",
+    "FAVORITES": "My favorites"
   },
   "PROFILE": {
     "TITLE": "My Profile",
@@ -191,17 +198,33 @@
     "CLOSE": "Close",
     "BACKGROUND_LABEL": "What is your background?",
     "REQUIRED_FIELD": "This field is required.",
+    "MIN_LENGTH_ERROR": "Minimum {{min}} characters (you typed {{current}}/{{min}}).",
     "ZONES_LABEL": "Preferred zones",
     "ZONES_PLACEHOLDER": "e.g. Madrid, Barcelona, Valencia",
     "ZONES_REQUIRED": "You must indicate at least one zone.",
-    "CV_LABEL": "CV (text)",
-    "CV_REQUIRED": "You must complete the CV in text format.",
+    "CV_LABEL": "CV (PDF)",
+    "CV_REQUIRED": "You must upload your CV in PDF format.",
+    "CV_CHANGE": "Change file",
+    "CV_UPLOAD_PROMPT": "Drag and drop your CV in PDF format or click to browse",
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "Bio is required.",
+    "CAPITAL_LABEL": "Available Own Capital (€)",
+    "CAPITAL_REQUIRED": "Available own capital is required for solvency verification.",
+    "FINANCING_LABEL": "Do You Require External Financing?",
+    "FINANCING_NO": "No, I have the full required capital",
+    "FINANCING_YES": "Yes, I will need a bank loan or external financing",
+    "FINANCING_REQUIRED": "You must indicate if you need financing.",
+    "NDA_LABEL": "I accept the Non-Disclosure Agreement (NDA) for this offer. I agree not to disclose financial, operational or commercial data of this business.",
+    "NDA_REQUIRED": "Accepting the Non-Disclosure Agreement (NDA) is mandatory to request access.",
     "SENDING": "Sending...",
     "SAVE_REQUEST": "Save and request",
     "OPENING_CHAT": "Opening chat...",
-    "CONTACT_OWNER": "Contact the owner"
+    "CONTACT_OWNER": "Contact the owner",
+    "ANALYTICS_TITLE": "Offer statistics",
+    "VIEWS": "Views",
+    "FAVORITES": "Favorites",
+    "REQUESTS": "Requests",
+    "CONVERSION": "Conversion"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "Ready to sell your company or take over?",
@@ -213,7 +236,13 @@
     "CLEAR_FILTER": "Clear filter",
     "NO_RESULTS": "No offers match your search.",
     "LOADING_BACKEND": "Loading offers from the server...",
-    "LOADING_ERROR": "Could not load offers. Try again."
+    "LOADING_ERROR": "Could not load offers. Try again.",
+    "CTA_REGISTER_TITLE": "Want to explore more opportunities?",
+    "CTA_REGISTER_DESC_START": "Join Relevo to view the",
+    "CTA_REGISTER_FALLBACK": "dozens of",
+    "CTA_REGISTER_DESC_END": "available businesses and access all their details.",
+    "CTA_REGISTER_BTN": "Register to view all",
+    "VIEW_DETAILS": "View details"
   },
   "LEGAL": {
     "PRIVACY_TITLE": "RELEVO PRIVACY POLICY",
@@ -267,14 +296,49 @@
     "RESOLVED_AS": "Status:",
     "SENT_TO": "Sent to:",
     "CONTACT_OWNER": "Contact Owner",
-    "CONTACT_INTERESTED": "Contact interested party"
+    "CONTACT_INTERESTED": "Contact interested party",
+    "CAPITAL_AVAILABLE": "Available Equity Capital",
+    "NOT_SPECIFIED": "Not specified",
+    "REQUIRES_FINANCING": "Requires Financing",
+    "YES": "Yes",
+    "NO": "No",
+    "NA": "N/A",
+    "NDA_STATUS": "NDA Status",
+    "NDA_SIGNED": "NDA Signed and Accepted",
+    "NO_NDA": "No NDA",
+    "AI_CV_AVAILABLE_TITLE": "AI CV Analysis available",
+    "AI_CV_AVAILABLE_SUB": "Analyze this candidate's resume to evaluate compatibility and experience.",
+    "ANALYZE_AI": "Analyze with AI",
+    "ANALYZING_AI_TITLE": "Analyzing resume with AI...",
+    "ANALYZING_AI_SUB": "Evaluating profile and experience, almost done!",
+    "AI_ERROR_TITLE": "Error in AI analysis",
+    "AI_ERROR_SUB": "Could not complete automatic analysis of the PDF document.",
+    "RETRY": "Retry",
+    "AI_COMPLETED": "AI CV Analysis Completed",
+    "SUITABILITY": "Suitability:",
+    "CANDIDATE_SUMMARY": "Candidate Summary",
+    "DETECTED_STRENGTHS": "Detected Strengths",
+    "EXPERIENCE_MILESTONES": "Experience Milestones",
+    "SUITABILITY_FEEDBACK": "Suitability Feedback",
+    "VIEW_CV": "View CV",
+    "MY_CV": "My CV",
+    "PREVIOUS": "Previous",
+    "PAGE_INFO": "Page {{page}} of {{total}}",
+    "NEXT": "Next"
   },
   "MY_OFFERS": {
     "TITLE": "My Offers",
     "SUBTITLE": "Manage your businesses published on Relevo",
     "EMPTY_TITLE": "You haven't published any offers",
     "EMPTY_DESC": "Start now to find the ideal successor for your business.",
-    "CREATE_NEW": "Publish new offer"
+    "CREATE_NEW": "Publish new offer",
+    "PUBLISHED_OFFERS": "Published offers",
+    "TOTAL_VIEWS": "Total views",
+    "TOTAL_FAVORITES": "Total favorites",
+    "TOTAL_REQUESTS": "Total requests",
+    "GLOBAL_CONVERSION": "Global conversion",
+    "VIEWS": "Views",
+    "FAVORITES": "Favorites"
   },
   "CHATS_PAGE": {
     "TITLE": "My Conversations",
@@ -294,11 +358,226 @@
     "REJECTED_NOTICE_OWNER": "You have decided not to accept this message request.",
     "EMPTY_STATE": "Be the first to write",
     "LOAD_MORE": "Load previous messages",
-    "NEW_MESSAGE": "New message"
+    "NEW_MESSAGE": "New message",
+    "DEAL_CLOSE_TITLE": "Deal closed",
+    "DEAL_CLOSE_DESC": "Mark this step when you have agreed to continue outside Relevo with meetings, documents or legal steps.",
+    "DEAL_CLOSE_BUTTON": "Deal closed",
+    "DEAL_CLOSING": "Confirming...",
+    "DEAL_CONFIRMED_BY_YOU": "Confirmed by you",
+    "DEAL_WAITING_OTHER": "Waiting for the other party",
+    "RATING_TITLE": "Rate the experience",
+    "RATING_DESC": "Your rating helps build trust for future deals with {{ name }}.",
+    "RATING_COMMENT_PLACEHOLDER": "Add an optional comment",
+    "RATING_SEND": "Send rating",
+    "RATING_SENDING": "Sending...",
+    "RATING_SENT": "Rating sent"
+  },
+  "RATINGS": {
+    "PROFILE_TITLE": "My ratings",
+    "AS_OWNER": "As owner",
+    "AS_INTERESTED": "As interested",
+    "OWNER": "Owner",
+    "INTERESTED": "Interested",
+    "REVIEWS": "ratings",
+    "NO_RATINGS": "No ratings",
+    "OWNER_OFFER_LABEL": "Owner rating for this offer",
+    "EMPTY_PROFILE": "You have not received any ratings yet."
+  },
+  "ONBOARDING": {
+    "SKIP": "Skip",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "FINISH": "Finish",
+    "STEP1_EYEBROW": "Welcome to Relevo",
+    "STEP1_TITLE": "Real businesses, new chapters",
+    "STEP1_BODY": "Relevo connects businesses looking for continuity with people interested in acquiring an operating company.",
+    "STEP2_EYEBROW": "Explore opportunities",
+    "STEP2_TITLE": "Find the right company",
+    "STEP2_BODY": "Use search to locate opportunities. In the marketplace you can also filter by sector, location and size.",
+    "STEP3_EYEBROW": "Each card is a business",
+    "STEP3_TITLE": "Read key signals before applying",
+    "STEP3_BODY": "Cards show sector, region, public metrics and access to the detail page once you are signed in.",
+    "STEP4_EYEBROW": "For sellers",
+    "STEP4_TITLE": "Publish your business with a guided flow",
+    "STEP4_BODY": "From Sell now you can create an offer, complete company details and move forward to publication."
   },
   "STATUS": {
     "PENDING": "Pending",
     "ACCEPTED": "Accepted",
     "REJECTED": "Rejected"
+  },
+  "FAVORITES": {
+    "TITLE": "My Favorites",
+    "SUBTITLE": "Saved offers to review them whenever you want.",
+    "LOADING": "Loading favorites...",
+    "EMPTY": "You don't have any favorite offers yet.",
+    "PAGE_INFO": "Page {{ page }} of {{ total }}"
+  },
+  "SOLICITUD_STATUS": {
+    "PENDING_BANNER": "Request pending review. The owner is evaluating your profile to grant you access.",
+    "ACCEPTED_BANNER": "Request accepted! The negotiation process is underway.",
+    "REJECTED_BANNER": "Request denied. This business has rejected your profile for this offer and you can no longer interact with it.",
+    "PENDING_BADGE": "Pending",
+    "ACCEPTED_BADGE": "In progress",
+    "REJECTED_BADGE": "Denied"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications",
+    "PRE_ACTIVATE_TITLE": "Enable notifications?",
+    "PRE_ACTIVATE_DESC": "Receive real-time alerts for new chat messages and updates on your offer requests.",
+    "PRE_ACTIVATE_LATER": "Maybe later",
+    "PRE_ACTIVATE_YES": "Yes, enable",
+    "DEACTIVATE_TITLE": "Disable notifications?",
+    "DEACTIVATE_DESC": "You will stop receiving real-time alerts in this browser. You can enable them again at any time by clicking the bell.",
+    "DEACTIVATE_CANCEL": "Cancel",
+    "DEACTIVATE_YES": "Yes, disable",
+    "SETTINGS_TITLE": "Notification Settings",
+    "SETTINGS_SUBTITLE": "Choose which notifications you want to receive on your devices",
+    "CHANNELS_HEADER": "Alert channels",
+    "SELECT_ALL": "Select all",
+    "DESELECT_ALL": "Deselect all",
+    "CHANNEL_CHAT": "Chat messages",
+    "CHANNEL_STATUS": "Status of my requests",
+    "CHANNEL_APPLICATIONS": "New requests received",
+    "CHANNEL_IA": "AI CV analysis",
+    "CHANNEL_OFFERS": "Offers",
+    "OFFER_ALERTS_TITLE": "Offer alerts",
+    "OFFER_ALERTS_SUBTITLE": "Set criteria and keep the record of offers that match each alert.",
+    "OFFER_ALERT_NAME": "Alert name",
+    "OFFER_ALERT_REGION": "City or region",
+    "OFFER_ALERT_EMPLOYEES": "Employees",
+    "OFFER_ALERT_EMPLOYEES_SHORT": "Employees",
+    "OFFER_ALERT_REVENUE": "Revenue",
+    "OFFER_ALERT_CREATE": "Create offer alert",
+    "OFFER_ALERT_EMPTY": "You have not created offer alerts yet.",
+    "OFFER_ALERT_NO_MATCHES": "No matching offers yet.",
+    "OFFER_ALERT_DEFAULT_NAME": "Offer alert",
+    "OFFER_ALERT_CREATED": "Offer alert created",
+    "OFFER_ALERT_ERROR": "The alert could not be saved.",
+    "OFFER_ALERT_CRITERIA_REQUIRED": "Add at least one alert criterion.",
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DEACTIVATE_COMPLETELY": "Disable notifications completely",
+    "TOAST_ACTIVATED": "Notifications successfully enabled!",
+    "TOAST_DENIED": "Permission denied.",
+    "TOAST_DEACTIVATED": "Notifications disabled in this browser.",
+    "TOAST_UPDATED": "Notification settings updated",
+    "TOAST_ERROR": "Error saving preferences.",
+    "TOAST_MARKED_ALL_READ": "All notifications marked as read",
+    "TOAST_CLEARED_ALL": "Notification history cleared",
+    "TOAST_BLOCKED": "You have blocked notifications. Please enable them by clicking on the padlock icon next to your browser's address bar.",
+    "MARK_ALL_READ": "Mark all as read",
+    "CLEAR_ALL": "Clear all",
+    "EMPTY_STATE": "No notifications yet",
+    "LOAD_MORE": "Load previous",
+    "LOADING": "Loading..."
+  },
+  "mentoring": {
+    "title": "Guidance & Mentoring",
+    "subtitle": "Learn the best practices to sell your company or buy one successfully.",
+    "progress": "Your overall progress",
+    "no_modules": "No mentoring modules are active at this moment.",
+    "start_step": "Start",
+    "completed": "Completed",
+    "mark_completed": "Mark as completed",
+    "tabs": {
+      "buy": "Buy business",
+      "sell": "Sell business"
+    },
+    "seller": {
+      "m1": {
+        "title": "Preparing the company for sale",
+        "description": "Learn to identify the best time to sell, understand the common reasons for selling, and avoid frequent mistakes before publishing the offer.",
+        "i1": {
+          "title": "Preparation and common mistakes"
+        }
+      },
+      "m2": {
+        "title": "Organizing the documentation",
+        "description": "Prepare the financial, legal, and operational documentation necessary to build trust with potential buyers.",
+        "i1": {
+          "title": "Organizing documentation"
+        }
+      },
+      "m3": {
+        "title": "Valuing the company",
+        "description": "Understand what factors determine a company's value, such as profitability, assets, and growth potential.",
+        "i1": {
+          "title": "Company valuation"
+        }
+      },
+      "m4": {
+        "title": "Creating an attractive offer",
+        "description": "Learn to present the business professionally, highlighting strengths while protecting confidential information.",
+        "i1": {
+          "title": "Creating an offer"
+        }
+      },
+      "m5": {
+        "title": "Managing contacts and negotiations",
+        "description": "Filter potential buyers, share information progressively, and manage negotiations professionally.",
+        "i1": {
+          "title": "Managing contacts"
+        }
+      },
+      "m6": {
+        "title": "Closing the sale",
+        "description": "Complete the final stages of the process, including Due Diligence, signing contracts, and preparing for the transition.",
+        "i1": {
+          "title": "Closing the sale"
+        }
+      }
+    },
+    "buyer": {
+      "m1": {
+        "title": "Defining purchase objectives",
+        "description": "Determine the budget, sectors of interest, and key characteristics that the ideal company should have.",
+        "i1": {
+          "title": "Defining objectives"
+        }
+      },
+      "m2": {
+        "title": "Searching for opportunities",
+        "description": "Learn where to find companies for sale and how to perform an initial screening of potential opportunities.",
+        "i1": {
+          "title": "Searching for opportunities"
+        }
+      },
+      "m3": {
+        "title": "Analyzing the financial situation",
+        "description": "Interpret the financial information of the company, including revenue, profits, debt, and liquidity.",
+        "i1": {
+          "title": "Financial analysis"
+        }
+      },
+      "m4": {
+        "title": "Assessing if the price is right",
+        "description": "Analyze whether the valuation proposed by the seller is consistent with the reality and potential of the business.",
+        "i1": {
+          "title": "Assessing the price"
+        }
+      },
+      "m5": {
+        "title": "Negotiating the purchase",
+        "description": "Prepare to negotiate the price and conditions of the transaction, identifying risks and opportunities.",
+        "i1": {
+          "title": "Negotiating the purchase"
+        }
+      },
+      "m6": {
+        "title": "Formalizing the acquisition",
+        "description": "Review legal documentation, complete Due Diligence, and formalize the purchase through the corresponding contracts.",
+        "i1": {
+          "title": "Formalizing the acquisition"
+        }
+      },
+      "m7": {
+        "title": "Managing the company",
+        "description": "Plan the transition, maintain the trust of the team and clients, and lay the foundations for future business growth.",
+        "i1": {
+          "title": "Post-purchase management"
+        }
+      }
+    }
   }
 }

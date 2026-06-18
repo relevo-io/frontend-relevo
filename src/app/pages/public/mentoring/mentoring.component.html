@@ -1,0 +1,207 @@
+<div class="mentoring-container">
+  <!-- Header Section -->
+  <div class="mentoring-header">
+    <div class="header-content">
+      <h1>{{ 'mentoring.title' | translate }}</h1>
+      <p>{{ 'mentoring.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <div class="mentoring-content-wrapper" [class.reader-open]="selectedItem() !== null">
+    <!-- Main list of routes & modules -->
+    <div class="modules-sidebar">
+      <div class="route-selector-pills">
+        <button class="route-pill" [class.active]="activeTab() === 0" (click)="activeTab.set(0)">
+          <mat-icon>shopping_cart</mat-icon>
+          {{ 'mentoring.tabs.buy' | translate }}
+        </button>
+        <button class="route-pill" [class.active]="activeTab() === 1" (click)="activeTab.set(1)">
+          <mat-icon>sell</mat-icon>
+          {{ 'mentoring.tabs.sell' | translate }}
+        </button>
+      </div>
+
+      <!-- BUY ROUTE -->
+      @if (activeTab() === 0) {
+        <div class="route-overview">
+          <div class="progress-info">
+            <span>{{ 'mentoring.progress' | translate }}</span>
+            <span class="percentage-badge">{{ getRouteProgress('BUY') }}%</span>
+          </div>
+          <mat-progress-bar mode="determinate" [value]="getRouteProgress('BUY')"></mat-progress-bar>
+        </div>
+
+        @if (buyModules.length > 0) {
+          <div class="modules-list">
+            <mat-accordion multi>
+              @for (mod of buyModules; track mod._id) {
+                <mat-expansion-panel class="module-panel">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="module-title">
+                      <span class="order-badge">M{{ mod.order }}</span>
+                      {{ mod.titleKey | translate }}
+                    </mat-panel-title>
+                    <mat-panel-description class="module-desc-summary">
+                      <span class="duration-badge"> <mat-icon>schedule</mat-icon> {{ mod.duration }} min </span>
+                      <span class="module-progress-text">{{ getModuleProgress(mod) }}%</span>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <p class="module-description">{{ mod.descriptionKey | translate }}</p>
+
+                  <div class="module-progress-mini">
+                    <mat-progress-bar mode="determinate" [value]="getModuleProgress(mod)"></mat-progress-bar>
+                  </div>
+
+                  <div class="item-list">
+                    @for (item of mod.items; track item.contentKey) {
+                      <div
+                        (click)="selectItem(mod, item)"
+                        [class.active-item]="selectedItem()?.item?.contentKey === item.contentKey"
+                        class="step-item"
+                      >
+                        <div class="step-left">
+                          <mat-icon class="status-icon" [class.completed]="completedKeys().has(item.contentKey)">
+                            {{ completedKeys().has(item.contentKey) ? 'check_circle' : 'play_circle_outline' }}
+                          </mat-icon>
+                          <span class="step-title" [class.completed-title]="completedKeys().has(item.contentKey)">
+                            {{ item.titleKey | translate }}
+                          </span>
+                        </div>
+
+                        <button class="step-start-btn">
+                          {{ 'mentoring.start_step' | translate }}
+                          <mat-icon class="step-start-icon">chevron_right</mat-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </mat-expansion-panel>
+              }
+            </mat-accordion>
+          </div>
+        } @else {
+          <ng-container *ngTemplateOutlet="noModules"></ng-container>
+        }
+      }
+
+      <!-- SELL ROUTE -->
+      @if (activeTab() === 1) {
+        <div class="route-overview">
+          <div class="progress-info">
+            <span>{{ 'mentoring.progress' | translate }}</span>
+            <span class="percentage-badge">{{ getRouteProgress('SELL') }}%</span>
+          </div>
+          <mat-progress-bar mode="determinate" [value]="getRouteProgress('SELL')"></mat-progress-bar>
+        </div>
+
+        @if (sellModules.length > 0) {
+          <div class="modules-list">
+            <mat-accordion multi>
+              @for (mod of sellModules; track mod._id) {
+                <mat-expansion-panel class="module-panel">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="module-title">
+                      <span class="order-badge">M{{ mod.order }}</span>
+                      {{ mod.titleKey | translate }}
+                    </mat-panel-title>
+                    <mat-panel-description class="module-desc-summary">
+                      <span class="duration-badge"> <mat-icon>schedule</mat-icon> {{ mod.duration }} min </span>
+                      <span class="module-progress-text">{{ getModuleProgress(mod) }}%</span>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <p class="module-description">{{ mod.descriptionKey | translate }}</p>
+
+                  <div class="module-progress-mini">
+                    <mat-progress-bar mode="determinate" [value]="getModuleProgress(mod)"></mat-progress-bar>
+                  </div>
+
+                  <div class="item-list">
+                    @for (item of mod.items; track item.contentKey) {
+                      <div
+                        (click)="selectItem(mod, item)"
+                        [class.active-item]="selectedItem()?.item?.contentKey === item.contentKey"
+                        class="step-item"
+                      >
+                        <div class="step-left">
+                          <mat-icon class="status-icon" [class.completed]="completedKeys().has(item.contentKey)">
+                            {{ completedKeys().has(item.contentKey) ? 'check_circle' : 'play_circle_outline' }}
+                          </mat-icon>
+                          <span class="step-title" [class.completed-title]="completedKeys().has(item.contentKey)">
+                            {{ item.titleKey | translate }}
+                          </span>
+                        </div>
+
+                        <button class="step-start-btn">
+                          {{ 'mentoring.start_step' | translate }}
+                          <mat-icon class="step-start-icon">chevron_right</mat-icon>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </mat-expansion-panel>
+              }
+            </mat-accordion>
+          </div>
+        } @else {
+          <ng-container *ngTemplateOutlet="noModules"></ng-container>
+        }
+      }
+    </div>
+
+    <!-- Right Side Markdown Reader Panel -->
+    @if (selectedItem(); as current) {
+      <div class="reader-panel">
+        <div class="reader-header">
+          <div class="reader-meta">
+            <span class="route-badge">{{
+              current.module.route === 'BUY' ? ('mentoring.tabs.buy' | translate) : ('mentoring.tabs.sell' | translate)
+            }}</span>
+            <h2>{{ current.item.titleKey | translate }}</h2>
+          </div>
+          <button mat-icon-button (click)="closeReader()" aria-label="Close reader">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="reader-body">
+          @if (isLoadingContent()) {
+            <div class="loading-overlay">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+          }
+          @if (!isLoadingContent()) {
+            <div class="markdown-container">
+              <markdown [data]="markdownContent()"></markdown>
+            </div>
+
+            <div class="reader-footer">
+              <button
+                mat-flat-button
+                class="complete-toggle-btn"
+                [class.completed]="completedKeys().has(current.item.contentKey)"
+                (click)="toggleCompleted(current.item.contentKey, $event)"
+              >
+                <mat-icon class="footer-btn-icon">{{
+                  completedKeys().has(current.item.contentKey) ? 'check_circle' : 'radio_button_unchecked'
+                }}</mat-icon>
+                {{
+                  (completedKeys().has(current.item.contentKey) ? 'mentoring.completed' : 'mentoring.mark_completed')
+                    | translate
+                }}
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <ng-template #noModules>
+    <div class="empty-state">
+      <mat-icon>school</mat-icon>
+      <p>{{ 'mentoring.no_modules' | translate }}</p>
+    </div>
+  </ng-template>
+</div>

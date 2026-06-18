@@ -91,38 +91,6 @@ body.dark-mode .hero-overlay {
   gap: 1rem;
 }
 
-/* Buttons */
-.btn {
-  padding: 1rem 2rem;
-  border-radius: var(--radius-full);
-  font-weight: 700;
-  font-size: 1.125rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.btn-primary-dark {
-  background-color: var(--primary);
-  color: var(--on-primary);
-}
-
-.btn-secondary {
-  background-color: var(--secondary);
-  color: white;
-}
-
-.btn-secondary-light {
-  background-color: var(--surface-container-high);
-  color: var(--on-surface);
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
 /* Stats Cards */
 .hero-stats {
   display: grid;
@@ -199,13 +167,6 @@ body.dark-mode .hero-overlay {
 
 .bg-light {
   background-color: var(--surface-container-low);
-}
-
-.grid-2 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6rem;
-  align-items: center;
 }
 
 .feature-visual {
@@ -322,9 +283,6 @@ body.dark-mode .hero-overlay {
   padding: 8rem 0;
 }
 
-.text-center {
-  text-align: center;
-}
 .section-lead {
   font-size: 1.25rem;
   color: var(--on-surface-variant);
@@ -377,6 +335,9 @@ body.dark-mode .hero-overlay {
 .trust h2 {
   color: white;
   font-size: 3rem;
+}
+.trust h4 {
+  color: white;
 }
 .trust .lead {
   color: rgba(255, 255, 255, 0.8);

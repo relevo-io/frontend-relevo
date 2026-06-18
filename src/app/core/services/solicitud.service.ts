@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Solicitud } from '../models/solicitud.model';
+import { PaginatedResponse } from '../models/pagination.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -27,11 +28,28 @@ export class SolicitudService {
     return this.http.get<Solicitud[]>(`${this.API_URL}/me/recibidas`);
   }
 
+  getMisSolicitudesOwnerPaged(page: number, limit: number): Observable<PaginatedResponse<Solicitud>> {
+    return this.http.get<PaginatedResponse<Solicitud>>(`${this.API_URL}/me/recibidas?page=${page}&limit=${limit}`);
+  }
+
   getMisSolicitudesEnviadas(): Observable<Solicitud[]> {
     return this.http.get<Solicitud[]>(`${this.API_URL}/me/enviadas`);
   }
 
-  crearSolicitud(data: { opportunityId: string; message: string }): Observable<Solicitud> {
+  getMisSolicitudesEnviadasPaged(page: number, limit: number): Observable<PaginatedResponse<Solicitud>> {
+    return this.http.get<PaginatedResponse<Solicitud>>(`${this.API_URL}/me/enviadas?page=${page}&limit=${limit}`);
+  }
+
+  crearSolicitud(data: {
+    opportunityId: string;
+    message: string;
+    bio: string;
+    professionalBackground: string;
+    preferredRegions: string[];
+    availableCapital: number;
+    financingNeeded: boolean;
+    ndaAccepted: boolean;
+  }): Observable<Solicitud> {
     return this.http.post<Solicitud>(this.API_URL, data);
   }
 

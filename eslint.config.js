@@ -13,11 +13,11 @@ module.exports = defineConfig([
       eslint.configs.recommended,
       tseslint.configs.recommended,
       tseslint.configs.stylistic,
-      angular.configs.tsRecommended,
+      angular.configs.tsRecommended
     ],
     processor: angular.processInlineTemplates,
     plugins: {
-      prettier: prettierPlugin,
+      prettier: prettierPlugin
     },
     rules: {
       'prettier/prettier': 'error',
@@ -26,16 +26,16 @@ module.exports = defineConfig([
         {
           type: 'attribute',
           prefix: 'app',
-          style: 'camelCase',
-        },
+          style: 'camelCase'
+        }
       ],
       '@angular-eslint/component-selector': [
         'error',
         {
           type: 'element',
           prefix: 'app',
-          style: 'kebab-case',
-        },
+          style: 'kebab-case'
+        }
       ],
       // Reglas similares al backend
       '@typescript-eslint/no-unused-vars': [
@@ -50,7 +50,7 @@ module.exports = defineConfig([
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-unsafe-function-type': 'off',
       'no-console': ['error', { allow: ['warn', 'error'] }]
-    },
+    }
   },
   {
     files: ['**/*.html'],
@@ -60,7 +60,7 @@ module.exports = defineConfig([
       '@angular-eslint/template/interactive-supports-focus': 'warn',
       '@angular-eslint/template/label-has-associated-control': 'warn',
       '@angular-eslint/template/prefer-control-flow': 'warn'
-    },
+    }
   },
   // Desactiva reglas de estilo de ESLint que Prettier ya maneja
   prettierConfig,

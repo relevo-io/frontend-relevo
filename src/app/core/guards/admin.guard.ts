@@ -6,7 +6,7 @@ import { AuthService } from '../services/auth.service';
  * Guarda que protege el Panel de Admin.
  * Solo deja pasar si el usuario tiene el rol 'ADMIN'.
  */
-export const adminGuard: CanActivateFn = (route, state) => {
+export const adminGuard: CanActivateFn = (_route, _state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 

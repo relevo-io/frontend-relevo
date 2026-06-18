@@ -25,7 +25,7 @@
         @if (isLoading()) {
           <span>{{ 'OFFER_DETAIL.LOADING' | translate }}</span>
         } @else {
-          <span>{{ filteredOfertas().length }} {{ 'MARKETPLACE_HOME.RESULTS' | translate }}</span>
+          <span>{{ pagination()?.totalItems || ofertas().length }} {{ 'MARKETPLACE_HOME.RESULTS' | translate }}</span>
         }
       </div>
     </div>
@@ -48,23 +48,34 @@
         <span class="material-symbols-outlined">error</span>
         <p>{{ error() }}</p>
       </div>
-    } @else if (isLoading()) {
+    } @else if (isLoading() && ofertas().length === 0) {
       <div class="state-box">
         <div class="loader"></div>
         <p>{{ 'MARKETPLACE_HOME.LOADING_BACKEND' | translate }}</p>
       </div>
-    } @else if (filteredOfertas().length === 0) {
+    } @else if (!isLoading() && ofertas().length === 0) {
       <div class="state-box">
         <span class="material-symbols-outlined">search_off</span>
         <p>{{ 'MARKETPLACE_HOME.NO_RESULTS' | translate }}</p>
       </div>
     } @else {
-      <div class="offers-grid">
-        @for (oferta of filteredOfertas(); track oferta._id) {
-          <article class="offer-card" [routerLink]="['/ofertas', oferta._id]">
+      <div
+        class="offers-grid"
+        [style.opacity]="isLoading() ? 0.6 : 1"
+        [style.pointer-events]="isLoading() ? 'none' : 'auto'"
+        [style.transition]="'opacity 0.2s ease'"
+      >
+        @for (oferta of displayedOfertas(); track oferta._id) {
+          <article
+            class="offer-card"
+            data-tour="offer-card"
+            [routerLink]="authService.isLoggedIn() ? ['/ofertas', oferta._id] : ['/register']"
+          >
             <header class="card-head">
-              <span class="sector">{{ oferta.sector }}</span>
-              @if (oferta.employeeRange) {
+              <div class="card-head-left">
+                <span class="sector">{{ oferta.sector }}</span>
+              </div>
+              @if (authService.isLoggedIn() && oferta.employeeRange) {
                 <span class="meta"
                   >{{ formatEmployees(oferta.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span
                 >
@@ -74,22 +85,109 @@
             <h3>{{ oferta.region }}</h3>
             <p class="description">{{ oferta.companyDescription }}</p>
 
+            <div class="card-map" aria-hidden="true">
+              <iframe
+                [src]="mapUrl(oferta.region)"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                tabindex="-1"
+              ></iframe>
+              <span class="map-label">
+                <span class="material-symbols-outlined">location_on</span>
+                {{ oferta.region }}
+              </span>
+            </div>
+
             <div class="card-footer">
-              @if (oferta.revenueRange) {
-                <span
-                  ><strong>{{ 'OFFER_DETAIL.REVENUE' | translate }}:</strong>
-                  {{ formatRevenue(oferta.revenueRange) }}</span
-                >
-              }
-              @if (oferta.creationYear) {
-                <span
-                  ><strong>{{ 'OFFER_DETAIL.SINCE' | translate }}:</strong> {{ oferta.creationYear }}</span
-                >
+              <div class="offer-public-metrics">
+                <span>
+                  <span class="material-symbols-outlined">visibility</span>
+                  {{ oferta.detailViewCount || 0 }}
+                </span>
+                <span class="rating-metric">
+                  <span class="material-symbols-outlined">favorite</span>
+                  {{ oferta.favoriteCount || 0 }}
+                </span>
+              </div>
+              @if (authService.isLoggedIn()) {
+                @if (oferta.revenueRange) {
+                  <span
+                    ><strong>{{ 'OFFER_DETAIL.REVENUE' | translate }}:</strong>
+                    {{ formatRevenue(oferta.revenueRange) }}</span
+                  >
+                }
+                @if (oferta.creationYear) {
+                  <span
+                    ><strong>{{ 'OFFER_DETAIL.SINCE' | translate }}:</strong> {{ oferta.creationYear }}</span
+                  >
+                }
+              } @else {
+                <span class="locked-details">
+                  <span class="material-symbols-outlined">lock</span>
+                  {{ 'MARKETPLACE_HOME.VIEW_DETAILS' | translate }}
+                </span>
               }
             </div>
+
+            @if (authService.isLoggedIn()) {
+              <div class="card-bottom-row">
+                <div class="status-badge-container">
+                  @if (solicitudesMap().get(oferta._id!); as status) {
+                    @if (status === 'PENDING') {
+                      <span class="status-badge pending sm">{{ 'SOLICITUD_STATUS.PENDING_BADGE' | translate }}</span>
+                    } @else if (status === 'ACCEPTED') {
+                      <span class="status-badge accepted sm">{{ 'SOLICITUD_STATUS.ACCEPTED_BADGE' | translate }}</span>
+                    } @else if (status === 'REJECTED') {
+                      <span class="status-badge rejected sm">{{ 'SOLICITUD_STATUS.REJECTED_BADGE' | translate }}</span>
+                    }
+                  }
+                </div>
+                <div class="favorite-actions">
+                  <button
+                    type="button"
+                    class="favorite-btn"
+                    [class.active]="isFavorite(oferta._id)"
+                    (click)="toggleFavorite($event, oferta._id)"
+                    aria-label="Marcar favorito"
+                  >
+                    <span class="material-symbols-outlined">favorite</span>
+                  </button>
+                </div>
+              </div>
+            }
           </article>
         }
       </div>
+
+      @if (authService.isLoggedIn()) {
+        @if (pagination() && pagination()!.totalPages > 1) {
+          <div class="pager">
+            <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
+              {{ 'COMMON.PREVIOUS' | translate }}
+            </button>
+            <span class="pager-info">
+              {{ 'FAVORITES.PAGE_INFO' | translate: { page: pagination()!.page, total: pagination()!.totalPages } }}
+            </span>
+            <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
+              {{ 'COMMON.NEXT' | translate }}
+            </button>
+          </div>
+        }
+      } @else {
+        <div class="register-cta">
+          <h3>
+            {{ 'MARKETPLACE_HOME.CTA_REGISTER_TITLE' | translate }}
+          </h3>
+          <p>
+            {{ 'MARKETPLACE_HOME.CTA_REGISTER_DESC_START' | translate }}
+            <strong>{{ pagination()?.totalItems || ('MARKETPLACE_HOME.CTA_REGISTER_FALLBACK' | translate) }}</strong>
+            {{ 'MARKETPLACE_HOME.CTA_REGISTER_DESC_END' | translate }}
+          </p>
+          <button class="btn-primary" routerLink="/register">
+            {{ 'MARKETPLACE_HOME.CTA_REGISTER_BTN' | translate }}
+          </button>
+        </div>
+      }
     }
   </section>
 </main>

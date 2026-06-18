@@ -7,6 +7,7 @@ import { RegisterRequest } from '../../../core/models/auth.model';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { OnboardingService } from '../../../core/services/onboarding.service';
 
 @Component({
   selector: 'app-register',
@@ -22,6 +23,7 @@ export class RegisterComponent {
   private translate = inject(TranslateService);
   private ns = inject(NotificationService);
   private themeService = inject(ThemeService);
+  private onboardingService = inject(OnboardingService);
 
   registerForm: FormGroup = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
@@ -40,6 +42,50 @@ export class RegisterComponent {
 
   togglePassword() {
     this.showPassword.update((val) => !val);
+  }
+
+  registerWithGoogle() {
+    this.errorMessage.set(null);
+    this.authService.loginWithGoogle().subscribe({
+      next: (res) => {
+        if (res.isNewUser) {
+          this.onboardingService.markPending();
+        }
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.errorMessage.set(this.resolveSocialError(error, 'Google'));
+      }
+    });
+  }
+
+  registerWithGithub() {
+    this.errorMessage.set(null);
+    this.authService.loginWithGitHub().subscribe({
+      next: (res) => {
+        if (res.isNewUser) {
+          this.onboardingService.markPending();
+        }
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.errorMessage.set(this.resolveSocialError(error, 'GitHub'));
+      }
+    });
+  }
+
+  private resolveSocialError(error: any, providerLabel: 'Google' | 'GitHub'): string {
+    const backendMessage = error?.error?.message;
+    if (backendMessage) return backendMessage;
+
+    const code = error?.code as string | undefined;
+    if (code === 'auth/popup-closed-by-user')
+      return `Has cerrado la ventana de ${providerLabel} antes de completar el acceso.`;
+    if (code === 'auth/account-exists-with-different-credential') {
+      return 'Ya existe una cuenta con ese email usando otro metodo de acceso.';
+    }
+
+    return `No se pudo iniciar sesion con ${providerLabel}.`;
   }
 
   onSubmit() {
@@ -64,6 +110,7 @@ export class RegisterComponent {
     this.authService.register(requestData).subscribe({
       next: () => {
         this.isLoading.set(false);
+        this.onboardingService.markPending();
         this.ns.success(
           this.translate.instant('COMMON.NOTIF.REGISTER_SUCCESS') ||
             'Cuenta creada correctamente. Por favor, inicia sesión.'

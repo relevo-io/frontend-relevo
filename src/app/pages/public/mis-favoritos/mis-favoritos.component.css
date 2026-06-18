@@ -1,0 +1,22 @@
+.favorites-page {
+  padding-top: 120px;
+  padding-bottom: 32px;
+  background: var(--surface);
+  min-height: 100vh;
+}
+
+.favorites-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.favorites-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.favorites-header p {
+  margin-top: 8px;
+  color: var(--on-surface-variant);
+}

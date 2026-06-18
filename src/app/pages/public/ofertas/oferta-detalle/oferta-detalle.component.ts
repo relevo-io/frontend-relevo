@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OfertaService } from '../../../../core/services/oferta.service';
-import { Oferta } from '../../../../core/models/oferta.model';
+import { Oferta, OfertaAnalytics } from '../../../../core/models/oferta.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../../shared/utils/oferta-formatters';
 import { SolicitudService } from '../../../../core/services/solicitud.service';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -30,6 +31,8 @@ export class OfertaDetalle {
   private chatService = inject(ChatService);
   private fb = inject(FormBuilder);
   private translate = inject(TranslateService);
+  private sanitizer = inject(DomSanitizer);
+  private mapUrlCache = new Map<string, SafeResourceUrl>();
 
   oferta = signal<Oferta | null>(null);
   isLoading = signal<boolean>(true);
@@ -38,22 +41,34 @@ export class OfertaDetalle {
   showRequestForm = signal<boolean>(false);
   error = signal<string | null>(null);
   solicitudStatus = signal<string | null>(null);
+  analytics = signal<OfertaAnalytics | null>(null);
 
   requestForm = this.fb.group({
     professionalBackground: ['', [Validators.required, Validators.minLength(10)]],
     preferredRegionsText: ['', [Validators.required, Validators.minLength(2)]],
-    bio: ['', [Validators.required, Validators.minLength(10)]]
+    bio: ['', [Validators.required, Validators.minLength(10)]],
+    availableCapital: [null as number | null, [Validators.required, Validators.min(0)]],
+    financingNeeded: [false, [Validators.required]],
+    ndaAccepted: [false, [Validators.requiredTrue]]
   });
 
   selectedCvFile = signal<File | null>(null);
   isUploadingCv = signal<boolean>(false);
   cvUploadError = signal<string | null>(null);
 
+  ownerName = computed(() => {
+    const offer = this.oferta();
+    if (!offer || !offer.owner) return null;
+    if (typeof offer.owner === 'object' && 'fullName' in offer.owner) {
+      return (offer.owner as { fullName: string }).fullName;
+    }
+    return null;
+  });
+
   isOwnOffer = computed(() => {
     const offer = this.oferta();
     const currentUserId = this.authService.currentUser()?._id;
     if (!offer || !currentUserId) return false;
-
     const ownerId = this.extractOwnerId(offer.owner);
     return ownerId === currentUserId;
   });
@@ -86,6 +101,12 @@ export class OfertaDetalle {
       next: (data) => {
         this.oferta.set(data);
         this.isLoading.set(false);
+        this.registrarVistaDetalle(id);
+        if (this.isOwnOffer()) {
+          this.cargarAnalytics(id);
+        } else {
+          this.analytics.set(null);
+        }
         this.verificarEstadoSolicitud(id);
       },
       error: (err) => {
@@ -93,6 +114,37 @@ export class OfertaDetalle {
         this.error.set(this.translate.instant('OFFER_DETAIL.LOADING_ERROR') || 'No se pudo cargar la oferta.');
         this.isLoading.set(false);
       }
+    });
+  }
+
+  registrarVistaDetalle(ofertaId: string): void {
+    const storageKey = `relevo_offer_viewed_${ofertaId}`;
+    if (typeof sessionStorage === 'undefined') {
+      return;
+    }
+
+    if (sessionStorage.getItem(storageKey)) {
+      return;
+    }
+
+    sessionStorage.setItem(storageKey, '1');
+    this.ofertaService.registerView(ofertaId).subscribe({
+      next: ({ detailViewCount }) => {
+        const current = this.oferta();
+        if (current) {
+          this.oferta.set({ ...current, detailViewCount });
+        }
+      },
+      error: (err) => console.error('Error registrando visita:', err)
+    });
+  }
+
+  cargarAnalytics(ofertaId: string): void {
+    this.ofertaService.getOfertaAnalytics(ofertaId).subscribe({
+      next: (analytics) => {
+        this.analytics.set(analytics);
+      },
+      error: (err) => console.error('Error cargando analytics de oferta:', err)
     });
   }
 
@@ -124,7 +176,10 @@ export class OfertaDetalle {
     this.requestForm.patchValue({
       professionalBackground: current?.professionalBackground ?? '',
       preferredRegionsText: (current?.preferredRegions ?? []).join(', '),
-      bio: current?.bio ?? ''
+      bio: current?.bio ?? '',
+      availableCapital: null,
+      financingNeeded: false,
+      ndaAccepted: false
     });
 
     this.showRequestForm.set(true);
@@ -162,74 +217,69 @@ export class OfertaDetalle {
       .map((v) => v.trim())
       .filter((v) => !!v);
 
-    // Step 1: Update profile data
-    this.usuarioService
-      .updateUsuario(currentUser._id, {
-        professionalBackground: formValue.professionalBackground?.trim(),
+    const availableCapital = Number(formValue.availableCapital) || 0;
+    const financingNeeded = formValue.financingNeeded === true || (formValue.financingNeeded as any) === 'true';
+    const ndaAccepted = formValue.ndaAccepted === true;
+
+    // Create the solicitud directly with all details
+    this.solicitudService
+      .crearSolicitud({
+        opportunityId: offer._id!,
+        message: `Solicitud enviada por ${currentUser.fullName}.`,
+        bio: (formValue.bio ?? '').trim(),
+        professionalBackground: (formValue.professionalBackground ?? '').trim(),
         preferredRegions,
-        bio: formValue.bio?.trim()
+        availableCapital,
+        financingNeeded,
+        ndaAccepted
       })
       .subscribe({
-        next: () => {
-          // Step 2: Create the solicitud first
-          this.solicitudService
-            .crearSolicitud({
-              opportunityId: offer._id!,
-              message: `Solicitud enviada por ${currentUser.fullName}.`
-            })
-            .subscribe({
-              next: (solicitud) => {
-                // Step 3: Get a pre-signed PUT URL from our backend
-                const file = this.selectedCvFile()!;
-                this.isUploadingCv.set(true);
-                this.solicitudService.getPresignedUploadUrl(file.name).subscribe({
-                  next: ({ uploadUrl, s3Key }) => {
-                    // Step 4: PUT the file directly to S3
-                    this.solicitudService.uploadCvToS3(uploadUrl, file).subscribe({
-                      next: () => {
-                        // Step 5: Notify Node to persist the s3Key in the Solicitud
-                        this.solicitudService.guardarCvKey(solicitud._id, s3Key).subscribe({
-                          next: () => {
-                            this.isSending.set(false);
-                            this.isUploadingCv.set(false);
-                            this.showRequestForm.set(false);
-                            this.solicitudStatus.set(solicitud.status);
-                            this.authService.fetchProfile().subscribe();
-                            this.ns.success(this.translate.instant('COMMON.NOTIF.REQUEST_SENT_SUCCESS'));
-                          },
-                          error: (err) => {
-                            console.error('Error guardando cvKey:', err);
-                            this.isSending.set(false);
-                            this.isUploadingCv.set(false);
-                            // Solicitud creada aunque el key no se guardó — informamos
-                            this.ns.error('CV subido, pero hubo un error al vincular la solicitud.');
-                          }
-                        });
-                      },
-                      error: (err) => {
-                        console.error('Error subiendo CV a S3:', err);
-                        this.isSending.set(false);
-                        this.isUploadingCv.set(false);
-                        this.cvUploadError.set('No se pudo subir el CV. Inténtalo de nuevo.');
-                      }
-                    });
-                  },
-                  error: (err) => {
-                    console.error('Error generando presigned URL:', err);
-                    this.isSending.set(false);
-                    this.isUploadingCv.set(false);
-                    this.cvUploadError.set('Error al preparar la subida. Inténtalo de nuevo.');
-                  }
-                });
-              },
-              error: (err) => {
-                console.error('Error creando solicitud:', err);
-                this.isSending.set(false);
-              }
-            });
+        next: (solicitud) => {
+          // Step 3: Get a pre-signed PUT URL from our backend
+          const file = this.selectedCvFile()!;
+          this.isUploadingCv.set(true);
+          this.solicitudService.getPresignedUploadUrl(file.name).subscribe({
+            next: ({ uploadUrl, s3Key }) => {
+              // Step 4: PUT the file directly to S3
+              this.solicitudService.uploadCvToS3(uploadUrl, file).subscribe({
+                next: () => {
+                  // Step 5: Notify Node to persist the s3Key in the Solicitud
+                  this.solicitudService.guardarCvKey(solicitud._id, s3Key).subscribe({
+                    next: () => {
+                      this.isSending.set(false);
+                      this.isUploadingCv.set(false);
+                      this.showRequestForm.set(false);
+                      this.solicitudStatus.set(solicitud.status);
+                      this.authService.fetchProfile().subscribe();
+                      this.ns.success(this.translate.instant('COMMON.NOTIF.REQUEST_SENT_SUCCESS'));
+                    },
+                    error: (err) => {
+                      console.error('Error guardando cvKey:', err);
+                      this.isSending.set(false);
+                      this.isUploadingCv.set(false);
+                      // Solicitud creada aunque el key no se guardó — informamos
+                      this.ns.error('CV subido, pero hubo un error al vincular la solicitud.');
+                    }
+                  });
+                },
+                error: (err) => {
+                  console.error('Error subiendo CV a S3:', err);
+                  this.isSending.set(false);
+                  this.isUploadingCv.set(false);
+                  this.cvUploadError.set('No se pudo subir el CV. Inténtalo de nuevo.');
+                }
+              });
+            },
+            error: (err) => {
+              console.error('Error generando presigned URL:', err);
+              this.isSending.set(false);
+              this.isUploadingCv.set(false);
+              this.cvUploadError.set('Error al preparar la subida. Inténtalo de nuevo.');
+            }
+          });
         },
         error: (err) => {
-          console.error('Error actualizando perfil previo a solicitud:', err);
+          console.error('Error creando solicitud:', err);
           this.isSending.set(false);
         }
       });
@@ -269,6 +319,19 @@ export class OfertaDetalle {
     return formatEmployeeRange(value);
   }
 
+  mapUrl(region?: string): SafeResourceUrl {
+    const location = region?.trim() || 'Espana';
+    const cached = this.mapUrlCache.get(location);
+    if (cached) return cached;
+
+    const query = encodeURIComponent(`${location}, Espana`);
+    const url = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://maps.google.com/maps?q=${query}&z=12&output=embed`
+    );
+    this.mapUrlCache.set(location, url);
+    return url;
+  }
+
   async contactarOwner(): Promise<void> {
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
@@ -294,9 +357,15 @@ export class OfertaDetalle {
   private extractOwnerId(owner: unknown): string | null {
     if (!owner) return null;
     if (typeof owner === 'string') return owner;
-    if (typeof owner === 'object' && owner !== null && '_id' in owner) {
+    if (typeof owner === 'object' && owner !== null) {
+      // Intentamos extraer el _id
       const maybeId = (owner as { _id?: unknown })._id;
-      return typeof maybeId === 'string' ? maybeId : null;
+      if (typeof maybeId === 'string') {
+        return maybeId;
+      }
+      if (typeof maybeId === 'object' && maybeId !== null && '$oid' in maybeId) {
+        return (maybeId as { $oid: string }).$oid;
+      }
     }
     return null;
   }

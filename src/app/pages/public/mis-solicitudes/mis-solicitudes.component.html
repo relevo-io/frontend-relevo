@@ -50,6 +50,15 @@
                   <div class="user-details">
                     <span class="label">{{ 'MAILBOX.MESSAGE_LABEL' | translate }}</span>
                     <span class="name">{{ solicitud.interestedUser.fullName }}</span>
+                    <span class="user-rating-line">
+                      <span class="material-symbols-outlined">star</span>
+                      @if (solicitud.interestedUser.ratingAsInterested?.count) {
+                        {{ solicitud.interestedUser.ratingAsInterested!.average | number: '1.1-1' }}
+                        <small>({{ solicitud.interestedUser.ratingAsInterested!.count }})</small>
+                      } @else {
+                        {{ 'RATINGS.NO_RATINGS' | translate }}
+                      }
+                    </span>
                     <span class="email">{{ solicitud.interestedUser.email }}</span>
                   </div>
                 } @else {
@@ -57,187 +66,243 @@
                   <div class="user-details">
                     <span class="label">{{ 'MAILBOX.SENT_TO' | translate }}</span>
                     <span class="name">{{ solicitud.owner.fullName }}</span>
+                    <span class="user-rating-line">
+                      <span class="material-symbols-outlined">star</span>
+                      @if (solicitud.owner.ratingAsOwner?.count) {
+                        {{ solicitud.owner.ratingAsOwner!.average | number: '1.1-1' }}
+                        <small>({{ solicitud.owner.ratingAsOwner!.count }})</small>
+                      } @else {
+                        {{ 'RATINGS.NO_RATINGS' | translate }}
+                      }
+                    </span>
                     <span class="email">{{ solicitud.owner.email }}</span>
                   </div>
                 }
               </div>
 
-              <!-- Only show applicant details to the Owner (Received tab) -->
-              @if (activeTab() === 'received') {
-                <div class="applicant-details">
-                  @if (solicitud.interestedUser.bio) {
-                    <div class="info-group">
-                      <h4>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</h4>
-                      <p>{{ solicitud.interestedUser.bio }}</p>
+              <!-- Applicant Details (Visible for both sent and received applications) -->
+              <div class="applicant-details">
+                @if (solicitud.bio || solicitud.interestedUser.bio) {
+                  <div class="info-group">
+                    <h4>{{ 'PROFILE_PAGE.BIO_LABEL' | translate }}</h4>
+                    <p>{{ solicitud.bio || solicitud.interestedUser.bio }}</p>
+                  </div>
+                }
+                @if (solicitud.professionalBackground || solicitud.interestedUser.professionalBackground) {
+                  <div class="info-group">
+                    <h4>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</h4>
+                    <p>{{ solicitud.professionalBackground || solicitud.interestedUser.professionalBackground }}</p>
+                  </div>
+                }
+                @if (solicitud.preferredRegions && solicitud.preferredRegions.length > 0) {
+                  <div class="info-group">
+                    <h4>{{ 'OFFER_DETAIL.ZONES_LABEL' | translate }}</h4>
+                    <p>{{ solicitud.preferredRegions.join(', ') }}</p>
+                  </div>
+                }
+                @if (solicitud.interestedUser.cv) {
+                  <div class="info-group">
+                    <h4>{{ 'OFFER_DETAIL.CV_LABEL' | translate }}</h4>
+                    <p>{{ solicitud.interestedUser.cv }}</p>
+                  </div>
+                }
+
+                <!-- M&A Financial & Security Details -->
+                <div class="info-group financial-security-details">
+                  <div class="detail-item">
+                    <h4>
+                      {{ 'MAILBOX.CAPITAL_AVAILABLE' | translate }}
+                    </h4>
+                    <strong>
+                      @if (solicitud.availableCapital !== undefined && solicitud.availableCapital !== null) {
+                        {{ solicitud.availableCapital | currency: 'EUR' : 'symbol' : '1.0-0' }}
+                      } @else {
+                        {{ 'MAILBOX.NOT_SPECIFIED' | translate }}
+                      }
+                    </strong>
+                  </div>
+
+                  <div class="detail-item">
+                    <h4>
+                      {{ 'MAILBOX.REQUIRES_FINANCING' | translate }}
+                    </h4>
+                    <span class="financing-value">
+                      @if (solicitud.financingNeeded !== undefined && solicitud.financingNeeded !== null) {
+                        {{ solicitud.financingNeeded ? ('MAILBOX.YES' | translate) : ('MAILBOX.NO' | translate) }}
+                      } @else {
+                        {{ 'MAILBOX.NA' | translate }}
+                      }
+                    </span>
+                  </div>
+
+                  <div class="detail-item">
+                    <h4>
+                      {{ 'MAILBOX.NDA_STATUS' | translate }}
+                    </h4>
+                    @if (solicitud.ndaAccepted) {
+                      <span class="nda-badge">
+                        <span class="material-symbols-outlined">verified_user</span>
+                        {{ 'MAILBOX.NDA_SIGNED' | translate }}
+                      </span>
+                    } @else {
+                      <span class="nda-badge pending">
+                        <span class="material-symbols-outlined">lock</span>
+                        {{ 'MAILBOX.NO_NDA' | translate }}
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Only show AI CV analysis to the owner (Received tab) -->
+              @if (activeTab() === 'received' && solicitud.cvKey) {
+                <div class="ai-analysis-wrapper">
+                  <!-- Estado: Pendiente -->
+                  @if (!solicitud.estadoAnalisis || solicitud.estadoAnalisis === 'PENDIENTE') {
+                    <div class="ai-status-panel pending">
+                      <div class="ai-info-text">
+                        <span class="material-symbols-outlined ai-sparkles">auto_awesome</span>
+                        <div>
+                          <span class="ai-title">{{ 'MAILBOX.AI_CV_AVAILABLE_TITLE' | translate }}</span>
+                          <span class="ai-subtitle">{{ 'MAILBOX.AI_CV_AVAILABLE_SUB' | translate }}</span>
+                        </div>
+                      </div>
+
+                      <button
+                        class="btn-ai-action primary"
+                        (click)="analizarCv(solicitud._id)"
+                        [disabled]="isAnalizando(solicitud._id)"
+                      >
+                        <span class="material-symbols-outlined">psychology</span>
+                        {{ 'MAILBOX.ANALYZE_AI' | translate }}
+                      </button>
                     </div>
                   }
-                  @if (solicitud.interestedUser.professionalBackground) {
-                    <div class="info-group">
-                      <h4>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</h4>
-                      <p>{{ solicitud.interestedUser.professionalBackground }}</p>
+
+                  <!-- Estado: En Proceso / Cargando -->
+                  @if (solicitud.estadoAnalisis === 'EN_PROCESO' || isAnalizando(solicitud._id)) {
+                    <div class="ai-status-panel processing">
+                      <div class="ai-loader-container">
+                        <div class="ai-loader-spinner"></div>
+                        <div class="ai-loading-text">
+                          <span class="ai-title animated-pulse">{{ 'MAILBOX.ANALYZING_AI_TITLE' | translate }}</span>
+                          <span class="ai-subtitle">{{ 'MAILBOX.ANALYZING_AI_SUB' | translate }}</span>
+                        </div>
+                      </div>
                     </div>
                   }
-                  @if (solicitud.interestedUser.cv) {
-                    <div class="info-group">
-                      <h4>{{ 'OFFER_DETAIL.CV_LABEL' | translate }}</h4>
-                      <p>{{ solicitud.interestedUser.cv }}</p>
+
+                  <!-- Estado: Error -->
+                  @if (solicitud.estadoAnalisis === 'ERROR') {
+                    <div class="ai-status-panel error">
+                      <div class="ai-info-text">
+                        <span class="material-symbols-outlined ai-error-icon">warning</span>
+                        <div>
+                          <span class="ai-title">{{ 'MAILBOX.AI_ERROR_TITLE' | translate }}</span>
+                          <span class="ai-subtitle">{{ 'MAILBOX.AI_ERROR_SUB' | translate }}</span>
+                        </div>
+                      </div>
+                      <button class="btn-ai-action retry" (click)="analizarCv(solicitud._id)">
+                        <span class="material-symbols-outlined">refresh</span>
+                        {{ 'MAILBOX.RETRY' | translate }}
+                      </button>
+                    </div>
+                  }
+
+                  <!-- Estado: Completado (Mostrar resumen e idoneidad) -->
+                  @if (solicitud.estadoAnalisis === 'COMPLETADO' && solicitud.resultadoIa) {
+                    <div class="ai-completed-container" [class.expanded]="isAiExpanded(solicitud._id)">
+                      <!-- Cabecera de estado IA -->
+                      <div class="ai-header" (click)="toggleAiExpansion(solicitud._id)">
+                        <div class="ai-header-left">
+                          <span class="material-symbols-outlined ai-badge-icon">auto_awesome</span>
+                          <span class="ai-header-title">{{ 'MAILBOX.AI_COMPLETED' | translate }}</span>
+                        </div>
+
+                        <div class="ai-header-right">
+                          <!-- Nota de Idoneidad -->
+                          <div
+                            class="ai-score-pill"
+                            [ngClass]="
+                              'score-' +
+                              (solicitud.resultadoIa.nota >= 8
+                                ? 'high'
+                                : solicitud.resultadoIa.nota >= 5
+                                  ? 'medium'
+                                  : 'low')
+                            "
+                          >
+                            <span class="score-label">{{ 'MAILBOX.SUITABILITY' | translate }}</span>
+                            <span class="score-value">{{ solicitud.resultadoIa.nota }}/10</span>
+                          </div>
+                          <button class="btn-toggle-ai">
+                            <span class="material-symbols-outlined">
+                              {{ isAiExpanded(solicitud._id) ? 'expand_less' : 'expand_more' }}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Panel de información detallada (expandible) -->
+                      @if (isAiExpanded(solicitud._id)) {
+                        <div class="ai-details-panel">
+                          <!-- Resumen Ejecutivo -->
+                          <div class="ai-section">
+                            <h4 class="ai-sec-title">
+                              <span class="material-symbols-outlined text-purple">summarize</span>
+                              {{ 'MAILBOX.CANDIDATE_SUMMARY' | translate }}
+                            </h4>
+                            <p class="ai-summary-text">{{ solicitud.resultadoIa.resumen }}</p>
+                          </div>
+
+                          <!-- Grid de Puntos Fuertes y Experiencia -->
+                          <div class="ai-grid">
+                            <!-- Puntos Fuertes -->
+                            <div class="ai-section">
+                              <h4 class="ai-sec-title">
+                                <span class="material-symbols-outlined text-green">check_circle</span>
+                                {{ 'MAILBOX.DETECTED_STRENGTHS' | translate }}
+                              </h4>
+                              <ul class="ai-bullets text-green">
+                                @for (punto of solicitud.resultadoIa.puntosFuertes; track $index) {
+                                  <li>
+                                    <span class="material-symbols-outlined li-icon">check</span>
+                                    {{ punto }}
+                                  </li>
+                                }
+                              </ul>
+                            </div>
+
+                            <!-- Experiencia Destacada -->
+                            <div class="ai-section">
+                              <h4 class="ai-sec-title">
+                                <span class="material-symbols-outlined text-blue">work</span>
+                                {{ 'MAILBOX.EXPERIENCE_MILESTONES' | translate }}
+                              </h4>
+                              <ul class="ai-bullets text-blue">
+                                @for (exp of solicitud.resultadoIa.experienciaDestacada; track $index) {
+                                  <li>
+                                    <span class="material-symbols-outlined li-icon">trending_flat</span>
+                                    {{ exp }}
+                                  </li>
+                                }
+                              </ul>
+                            </div>
+                          </div>
+
+                          <!-- Comentario / Justificación de la nota -->
+                          <div class="ai-feedback-box">
+                            <h4 class="ai-sec-title">
+                              <span class="material-symbols-outlined text-orange">lightbulb</span>
+                              {{ 'MAILBOX.SUITABILITY_FEEDBACK' | translate }}
+                            </h4>
+                            <p class="ai-feedback-text">{{ solicitud.resultadoIa.comentarioNota }}</p>
+                          </div>
+                        </div>
+                      }
                     </div>
                   }
                 </div>
-
-                <!-- SECCIÓN DE ANÁLISIS DE IA (Premium UI Layout) -->
-                @if (solicitud.cvKey) {
-                  <div class="ai-analysis-wrapper">
-                    <!-- Estado: Pendiente -->
-                    @if (!solicitud.estadoAnalisis || solicitud.estadoAnalisis === 'PENDIENTE') {
-                      <div class="ai-status-panel pending">
-                        <div class="ai-info-text">
-                          <span class="material-symbols-outlined ai-sparkles">auto_awesome</span>
-                          <div>
-                            <span class="ai-title">Análisis de CV con Inteligencia Artificial disponible</span>
-                            <span class="ai-subtitle"
-                              >Analiza el currículum de este candidato para evaluar compatibilidad y experiencia.</span
-                            >
-                          </div>
-                        </div>
-                        <button
-                          class="btn-ai-action primary"
-                          (click)="analizarCv(solicitud._id)"
-                          [disabled]="isAnalizando(solicitud._id)"
-                        >
-                          <span class="material-symbols-outlined">psychology</span>
-                          Analizar con IA
-                        </button>
-                      </div>
-                    }
-
-                    <!-- Estado: En Proceso / Cargando -->
-                    @if (solicitud.estadoAnalisis === 'EN_PROCESO' || isAnalizando(solicitud._id)) {
-                      <div class="ai-status-panel processing">
-                        <div class="ai-loader-container">
-                          <div class="ai-loader-spinner"></div>
-                          <div class="ai-loading-text">
-                            <span class="ai-title animated-pulse">Analizando currículum con IA...</span>
-                            <span class="ai-subtitle">Evaluando perfil y experiencia, ¡falta muy poco!</span>
-                          </div>
-                        </div>
-                      </div>
-                    }
-
-                    <!-- Estado: Error -->
-                    @if (solicitud.estadoAnalisis === 'ERROR') {
-                      <div class="ai-status-panel error">
-                        <div class="ai-info-text">
-                          <span class="material-symbols-outlined ai-error-icon">warning</span>
-                          <div>
-                            <span class="ai-title">Error en el análisis de IA</span>
-                            <span class="ai-subtitle"
-                              >No se pudo completar el análisis automático del documento PDF.</span
-                            >
-                          </div>
-                        </div>
-                        <button class="btn-ai-action retry" (click)="analizarCv(solicitud._id)">
-                          <span class="material-symbols-outlined">refresh</span>
-                          Reintentar
-                        </button>
-                      </div>
-                    }
-
-                    <!-- Estado: Completado (Mostrar resumen e idoneidad) -->
-                    @if (solicitud.estadoAnalisis === 'COMPLETADO' && solicitud.resultadoIa) {
-                      <div class="ai-completed-container" [class.expanded]="isAiExpanded(solicitud._id)">
-                        <!-- Cabecera de estado IA -->
-                        <div class="ai-header" (click)="toggleAiExpansion(solicitud._id)">
-                          <div class="ai-header-left">
-                            <span class="material-symbols-outlined ai-badge-icon">auto_awesome</span>
-                            <span class="ai-header-title">Análisis de CV con IA Completado</span>
-                          </div>
-
-                          <div class="ai-header-right">
-                            <!-- Nota de Idoneidad -->
-                            <div
-                              class="ai-score-pill"
-                              [ngClass]="
-                                'score-' +
-                                (solicitud.resultadoIa.nota >= 8
-                                  ? 'high'
-                                  : solicitud.resultadoIa.nota >= 5
-                                    ? 'medium'
-                                    : 'low')
-                              "
-                            >
-                              <span class="score-label">Idoneidad:</span>
-                              <span class="score-value">{{ solicitud.resultadoIa.nota }}/10</span>
-                            </div>
-                            <button class="btn-toggle-ai">
-                              <span class="material-symbols-outlined">
-                                {{ isAiExpanded(solicitud._id) ? 'expand_less' : 'expand_more' }}
-                              </span>
-                            </button>
-                          </div>
-                        </div>
-
-                        <!-- Panel de información detallada (expandible) -->
-                        @if (isAiExpanded(solicitud._id)) {
-                          <div class="ai-details-panel">
-                            <!-- Resumen Ejecutivo -->
-                            <div class="ai-section">
-                              <h4 class="ai-sec-title">
-                                <span class="material-symbols-outlined text-purple">summarize</span>
-                                Resumen del Candidato
-                              </h4>
-                              <p class="ai-summary-text">{{ solicitud.resultadoIa.resumen }}</p>
-                            </div>
-
-                            <!-- Grid de Puntos Fuertes y Experiencia -->
-                            <div class="ai-grid">
-                              <!-- Puntos Fuertes -->
-                              <div class="ai-section">
-                                <h4 class="ai-sec-title">
-                                  <span class="material-symbols-outlined text-green">check_circle</span>
-                                  Fortalezas Detectadas
-                                </h4>
-                                <ul class="ai-bullets text-green">
-                                  @for (punto of solicitud.resultadoIa.puntosFuertes; track $index) {
-                                    <li>
-                                      <span class="material-symbols-outlined li-icon">check</span>
-                                      {{ punto }}
-                                    </li>
-                                  }
-                                </ul>
-                              </div>
-
-                              <!-- Experiencia Destacada -->
-                              <div class="ai-section">
-                                <h4 class="ai-sec-title">
-                                  <span class="material-symbols-outlined text-blue">work</span>
-                                  Hitos de Experiencia
-                                </h4>
-                                <ul class="ai-bullets text-blue">
-                                  @for (exp of solicitud.resultadoIa.experienciaDestacada; track $index) {
-                                    <li>
-                                      <span class="material-symbols-outlined li-icon">trending_flat</span>
-                                      {{ exp }}
-                                    </li>
-                                  }
-                                </ul>
-                              </div>
-                            </div>
-
-                            <!-- Comentario / Justificación de la nota -->
-                            <div class="ai-feedback-box">
-                              <h4 class="ai-sec-title">
-                                <span class="material-symbols-outlined text-orange">lightbulb</span>
-                                Feedback de Idoneidad
-                              </h4>
-                              <p class="ai-feedback-text">{{ solicitud.resultadoIa.comentarioNota }}</p>
-                            </div>
-                          </div>
-                        }
-                      </div>
-                    }
-                  </div>
-                }
               }
             </div>
 
@@ -247,7 +312,7 @@
                 @if (solicitud.cvKey) {
                   <button class="btn-view-cv" (click)="verCv(solicitud._id)">
                     <span class="material-symbols-outlined">picture_as_pdf</span>
-                    Ver CV
+                    {{ 'MAILBOX.VIEW_CV' | translate }}
                   </button>
                 }
                 @if (solicitud.status === 'PENDING') {
@@ -258,20 +323,12 @@
                     {{ 'MAILBOX.REJECT' | translate }}
                   </button>
                 } @else {
-                  <div class="resolution-container">
-                    <p class="resolution-text">
-                      {{ 'MAILBOX.RESOLVED_AS' | translate }}
-                      <span [ngClass]="solicitud.status.toLowerCase()">{{
-                        'STATUS.' + solicitud.status | translate
-                      }}</span>
-                    </p>
-                    @if (solicitud.status === 'ACCEPTED') {
-                      <button class="btn-contact" (click)="contactar(solicitud)">
-                        <span class="material-symbols-outlined">chat</span>
-                        {{ 'MAILBOX.CONTACT_INTERESTED' | translate }}
-                      </button>
-                    }
-                  </div>
+                  @if (solicitud.status === 'ACCEPTED') {
+                    <button class="btn-contact" (click)="contactar(solicitud)">
+                      <span class="material-symbols-outlined">chat</span>
+                      {{ 'MAILBOX.CONTACT_INTERESTED' | translate }}
+                    </button>
+                  }
                 }
               }
 
@@ -280,7 +337,7 @@
                 @if (solicitud.cvKey) {
                   <button class="btn-view-cv" (click)="verCv(solicitud._id)">
                     <span class="material-symbols-outlined">picture_as_pdf</span>
-                    Mi CV
+                    {{ 'MAILBOX.MY_CV' | translate }}
                   </button>
                 }
                 @if (solicitud.status === 'ACCEPTED') {
@@ -301,6 +358,19 @@
           </div>
         }
       </div>
+      @if (pagination() && pagination()!.totalPages > 1) {
+        <div class="pager">
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
+            {{ 'MAILBOX.PREVIOUS' | translate }}
+          </button>
+          <span class="pager-info">{{
+            'MAILBOX.PAGE_INFO' | translate: { page: pagination()!.page, total: pagination()!.totalPages }
+          }}</span>
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
+            {{ 'MAILBOX.NEXT' | translate }}
+          </button>
+        </div>
+      }
     }
   </div>
 </main>

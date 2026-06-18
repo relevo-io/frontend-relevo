@@ -1,19 +1,21 @@
-import { Injectable, inject, PLATFORM_ID, OnDestroy, NgZone } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID, OnDestroy, NgZone, effect } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, BehaviorSubject, fromEvent, merge, tap } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, tap } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import {
   Chat,
+  ChatRating,
   Mensaje,
   SendMessageAck,
   JoinChatAck,
   ConnectionStatus,
   PresenceStatus,
-  ChatStatus
+  MessageType
 } from '../models/chat.model';
+import { NotificationHistory } from '../models/notification.model';
 
 const API_URL = `${environment.apiUrl}/api`;
 const SOCKET_URL = new URL(environment.apiUrl).origin;
@@ -27,6 +29,19 @@ export class ChatService implements OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private ngZone = inject(NgZone);
 
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      effect(() => {
+        const loggedIn = this.authService.isLoggedIn();
+        if (loggedIn) {
+          this.connect();
+        } else {
+          this.disconnect();
+        }
+      });
+    }
+  }
+
   // ── Socket instance ─────────────────────────
   private socket: Socket | null = null;
   private activeChatId: string | null = null;
@@ -38,6 +53,7 @@ export class ChatService implements OnDestroy {
   private presenceSubject = new BehaviorSubject<PresenceStatus>('offline');
   private notificationsSubject = new Subject<{ chatId: string; message: Mensaje }>();
   private totalUnreadSubject = new BehaviorSubject<number>(0);
+  private newNotificationSubject = new Subject<NotificationHistory>();
 
   /** Stream de mensajes nuevos entrantes */
   readonly messages$ = this.messagesSubject.asObservable();
@@ -45,6 +61,8 @@ export class ChatService implements OnDestroy {
   readonly notifications$ = this.notificationsSubject.asObservable();
   /** Conteo total de mensajes no leídos */
   readonly totalUnread$ = this.totalUnreadSubject.asObservable();
+  /** Notificaciones de historial en tiempo real */
+  readonly newNotification$ = this.newNotificationSubject.asObservable();
   /** Stream del userId que está escribiendo (null si no hay nadie) */
   readonly typing$ = this.typingSubject.asObservable();
   /** Estado de la conexión socket */
@@ -64,7 +82,7 @@ export class ChatService implements OnDestroy {
     // Si el socket ja existeix però el token ha canviat (canvi d'usuari), desconnectem
     if (this.socket) {
       const auth = this.socket.auth;
-      const socketToken = typeof auth === 'object' ? (auth as any)?.['token'] : null;
+      const socketToken = typeof auth === 'object' && auth !== null ? (auth as Record<string, unknown>)['token'] : null;
 
       if (socketToken === `Bearer ${token}`) return;
 
@@ -152,6 +170,12 @@ export class ChatService implements OnDestroy {
       });
     });
 
+    this.socket.on('new_notification', (notif: NotificationHistory) => {
+      this.ngZone.run(() => {
+        this.newNotificationSubject.next(notif);
+      });
+    });
+
     this.socket.on('error', (error: { message: string }) => {
       console.error('[ChatService] Socket error:', error.message);
     });
@@ -187,16 +211,38 @@ export class ChatService implements OnDestroy {
   }
 
   /**
-   * Envía un mensaje. Devuelve una Promise con el ack del servidor.
-   * El llamador puede mostrar el mensaje en modo 'sending' y actualizar según el ack.
+   * Envía un mensaje (puede contener texto y/o metadatos de un archivo).
    */
-  sendMessage(chatId: string, content: string): Promise<SendMessageAck> {
+  sendMessage(
+    chatId: string,
+    content: string,
+    fileData?: {
+      messageType: MessageType;
+      s3Key: string;
+      fileName: string;
+      fileSize: number;
+      mimeType: string;
+    }
+  ): Promise<SendMessageAck> {
     return new Promise((resolve) => {
       if (!this.socket?.connected) {
         resolve({ ok: false, error: 'No hay conexión' });
         return;
       }
-      this.socket.emit('send_message', { chatId, content }, (ack: SendMessageAck) => resolve(ack));
+      this.socket.emit('send_message', { chatId, content, ...fileData }, (ack: SendMessageAck) => resolve(ack));
+    });
+  }
+
+  /** Obtiene la URL pre-firmada para subir un archivo adjunto del chat */
+  getPresignedChatUrl(filename: string, mimeType: string): Observable<{ uploadUrl: string; s3Key: string }> {
+    const params = new HttpParams().set('filename', filename).set('mimeType', mimeType);
+    return this.http.get<{ uploadUrl: string; s3Key: string }>(`${API_URL}/storage/chat-presigned-url`, { params });
+  }
+
+  /** Sube un archivo binario directamente a S3 omitiendo la cabecera JWT */
+  uploadFileToS3(uploadUrl: string, file: File): Observable<void> {
+    return this.http.put<void>(uploadUrl, file, {
+      headers: { skipAuth: 'true' }
     });
   }
 
@@ -258,6 +304,18 @@ export class ChatService implements OnDestroy {
   /** Actualiza el estado de aprobación de un chat (APPROVED / REJECTED) */
   updateChatStatus(chatId: string, status: 'APPROVED' | 'REJECTED'): Observable<Chat> {
     return this.http.patch<Chat>(`${API_URL}/chats/${chatId}/status`, { status });
+  }
+
+  closeDeal(chatId: string): Observable<Chat> {
+    return this.http.post<Chat>(`${API_URL}/chats/${chatId}/close`, {});
+  }
+
+  getMyChatRating(chatId: string): Observable<{ rating: ChatRating | null }> {
+    return this.http.get<{ rating: ChatRating | null }>(`${API_URL}/chats/${chatId}/my-rating`);
+  }
+
+  rateChat(chatId: string, score: number, comment?: string): Observable<ChatRating> {
+    return this.http.post<ChatRating>(`${API_URL}/chats/${chatId}/rating`, { score, comment });
   }
 
   // ─────────────────────────────────────────────

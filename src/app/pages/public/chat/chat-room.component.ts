@@ -10,20 +10,27 @@ import {
   AfterViewChecked,
   PLATFORM_ID
 } from '@angular/core';
-import { isPlatformBrowser, AsyncPipe, DatePipe } from '@angular/common';
+import { isPlatformBrowser, DatePipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { ChatService } from '../../../core/services/chat.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Mensaje, Chat, ConnectionStatus, PresenceStatus } from '../../../core/models/chat.model';
+import {
+  Mensaje,
+  Chat,
+  ChatRating,
+  ConnectionStatus,
+  PresenceStatus,
+  MessageType
+} from '../../../core/models/chat.model';
 
 @Component({
   selector: 'app-chat-room',
   standalone: true,
-  imports: [DatePipe, FormsModule, RouterLink, TranslateModule],
+  imports: [DatePipe, DecimalPipe, FormsModule, RouterLink, TranslateModule],
   templateUrl: './chat-room.component.html',
   styleUrl: './chat-room.component.css'
 })
@@ -37,6 +44,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   private platformId = inject(PLATFORM_ID);
 
   private destroy$ = new Subject<void>();
+  private chatChanged$ = new Subject<void>();
   private typingInput$ = new Subject<string>();
   private subscriptions: Subscription[] = [];
 
@@ -47,10 +55,25 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   isLoading = signal(true);
   isLoadingMore = signal(false);
   isSending = signal(false);
+  isUploadingFile = signal(false);
+  isRecording = signal(false);
+  recordingDuration = signal(0);
   hasMoreMessages = signal(true);
   showNewMessageBanner = signal(false);
   isAtBottom = signal(true);
   chatId = signal('');
+  myRating = signal<ChatRating | null>(null);
+  ratingScore = signal(0);
+  ratingHover = signal(0);
+  ratingComment = signal('');
+  isClosingDeal = signal(false);
+  isSendingRating = signal(false);
+
+  // ── MediaRecorder properties ────────────────
+  private mediaRecorder: any = null;
+  private audioChunks: Blob[] = [];
+  private recordingTimer: any = null;
+  private audioStream: MediaStream | null = null;
 
   // ── Real-time signals ────────────────────────
   connectionStatus = signal<ConnectionStatus>('disconnected');
@@ -61,6 +84,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   currentUserId = computed(() => this.authService.currentUser()?._id ?? '');
   isReadOnly = computed(() => this.chat()?.isReadOnly ?? false);
   isPendingApproval = computed(() => this.chat()?.status === 'PENDING_APPROVAL');
+  isDealClosed = computed(() => Boolean(this.chat()?.closedAt));
 
   isOwnerOfOffer = computed(() => {
     const c = this.chat();
@@ -77,6 +101,28 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (c.status === 'REJECTED') return false;
     return true;
   });
+
+  hasConfirmedDeal = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    return this.isOwnerOfOffer() ? Boolean(c.closedByOwner) : Boolean(c.closedByInterested);
+  });
+
+  isWaitingOtherDealConfirmation = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    if (this.isDealClosed()) return false;
+    if (!this.hasConfirmedDeal()) return false;
+    return this.isOwnerOfOffer() ? !c.closedByInterested : !c.closedByOwner;
+  });
+
+  canShowDealClosePanel = computed(() => {
+    const c = this.chat();
+    if (!c) return false;
+    return c.status === 'APPROVED' && !this.isDealClosed();
+  });
+
+  canRateClosedDeal = computed(() => this.isDealClosed() && !this.myRating());
 
   otherParticipantName = computed(() => {
     const c = this.chat();
@@ -98,12 +144,57 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private shouldScrollToBottom = false;
 
+  private handleVisibilityChange = (): void => {
+    if (document.hidden) {
+      if (this.chatId()) {
+        this.chatService.sendTypingStop(this.chatId());
+        this.chatService.leaveChat(this.chatId());
+      }
+    } else {
+      if (this.chatId()) {
+        this.chatService.joinChat(this.chatId());
+        this.chatService.markAsRead(this.chatId());
+      }
+    }
+  };
+
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('chatId') ?? '';
-    this.chatId.set(id);
-    this.loadChatAndHistory(id);
-    this.subscribeToRealtime(id);
-    this.setupTypingDebounce(id);
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const id = params.get('chatId') ?? '';
+      const oldId = this.chatId();
+
+      if (id !== oldId) {
+        if (oldId) {
+          this.chatService.sendTypingStop(oldId);
+          this.chatService.leaveChat(oldId);
+        }
+
+        this.chatChanged$.next();
+
+        // Reset state before loading new chat
+        this.chatId.set(id);
+        this.messages.set([]);
+        this.chat.set(null);
+        this.myRating.set(null);
+        this.ratingScore.set(0);
+        this.ratingHover.set(0);
+        this.ratingComment.set('');
+        this.typingUserId.set(null);
+        this.presenceStatus.set('offline');
+        this.showNewMessageBanner.set(false);
+        this.hasMoreMessages.set(true);
+
+        if (id) {
+          this.loadChatAndHistory(id);
+          this.subscribeToRealtime(id);
+          this.setupTypingDebounce(id);
+        }
+      }
+    });
+
+    if (isPlatformBrowser(this.platformId)) {
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -114,9 +205,16 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+    }
+    this.cleanupRecordingResources();
     if (this.chatId()) {
+      this.chatService.sendTypingStop(this.chatId());
       this.chatService.leaveChat(this.chatId());
     }
+    this.chatChanged$.next();
+    this.chatChanged$.complete();
     this.destroy$.next();
     this.destroy$.complete();
     this.subscriptions.forEach((s) => s.unsubscribe());
@@ -131,11 +229,16 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     try {
       // Load chat metadata
       const chats = await this.chatService.getMyChats().toPromise();
+      if (this.chatId() !== chatId) return;
+
       const chat = chats?.find((c) => c._id === chatId);
       this.chat.set(chat ?? null);
+      await this.loadMyRating(chatId);
 
       // Load initial message history (last 30)
       const msgs = await this.chatService.getMessages(chatId).toPromise();
+      if (this.chatId() !== chatId) return;
+
       this.messages.set(msgs ?? []);
       this.hasMoreMessages.set((msgs?.length ?? 0) >= 30);
 
@@ -148,18 +251,22 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     } catch (err) {
       console.error('[ChatRoom] Failed to load chat:', err);
     } finally {
-      this.isLoading.set(false);
+      if (this.chatId() === chatId) {
+        this.isLoading.set(false);
+      }
     }
   }
 
   private subscribeToRealtime(chatId: string): void {
+    const until$ = merge(this.destroy$, this.chatChanged$);
+
     // Incoming messages
-    this.chatService.messages$.pipe(takeUntil(this.destroy$)).subscribe((msg) => {
+    this.chatService.messages$.pipe(takeUntil(until$)).subscribe((msg) => {
       // Filter messages for this chat only
       if (msg.chat !== chatId) return;
 
       // Replace optimistic message if it matches localId
-      const existing = this.messages().findIndex((m) => m.localId && m.localId === (msg as any).localId);
+      const existing = this.messages().findIndex((m) => m.localId && m.localId === msg.localId);
       if (existing !== -1) {
         const updated = [...this.messages()];
         updated[existing] = { ...msg, status: 'sent' };
@@ -178,19 +285,18 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
 
     // Typing
-    this.chatService.typing$.pipe(takeUntil(this.destroy$)).subscribe((userId) => this.typingUserId.set(userId));
+    this.chatService.typing$.pipe(takeUntil(until$)).subscribe((userId) => this.typingUserId.set(userId));
 
     // Connection status
-    this.chatService.connectionStatus$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((status) => this.connectionStatus.set(status));
+    this.chatService.connectionStatus$.pipe(takeUntil(until$)).subscribe((status) => this.connectionStatus.set(status));
 
     // Presence
-    this.chatService.presence$.pipe(takeUntil(this.destroy$)).subscribe((status) => this.presenceStatus.set(status));
+    this.chatService.presence$.pipe(takeUntil(until$)).subscribe((status) => this.presenceStatus.set(status));
   }
 
   private setupTypingDebounce(chatId: string): void {
-    this.typingInput$.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$)).subscribe((value) => {
+    const until$ = merge(this.destroy$, this.chatChanged$);
+    this.typingInput$.pipe(debounceTime(300), distinctUntilChanged(), takeUntil(until$)).subscribe((value) => {
       if (value.length > 0) {
         this.chatService.sendTypingStart(chatId);
       } else {
@@ -269,21 +375,187 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
+  private async loadMyRating(chatId: string): Promise<void> {
+    try {
+      const response = await this.chatService.getMyChatRating(chatId).toPromise();
+      if (this.chatId() === chatId) {
+        this.myRating.set(response?.rating ?? null);
+      }
+    } catch {
+      this.myRating.set(null);
+    }
+  }
+
+  async closeDeal(): Promise<void> {
+    const id = this.chatId();
+    if (!id || this.isClosingDeal() || this.hasConfirmedDeal()) return;
+
+    this.isClosingDeal.set(true);
+    try {
+      const updated = await this.chatService.closeDeal(id).toPromise();
+      if (updated) {
+        this.chat.set(updated);
+      }
+    } catch (err) {
+      console.error('[ChatRoom] Error closing deal:', err);
+    } finally {
+      this.isClosingDeal.set(false);
+    }
+  }
+
+  setRating(score: number): void {
+    this.ratingScore.set(score);
+  }
+
+  async submitRating(): Promise<void> {
+    const score = this.ratingScore();
+    if (!score || this.isSendingRating()) return;
+
+    this.isSendingRating.set(true);
+    try {
+      const rating = await this.chatService.rateChat(this.chatId(), score, this.ratingComment().trim()).toPromise();
+      if (rating) {
+        this.myRating.set(rating);
+      }
+    } catch (err) {
+      console.error('[ChatRoom] Error sending rating:', err);
+    } finally {
+      this.isSendingRating.set(false);
+    }
+  }
+
   async retryMessage(msg: Mensaje): Promise<void> {
     if (!msg.localId) return;
 
     const updated = this.messages().map((m) => (m.localId === msg.localId ? { ...m, status: 'sending' as const } : m));
     this.messages.set(updated);
 
-    const ack = await this.chatService.sendMessage(this.chatId(), msg.content);
-    if (ack.ok && ack.message) {
-      const final = this.messages().map((m) =>
-        m.localId === msg.localId ? { ...ack.message!, status: 'sent' as const } : m
-      );
-      this.messages.set(final);
-    } else {
+    try {
+      let ack;
+      if (msg.s3Key && msg.messageType) {
+        ack = await this.chatService.sendMessage(this.chatId(), msg.content, {
+          messageType: msg.messageType,
+          s3Key: msg.s3Key,
+          fileName: msg.fileName || '',
+          fileSize: msg.fileSize || 0,
+          mimeType: msg.mimeType || ''
+        });
+      } else {
+        ack = await this.chatService.sendMessage(this.chatId(), msg.content);
+      }
+
+      if (ack.ok && ack.message) {
+        const final = this.messages().map((m) =>
+          m.localId === msg.localId ? { ...ack.message!, status: 'sent' as const } : m
+        );
+        this.messages.set(final);
+      } else {
+        const errored = this.messages().map((m) =>
+          m.localId === msg.localId ? { ...m, status: 'error' as const } : m
+        );
+        this.messages.set(errored);
+      }
+    } catch {
       const errored = this.messages().map((m) => (m.localId === msg.localId ? { ...m, status: 'error' as const } : m));
       this.messages.set(errored);
+    }
+  }
+
+  async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const maxSizeBytes = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSizeBytes) {
+      alert('El archivo supera el límite de 10 MB');
+      return;
+    }
+
+    let messageType: MessageType = 'file';
+    if (file.type.startsWith('image/')) {
+      messageType = 'image';
+    } else if (file.type.startsWith('video/')) {
+      messageType = 'video';
+    } else if (file.type.startsWith('audio/')) {
+      messageType = 'audio';
+    }
+
+    this.isUploadingFile.set(true);
+
+    try {
+      // Step 1: Request S3 pre-signed upload URL (PUT)
+      const res = await this.chatService.getPresignedChatUrl(file.name, file.type).toPromise();
+
+      if (!res || !res.uploadUrl || !res.s3Key) {
+        throw new Error('No se pudo obtener la URL de subida de S3');
+      }
+
+      const { uploadUrl, s3Key } = res;
+
+      // Step 2: Upload binary file directly to S3
+      await this.chatService.uploadFileToS3(uploadUrl, file).toPromise();
+
+      // Step 3: Send message metadata via WebSockets
+      await this.sendAttachmentMessage(messageType, s3Key, file.name, file.size, file.type);
+    } catch (err) {
+      console.error('[ChatRoom] Error subiendo archivo a S3:', err);
+      alert('Error al subir el archivo');
+    } finally {
+      this.isUploadingFile.set(false);
+      input.value = ''; // Reset input selection
+    }
+  }
+
+  async sendAttachmentMessage(
+    messageType: MessageType,
+    s3Key: string,
+    fileName: string,
+    fileSize: number,
+    mimeType: string
+  ): Promise<void> {
+    const chatId = this.chatId();
+    const localId = `local_${Date.now()}`;
+    const userId = this.currentUserId();
+
+    const optimisticMsg: Mensaje = {
+      localId,
+      chat: chatId,
+      sender: userId,
+      content: '',
+      messageType,
+      s3Key,
+      fileName,
+      fileSize,
+      mimeType,
+      status: 'sending',
+      createdAt: new Date().toISOString()
+    };
+
+    this.messages.set([...this.messages(), optimisticMsg]);
+    this.shouldScrollToBottom = true;
+
+    try {
+      const ack = await this.chatService.sendMessage(chatId, '', {
+        messageType,
+        s3Key,
+        fileName,
+        fileSize,
+        mimeType
+      });
+
+      if (ack.ok && ack.message) {
+        const updated = this.messages().map((m) =>
+          m.localId === localId ? { ...ack.message!, status: 'sent' as const } : m
+        );
+        this.messages.set(updated);
+      } else {
+        const updated = this.messages().map((m) => (m.localId === localId ? { ...m, status: 'error' as const } : m));
+        this.messages.set(updated);
+      }
+    } catch {
+      const updated = this.messages().map((m) => (m.localId === localId ? { ...m, status: 'error' as const } : m));
+      this.messages.set(updated);
     }
   }
 
@@ -326,13 +598,15 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   scrollToBottom(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    try {
-      const el = this.messagesContainer?.nativeElement;
-      if (el) el.scrollTop = el.scrollHeight;
-      this.showNewMessageBanner.set(false);
-    } catch {
-      /* ignore */
-    }
+    setTimeout(() => {
+      try {
+        const el = this.messagesContainer?.nativeElement;
+        if (el) el.scrollTop = el.scrollHeight;
+        this.showNewMessageBanner.set(false);
+      } catch {
+        /* ignore */
+      }
+    }, 50);
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -350,5 +624,103 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   getSenderName(msg: Mensaje): string {
     if (typeof msg.sender === 'object') return (msg.sender as { fullName: string }).fullName;
     return '';
+  }
+
+  async startRecording(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert('Tu dispositivo o navegador no soporta el acceso al micrófono.');
+      return;
+    }
+
+    if (!(window as any).MediaRecorder) {
+      alert('Tu navegador no soporta la grabación de audio.');
+      return;
+    }
+
+    try {
+      this.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      this.audioChunks = [];
+      this.mediaRecorder = new (window as any).MediaRecorder(this.audioStream);
+
+      this.mediaRecorder.ondataavailable = (event: any) => {
+        if (event.data.size > 0) {
+          this.audioChunks.push(event.data);
+        }
+      };
+
+      this.mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+        const file = new File([audioBlob], `voice-note-${Date.now()}.webm`, {
+          type: 'audio/webm'
+        });
+
+        this.isUploadingFile.set(true);
+
+        try {
+          const res = await this.chatService.getPresignedChatUrl(file.name, file.type).toPromise();
+          if (!res || !res.uploadUrl || !res.s3Key) {
+            throw new Error('No se pudo obtener la URL de S3');
+          }
+          const { uploadUrl, s3Key } = res;
+
+          await this.chatService.uploadFileToS3(uploadUrl, file).toPromise();
+          await this.sendAttachmentMessage('audio', s3Key, 'Nota de voz.webm', file.size, file.type);
+        } catch (err) {
+          console.error('[ChatRoom] Error enviando nota de voz:', err);
+          alert('Error al enviar la nota de voz');
+        } finally {
+          this.isUploadingFile.set(false);
+        }
+      };
+
+      this.mediaRecorder.start();
+      this.isRecording.set(true);
+      this.recordingDuration.set(0);
+
+      this.recordingTimer = setInterval(() => {
+        this.recordingDuration.set(this.recordingDuration() + 1);
+      }, 1000);
+    } catch (err) {
+      console.error('[ChatRoom] Error al acceder al micrófono:', err);
+      alert('No se pudo acceder al micrófono. Por favor, concede los permisos correspondientes.');
+    }
+  }
+
+  stopRecording(): void {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+      this.mediaRecorder.stop();
+    }
+    this.cleanupRecordingResources();
+  }
+
+  cancelRecording(): void {
+    if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+      this.mediaRecorder.onstop = null;
+      this.mediaRecorder.stop();
+    }
+    this.cleanupRecordingResources();
+  }
+
+  private cleanupRecordingResources(): void {
+    this.isRecording.set(false);
+    this.recordingDuration.set(0);
+
+    if (this.recordingTimer) {
+      clearInterval(this.recordingTimer);
+      this.recordingTimer = null;
+    }
+
+    if (this.audioStream) {
+      this.audioStream.getTracks().forEach((track: any) => track.stop());
+      this.audioStream = null;
+    }
+  }
+
+  formatDuration(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }
 }

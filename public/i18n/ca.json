@@ -17,7 +17,9 @@
       "CHAT_ERROR": "No s'ha pogut iniciar el xat. Torna-ho a provar."
     },
     "VIEW": "Veure",
-    "VIEW_ALL": "Veure-ho tot"
+    "VIEW_ALL": "Veure-ho tot",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Següent"
   },
   "AUTH": {
     "LOGIN_TITLE": "Iniciar Sessió",
@@ -51,7 +53,10 @@
       "BADGE_TITLE": "Plataforma Segura",
       "BADGE_SUB": "Garantim privacitat total."
     },
-    "REGISTER_BUTTON": "Crear Compte"
+    "REGISTER_BUTTON": "Crear Compte",
+    "OR_CONTINUE_WITH": "O continua amb",
+    "CONTINUE_WITH_GOOGLE": "Continua amb Google",
+    "CONTINUE_WITH_GITHUB": "Continua amb GitHub"
   },
   "NAVBAR": {
     "LOGOUT": "Tancar Sessió",
@@ -62,7 +67,9 @@
     "PROFILE": "Perfil",
     "HOME": "Inici",
     "DARK_MODE": "Mode fosc",
-    "LIGHT_MODE": "Mode clar"
+    "LIGHT_MODE": "Mode clar",
+    "CHATS": "Xats",
+    "FAVORITES": "Els meus preferits"
   },
   "PROFILE": {
     "TITLE": "El Meu Perfil",
@@ -191,17 +198,33 @@
     "CLOSE": "Tancar",
     "BACKGROUND_LABEL": "Quin és el teu background?",
     "REQUIRED_FIELD": "Aquest camp és obligatori.",
+    "MIN_LENGTH_ERROR": "Mínim {{min}} caràcters (en portes {{current}}/{{min}}).",
     "ZONES_LABEL": "Zones preferides",
     "ZONES_PLACEHOLDER": "Ex. Madrid, Barcelona, València",
     "ZONES_REQUIRED": "Has d'indicar almenys una zona.",
-    "CV_LABEL": "CV (text)",
-    "CV_REQUIRED": "Has de completar el CV en format text.",
+    "CV_LABEL": "CV (PDF)",
+    "CV_REQUIRED": "Has de pujar el teu CV en format PDF.",
+    "CV_CHANGE": "Canviar fitxer",
+    "CV_UPLOAD_PROMPT": "Arrossega i deixa anar el teu CV en format PDF o fes clic per examinar",
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "La bio és obligatòria.",
+    "CAPITAL_LABEL": "Capital Propi Disponible (€)",
+    "CAPITAL_REQUIRED": "El capital propi disponible és requerit per a la solvència.",
+    "FINANCING_LABEL": "Necessites Finançament Extern?",
+    "FINANCING_NO": "No, disposo del capital total necessari",
+    "FINANCING_YES": "Sí, necessitaré demanar un préstec bancari o finançament",
+    "FINANCING_REQUIRED": "S'ha de respondre si es necessita finançament.",
+    "NDA_LABEL": "Accepto el compromís de confidencialitat (NDA) d'aquesta oferta. Estic d'acord a no difondre dades financeres, operacionals o comercials d'aquest negoci.",
+    "NDA_REQUIRED": "És obligatori acceptar l'acord de confidencialitat (NDA) per demanar accés.",
     "SENDING": "Enviant...",
     "SAVE_REQUEST": "Guardar i sol·licitar",
     "OPENING_CHAT": "Obrint xat...",
-    "CONTACT_OWNER": "Contactar amb el propietari"
+    "CONTACT_OWNER": "Contactar amb el propietari",
+    "ANALYTICS_TITLE": "Estadístiques de l'oferta",
+    "VIEWS": "Visites",
+    "FAVORITES": "Preferits",
+    "REQUESTS": "Sol·licituds",
+    "CONVERSION": "Conversió"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "Llest per vendre la teva empresa o prendre el relleu?",
@@ -213,7 +236,13 @@
     "CLEAR_FILTER": "Netejar filtre",
     "NO_RESULTS": "No hi ha ofertes que coincideixin amb la teva cerca.",
     "LOADING_BACKEND": "Carregant ofertes des del servidor...",
-    "LOADING_ERROR": "No s'han pogut carregar les ofertes. Torna-ho a provar."
+    "LOADING_ERROR": "No s'han pogut carregar les ofertes. Torna-ho a provar.",
+    "CTA_REGISTER_TITLE": "Vols explorar més oportunitats?",
+    "CTA_REGISTER_DESC_START": "Uneix-te a Relevo per veure les",
+    "CTA_REGISTER_FALLBACK": "desenes de",
+    "CTA_REGISTER_DESC_END": "empreses disponibles i accedir a tots els seus detalls.",
+    "CTA_REGISTER_BTN": "Registra't per veure-ho tot",
+    "VIEW_DETAILS": "Veure detalls"
   },
   "LEGAL": {
     "PRIVACY_TITLE": "POLÍTICA DE PRIVACITAT DE RELEVO",
@@ -267,14 +296,49 @@
     "RESOLVED_AS": "Estat:",
     "SENT_TO": "Enviada a:",
     "CONTACT_OWNER": "Contactar amb el propietari",
-    "CONTACT_INTERESTED": "Contactar amb l'interessat"
+    "CONTACT_INTERESTED": "Contactar amb l'interessat",
+    "CAPITAL_AVAILABLE": "Capital Propi Disponible",
+    "NOT_SPECIFIED": "No especificat",
+    "REQUIRES_FINANCING": "Requereix Finançament",
+    "YES": "Sí",
+    "NO": "No",
+    "NA": "N/A",
+    "NDA_STATUS": "Estat del NDA",
+    "NDA_SIGNED": "NDA Signat i Acceptat",
+    "NO_NDA": "Sense NDA",
+    "AI_CV_AVAILABLE_TITLE": "Anàlisi de CV amb Intel·ligència Artificial disponible",
+    "AI_CV_AVAILABLE_SUB": "Analitza el currículum d'aquest candidat per avaluar compatibilitat i experiència.",
+    "ANALYZE_AI": "Analitzar amb IA",
+    "ANALYZING_AI_TITLE": "Analitzant currículum amb IA...",
+    "ANALYZING_AI_SUB": "Avaluant perfil i experiència, falta molt poc!",
+    "AI_ERROR_TITLE": "Error en l'anàlisi d'IA",
+    "AI_ERROR_SUB": "No s'ha pogut completar l'anàlisi automàtic del document PDF.",
+    "RETRY": "Reintentar",
+    "AI_COMPLETED": "Anàlisi de CV amb IA Completat",
+    "SUITABILITY": "Idoneïtat:",
+    "CANDIDATE_SUMMARY": "Resum del Candidat",
+    "DETECTED_STRENGTHS": "Fortaleses Detectades",
+    "EXPERIENCE_MILESTONES": "Fites d'Experiència",
+    "SUITABILITY_FEEDBACK": "Feedback d'Idoneïtat",
+    "VIEW_CV": "Veure CV",
+    "MY_CV": "El meu CV",
+    "PREVIOUS": "Anterior",
+    "PAGE_INFO": "Pàgina {{page}} de {{total}}",
+    "NEXT": "Següent"
   },
   "MY_OFFERS": {
     "TITLE": "Les meves Ofertes",
     "SUBTITLE": "Gestiona els teus negocis publicats a Relevo",
     "EMPTY_TITLE": "No has publicat cap oferta",
     "EMPTY_DESC": "Comença ara a buscar el relleu ideal per al teu negoci.",
-    "CREATE_NEW": "Publicar nova oferta"
+    "CREATE_NEW": "Publicar nova oferta",
+    "PUBLISHED_OFFERS": "Ofertes publicades",
+    "TOTAL_VIEWS": "Visites totals",
+    "TOTAL_FAVORITES": "Preferits totals",
+    "TOTAL_REQUESTS": "Sol·licituds totals",
+    "GLOBAL_CONVERSION": "Conversió global",
+    "VIEWS": "Visites",
+    "FAVORITES": "Preferits"
   },
   "CHATS_PAGE": {
     "TITLE": "Les meves Converses",
@@ -294,11 +358,226 @@
     "REJECTED_NOTICE_OWNER": "Has decidit no acceptar aquesta sol·licitud de missatge.",
     "EMPTY_STATE": "Sigues el primer a escriure",
     "LOAD_MORE": "Carregar missatges anteriors",
-    "NEW_MESSAGE": "Nou missatge"
+    "NEW_MESSAGE": "Nou missatge",
+    "DEAL_CLOSE_TITLE": "Venda tancada",
+    "DEAL_CLOSE_DESC": "Marca aquest pas quan hàgiu acordat continuar fora de Relevo amb reunions, documentació o tràmits legals.",
+    "DEAL_CLOSE_BUTTON": "Venda tancada",
+    "DEAL_CLOSING": "Confirmant...",
+    "DEAL_CONFIRMED_BY_YOU": "Confirmat per tu",
+    "DEAL_WAITING_OTHER": "Esperant l'altra part",
+    "RATING_TITLE": "Valora l'experiència",
+    "RATING_DESC": "La teva valoració ajuda a construir confiança en futures operacions amb {{ name }}.",
+    "RATING_COMMENT_PLACEHOLDER": "Afegeix un comentari opcional",
+    "RATING_SEND": "Enviar valoració",
+    "RATING_SENDING": "Enviant...",
+    "RATING_SENT": "Valoració enviada"
+  },
+  "RATINGS": {
+    "PROFILE_TITLE": "Les meves valoracions",
+    "AS_OWNER": "Com a propietari",
+    "AS_INTERESTED": "Com a interessat",
+    "OWNER": "Propietari",
+    "INTERESTED": "Interessat",
+    "REVIEWS": "valoracions",
+    "NO_RATINGS": "Sense valoracions",
+    "OWNER_OFFER_LABEL": "Rating de l'owner d'aquesta oferta",
+    "EMPTY_PROFILE": "Encara no has rebut valoracions."
+  },
+  "ONBOARDING": {
+    "SKIP": "Saltar",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Següent",
+    "FINISH": "Finalitzar",
+    "STEP1_EYEBROW": "Benvingut a Relevo",
+    "STEP1_TITLE": "Empreses reals, noves etapes",
+    "STEP1_BODY": "Relevo connecta negocis que busquen continuïtat amb persones interessades a adquirir una empresa en funcionament.",
+    "STEP2_EYEBROW": "Explora oportunitats",
+    "STEP2_TITLE": "Troba l'empresa adequada",
+    "STEP2_BODY": "Fes servir el cercador per localitzar oportunitats. Al marketplace també pots filtrar per sector, ubicació i mida.",
+    "STEP3_EYEBROW": "Cada targeta és una empresa",
+    "STEP3_TITLE": "Llegeix senyals clau abans d'aplicar",
+    "STEP3_BODY": "Les targetes mostren sector, regió, mètriques públiques i accés al detall quan has iniciat sessió.",
+    "STEP4_EYEBROW": "Per vendre",
+    "STEP4_TITLE": "Publica el teu negoci amb un flux guiat",
+    "STEP4_BODY": "Des de Vendre ara pots crear una oferta, completar dades de l'empresa i avançar fins a la publicació."
   },
   "STATUS": {
     "PENDING": "Pendent",
     "ACCEPTED": "Acceptada",
     "REJECTED": "Denegada"
+  },
+  "FAVORITES": {
+    "TITLE": "Els Meus Favorits",
+    "SUBTITLE": "Ofertes guardades per revisar-les quan vulguis.",
+    "LOADING": "Carregant preferits...",
+    "EMPTY": "Encara no tens cap oferta preferida.",
+    "PAGE_INFO": "Pàgina {{ page }} de {{ total }}"
+  },
+  "SOLICITUD_STATUS": {
+    "PENDING_BANNER": "Sol·licitud pendent de revisió. El propietari està valorant el teu perfil per donar-te accés.",
+    "ACCEPTED_BANNER": "Sol·licitud acceptada! El procés de negociació ja està en marxa.",
+    "REJECTED_BANNER": "Sol·licitud denegada. Aquest negoci ha rebutjat el teu perfil per a aquesta oferta i no pots interactuar-hi més.",
+    "PENDING_BADGE": "Pendent",
+    "ACCEPTED_BADGE": "Procés en marxa",
+    "REJECTED_BADGE": "Denegada"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notificacions",
+    "PRE_ACTIVATE_TITLE": "Activar notificacions?",
+    "PRE_ACTIVATE_DESC": "Rep alertes en temps real de nous missatges de xat i actualitzacions sobre les teves sol·licituds d'ofertes.",
+    "PRE_ACTIVATE_LATER": "Potser més tard",
+    "PRE_ACTIVATE_YES": "Sí, activar",
+    "DEACTIVATE_TITLE": "Desactivar notificacions?",
+    "DEACTIVATE_DESC": "Deixaràs de rebre alertes en temps real en aquest navegador. Pots tornar a activar-les en qualsevol moment prement la campana.",
+    "DEACTIVATE_CANCEL": "Cancel·lar",
+    "DEACTIVATE_YES": "Sí, desactivar",
+    "SETTINGS_TITLE": "Ajustos de Notificacions",
+    "SETTINGS_SUBTITLE": "Tria quines notificacions vols rebre en els teus dispositius",
+    "CHANNELS_HEADER": "Canals d'alerta",
+    "SELECT_ALL": "Seleccionar tot",
+    "DESELECT_ALL": "Desmarcar tot",
+    "CHANNEL_CHAT": "Missatges de xat",
+    "CHANNEL_STATUS": "Estat de les meves sol·licituds",
+    "CHANNEL_APPLICATIONS": "Noves sol·licituds rebudes",
+    "CHANNEL_IA": "Anàlisi de CV per IA",
+    "CHANNEL_OFFERS": "Ofertes",
+    "OFFER_ALERTS_TITLE": "Alertes d'ofertes",
+    "OFFER_ALERTS_SUBTITLE": "Defineix criteris i guarda el registre d'ofertes que encaixen amb cada alerta.",
+    "OFFER_ALERT_NAME": "Nom de l'alerta",
+    "OFFER_ALERT_REGION": "Ciutat o regió",
+    "OFFER_ALERT_EMPLOYEES": "Empleats",
+    "OFFER_ALERT_EMPLOYEES_SHORT": "Empleats",
+    "OFFER_ALERT_REVENUE": "Facturació",
+    "OFFER_ALERT_CREATE": "Crear alerta d'oferta",
+    "OFFER_ALERT_EMPTY": "Encara no has creat alertes d'ofertes.",
+    "OFFER_ALERT_NO_MATCHES": "Encara no hi ha ofertes coincidents.",
+    "OFFER_ALERT_DEFAULT_NAME": "Alerta d'ofertes",
+    "OFFER_ALERT_CREATED": "Alerta d'ofertes creada",
+    "OFFER_ALERT_ERROR": "No s'ha pogut desar l'alerta.",
+    "OFFER_ALERT_CRITERIA_REQUIRED": "Indica almenys un criteri d'alerta.",
+    "SAVE": "Desar",
+    "CANCEL": "Cancel·lar",
+    "DEACTIVATE_COMPLETELY": "Desactivar notificacions per complet",
+    "TOAST_ACTIVATED": "Notificacions activades amb èxit!",
+    "TOAST_DENIED": "Permís denegat.",
+    "TOAST_DEACTIVATED": "Notificacions desactivades en aquest navegador.",
+    "TOAST_UPDATED": "Ajustos de notificació actualitzats",
+    "TOAST_ERROR": "Error al desar les preferències.",
+    "TOAST_MARKED_ALL_READ": "Totes les notificacions marcades com a llegides",
+    "TOAST_CLEARED_ALL": "Historial de notificacions buidat",
+    "TOAST_BLOCKED": "Has bloquejat les notificacions. Activa-les fent clic en la icona del cadenat al costat de la barra d'adreces del teu navegador.",
+    "MARK_ALL_READ": "Marcar tot com a llegit",
+    "CLEAR_ALL": "Buidar",
+    "EMPTY_STATE": "No tens notificacions",
+    "LOAD_MORE": "Veure anteriors",
+    "LOADING": "Carregant..."
+  },
+  "mentoring": {
+    "title": "Acompanyament i Mentoring",
+    "subtitle": "Aprèn les millors pràctiques per vendre la teva empresa o comprar-ne una amb èxit.",
+    "progress": "El teu progrés global",
+    "no_modules": "No hi ha mòduls de mentoring actius en aquest moment.",
+    "start_step": "Començar",
+    "completed": "Completat",
+    "mark_completed": "Marcar com a completat",
+    "tabs": {
+      "buy": "Comprar empresa",
+      "sell": "Vendre empresa"
+    },
+    "seller": {
+      "m1": {
+        "title": "Preparar l’empresa per a la venda",
+        "description": "Aprendre a identificar el millor moment per vendre, entendre els motius habituals de venda i evitar errors freqüents abans de publicar l’oferta.",
+        "i1": {
+          "title": "Preparació i errors freqüents"
+        }
+      },
+      "m2": {
+        "title": "Organitzar la documentació",
+        "description": "Preparar la documentació financera, legal i operativa necessària per transmetre confiança als possibles compradors.",
+        "i1": {
+          "title": "Organització de documentació"
+        }
+      },
+      "m3": {
+        "title": "Valorar l’empresa",
+        "description": "Comprendre quins factors determinen el valor d’una empresa, com la rendibilitat, els actius i el potencial de creixement.",
+        "i1": {
+          "title": "Valoració de l'empresa"
+        }
+      },
+      "m4": {
+        "title": "Crear una oferta atractiva",
+        "description": "Aprendre a presentar el negoci de manera professional, destacant els punts forts i protegint la informació confidencial.",
+        "i1": {
+          "title": "Creació d'oferta"
+        }
+      },
+      "m5": {
+        "title": "Gestionar contactes i negociacions",
+        "description": "Filtrar possibles compradors, compartir informació de manera progressiva i gestionar les negociacions amb professionalitat.",
+        "i1": {
+          "title": "Gestió de contactes"
+        }
+      },
+      "m6": {
+        "title": "Tancar la venda",
+        "description": "Completar les fases finals del procés, incloent la Due Diligence, la signatura dels contractes i la preparació de la transició.",
+        "i1": {
+          "title": "Tancament de la venda"
+        }
+      }
+    },
+    "buyer": {
+      "m1": {
+        "title": "Definir els objectius de compra",
+        "description": "Determinar el pressupost disponible, els sectors d’interès i les característiques que hauria de tenir l’empresa ideal.",
+        "i1": {
+          "title": "Definir objectius"
+        }
+      },
+      "m2": {
+        "title": "Buscar oportunitats",
+        "description": "Aprendre on trobar empreses en venda i com realitzar un primer filtratge d’oportunitats potencials.",
+        "i1": {
+          "title": "Cerca d'oportunitats"
+        }
+      },
+      "m3": {
+        "title": "Analitzar la situació financera",
+        "description": "Interpretar la informació financera de l’empresa, incloent facturació, beneficis, endeutament i liquiditat.",
+        "i1": {
+          "title": "Anàlisi financera"
+        }
+      },
+      "m4": {
+        "title": "Valorar si el preu és correcte",
+        "description": "Analitzar si la valoració proposada pel venedor és coherent amb la realitat i el potencial del negoci.",
+        "i1": {
+          "title": "Valoració del preu"
+        }
+      },
+      "m5": {
+        "title": "Negociar la compra",
+        "description": "Preparar-se per negociar el preu i les condicions de l’operació, identificant riscos i oportunitats.",
+        "i1": {
+          "title": "Negociació de compra"
+        }
+      },
+      "m6": {
+        "title": "Formalitzar l’adquisició",
+        "description": "Revisar la documentació legal, completar la Due Diligence i formalitzar la compra mitjançant els contractes corresponents.",
+        "i1": {
+          "title": "Formalitzar adquisició"
+        }
+      },
+      "m7": {
+        "title": "Gestionar l’empresa",
+        "description": "Planificar la transició, mantenir la confiança de l’equip i dels clients, i establir les bases per al futur creixement del negoci.",
+        "i1": {
+          "title": "Gestió post-compra"
+        }
+      }
+    }
   }
 }

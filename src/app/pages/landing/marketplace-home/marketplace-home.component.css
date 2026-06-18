@@ -1,5 +1,5 @@
 .marketplace-home {
-  padding-top: 52px; /* Mantenim la nova alçada de navbar */
+  padding-top: 52px; /* Mantenim la nova alÃ§ada de navbar */
   background: var(--surface);
 }
 
@@ -16,7 +16,7 @@
     linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, transparent 80%), url('/assets/images/abstract-blue.png');
   background-size: cover;
   background-position: center;
-  filter: brightness(1.2); /* Més llum en mode clar */
+  filter: brightness(1.2); /* MÃ©s llum en mode clar */
   transition: all 0.5s ease;
 }
 
@@ -49,7 +49,7 @@ body.dark-mode .hero-image {
 }
 
 body.dark-mode .hero-card {
-  background-color: #020617 !important; /* Blau de mitjanit gairebé negre */
+  background-color: #020617 !important; /* Blau de mitjanit gairebÃ© negre */
   background: rgba(2, 6, 23, 0.9) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6) !important;
@@ -158,89 +158,11 @@ body.dark-mode .hero-card {
   background: var(--surface-container-low);
 }
 
-.offers-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.offer-card {
-  background: var(--surface-container-lowest);
-  border: 1px solid var(--outline-variant);
-  border-radius: 14px;
-  padding: 16px;
-  min-height: 210px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-  cursor: pointer;
-}
-
-.offer-card:hover {
-  transform: translateY(-2px);
-  border-color: #a9b3c8;
-  box-shadow: var(--shadow-md);
-}
-
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.sector {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--secondary);
-  letter-spacing: 0.03em;
-}
-
-.meta {
-  font-size: 0.75rem;
-  color: var(--on-surface-variant);
-}
-
-.offer-card h3 {
-  font-size: 1.15rem;
-  margin: 0;
-}
-
-.description {
-  color: var(--on-surface-variant);
-  font-size: 0.92rem;
-  line-height: 1.45;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.card-footer {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.82rem;
-  color: var(--on-surface-variant);
-}
-
 /* =========================================
-   DARK MODE
+   DARK MODE OVERRIDES
    ========================================= */
 body.dark-mode .marketplace-home {
   background: #020617;
-}
-
-body.dark-mode .offer-card {
-  background: #0f172a;
-  border-color: #1e293b;
 }
 
 body.dark-mode .sector-chip {
@@ -252,4 +174,70 @@ body.dark-mode .sector-chip:hover,
 body.dark-mode .sector-chip.active {
   background-color: var(--secondary) !important;
   color: white !important;
+}
+
+.locked-details {
+  color: var(--secondary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.locked-details .material-symbols-outlined {
+  font-size: 18px;
+}
+
+body.dark-mode .locked-details {
+  color: var(--on-secondary-container) !important;
+}
+
+.card-map {
+  position: relative;
+  height: 132px;
+  margin: 14px 0 4px;
+  overflow: hidden;
+  border: 1px solid var(--outline-variant);
+  border-radius: 16px;
+  background: var(--surface-container-low);
+}
+
+.card-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  pointer-events: none;
+  filter: saturate(0.9) contrast(0.98);
+}
+
+.map-label {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  max-width: calc(100% - 20px);
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #031632;
+  font-size: 0.78rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(3, 22, 50, 0.16);
+}
+
+.map-label .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--secondary);
+}
+
+body.dark-mode .card-map {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #0f172a;
+}
+
+body.dark-mode .card-map iframe {
+  filter: saturate(0.75) brightness(0.82);
 }

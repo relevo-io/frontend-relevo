@@ -10,7 +10,7 @@
         <div class="card-header">
           <div class="info-principal">
             <h3>{{ user.fullName }}</h3>
-            <div class="roles-container" style="display: flex; gap: 4px; flex-wrap: wrap">
+            <div class="roles-container">
               @for (role of user.roles || []; track role) {
                 <span class="role-badge" [ngClass]="role.toLowerCase()">
                   {{

@@ -20,6 +20,21 @@ export interface Chat {
   unreadInterested: number;
   isReadOnly: boolean;
   status: ChatStatus;
+  closedByOwner?: boolean;
+  closedByInterested?: boolean;
+  closedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ChatRating {
+  _id?: string;
+  chat: string;
+  fromUser: string;
+  toUser: string;
+  ratedRole: 'OWNER' | 'INTERESTED';
+  score: number;
+  comment?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -31,6 +46,9 @@ export interface Chat {
 /** Status local para Optimistic UI (no viene del backend) */
 export type MessageStatus = 'sending' | 'sent' | 'error';
 
+export const MESSAGE_TYPES = ['text', 'image', 'file', 'audio', 'video'] as const;
+export type MessageType = (typeof MESSAGE_TYPES)[number];
+
 export interface Mensaje {
   _id?: string;
   /** ID local temporal (para Optimistic UI antes del ack) */
@@ -38,6 +56,12 @@ export interface Mensaje {
   chat: string;
   sender: string | { _id: string; fullName: string; email: string };
   content: string;
+  messageType?: MessageType;
+  s3Key?: string;
+  fileUrl?: string; // URL temporal firmada devuelta por el backend
+  fileName?: string;
+  fileSize?: number;
+  mimeType?: string;
   /** Solo en el frontend — no persiste en DB */
   status?: MessageStatus;
   createdAt: string;

@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ChatService } from '../../../core/services/chat.service';
-import { Usuario } from '../../../core/models/usuario.model';
+import { MyRatingsResponse, UserRating, Usuario } from '../../../core/models/usuario.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { Chat } from '../../../core/models/chat.model';
 
@@ -24,6 +24,7 @@ export class PerfilComponent implements OnInit {
 
   usuario = signal<Usuario | null>(null);
   recentChats = signal<Chat[]>([]);
+  ratings = signal<MyRatingsResponse | null>(null);
   isEditing = signal(false);
   isLoading = signal(true);
   isSaving = signal(false);
@@ -39,6 +40,7 @@ export class PerfilComponent implements OnInit {
   ngOnInit() {
     this.cargarMiPerfil();
     this.cargarChatsRecientes();
+    this.cargarRatings();
   }
 
   cargarMiPerfil() {
@@ -92,6 +94,19 @@ export class PerfilComponent implements OnInit {
         /* silencioso */
       }
     });
+  }
+
+  cargarRatings(): void {
+    this.usuarioService.getMyRatings().subscribe({
+      next: (data) => this.ratings.set(data),
+      error: () => this.ratings.set(null)
+    });
+  }
+
+  getReviewerName(rating: UserRating): string {
+    const fromUser = rating.fromUser;
+    if (typeof fromUser === 'object' && fromUser?.fullName) return fromUser.fullName;
+    return 'Usuario';
   }
 
   getOtherParticipantName(chat: Chat): string {

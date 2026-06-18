@@ -1,0 +1,557 @@
+.mentoring-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 24px 48px; /* Ajustat per quedar sota el navbar */
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: var(--surface);
+  color: var(--on-surface);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Header amb disseny premium (Adaptatiu) */
+.mentoring-header {
+  margin-bottom: 32px;
+  background: linear-gradient(135deg, var(--surface-container-low) 0%, var(--surface-container-high) 100%);
+  padding: 48px 40px;
+  border-radius: var(--radius-2xl);
+  color: var(--on-surface);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--outline-variant);
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .mentoring-header {
+  background: linear-gradient(135deg, var(--primary-container) 0%, #031632 100%);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-md);
+}
+
+.mentoring-header h1 {
+  font-size: 2.6rem;
+  margin: 0 0 12px 0;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+}
+
+.mentoring-header p {
+  font-size: 1.15rem;
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+/* Emplenament / disseny dividit de contingut */
+.mentoring-content-wrapper {
+  display: flex;
+  gap: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  align-items: flex-start;
+}
+
+/* Sidebar de mòduls */
+.modules-sidebar {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface-container-lowest);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-ambient);
+  padding: 24px;
+  border: 1px solid var(--outline-variant);
+  transition: all 0.3s ease;
+}
+
+/* Lògica de pantalla dividida quan s'obre el lector */
+.mentoring-content-wrapper.reader-open .modules-sidebar {
+  flex: 0 0 460px;
+}
+
+/* Lector de contingut Markdown */
+.reader-panel {
+  flex: 1;
+  background: var(--surface-container-lowest);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--outline-variant);
+  box-shadow: var(--shadow-ambient);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 180px);
+  position: sticky;
+  top: 100px;
+  overflow: hidden;
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.reader-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--outline-variant);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface-container-low);
+}
+
+.reader-meta .route-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.reader-meta h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  letter-spacing: -0.02em;
+}
+
+.reader-body {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding: 32px 28px;
+  background: var(--surface-container-lowest);
+  display: flex;
+  flex-direction: column;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--surface-alpha-80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Tipografia de Markdown */
+.markdown-container {
+  color: var(--on-surface);
+  line-height: 1.7;
+  font-size: 1.05rem;
+  flex: 1;
+}
+
+.markdown-container ::ng-deep h1,
+.markdown-container ::ng-deep h2,
+.markdown-container ::ng-deep h3 {
+  color: var(--secondary);
+  margin-top: 28px;
+  margin-bottom: 14px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--outline-variant);
+  padding-bottom: 8px;
+}
+
+.markdown-container ::ng-deep p {
+  margin-bottom: 18px;
+  opacity: 0.95;
+}
+
+.markdown-container ::ng-deep ul,
+.markdown-container ::ng-deep ol {
+  padding-left: 24px;
+  margin-bottom: 18px;
+}
+
+.markdown-container ::ng-deep li {
+  margin-bottom: 10px;
+}
+
+.markdown-container ::ng-deep strong {
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.markdown-container ::ng-deep blockquote {
+  border-left: 4px solid var(--secondary);
+  background: var(--surface-container-low);
+  padding: 16px 20px;
+  margin: 20px 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  font-style: italic;
+  color: var(--on-surface-variant);
+}
+
+/* Reader footer button to mark completed */
+.reader-footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--outline-variant);
+  display: flex;
+  justify-content: center;
+}
+
+.complete-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  padding: 12px 28px !important;
+  border-radius: var(--radius-full) !important;
+  background-color: var(--surface-container-high) !important;
+  color: var(--on-surface-variant) !important;
+  border: 1px solid var(--outline-variant) !important;
+  transition: all 0.2s ease !important;
+}
+
+.complete-toggle-btn:hover {
+  background-color: var(--surface-container-highest) !important;
+  color: var(--on-surface) !important;
+}
+
+.complete-toggle-btn.completed {
+  background-color: var(--secondary-container) !important;
+  color: var(--on-secondary-container) !important;
+  border-color: var(--secondary) !important;
+}
+
+.complete-toggle-btn .footer-btn-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Vista general de progrés de ruta */
+.route-overview {
+  padding: 16px 8px 24px;
+  border-bottom: 1px solid var(--outline-variant);
+  margin-bottom: 24px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: var(--on-surface-variant);
+}
+
+.percentage-badge {
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Acordions i Expansion Panels de Material */
+.module-panel {
+  border-radius: var(--radius-xl) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-lowest) !important;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+}
+
+.module-panel:hover {
+  border-color: var(--secondary);
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.module-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-weight: 750;
+  color: var(--on-surface);
+  white-space: normal;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.order-badge {
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  padding: 4px 8px;
+  border-radius: var(--radius-lg);
+  font-size: 0.8rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.module-desc-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.duration-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--on-surface-variant);
+  background: var(--surface-container-low);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.duration-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.module-progress-text {
+  font-weight: 800;
+  color: var(--on-secondary-container);
+  font-size: 0.85rem;
+}
+
+.module-description {
+  color: var(--on-surface-variant);
+  font-size: 0.95rem;
+  margin: 12px 0 20px 0;
+  line-height: 1.5;
+}
+
+.module-progress-mini {
+  margin-bottom: 20px;
+}
+
+/* Llista de passos formatius */
+.item-list {
+  padding-top: 12px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: var(--surface-container-lowest);
+  gap: 16px;
+}
+
+.step-item:hover {
+  background: var(--surface-container-low);
+  border-color: var(--outline-variant);
+}
+
+.active-item {
+  background: var(--secondary-container) !important;
+  color: var(--on-secondary-container) !important;
+  border-color: var(--secondary) !important;
+}
+
+.step-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.status-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--outline);
+  flex-shrink: 0;
+}
+
+.status-icon.completed {
+  color: #10b981;
+}
+
+.active-item .status-icon {
+  color: var(--on-secondary-container) !important;
+}
+
+.step-title {
+  font-size: 0.95rem;
+  color: var(--on-surface);
+  font-weight: 600;
+  white-space: normal;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.active-item .step-title {
+  color: var(--on-secondary-container) !important;
+}
+
+.completed-title {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* Step start button style inside expansion panels */
+.step-start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background-color: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.step-item:hover .step-start-btn {
+  background-color: var(--secondary);
+  color: #ffffff;
+  border-color: var(--secondary);
+}
+
+.active-item .step-start-btn {
+  background-color: var(--on-secondary-container) !important;
+  color: var(--secondary-container) !important;
+  border-color: var(--on-secondary-container) !important;
+}
+
+.step-start-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.step-type-icon {
+  display: none; /* Removed in favor of status-icon for cleaner look */
+}
+
+/* Custom empty icon style leveraging the global empty-state layout */
+.empty-state mat-icon {
+  font-size: 56px;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+  color: var(--outline);
+}
+
+/* Selector de rutes estil píndola (Segmented Control) */
+.route-selector-pills {
+  display: flex;
+  background-color: var(--surface-container-low);
+  padding: 6px;
+  border-radius: var(--radius-xl);
+  margin-bottom: 28px;
+  border: 1px solid var(--outline-variant);
+  gap: 6px;
+}
+
+.route-pill {
+  flex: 1;
+  padding: 12px 18px;
+  border: none;
+  background: transparent;
+  color: var(--on-surface-variant);
+  font-weight: 750;
+  font-size: 0.95rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.route-pill mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.route-pill:hover:not(.active) {
+  color: var(--on-surface);
+  background-color: var(--surface-container-high);
+}
+
+.route-pill.active {
+  background-color: var(--secondary); /* Verd corporatiu o lila si el tema canvia, encaixa a la perfecció */
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+body.dark-mode .route-pill.active {
+  background-color: var(--secondary);
+  color: #ffffff;
+}
+
+/* Sobreescriptura general per a Material Expansion Panels en Mode Fosc */
+::ng-deep .mat-expansion-panel-header-title,
+::ng-deep .mat-expansion-panel-header-description {
+  color: var(--on-surface) !important;
+}
+
+/* Disseny responsive per a dispositius mòbils */
+@media (max-width: 992px) {
+  .mentoring-container {
+    padding-top: 100px;
+  }
+
+  .mentoring-content-wrapper {
+    flex-direction: column;
+  }
+
+  .mentoring-content-wrapper.reader-open .modules-sidebar {
+    flex: none;
+    width: 100%;
+  }
+
+  .reader-panel {
+    height: auto;
+    max-height: 65vh;
+    position: relative;
+    top: 0;
+    width: 100%;
+  }
+}
+
+/* Hide duration and progress in sidebar module headers when the reader is open (squeezed sidebar width) */
+.reader-open ::ng-deep .mat-expansion-panel-header-description,
+.reader-open .module-desc-summary {
+  display: none !important;
+}

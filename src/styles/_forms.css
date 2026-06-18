@@ -1,0 +1,512 @@
+/* ==========================================================================
+   src/styles/_forms.css
+   Full d'estils centralitzat per a formularis (Públics i Client)
+   ========================================================================== */
+
+/* 1. Targeta del Formulari (Form Card) */
+.form-card {
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-ambient);
+}
+
+.offer-form {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.12);
+}
+
+/* 2. Disposició de Camps (Fields Layout) */
+.field-group,
+.form-group,
+.form-group-public {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-group label,
+.form-group label,
+.form-group-public label {
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.required {
+  color: #ef4444;
+}
+
+/* 3. Controls de Formulari (Inputs, Textareas, Selects) */
+.field-group input,
+.field-group textarea,
+.field-group select,
+.form-group input,
+.form-group textarea,
+.form-group select,
+.form-group-public input,
+.form-group-public textarea,
+.form-group-public select {
+  width: 100%;
+  border: 1px solid var(--outline-variant);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  transition: all 0.2s ease;
+}
+
+.field-group textarea,
+.form-group textarea,
+.form-group-public textarea {
+  resize: vertical;
+}
+
+/* Estats de focus */
+.field-group input:focus,
+.field-group textarea:focus,
+.field-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.form-group-public input:focus,
+.form-group-public textarea:focus,
+.form-group-public select:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(0, 109, 61, 0.2);
+}
+
+/* Estats Invàlids (Validation Errors) */
+.field-group.invalid input,
+.field-group.invalid textarea,
+.field-group.invalid select,
+.form-group.invalid input,
+.form-group.invalid textarea,
+.form-group.invalid select,
+.form-group-public.invalid input,
+.form-group-public.invalid textarea,
+.form-group-public.invalid select {
+  border-color: #ef4444;
+}
+
+.field-error {
+  color: #ef4444;
+  font-size: 0.85rem;
+}
+
+/* 4. Botons de Formulari Comuns */
+.form-actions-bar,
+.actions {
+  margin-top: 6px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-cancel,
+.btn-save {
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+}
+
+.btn-cancel:hover {
+  background-color: var(--surface-container-high);
+}
+
+.btn-save {
+  border: 1px solid var(--secondary);
+  background: var(--secondary);
+  color: #ffffff;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: #047240;
+  border-color: #047240;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.2);
+}
+
+.btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 5. Estils dinàmics en Mode Fosc de Formularis */
+body.dark-mode .form-card,
+body.dark-mode .offer-form {
+  background-color: #0a1120 !important;
+  border-color: #1e293b !important;
+}
+
+body.dark-mode .field-group input,
+body.dark-mode .field-group textarea,
+body.dark-mode .field-group select,
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea,
+body.dark-mode .form-group select,
+body.dark-mode .form-group-public input,
+body.dark-mode .form-group-public textarea,
+body.dark-mode .form-group-public select {
+  background-color: #141c30 !important;
+  color: #f1f5f9 !important;
+  border-color: #2e3a52 !important;
+}
+
+body.dark-mode .field-group input:focus,
+body.dark-mode .field-group textarea:focus,
+body.dark-mode .field-group select:focus,
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group textarea:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group-public input:focus,
+body.dark-mode .form-group-public textarea:focus,
+body.dark-mode .form-group-public select:focus {
+  border-color: var(--secondary) !important;
+  background-color: #0d1527 !important;
+  box-shadow: 0 0 0 4px rgba(0, 109, 61, 0.25) !important;
+}
+
+body.dark-mode .btn-cancel {
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .btn-cancel:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #f1f5f9 !important;
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.modal-actions .btn-cancel,
+.modal-actions .btn-save {
+  height: 44px;
+  padding: 0 24px;
+  font-size: 0.95rem;
+}
+
+/* 6. Diàlegs Modals comuns (Overlay i Targeta Modal) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.request-modal,
+.form-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 32px;
+  padding: 40px;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.15);
+  z-index: 1001;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.modal-header h2 {
+  font-size: 1.65rem;
+  font-weight: 850;
+  margin: 0;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.btn-close:hover {
+  color: #ef4444;
+}
+
+/* Premium Light Mode fields inside request-modal, form-modal, and offer-form */
+.request-modal .field-group label,
+.form-modal .field-group label,
+.offer-form .field-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.request-modal .field-group input,
+.request-modal .field-group textarea,
+.request-modal .field-group select,
+.form-modal .field-group input,
+.form-modal .field-group textarea,
+.form-modal .field-group select,
+.offer-form .field-group input,
+.offer-form .field-group textarea,
+.offer-form .field-group select {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 20px;
+  color: #0f172a;
+  font-size: 0.95rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.request-modal .field-group input:focus,
+.request-modal .field-group textarea:focus,
+.request-modal .field-group select:focus,
+.form-modal .field-group input:focus,
+.form-modal .field-group textarea:focus,
+.form-modal .field-group select:focus,
+.offer-form .field-group input:focus,
+.offer-form .field-group textarea:focus,
+.offer-form .field-group select:focus {
+  outline: none;
+  border-color: var(--secondary);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(0, 109, 61, 0.15);
+}
+
+.request-modal .cv-upload-area {
+  position: relative;
+  background: #f8fafc;
+  border: 2px dashed #e2e8f0;
+  border-radius: 18px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.request-modal .cv-upload-area:hover {
+  border-color: var(--secondary);
+  background: rgba(0, 109, 61, 0.02);
+}
+
+.request-modal .cv-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 30px 20px;
+  cursor: pointer;
+  text-align: center;
+  color: #475569;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.request-modal .cv-upload-label span:not(.material-symbols-outlined) {
+  font-weight: 600;
+  color: #334155;
+}
+
+.request-modal .cv-upload-label small {
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* 7. Zona de Càrrega de Fitxers (File / CV Upload) */
+.cv-upload-group label:first-of-type {
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.cv-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.cv-upload-area {
+  position: relative;
+  border: 2px dashed var(--outline-variant);
+  border-radius: 12px;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.cv-upload-area.has-file {
+  border-color: var(--secondary);
+  border-style: solid;
+  background: rgba(0, 109, 61, 0.05);
+}
+
+.cv-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px 16px;
+  cursor: pointer;
+  text-align: center;
+  color: var(--on-surface-variant);
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.cv-upload-label:hover {
+  color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.cv-upload-label .material-symbols-outlined {
+  font-size: 2rem;
+  color: var(--secondary);
+}
+
+.cv-filename {
+  font-weight: 700;
+  color: var(--on-surface);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cv-change {
+  font-size: 0.78rem;
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+.upload-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--secondary);
+}
+
+.upload-progress .progress-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(0, 109, 61, 0.2);
+  overflow: hidden;
+  position: relative;
+}
+
+.upload-progress .progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 60%;
+  height: 100%;
+  background: var(--secondary);
+  border-radius: 999px;
+  animation: progress-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes progress-slide {
+  0% {
+    left: -60%;
+  }
+  100% {
+    left: 110%;
+  }
+}
+
+/* 8. Overrides de Mode Fosc per a Modals i Upload */
+body.dark-mode .request-modal,
+body.dark-mode .form-modal {
+  background-color: #0b1329 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.65) !important;
+}
+
+body.dark-mode .modal-header h2 {
+  color: #f8fafc !important;
+}
+
+body.dark-mode .cv-upload-area {
+  border-color: #2e3a52;
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 18px;
+  transition: all 0.25s ease;
+}
+
+body.dark-mode .cv-upload-area:hover {
+  border-color: var(--secondary) !important;
+  background: rgba(0, 109, 61, 0.12) !important;
+}
+
+body.dark-mode .cv-upload-area.has-file {
+  border-color: var(--secondary) !important;
+  background: rgba(0, 109, 61, 0.15) !important;
+}
+
+body.dark-mode .cv-filename {
+  color: #f1f5f9;
+}
+
+body.dark-mode .request-modal .field-group label,
+body.dark-mode .form-modal .field-group label,
+body.dark-mode .offer-form .field-group label {
+  color: #cbd5e1 !important;
+}

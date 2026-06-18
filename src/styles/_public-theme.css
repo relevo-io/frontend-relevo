@@ -1,0 +1,961 @@
+/* ==========================================================================
+   src/styles/_public-theme.css
+   Full d'estils centralitzat per a la Web Pública (Marketplace, Pàgines d'Usuari)
+   ========================================================================== */
+
+/* 1. Estructures Base de Bústia i Marketplace */
+.mailbox-page {
+  min-height: calc(100vh - 95px);
+  padding: 120px 1rem 3rem;
+  background-color: var(--surface-container-lowest);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.mailbox-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mailbox-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  background-color: var(--surface-container-low);
+  padding: 0.4rem;
+  border-radius: var(--radius-xl);
+  width: fit-content;
+}
+
+.mailbox-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.8rem;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--on-surface-variant);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.mailbox-tabs button:hover {
+  color: var(--primary);
+  background-color: var(--surface-container-high);
+}
+
+.mailbox-tabs button.active {
+  color: var(--secondary);
+  background-color: var(--secondary-container);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mailbox-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.mailbox-header {
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.mailbox-header h1 {
+  font-size: 2.8rem;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  color: var(--primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.subtitle {
+  color: var(--on-surface-variant);
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.header-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* 2. Targetes i Llistats (Cards) */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.request-card {
+  background-color: var(--surface-container-lowest);
+  border-radius: var(--radius-2xl);
+  padding: 2rem;
+  border: 1px solid var(--outline-variant);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-ambient);
+}
+
+.request-card:hover {
+  border-color: var(--secondary);
+  box-shadow: var(--shadow-ambient);
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.offer-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.company-desc {
+  color: var(--on-surface-variant);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  color: var(--on-surface-variant);
+}
+
+.request-body {
+  margin-bottom: 1.5rem;
+}
+
+.request-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--outline-variant);
+}
+
+/* 3. Botons Públics Compartits */
+.btn-primary-small {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--secondary);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn-primary-small:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.2);
+}
+
+.btn-accept,
+.btn-reject {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-accept {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-accept:hover {
+  background-color: #059669;
+}
+
+.btn-reject {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-reject:hover {
+  background-color: #dc2626;
+}
+
+.btn-contact {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--secondary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.btn-contact:hover {
+  background-color: #047240;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 109, 61, 0.3);
+}
+
+.btn-view,
+.btn-view-cv {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: 1.5px solid var(--secondary);
+  background: transparent;
+  color: var(--secondary);
+  transition: all 0.2s ease;
+}
+
+.btn-view:hover,
+.btn-view-cv:hover {
+  background: var(--secondary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 109, 61, 0.25);
+}
+
+/* 4. Paginació Pública (Pager) */
+.pager {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.pager-btn {
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-lowest);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pager-btn:hover:not(:disabled) {
+  background-color: var(--surface-container-high);
+}
+
+.pager-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pager-info {
+  color: var(--on-surface-variant);
+  font-size: 0.9rem;
+}
+
+/* 5. Estils dinàmics en Mode Fosc de la Web Pública */
+body.dark-mode .mailbox-page {
+  background: #020617 !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .request-card {
+  background: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .mailbox-header h1 {
+  color: #f8fafc !important;
+}
+
+body.dark-mode .company-desc,
+body.dark-mode .date,
+body.dark-mode .subtitle {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .mailbox-tabs button:hover {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .mailbox-tabs button.active {
+  background-color: rgba(0, 109, 61, 0.2) !important;
+  color: #4ade80 !important;
+}
+
+body.dark-mode .pager-btn {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .pager-btn:hover:not(:disabled) {
+  background-color: #1e293b !important;
+}
+
+/* 6. Targeta d'Oferta i Graella (Offer Cards & Grid) */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 960px) {
+  .offers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.offer-card {
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: 14px;
+  padding: 16px;
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.offer-card:hover {
+  transform: translateY(-2px);
+  border-color: #a9b3c8;
+  box-shadow: var(--shadow-md);
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-head-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sector {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--secondary);
+  letter-spacing: 0.03em;
+}
+
+.meta {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+}
+
+.offer-card h3 {
+  font-size: 1.15rem;
+  margin: 0;
+  color: var(--on-surface);
+}
+
+.description {
+  color: var(--on-surface-variant);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--on-surface-variant);
+}
+
+.offer-public-metrics {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--on-surface-variant);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.offer-public-metrics span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.offer-public-metrics .material-symbols-outlined {
+  font-size: 20px;
+  color: currentColor;
+}
+
+.offer-public-metrics .rating-metric .material-symbols-outlined {
+  color: #e11d48;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.favorite-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.favorite-btn {
+  border: none;
+  background: transparent;
+  color: #e11d48;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn .material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.favorite-btn:hover {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.favorite-btn.active {
+  color: #e11d48;
+  background: transparent;
+}
+
+.favorite-btn.active .material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+/* Mode Fosc de la Targeta d'Oferta */
+body.dark-mode .offer-card {
+  background: #020617 !important;
+  border-color: #1e293b !important;
+}
+
+body.dark-mode .offer-card h3 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .offer-card:hover {
+  border-color: var(--secondary) !important;
+}
+
+/* 5. Vista de Llistat d'Usuaris */
+.contenedor-usuarios {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 2rem 3rem;
+  background-color: var(--surface);
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header-section h2 {
+  color: var(--on-surface);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-section p {
+  color: var(--on-surface-variant);
+  font-size: 1.1rem;
+}
+
+.grid-usuarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.usuario-card {
+  background: var(--surface-container-lowest);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--outline-variant);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.usuario-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--outline);
+}
+
+.usuario-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.usuario-card .avatar {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--secondary), var(--primary-container));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.info-principal h3 {
+  margin: 0 0 0.4rem 0;
+  color: var(--on-surface);
+  font-size: 1.25rem;
+}
+
+.roles-container {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.role-badge.owner {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.role-badge.interested {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.usuario-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--on-surface-variant);
+  font-size: 0.95rem;
+}
+
+.info-item .icono {
+  font-size: 1.2rem;
+  color: var(--secondary);
+  opacity: 0.8;
+}
+
+/* Mode Fosc del Llistat d'Usuaris */
+body.dark-mode .usuario-card {
+  background: #020617 !important;
+  border-color: #1e293b !important;
+}
+
+body.dark-mode .role-badge.owner {
+  background-color: rgba(22, 101, 52, 0.2) !important;
+  color: #4ade80 !important;
+}
+
+body.dark-mode .role-badge.interested {
+  background-color: rgba(55, 48, 163, 0.2) !important;
+  color: #818cf8 !important;
+}
+
+/* 6. Components de Missatgeria i Xats (Chats & Mailbox) */
+.mis-chats-header h1 .material-symbols-outlined {
+  font-size: 28px;
+  color: var(--secondary);
+}
+
+.btn-create-first {
+  background-color: var(--secondary);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  transition: transform 0.2s;
+}
+
+.btn-create-first:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Chat list ───────────────────────────── */
+.chat-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-xl);
+  background: white;
+  border: 1px solid var(--outline-variant);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.chat-card:hover {
+  background: var(--surface-container-low);
+  border-color: var(--primary-container);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.chat-card.unread {
+  background: #f0fdf4;
+  border-color: var(--secondary-container);
+}
+
+.chat-card.readonly {
+  opacity: 0.7;
+}
+
+/* ── Avatar ───────────────────────────────── */
+.chat-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-container));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.readonly-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  background: var(--outline);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.readonly-badge .material-symbols-outlined {
+  font-size: 10px !important;
+  color: white;
+}
+
+/* ── Content ─────────────────────────────── */
+.chat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.chat-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-time {
+  font-size: 0.72rem;
+  color: var(--on-surface-variant);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.chat-oferta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: var(--on-surface-variant);
+  margin-bottom: 4px;
+}
+
+.chat-oferta .material-symbols-outlined {
+  font-size: 12px;
+}
+
+.chat-preview-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chat-preview {
+  font-size: 0.82rem;
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-preview.unread-text {
+  color: var(--on-surface);
+  font-weight: 600;
+}
+
+.preview-check {
+  font-size: 13px !important;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* ── Quick Actions ────────────────────────── */
+.quick-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--outline-variant);
+}
+
+.btn-quick-approve,
+.btn-quick-reject {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-quick-approve {
+  color: #22c55e;
+}
+
+.btn-quick-approve:hover {
+  background: #f0fdf4;
+  transform: scale(1.1);
+}
+
+.btn-quick-reject {
+  color: #ef4444;
+}
+
+.btn-quick-reject:hover {
+  background: #fef2f2;
+  transform: scale(1.1);
+}
+
+.btn-quick-approve .material-symbols-outlined,
+.btn-quick-reject .material-symbols-outlined {
+  font-size: 24px !important;
+}
+
+/* ── Mode Fosc particulars ────────────────── */
+body.dark-mode .chat-card {
+  background: rgba(2, 6, 23, 0.7) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .chat-card:hover {
+  background: rgba(30, 41, 59, 0.5) !important;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .chat-name {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .chat-preview {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .chat-time,
+body.dark-mode .chat-oferta {
+  color: #64748b !important;
+}
+
+body.dark-mode .chat-card.unread {
+  background: rgba(0, 109, 61, 0.15) !important;
+  border-color: rgba(0, 109, 61, 0.3) !important;
+}
+
+body.dark-mode .chat-preview.unread-text {
+  color: #ffffff !important;
+}
+
+body.dark-mode .readonly-badge {
+  background: #334155 !important;
+  border-color: #020617 !important;
+}
+
+body.dark-mode .quick-actions {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .btn-quick-approve:hover {
+  background: rgba(34, 197, 94, 0.1);
+}
+
+body.dark-mode .btn-quick-reject:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ── 6. Banner de registre CTA (Marketplace Home) ── */
+.register-cta {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 3rem 1.5rem;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.register-cta h3 {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+.register-cta p {
+  margin-bottom: 2rem;
+  color: var(--on-surface-variant);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+body.dark-mode .register-cta {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .register-cta h3 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .register-cta p {
+  color: #94a3b8 !important;
+}

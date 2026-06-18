@@ -17,7 +17,9 @@
       "CHAT_ERROR": "No se pudo iniciar el chat. Reinténtalo."
     },
     "VIEW": "Ver",
-    "VIEW_ALL": "Ver todo"
+    "VIEW_ALL": "Ver todo",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente"
   },
   "AUTH": {
     "LOGIN_TITLE": "Iniciar Sesión",
@@ -51,7 +53,10 @@
       "BADGE_TITLE": "Plataforma Segura",
       "BADGE_SUB": "Garantizamos privacidad total."
     },
-    "REGISTER_BUTTON": "Crear Cuenta"
+    "REGISTER_BUTTON": "Crear Cuenta",
+    "OR_CONTINUE_WITH": "O continúa con",
+    "CONTINUE_WITH_GOOGLE": "Continuar con Google",
+    "CONTINUE_WITH_GITHUB": "Continuar con GitHub"
   },
   "NAVBAR": {
     "LOGOUT": "Cerrar Sesión",
@@ -62,7 +67,9 @@
     "PROFILE": "Perfil",
     "HOME": "Inicio",
     "DARK_MODE": "Modo oscuro",
-    "LIGHT_MODE": "Modo claro"
+    "LIGHT_MODE": "Modo claro",
+    "CHATS": "Chats",
+    "FAVORITES": "Mis favoritos"
   },
   "PROFILE": {
     "TITLE": "Mi Perfil",
@@ -191,17 +198,33 @@
     "CLOSE": "Cerrar",
     "BACKGROUND_LABEL": "¿Cuál es tu background?",
     "REQUIRED_FIELD": "Este campo es obligatorio.",
+    "MIN_LENGTH_ERROR": "Mínimo {{min}} caracteres (llevas {{current}}/{{min}}).",
     "ZONES_LABEL": "Zonas preferidas",
     "ZONES_PLACEHOLDER": "Ej. Madrid, Barcelona, Valencia",
     "ZONES_REQUIRED": "Debes indicar al menos una zona.",
-    "CV_LABEL": "CV (texto)",
-    "CV_REQUIRED": "Debes completar el CV en formato texto.",
+    "CV_LABEL": "CV (PDF)",
+    "CV_REQUIRED": "Debes subir tu CV en formato PDF.",
+    "CV_CHANGE": "Cambiar archivo",
+    "CV_UPLOAD_PROMPT": "Arrastra y suelta tu CV en formato PDF o haz clic para examinar",
     "BIO_LABEL": "Bio",
     "BIO_REQUIRED": "La bio es obligatoria.",
+    "CAPITAL_LABEL": "Capital Propio Disponible (€)",
+    "CAPITAL_REQUIRED": "El capital propio disponible es requerido para la solvencia.",
+    "FINANCING_LABEL": "¿Requiere Financiación Externa?",
+    "FINANCING_NO": "No, dispongo del capital total necesario",
+    "FINANCING_YES": "Sí, necesitaré pedir un préstamo bancario o financiación",
+    "FINANCING_REQUIRED": "Se debe responder si se necesita financiación.",
+    "NDA_LABEL": "Acepto el compromiso de confidencialidad (NDA) de esta oferta. Estoy de acuerdo en no difundir datos financieros, operacionales o comerciales de este negocio.",
+    "NDA_REQUIRED": "Es obligatorio aceptar el acuerdo de confidencialidad (NDA) para solicitar acceso.",
     "SENDING": "Enviando...",
     "SAVE_REQUEST": "Guardar y solicitar",
     "OPENING_CHAT": "Abriendo chat...",
-    "CONTACT_OWNER": "Contactar con el propietario"
+    "CONTACT_OWNER": "Contactar con el propietario",
+    "ANALYTICS_TITLE": "Estadísticas de la oferta",
+    "VIEWS": "Visitas",
+    "FAVORITES": "Favoritos",
+    "REQUESTS": "Solicitudes",
+    "CONVERSION": "Conversión"
   },
   "MARKETPLACE_HOME": {
     "HERO_TITLE": "¿Listo para vender tu empresa o tomar el relevo?",
@@ -213,7 +236,13 @@
     "CLEAR_FILTER": "Limpiar filtro",
     "NO_RESULTS": "No hay ofertas que coincidan con tu búsqueda.",
     "LOADING_BACKEND": "Cargando ofertas desde el servidor...",
-    "LOADING_ERROR": "No se pudieron cargar las ofertas. Inténtalo de nuevo."
+    "LOADING_ERROR": "No se pudieron cargar las ofertas. Inténtalo de nuevo.",
+    "CTA_REGISTER_TITLE": "¿Quieres explorar más oportunidades?",
+    "CTA_REGISTER_DESC_START": "Únete a Relevo para ver las",
+    "CTA_REGISTER_FALLBACK": "decenas de",
+    "CTA_REGISTER_DESC_END": "empresas disponibles y acceder a todos sus detalles.",
+    "CTA_REGISTER_BTN": "Regístrate para ver todo",
+    "VIEW_DETAILS": "Ver detalles"
   },
   "LEGAL": {
     "PRIVACY_TITLE": "POLÍTICA DE PRIVACIDAD DE RELEVO",
@@ -267,14 +296,49 @@
     "RESOLVED_AS": "Estado:",
     "SENT_TO": "Enviada a:",
     "CONTACT_OWNER": "Contactar con el propietario",
-    "CONTACT_INTERESTED": "Contactar con el interesado"
+    "CONTACT_INTERESTED": "Contactar con el interesado",
+    "CAPITAL_AVAILABLE": "Capital Propio Disponible",
+    "NOT_SPECIFIED": "No especificado",
+    "REQUIRES_FINANCING": "Requiere Financiación",
+    "YES": "Sí",
+    "NO": "No",
+    "NA": "N/A",
+    "NDA_STATUS": "Estado del NDA",
+    "NDA_SIGNED": "NDA Firmado y Aceptado",
+    "NO_NDA": "Sin NDA",
+    "AI_CV_AVAILABLE_TITLE": "Análisis de CV con Inteligencia Artificial disponible",
+    "AI_CV_AVAILABLE_SUB": "Analiza el currículum de este candidato para evaluar compatibilidad y experiencia.",
+    "ANALYZE_AI": "Analizar con IA",
+    "ANALYZING_AI_TITLE": "Analizando currículum con IA...",
+    "ANALYZING_AI_SUB": "Evaluando perfil y experiencia, ¡falta muy poco!",
+    "AI_ERROR_TITLE": "Error en el análisis de IA",
+    "AI_ERROR_SUB": "No se pudo completar el análisis automático del documento PDF.",
+    "RETRY": "Reintentar",
+    "AI_COMPLETED": "Análisis de CV con IA Completado",
+    "SUITABILITY": "Idoneidad:",
+    "CANDIDATE_SUMMARY": "Resumen del Candidato",
+    "DETECTED_STRENGTHS": "Fortalezas Detectadas",
+    "EXPERIENCE_MILESTONES": "Hitos de Experiencia",
+    "SUITABILITY_FEEDBACK": "Feedback de Idoneidad",
+    "VIEW_CV": "Ver CV",
+    "MY_CV": "Mi CV",
+    "PREVIOUS": "Anterior",
+    "PAGE_INFO": "Página {{page}} de {{total}}",
+    "NEXT": "Siguiente"
   },
   "MY_OFFERS": {
     "TITLE": "Mis Ofertas",
     "SUBTITLE": "Gestiona tus negocios publicados en Relevo",
     "EMPTY_TITLE": "No has publicado ninguna oferta",
     "EMPTY_DESC": "Comienza ahora a buscar el relevo ideal para tu negocio.",
-    "CREATE_NEW": "Publicar nueva oferta"
+    "CREATE_NEW": "Publicar nueva oferta",
+    "PUBLISHED_OFFERS": "Ofertas publicadas",
+    "TOTAL_VIEWS": "Visitas totales",
+    "TOTAL_FAVORITES": "Favoritos totales",
+    "TOTAL_REQUESTS": "Solicitudes totales",
+    "GLOBAL_CONVERSION": "Conversión global",
+    "VIEWS": "Visitas",
+    "FAVORITES": "Favoritos"
   },
   "CHATS_PAGE": {
     "TITLE": "Mis Conversaciones",
@@ -294,11 +358,226 @@
     "REJECTED_NOTICE_OWNER": "Has decidido no aceptar esta solicitud de mensaje.",
     "EMPTY_STATE": "Sé el primero en escribir",
     "LOAD_MORE": "Cargar mensajes anteriores",
-    "NEW_MESSAGE": "Nuevo mensaje"
+    "NEW_MESSAGE": "Nuevo mensaje",
+    "DEAL_CLOSE_TITLE": "Venta cerrada",
+    "DEAL_CLOSE_DESC": "Marca este paso cuando hayáis decidido continuar fuera de Relevo con reuniones, documentación o trámites.",
+    "DEAL_CLOSE_BUTTON": "Venta cerrada",
+    "DEAL_CLOSING": "Confirmando...",
+    "DEAL_CONFIRMED_BY_YOU": "Confirmado por ti",
+    "DEAL_WAITING_OTHER": "Esperando a la otra parte",
+    "RATING_TITLE": "Valora la experiencia",
+    "RATING_DESC": "Tu valoración ayuda a construir confianza en futuras operaciones con {{ name }}.",
+    "RATING_COMMENT_PLACEHOLDER": "Añade un comentario opcional",
+    "RATING_SEND": "Enviar valoración",
+    "RATING_SENDING": "Enviando...",
+    "RATING_SENT": "Valoración enviada"
+  },
+  "RATINGS": {
+    "PROFILE_TITLE": "Mis valoraciones",
+    "AS_OWNER": "Como propietario",
+    "AS_INTERESTED": "Como interesado",
+    "OWNER": "Propietario",
+    "INTERESTED": "Interesado",
+    "REVIEWS": "valoraciones",
+    "NO_RATINGS": "Sin valoraciones",
+    "OWNER_OFFER_LABEL": "Rating del owner de esta oferta",
+    "EMPTY_PROFILE": "Aún no has recibido valoraciones."
+  },
+  "ONBOARDING": {
+    "SKIP": "Saltar",
+    "PREVIOUS": "Anterior",
+    "NEXT": "Siguiente",
+    "FINISH": "Finalizar",
+    "STEP1_EYEBROW": "Bienvenido a Relevo",
+    "STEP1_TITLE": "Empresas reales, nuevas etapas",
+    "STEP1_BODY": "Relevo conecta negocios que buscan continuidad con personas interesadas en adquirir una empresa en funcionamiento.",
+    "STEP2_EYEBROW": "Explora oportunidades",
+    "STEP2_TITLE": "Encuentra la empresa adecuada",
+    "STEP2_BODY": "Usa el buscador para localizar oportunidades. En el marketplace también puedes filtrar por sector, ubicación y tamaño.",
+    "STEP3_EYEBROW": "Cada tarjeta es una empresa",
+    "STEP3_TITLE": "Lee señales clave antes de aplicar",
+    "STEP3_BODY": "Las cards muestran sector, región, métricas públicas y acceso al detalle cuando has iniciado sesión.",
+    "STEP4_EYEBROW": "Para vender",
+    "STEP4_TITLE": "Publica tu negocio con un flujo guiado",
+    "STEP4_BODY": "Desde Vender ahora puedes crear una oferta, completar datos de la empresa y avanzar hasta la publicación."
   },
   "STATUS": {
     "PENDING": "Pendiente",
     "ACCEPTED": "Aceptada",
     "REJECTED": "Denegada"
+  },
+  "FAVORITES": {
+    "TITLE": "Mis Favoritos",
+    "SUBTITLE": "Ofertas guardadas para revisarlas cuando quieras.",
+    "LOADING": "Cargando favoritos...",
+    "EMPTY": "Aún no tienes ofertas favoritas.",
+    "PAGE_INFO": "Página {{ page }} de {{ total }}"
+  },
+  "SOLICITUD_STATUS": {
+    "PENDING_BANNER": "Solicitud pendiente de revisión. El propietario está valorando tu perfil para darte acceso.",
+    "ACCEPTED_BANNER": "¡Solicitud aceptada! El proceso de negociación ya está en marcha.",
+    "REJECTED_BANNER": "Solicitud denegada. Este negocio ha rechazado tu perfil para esta oferta y no puedes interactuar más con ella.",
+    "PENDING_BADGE": "Pendiente",
+    "ACCEPTED_BADGE": "Proceso en marcha",
+    "REJECTED_BADGE": "Denegada"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notificaciones",
+    "PRE_ACTIVATE_TITLE": "¿Activar notificaciones?",
+    "PRE_ACTIVATE_DESC": "Recibe alertas en tiempo real de nuevos mensajes de chat y actualizaciones sobre tus solicitudes de ofertas.",
+    "PRE_ACTIVATE_LATER": "Quizás más tarde",
+    "PRE_ACTIVATE_YES": "Sí, activar",
+    "DEACTIVATE_TITLE": "¿Desactivar notificaciones?",
+    "DEACTIVATE_DESC": "Dejarás de recibir alertas en tiempo real en este navegador. Puedes volver a activarlas en cualquier momento pulsando la campana.",
+    "DEACTIVATE_CANCEL": "Cancelar",
+    "DEACTIVATE_YES": "Sí, desactivar",
+    "SETTINGS_TITLE": "Ajustes de Notificaciones",
+    "SETTINGS_SUBTITLE": "Elige qué notificaciones quieres recibir en tus dispositivos",
+    "CHANNELS_HEADER": "Canales de alerta",
+    "SELECT_ALL": "Seleccionar todo",
+    "DESELECT_ALL": "Desmarcar todo",
+    "CHANNEL_CHAT": "Mensajes de chat",
+    "CHANNEL_STATUS": "Estado de mis solicitudes",
+    "CHANNEL_APPLICATIONS": "Nuevas solicitudes recibidas",
+    "CHANNEL_IA": "Análisis de CV por IA",
+    "CHANNEL_OFFERS": "Ofertas",
+    "OFFER_ALERTS_TITLE": "Alertas de ofertas",
+    "OFFER_ALERTS_SUBTITLE": "Define criterios y guarda el registro de ofertas que encajan con cada alerta.",
+    "OFFER_ALERT_NAME": "Nombre de la alerta",
+    "OFFER_ALERT_REGION": "Ciudad o región",
+    "OFFER_ALERT_EMPLOYEES": "Empleados",
+    "OFFER_ALERT_EMPLOYEES_SHORT": "Empleados",
+    "OFFER_ALERT_REVENUE": "Facturación",
+    "OFFER_ALERT_CREATE": "Crear alerta de oferta",
+    "OFFER_ALERT_EMPTY": "Aún no has creado alertas de ofertas.",
+    "OFFER_ALERT_NO_MATCHES": "Sin ofertas coincidentes todavía.",
+    "OFFER_ALERT_DEFAULT_NAME": "Alerta de ofertas",
+    "OFFER_ALERT_CREATED": "Alerta de ofertas creada",
+    "OFFER_ALERT_ERROR": "No se pudo guardar la alerta.",
+    "OFFER_ALERT_CRITERIA_REQUIRED": "Indica al menos un criterio de alerta.",
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "DEACTIVATE_COMPLETELY": "Desactivar notificaciones por completo",
+    "TOAST_ACTIVATED": "¡Notificaciones activadas con éxito!",
+    "TOAST_DENIED": "Permiso denegado.",
+    "TOAST_DEACTIVATED": "Notificaciones desactivadas en este navegador.",
+    "TOAST_UPDATED": "Ajustes de notificación actualizados",
+    "TOAST_ERROR": "Error al guardar las preferencias.",
+    "TOAST_MARKED_ALL_READ": "Todas las notificaciones marcadas como leídas",
+    "TOAST_CLEARED_ALL": "Historial de notificaciones vaciado",
+    "TOAST_BLOCKED": "Has bloqueado las notificaciones. Actívalas haciendo clic en el icono del candado junto a la barra de direcciones de tu navegador.",
+    "MARK_ALL_READ": "Marcar todo como leído",
+    "CLEAR_ALL": "Vaciar",
+    "EMPTY_STATE": "No tienes notificaciones",
+    "LOAD_MORE": "Ver anteriores",
+    "LOADING": "Cargando..."
+  },
+  "mentoring": {
+    "title": "Acompañamiento y Mentoring",
+    "subtitle": "Aprende las mejores prácticas para vender tu empresa o comprar una con éxito.",
+    "progress": "Tu progreso global",
+    "no_modules": "No hay módulos de mentoring activos en este momento.",
+    "start_step": "Comenzar",
+    "completed": "Completado",
+    "mark_completed": "Marcar como completado",
+    "tabs": {
+      "buy": "Comprar empresa",
+      "sell": "Vender empresa"
+    },
+    "seller": {
+      "m1": {
+        "title": "Preparar la empresa para la venta",
+        "description": "Aprender a identificar el mejor momento para vender, entender los motivos habituales de venta y evitar errores frecuentes antes de publicar la oferta.",
+        "i1": {
+          "title": "Preparación y errores frecuentes"
+        }
+      },
+      "m2": {
+        "title": "Organizar la documentación",
+        "description": "Preparar la documentación financiera, legal y operativa necesaria para transmitir confianza a los posibles compradores.",
+        "i1": {
+          "title": "Organización de documentación"
+        }
+      },
+      "m3": {
+        "title": "Valorar la empresa",
+        "description": "Comprender qué factores determinan el valor de una empresa, como la rentabilidad, los activos y el potencial de crecimiento.",
+        "i1": {
+          "title": "Valoración de la empresa"
+        }
+      },
+      "m4": {
+        "title": "Crear una oferta atractiva",
+        "description": "Aprender a presentar el negocio de manera profesional, destacando los puntos fuertes y protegiendo la información confidencial.",
+        "i1": {
+          "title": "Creación de oferta"
+        }
+      },
+      "m5": {
+        "title": "Gestionar contactos y negociaciones",
+        "description": "Filtrar posibles compradores, compartir información de manera progresiva y gestionar las negociaciones con profesionalidad.",
+        "i1": {
+          "title": "Gestión de contactos"
+        }
+      },
+      "m6": {
+        "title": "Cerrar la venta",
+        "description": "Completar las fases finales del proceso, incluyendo la Due Diligence, la firma de los contratos y la preparación de la transición.",
+        "i1": {
+          "title": "Cierre de la venta"
+        }
+      }
+    },
+    "buyer": {
+      "m1": {
+        "title": "Definir los objetivos de compra",
+        "description": "Determinar el presupuesto disponible, los sectores de interés y las características que debería tener la empresa ideal.",
+        "i1": {
+          "title": "Definir objetivos"
+        }
+      },
+      "m2": {
+        "title": "Buscar oportunidades",
+        "description": "Aprender dónde encontrar empresas en venta y cómo realizar un primer filtrado de oportunidades potenciales.",
+        "i1": {
+          "title": "Búsqueda de oportunidades"
+        }
+      },
+      "m3": {
+        "title": "Analizar la situación financiera",
+        "description": "Interpretar la información financiera de la empresa, incluyendo facturación, beneficios, endeudamiento y liquidez.",
+        "i1": {
+          "title": "Análisis financiero"
+        }
+      },
+      "m4": {
+        "title": "Valorar si el precio es correcto",
+        "description": "Analizar si la valoración propuesta por el vendedor es coherente con la realidad y el potencial del negocio.",
+        "i1": {
+          "title": "Valoración del precio"
+        }
+      },
+      "m5": {
+        "title": "Negociar la compra",
+        "description": "Prepararse para negociar el precio y las condiciones de la operación, identificando riesgos y oportunidades.",
+        "i1": {
+          "title": "Negociación de compra"
+        }
+      },
+      "m6": {
+        "title": "Formalizar la adquisición",
+        "description": "Revisar la documentación legal, completar la Due Diligence y formalizar la compra mediante los contratos correspondientes.",
+        "i1": {
+          "title": "Formalizar adquisición"
+        }
+      },
+      "m7": {
+        "title": "Gestionar la empresa",
+        "description": "Planificar la transición, mantener la confianza del equipo y de los clientes, y establecer las bases para el futuro crecimiento del negocio.",
+        "i1": {
+          "title": "Gestión post-compra"
+        }
+      }
+    }
   }
 }

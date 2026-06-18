@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../models/usuario.model';
+import { MyRatingsResponse, Usuario } from '../models/usuario.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -63,5 +63,9 @@ export class UsuarioService {
   // 9. Cambiar tema de un usuario (PATCH)
   updateUsuarioTheme(id: string, theme: string): Observable<Usuario> {
     return this.http.patch<Usuario>(`${this.apiUrl}/${id}`, { theme });
+  }
+
+  getMyRatings(): Observable<MyRatingsResponse> {
+    return this.http.get<MyRatingsResponse>(`${this.apiUrl}/me/ratings`);
   }
 }
