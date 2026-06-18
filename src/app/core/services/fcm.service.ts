@@ -20,6 +20,7 @@ export class FcmService {
 
   private messaging: Messaging | null = null;
   private currentToken: string | null = null;
+  private unsubscribeOnMessage: (() => void) | null = null;
 
   // Señal reactiva que contiene el estado de los permisos de notificación
   public permissionState = signal<NotificationPermission>('default');
@@ -106,8 +107,14 @@ export class FcmService {
         await this.acquireToken(registration);
       }
 
+      // Cancelar suscripción previa si existe para evitar duplicidad de listeners
+      if (this.unsubscribeOnMessage) {
+        this.unsubscribeOnMessage();
+        this.unsubscribeOnMessage = null;
+      }
+
       // Escuchar mensajes recibidos en Primer Plano (Foreground)
-      onMessage(this.messaging, (payload: MessagePayload) => {
+      this.unsubscribeOnMessage = onMessage(this.messaging, (payload: MessagePayload) => {
         // Evitar mostrar la notificación de toast si el usuario ya está viendo ese mismo chat
         const notificationChatId = payload.data?.['chatId'];
         const currentUrl = this.router.url;
@@ -210,6 +217,11 @@ export class FcmService {
    * Elimina el token del backend e invalida el token FCM local
    */
   private async cleanFCM(): Promise<void> {
+    if (this.unsubscribeOnMessage) {
+      this.unsubscribeOnMessage();
+      this.unsubscribeOnMessage = null;
+    }
+
     if (!this.currentToken) return;
 
     const tokenToDelete = this.currentToken;
