@@ -550,9 +550,20 @@ export class Navbar {
   }
 
   onSearchInput(value: string): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
+      return;
+    }
+
     this.marketplaceSearchService.setQuery(value);
     if (!this.router.url.startsWith('/admin') && this.router.url !== '/') {
       this.router.navigate(['/']);
+    }
+  }
+
+  handleSearchAccess(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
     }
   }
 

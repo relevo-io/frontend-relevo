@@ -1,0 +1,63 @@
+<main class="payment-page">
+  <section class="payment-shell container-full">
+    <a routerLink="/" class="back-link">{{ 'OFFER_DETAIL.BACK_LINK' | translate }}</a>
+
+    <article class="payment-card">
+      <div class="payment-card-header">
+        <span class="payment-badge">{{ 'MONETIZATION.SIMULATED_BADGE' | translate }}</span>
+        <h1>{{ title() | translate }}</h1>
+        <p>{{ subtitle() | translate }}</p>
+      </div>
+
+      @if (mode() === 'publish-offer') {
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span>{{ 'MONETIZATION.SUMMARY_REGION' | translate }}</span>
+            <strong>{{ draft()?.region || '-' }}</strong>
+          </div>
+          <div class="summary-item">
+            <span>{{ 'MONETIZATION.SUMMARY_SECTOR' | translate }}</span>
+            <strong>{{ draft()?.sector || '-' }}</strong>
+          </div>
+          <div class="summary-item full">
+            <span>{{ 'MONETIZATION.SUMMARY_DESCRIPTION' | translate }}</span>
+            <strong>{{ draft()?.companyDescription || '-' }}</strong>
+          </div>
+        </div>
+      } @else {
+        <div class="pro-benefits">
+          <div class="benefit-item">
+            <span class="material-symbols-outlined">filter_alt</span>
+            <div>
+              <strong>{{ 'MONETIZATION.PRO_FILTERS_TITLE' | translate }}</strong>
+              <p>{{ 'MONETIZATION.PRO_FILTERS_BODY' | translate }}</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="material-symbols-outlined">all_inclusive</span>
+            <div>
+              <strong>{{ 'MONETIZATION.PRO_UNLIMITED_TITLE' | translate }}</strong>
+              <p>{{ 'MONETIZATION.PRO_UNLIMITED_BODY' | translate }}</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="material-symbols-outlined">calendar_month</span>
+            <div>
+              <strong>{{ 'MONETIZATION.PRO_DURATION_TITLE' | translate }}</strong>
+              <p>{{ 'MONETIZATION.PRO_DURATION_BODY' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="payment-actions">
+        <button type="button" class="btn-outline" routerLink="/">
+          {{ 'OFFER_CREATE.CANCEL' | translate }}
+        </button>
+        <button type="button" class="btn-solid" (click)="submit()" [disabled]="isProcessing()">
+          {{ (isProcessing() ? 'MONETIZATION.PROCESSING' : primaryLabel()) | translate }}
+        </button>
+      </div>
+    </article>
+  </section>
+</main>

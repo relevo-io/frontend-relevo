@@ -122,6 +122,11 @@ body.dark-mode .btn-theme:hover {
   background: var(--surface-container-low) !important;
 }
 
+.btn-pro {
+  min-width: 112px;
+  font-weight: 800;
+}
+
 .btn-solid {
   background: var(--secondary);
   color: var(--on-secondary);

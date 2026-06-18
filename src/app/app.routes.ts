@@ -26,6 +26,7 @@ import { MisSolicitudesComponent } from './pages/public/mis-solicitudes/mis-soli
 import { MisOfertasComponent } from './pages/public/mis-ofertas/mis-ofertas.component';
 import { MisFavoritosComponent } from './pages/public/mis-favoritos/mis-favoritos.component';
 import { MentoringComponent } from './pages/public/mentoring/mentoring.component';
+import { SimulatedPaymentComponent } from './pages/public/payments/simulated-payment.component';
 
 // Admin Pages
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
@@ -46,6 +47,7 @@ export const routes: Routes = [
       { path: 'oauth/callback/:provider', component: OAuthCallbackComponent },
       { path: 'ofertas', component: OfertaListComponent },
       { path: 'ofertas/crear', component: OfertaCreateComponent, canActivate: [authGuard] },
+      { path: 'pago-simulado/:mode', component: SimulatedPaymentComponent, canActivate: [authGuard] },
       { path: 'ofertas/:id', component: OfertaDetalle, canActivate: [authGuard] },
       { path: 'aviso-legal', component: AvisoLegalComponent },
       { path: 'terminos-servicio', component: TerminosServicioComponent },

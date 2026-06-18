@@ -28,6 +28,8 @@ export class AuthService {
   public isLoggedIn = computed(() => !!this.currentUser());
   public isAdmin = computed(() => this.currentUser()?.roles?.includes('ADMIN') ?? false);
   public isOwner = computed(() => this.currentUser()?.roles?.includes('OWNER') ?? false);
+  public isInterested = computed(() => this.currentUser()?.roles?.includes('INTERESTED') ?? false);
+  public isPro = computed(() => this.currentUser()?.proActive ?? false);
   public isBrowser = isPlatformBrowser(this.platformId);
 
   constructor() {

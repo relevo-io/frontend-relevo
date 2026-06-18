@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -8,6 +8,12 @@ import { ChatService } from '../../../core/services/chat.service';
 import { MyRatingsResponse, UserRating, Usuario } from '../../../core/models/usuario.model';
 import { TranslateModule } from '@ngx-translate/core';
 import { Chat } from '../../../core/models/chat.model';
+import {
+  MARKETPLACE_EMPLOYEE_RANGE_OPTIONS,
+  MARKETPLACE_REVENUE_RANGE_OPTIONS,
+  MARKETPLACE_SECTOR_OPTIONS
+} from '../../../shared/utils/marketplace-options';
+import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
 
 @Component({
   selector: 'app-perfil',
@@ -28,13 +34,24 @@ export class PerfilComponent implements OnInit {
   isEditing = signal(false);
   isLoading = signal(true);
   isSaving = signal(false);
+  selectedPreferredSectors = signal<string[]>([]);
+  selectedPreferredEmployeeRanges = signal<string[]>([]);
+  selectedPreferredRevenueRanges = signal<string[]>([]);
+
+  sectorOptions = MARKETPLACE_SECTOR_OPTIONS;
+  employeeRangeOptions = MARKETPLACE_EMPLOYEE_RANGE_OPTIONS;
+  revenueRangeOptions = MARKETPLACE_REVENUE_RANGE_OPTIONS;
 
   currentUserId = computed(() => this.authService.currentUser()?._id ?? '');
+  isProUser = computed(() => this.authService.isPro());
 
   profileForm: FormGroup = this.fb.group({
     location: [''],
     bio: [''],
-    professionalBackground: ['']
+    professionalBackground: [''],
+    preferredRegionsText: [''],
+    preferredCreationYearFrom: [null],
+    preferredCreationYearTo: [null]
   });
 
   ngOnInit() {
@@ -53,8 +70,14 @@ export class PerfilComponent implements OnInit {
         this.profileForm.patchValue({
           location: data.location || '',
           bio: data.bio || '',
-          professionalBackground: data.professionalBackground || ''
+          professionalBackground: data.professionalBackground || '',
+          preferredRegionsText: (data.preferredRegions || []).join(', '),
+          preferredCreationYearFrom: data.preferredCreationYearFrom ?? null,
+          preferredCreationYearTo: data.preferredCreationYearTo ?? null
         });
+        this.selectedPreferredSectors.set(data.preferredSectors ?? []);
+        this.selectedPreferredEmployeeRanges.set(data.preferredEmployeeRanges ?? []);
+        this.selectedPreferredRevenueRanges.set(data.preferredRevenueRanges ?? []);
         this.isLoading.set(false);
       },
       error: () => {
@@ -74,17 +97,91 @@ export class PerfilComponent implements OnInit {
     this.isSaving.set(true);
     const formVals = this.profileForm.value;
 
-    this.usuarioService.updateUsuario(current._id, formVals).subscribe({
-      next: (actualizado) => {
-        this.usuario.set(actualizado);
-        this.isEditing.set(false);
-        this.isSaving.set(false);
-      },
-      error: (err) => {
-        console.error(err);
-        this.isSaving.set(false);
-      }
-    });
+    const preferredRegions = String(formVals.preferredRegionsText || '')
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    this.usuarioService
+      .updateUsuario(current._id, {
+        location: formVals.location || '',
+        bio: formVals.bio || '',
+        professionalBackground: formVals.professionalBackground || ''
+      })
+      .subscribe({
+        next: () => {
+          this.usuarioService
+            .updateMarketplacePreferences({
+              preferredRegions,
+              preferredSectors: this.selectedPreferredSectors(),
+              preferredEmployeeRanges: this.selectedPreferredEmployeeRanges(),
+              preferredRevenueRanges: this.selectedPreferredRevenueRanges(),
+              preferredCreationYearFrom: formVals.preferredCreationYearFrom || undefined,
+              preferredCreationYearTo: formVals.preferredCreationYearTo || undefined
+            })
+            .subscribe({
+              next: (actualizado) => {
+                this.usuario.set(actualizado);
+                this.authService.currentUser.set(actualizado);
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('user_data', JSON.stringify(actualizado));
+                }
+                this.isEditing.set(false);
+                this.isSaving.set(false);
+              },
+              error: (err) => {
+                console.error(err);
+                this.isSaving.set(false);
+              }
+            });
+        },
+        error: (err) => {
+          console.error(err);
+          this.isSaving.set(false);
+        }
+      });
+  }
+
+  togglePreferenceValue(
+    signalRef:
+      | typeof this.selectedPreferredSectors
+      | typeof this.selectedPreferredEmployeeRanges
+      | typeof this.selectedPreferredRevenueRanges,
+    value: string
+  ): void {
+    signalRef.update((items) => (items.includes(value) ? items.filter((item) => item !== value) : [...items, value]));
+  }
+
+  hasPreferenceValue(
+    signalRef:
+      | typeof this.selectedPreferredSectors
+      | typeof this.selectedPreferredEmployeeRanges
+      | typeof this.selectedPreferredRevenueRanges,
+    value: string
+  ): boolean {
+    return signalRef().includes(value);
+  }
+
+  formatEmployee(value: string): string {
+    return formatEmployeeRange(value);
+  }
+
+  formatRevenue(value: string): string {
+    return formatRevenueRange(value);
+  }
+
+  getPreferencesSummary(user: Usuario): string {
+    const parts = [
+      (user.preferredSectors ?? []).join(', '),
+      (user.preferredRegions ?? []).join(', '),
+      (user.preferredEmployeeRanges ?? []).map((value) => this.formatEmployee(value)).join(', '),
+      (user.preferredRevenueRanges ?? []).map((value) => this.formatRevenue(value)).join(', '),
+      user.preferredCreationYearFrom && user.preferredCreationYearTo
+        ? `${user.preferredCreationYearFrom} - ${user.preferredCreationYearTo}`
+        : ''
+    ].filter(Boolean);
+
+    return parts.join(' · ');
   }
 
   cargarChatsRecientes(): void {
