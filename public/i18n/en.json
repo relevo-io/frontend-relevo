@@ -227,9 +227,17 @@
     "CONVERSION": "Conversion"
   },
   "MARKETPLACE_HOME": {
+    "HERO_EYEBROW": "Your next business is waiting",
     "HERO_TITLE": "Ready to sell your company or take over?",
     "HERO_SUBTITLE": "Publish your business in minutes or find a running company to start with a solid foundation.",
     "HOW_IT_WORKS": "How Relevo works",
+    "HERO_PROOF": "+500 businesses published successfully.",
+    "FEATURE_SECURITY_TITLE": "Security and trust",
+    "FEATURE_SECURITY_BODY": "We verify every company and buyer for secure transactions.",
+    "FEATURE_OPPORTUNITIES_TITLE": "Real opportunities",
+    "FEATURE_OPPORTUNITIES_BODY": "Access active companies with verified financial and operating data.",
+    "FEATURE_SUPPORT_TITLE": "Expert support",
+    "FEATURE_SUPPORT_BODY": "We guide you through every step of the buying and selling process.",
     "OFFERS_TITLE": "Available companies",
     "OFFERS_SUBTITLE": "Explore real opportunities published by verified owners.",
     "RESULTS": "results",
@@ -471,6 +479,23 @@
     "EMPTY_STATE": "No notifications yet",
     "LOAD_MORE": "Load previous",
     "LOADING": "Loading..."
+  },
+  "HELP": {
+    "BUTTON_TITLE": "Help",
+    "TITLE": "Help",
+    "SUBTITLE": "Find quick answers about Relevo or replay the initial walkthrough.",
+    "START_TOUR": "Start tutorial",
+    "CLOSE": "Close",
+    "FAQ_1_Q": "What is Relevo?",
+    "FAQ_1_A": "Relevo connects owners who want to sell a business with people interested in buying or exploring real opportunities.",
+    "FAQ_2_Q": "Can I view offers without signing up?",
+    "FAQ_2_A": "Yes. You can explore offers and basic filters. To save favorites, use full search, request an offer or publish a business, you need to sign in.",
+    "FAQ_3_Q": "How do I contact an offer owner?",
+    "FAQ_3_A": "Open the offer, send a request and, when the owner accepts it, the chat between both parties becomes available inside the platform.",
+    "FAQ_4_Q": "What happens when a sale is marked as closed?",
+    "FAQ_4_A": "When both owner and interested user confirm the closed sale, the match inside Relevo is considered completed and both can rate the experience.",
+    "FAQ_5_Q": "How do offer alerts work?",
+    "FAQ_5_A": "From the bell you can create alerts by city, size or revenue. If a matching offer appears, you receive a notification and it is saved in the alert history."
   },
   "mentoring": {
     "title": "Guidance & Mentoring",

@@ -55,7 +55,7 @@
           <div class="request-card">
             <div class="request-header">
               <div class="offer-info">
-                <span class="sector-badge">{{ o.sector }}</span>
+                <span class="sector-badge" [ngClass]="sectorToneClass(o.sector)">{{ o.sector }}</span>
                 <h3>{{ o.region }}</h3>
                 <p class="company-desc">{{ o.companyDescription }}</p>
               </div>

@@ -227,9 +227,17 @@
     "CONVERSION": "Conversió"
   },
   "MARKETPLACE_HOME": {
+    "HERO_EYEBROW": "El teu proper negoci t'espera",
     "HERO_TITLE": "Llest per vendre la teva empresa o prendre el relleu?",
     "HERO_SUBTITLE": "Publica el teu negoci en minuts o troba una empresa en funcionament per començar amb base sòlida.",
     "HOW_IT_WORKS": "Com funciona Relevo",
+    "HERO_PROOF": "+500 negocis publicats amb èxit.",
+    "FEATURE_SECURITY_TITLE": "Seguretat i confiança",
+    "FEATURE_SECURITY_BODY": "Verifiquem cada empresa i comprador per a transaccions segures.",
+    "FEATURE_OPPORTUNITIES_TITLE": "Oportunitats reals",
+    "FEATURE_OPPORTUNITIES_BODY": "Accedeix a empreses actives amb dades financeres i operatives verificades.",
+    "FEATURE_SUPPORT_TITLE": "Acompanyament expert",
+    "FEATURE_SUPPORT_BODY": "T'acompanyem en cada pas del procés de compravenda.",
     "OFFERS_TITLE": "Empreses disponibles",
     "OFFERS_SUBTITLE": "Explora oportunitats reals publicades per propietaris verificats.",
     "RESULTS": "resultats",
@@ -471,6 +479,23 @@
     "EMPTY_STATE": "No tens notificacions",
     "LOAD_MORE": "Veure anteriors",
     "LOADING": "Carregant..."
+  },
+  "HELP": {
+    "BUTTON_TITLE": "Ajuda",
+    "TITLE": "Ajuda",
+    "SUBTITLE": "Resol dubtes ràpids sobre Relevo o torna a veure el tutorial inicial.",
+    "START_TOUR": "Veure tutorial",
+    "CLOSE": "Tancar",
+    "FAQ_1_Q": "Què és Relevo?",
+    "FAQ_1_A": "Relevo connecta propietaris que volen vendre una empresa amb persones interessades a comprar o explorar oportunitats reals.",
+    "FAQ_2_Q": "Puc veure ofertes sense registrar-me?",
+    "FAQ_2_A": "Sí. Pots explorar ofertes i filtres bàsics. Per guardar favorits, fer servir la cerca completa, sol·licitar una oferta o publicar una empresa has d'iniciar sessió.",
+    "FAQ_3_Q": "Com contacto amb el propietari d'una oferta?",
+    "FAQ_3_A": "Has d'obrir l'oferta, enviar una sol·licitud i, quan l'owner l'accepti, s'habilita el xat entre les dues parts dins de la plataforma.",
+    "FAQ_4_Q": "Què passa quan es marca una venda com a tancada?",
+    "FAQ_4_A": "Quan owner i interessat confirmen la venda tancada, el match dins de Relevo es considera completat i tots dos poden valorar l'experiència.",
+    "FAQ_5_Q": "Com funcionen les alertes d'ofertes?",
+    "FAQ_5_A": "Des de la campana pots crear alertes per ciutat, mida o facturació. Si apareix una oferta que encaixa, reps una notificació i queda registrada a l'alerta."
   },
   "mentoring": {
     "title": "Acompanyament i Mentoring",

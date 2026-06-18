@@ -433,6 +433,43 @@ body.dark-mode .btn-navbar-bell.active {
   opacity: 0.6;
 }
 
+.btn-navbar-help,
+.btn-help-inline {
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-low);
+  color: var(--primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.btn-navbar-help {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.btn-help-inline {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  margin-left: auto;
+}
+
+.btn-navbar-help:hover,
+.btn-help-inline:hover {
+  border-color: var(--primary);
+  background-color: var(--surface-container-high);
+  transform: translateY(-1px);
+}
+
 /* Custom Notifications Modal Styles */
 .notifications-modal-overlay {
   position: fixed;
@@ -509,6 +546,59 @@ body.dark-mode .btn-navbar-bell.active {
 body.dark-mode .notifications-modal-card {
   background-color: #0f172a;
   border-color: #1e293b;
+}
+
+.help-modal-card {
+  max-width: 560px;
+  text-align: left;
+}
+
+.help-modal-card > h3,
+.help-modal-card > p {
+  text-align: center;
+}
+
+.help-modal-icon span {
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.faq-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 340px;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  padding-right: 0.25rem;
+}
+
+.faq-item {
+  border: 1px solid var(--outline-variant);
+  border-radius: 14px;
+  background: var(--surface-container-low);
+  padding: 0.85rem 0.95rem;
+}
+
+.faq-item h4 {
+  color: var(--on-surface);
+  font-size: 0.92rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+}
+
+.faq-item p {
+  color: var(--on-surface-variant);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+body.dark-mode .faq-item {
+  background-color: #1e293b;
+  border-color: #334155;
 }
 
 @keyframes fadeIn {

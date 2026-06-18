@@ -7,6 +7,7 @@ import { OfertaService } from '../../../core/services/oferta.service';
 import { MarketplaceSearchService } from '../../../core/services/marketplace-search.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
+import { getSectorToneClass } from '../../../shared/utils/sector-tone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaginationMeta } from '../../../core/models/pagination.model';
 import { SolicitudService } from '../../../core/services/solicitud.service';
@@ -129,6 +130,10 @@ export class MarketplaceHomeComponent {
 
   formatEmployees(value?: string): string {
     return formatEmployeeRange(value);
+  }
+
+  sectorToneClass(sector?: string): string {
+    return getSectorToneClass(sector);
   }
 
   mapUrl(region?: string): SafeResourceUrl {

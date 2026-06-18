@@ -227,9 +227,17 @@
     "CONVERSION": "Conversión"
   },
   "MARKETPLACE_HOME": {
+    "HERO_EYEBROW": "Tu próximo negocio te espera",
     "HERO_TITLE": "¿Listo para vender tu empresa o tomar el relevo?",
     "HERO_SUBTITLE": "Publica tu negocio en minutos o encuentra una empresa en funcionamiento para empezar con base sólida.",
     "HOW_IT_WORKS": "Cómo funciona Relevo",
+    "HERO_PROOF": "+500 negocios publicados con éxito.",
+    "FEATURE_SECURITY_TITLE": "Seguridad y confianza",
+    "FEATURE_SECURITY_BODY": "Verificamos cada empresa y comprador para transacciones seguras.",
+    "FEATURE_OPPORTUNITIES_TITLE": "Oportunidades reales",
+    "FEATURE_OPPORTUNITIES_BODY": "Accede a empresas activas con datos financieros y operativos verificados.",
+    "FEATURE_SUPPORT_TITLE": "Acompañamiento experto",
+    "FEATURE_SUPPORT_BODY": "Te guiamos en cada paso del proceso de compraventa.",
     "OFFERS_TITLE": "Empresas disponibles",
     "OFFERS_SUBTITLE": "Explora oportunidades reales publicadas por propietarios verificados.",
     "RESULTS": "resultados",
@@ -471,6 +479,23 @@
     "EMPTY_STATE": "No tienes notificaciones",
     "LOAD_MORE": "Ver anteriores",
     "LOADING": "Cargando..."
+  },
+  "HELP": {
+    "BUTTON_TITLE": "Ayuda",
+    "TITLE": "Ayuda",
+    "SUBTITLE": "Resuelve dudas rápidas sobre Relevo o vuelve a ver el tutorial inicial.",
+    "START_TOUR": "Ver tutorial",
+    "CLOSE": "Cerrar",
+    "FAQ_1_Q": "¿Qué es Relevo?",
+    "FAQ_1_A": "Relevo conecta propietarios que quieren vender una empresa con personas interesadas en comprar o explorar oportunidades reales.",
+    "FAQ_2_Q": "¿Puedo ver ofertas sin registrarme?",
+    "FAQ_2_A": "Sí. Puedes explorar ofertas y filtros básicos. Para guardar favoritos, usar el buscador completo, solicitar una oferta o publicar una empresa necesitas iniciar sesión.",
+    "FAQ_3_Q": "¿Cómo contacto con el propietario de una oferta?",
+    "FAQ_3_A": "Debes abrir la oferta, enviar una solicitud y, cuando el owner la acepte, se habilita el chat entre ambas partes dentro de la plataforma.",
+    "FAQ_4_Q": "¿Qué ocurre cuando se marca una venta como cerrada?",
+    "FAQ_4_A": "Cuando owner e interesado confirman la venta cerrada, el match dentro de Relevo se considera completado y ambos pueden valorar la experiencia.",
+    "FAQ_5_Q": "¿Cómo funcionan las alertas de ofertas?",
+    "FAQ_5_A": "Desde la campana puedes crear alertas por ciudad, tamaño o facturación. Si aparece una oferta que encaja, recibirás una notificación y quedará registrada en la alerta."
   },
   "mentoring": {
     "title": "Acompañamiento y Mentoring",
