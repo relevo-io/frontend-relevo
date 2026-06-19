@@ -2,14 +2,51 @@
   <section class="hero">
     <div class="hero-image"></div>
     <div class="hero-overlay container-full">
-      <div class="hero-card">
+      <div class="hero-content">
+        <span class="hero-eyebrow">{{ 'MARKETPLACE_HOME.HERO_EYEBROW' | translate }}</span>
         <h1>{{ 'MARKETPLACE_HOME.HERO_TITLE' | translate }}</h1>
         <p>{{ 'MARKETPLACE_HOME.HERO_SUBTITLE' | translate }}</p>
         <div class="hero-actions">
           <button class="btn-primary" routerLink="/ofertas/crear">{{ 'NAVBAR.SELL_NOW' | translate }}</button>
           <button class="btn-secondary" routerLink="/como-funciona">
+            <span class="material-symbols-outlined">play_circle</span>
             {{ 'MARKETPLACE_HOME.HOW_IT_WORKS' | translate }}
           </button>
+        </div>
+        <div class="hero-proof">
+          <div class="proof-avatars" aria-hidden="true">
+            <span class="proof-avatar avatar-one">A</span>
+            <span class="proof-avatar avatar-two">M</span>
+            <span class="proof-avatar avatar-three">J</span>
+          </div>
+          <div>
+            <div class="proof-stars" aria-hidden="true">★★★★★</div>
+            <span>{{ 'MARKETPLACE_HOME.HERO_PROOF' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-features" aria-label="Relevo">
+        <div class="hero-feature">
+          <span class="feature-icon material-symbols-outlined">verified_user</span>
+          <div>
+            <h2>{{ 'MARKETPLACE_HOME.FEATURE_SECURITY_TITLE' | translate }}</h2>
+            <p>{{ 'MARKETPLACE_HOME.FEATURE_SECURITY_BODY' | translate }}</p>
+          </div>
+        </div>
+        <div class="hero-feature">
+          <span class="feature-icon material-symbols-outlined">trending_up</span>
+          <div>
+            <h2>{{ 'MARKETPLACE_HOME.FEATURE_OPPORTUNITIES_TITLE' | translate }}</h2>
+            <p>{{ 'MARKETPLACE_HOME.FEATURE_OPPORTUNITIES_BODY' | translate }}</p>
+          </div>
+        </div>
+        <div class="hero-feature">
+          <span class="feature-icon material-symbols-outlined">groups</span>
+          <div>
+            <h2>{{ 'MARKETPLACE_HOME.FEATURE_SUPPORT_TITLE' | translate }}</h2>
+            <p>{{ 'MARKETPLACE_HOME.FEATURE_SUPPORT_BODY' | translate }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -30,16 +67,71 @@
       </div>
     </div>
 
-    @if (sectoresDestacados().length > 0) {
-      <div class="sector-filters">
-        @for (sector of sectoresDestacados(); track sector) {
-          <button class="sector-chip" (click)="filtrarPorSector(sector)">{{ sector }}</button>
-        }
-        @if (searchQuery()) {
-          <button class="clear-filter" (click)="limpiarFiltro()">
-            {{ 'MARKETPLACE_HOME.CLEAR_FILTER' | translate }}
-          </button>
-        }
+    @if (canUseAdvancedFilters()) {
+      <div class="advanced-filters-panel">
+        <select [ngModel]="selectedSector()" (ngModelChange)="selectedSector.set($event)">
+          <option value="">{{ 'MONETIZATION.FILTER_SECTOR' | translate }}</option>
+          @for (sector of sectorOptions; track sector) {
+            <option [value]="sector">{{ sector }}</option>
+          }
+        </select>
+
+        <input
+          type="text"
+          list="marketplace-location-suggestions"
+          [placeholder]="'MONETIZATION.FILTER_LOCATION' | translate"
+          [ngModel]="selectedRegion()"
+          (ngModelChange)="selectedRegion.set($event)"
+        />
+        <datalist id="marketplace-location-suggestions">
+          @for (location of locationSuggestions; track location) {
+            <option [value]="location"></option>
+          }
+        </datalist>
+
+        <select [ngModel]="selectedEmployeeRange()" (ngModelChange)="selectedEmployeeRange.set($event)">
+          <option value="">{{ 'MONETIZATION.FILTER_EMPLOYEES' | translate }}</option>
+          @for (option of employeeRangeOptions; track option) {
+            <option [value]="option">{{ formatEmployees(option) }}</option>
+          }
+        </select>
+
+        <select [ngModel]="selectedRevenueRange()" (ngModelChange)="selectedRevenueRange.set($event)">
+          <option value="">{{ 'MONETIZATION.FILTER_REVENUE' | translate }}</option>
+          @for (option of revenueRangeOptions; track option) {
+            <option [value]="option">{{ formatRevenue(option) }}</option>
+          }
+        </select>
+
+        <input
+          type="number"
+          min="1800"
+          [placeholder]="'MONETIZATION.FILTER_YEAR_FROM' | translate"
+          [ngModel]="selectedCreationYearFrom()"
+          (ngModelChange)="selectedCreationYearFrom.set($event ? +$event : null)"
+        />
+
+        <input
+          type="number"
+          min="1800"
+          [placeholder]="'MONETIZATION.FILTER_YEAR_TO' | translate"
+          [ngModel]="selectedCreationYearTo()"
+          (ngModelChange)="selectedCreationYearTo.set($event ? +$event : null)"
+        />
+
+        <button type="button" class="filters-reset-btn" (click)="clearAdvancedFilters()">
+          {{ 'MONETIZATION.CLEAR_FILTERS' | translate }}
+        </button>
+      </div>
+    } @else if (showProInvite()) {
+      <div class="pro-invite-banner">
+        <div>
+          <strong>{{ 'MONETIZATION.PRO_INVITE_TITLE' | translate }}</strong>
+          <p>{{ 'MONETIZATION.PRO_INVITE_BODY' | translate }}</p>
+        </div>
+        <button class="btn-primary" routerLink="/pago-simulado/pro">
+          {{ 'MONETIZATION.BECOME_PRO' | translate }}
+        </button>
       </div>
     }
 
@@ -69,11 +161,12 @@
           <article
             class="offer-card"
             data-tour="offer-card"
-            [routerLink]="authService.isLoggedIn() ? ['/ofertas', oferta._id] : ['/register']"
+            [class.locked-search-result]="isBlurredResult($index)"
+            [routerLink]="cardRoute(oferta._id, $index)"
           >
             <header class="card-head">
               <div class="card-head-left">
-                <span class="sector">{{ oferta.sector }}</span>
+                <span class="sector" [ngClass]="sectorToneClass(oferta.sector)">{{ oferta.sector }}</span>
               </div>
               @if (authService.isLoggedIn() && oferta.employeeRange) {
                 <span class="meta"
@@ -84,6 +177,13 @@
 
             <h3>{{ oferta.region }}</h3>
             <p class="description">{{ oferta.companyDescription }}</p>
+
+            @if (isBlurredResult($index)) {
+              <div class="locked-search-overlay">
+                <strong>{{ 'MONETIZATION.BECOME_PRO' | translate }}</strong>
+                <span>{{ 'MONETIZATION.BLURRED_RESULTS_MESSAGE' | translate }}</span>
+              </div>
+            }
 
             <div class="card-map" aria-hidden="true">
               <iframe
@@ -129,7 +229,7 @@
               }
             </div>
 
-            @if (authService.isLoggedIn()) {
+            @if (authService.isLoggedIn() && !isBlurredResult($index)) {
               <div class="card-bottom-row">
                 <div class="status-badge-container">
                   @if (solicitudesMap().get(oferta._id!); as status) {
@@ -159,21 +259,21 @@
         }
       </div>
 
-      @if (authService.isLoggedIn()) {
-        @if (pagination() && pagination()!.totalPages > 1) {
-          <div class="pager">
-            <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
-              {{ 'COMMON.PREVIOUS' | translate }}
-            </button>
-            <span class="pager-info">
-              {{ 'FAVORITES.PAGE_INFO' | translate: { page: pagination()!.page, total: pagination()!.totalPages } }}
-            </span>
-            <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
-              {{ 'COMMON.NEXT' | translate }}
-            </button>
-          </div>
-        }
-      } @else {
+      @if (showPager()) {
+        <div class="pager">
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasPrevPage" (click)="prevPage()">
+            {{ 'COMMON.PREVIOUS' | translate }}
+          </button>
+          <span class="pager-info">
+            {{ 'FAVORITES.PAGE_INFO' | translate: { page: pagination()!.page, total: pagination()!.totalPages } }}
+          </span>
+          <button type="button" class="pager-btn" [disabled]="!pagination()!.hasNextPage" (click)="nextPage()">
+            {{ 'COMMON.NEXT' | translate }}
+          </button>
+        </div>
+      }
+
+      @if (!authService.isLoggedIn()) {
         <div class="register-cta">
           <h3>
             {{ 'MARKETPLACE_HOME.CTA_REGISTER_TITLE' | translate }}

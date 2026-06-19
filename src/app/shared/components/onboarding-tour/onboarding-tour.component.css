@@ -27,7 +27,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9992;
+  z-index: 9993;
   background: var(--surface-container-lowest);
   border: 1px solid rgba(205, 220, 255, 0.75);
   border-radius: 16px;

@@ -68,4 +68,22 @@ export class UsuarioService {
   getMyRatings(): Observable<MyRatingsResponse> {
     return this.http.get<MyRatingsResponse>(`${this.apiUrl}/me/ratings`);
   }
+
+  updateMarketplacePreferences(
+    data: Pick<
+      Usuario,
+      | 'preferredRegions'
+      | 'preferredSectors'
+      | 'preferredEmployeeRanges'
+      | 'preferredRevenueRanges'
+      | 'preferredCreationYearFrom'
+      | 'preferredCreationYearTo'
+    >
+  ): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.apiUrl}/me/marketplace-preferences`, data);
+  }
+
+  activateProPlan(): Observable<Usuario> {
+    return this.http.post<Usuario>(`${this.apiUrl}/me/pro/activate`, {});
+  }
 }

@@ -19,7 +19,7 @@
         @for (oferta of favoritas(); track oferta._id) {
           <article class="offer-card" [routerLink]="['/ofertas', oferta._id]">
             <header class="card-head">
-              <span class="sector">{{ oferta.sector }}</span>
+              <span class="sector" [ngClass]="sectorToneClass(oferta.sector)">{{ oferta.sector }}</span>
               @if (oferta.employeeRange) {
                 <span class="meta"
                   >{{ formatEmployees(oferta.employeeRange) }} {{ 'MARKETPLACE.EMPLOYEES' | translate }}</span

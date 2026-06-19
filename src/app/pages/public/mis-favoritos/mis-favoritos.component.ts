@@ -5,6 +5,7 @@ import { OfertaService } from '../../../core/services/oferta.service';
 import { Oferta } from '../../../core/models/oferta.model';
 import { PaginationMeta } from '../../../core/models/pagination.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
+import { getSectorToneClass } from '../../../shared/utils/sector-tone';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -57,6 +58,10 @@ export class MisFavoritosComponent implements OnInit {
 
   formatEmployees(value?: string): string {
     return formatEmployeeRange(value);
+  }
+
+  sectorToneClass(sector?: string): string {
+    return getSectorToneClass(sector);
   }
 
   prevPage(): void {

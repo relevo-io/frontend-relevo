@@ -14,7 +14,7 @@ export class OnboardingTourComponent implements OnDestroy {
   tour = inject(OnboardingService);
   rect = signal<DOMRect | null>(null);
   private highlightedElement: HTMLElement | null = null;
-  private previousInlineStyles: Partial<CSSStyleDeclaration> = {};
+  private highlightedClone: HTMLElement | null = null;
 
   step = computed<OnboardingStep>(() => this.tour.steps[this.tour.currentIndex()]);
   progress = computed(() => `${this.tour.currentIndex() + 1} / ${this.tour.steps.length}`);
@@ -76,41 +76,107 @@ export class OnboardingTourComponent implements OnDestroy {
   }
 
   private setHighlightedElement(element: HTMLElement): void {
-    if (this.highlightedElement === element) return;
-
-    this.clearHighlightedElement();
-    const style = window.getComputedStyle(element);
-
     this.highlightedElement = element;
-    this.previousInlineStyles = {
-      position: element.style.position,
-      zIndex: element.style.zIndex,
-      boxShadow: element.style.boxShadow,
-      backgroundColor: element.style.backgroundColor,
-      borderRadius: element.style.borderRadius
-    };
-
-    if (style.position === 'static') {
-      element.style.position = 'relative';
-    }
-    element.style.zIndex = '9991';
-    element.style.boxShadow = '0 0 0 5px rgba(205, 220, 255, 0.45), 0 12px 28px rgba(0, 0, 0, 0.18)';
-    element.style.borderRadius = style.borderRadius === '0px' ? '16px' : style.borderRadius;
-
-    if (style.backgroundColor === 'rgba(0, 0, 0, 0)' || style.backgroundColor === 'transparent') {
-      element.style.backgroundColor = 'var(--surface-container-lowest)';
-    }
+    this.renderHighlightedClone();
   }
 
   private clearHighlightedElement(): void {
-    if (!this.highlightedElement) return;
-
-    this.highlightedElement.style.position = this.previousInlineStyles.position ?? '';
-    this.highlightedElement.style.zIndex = this.previousInlineStyles.zIndex ?? '';
-    this.highlightedElement.style.boxShadow = this.previousInlineStyles.boxShadow ?? '';
-    this.highlightedElement.style.backgroundColor = this.previousInlineStyles.backgroundColor ?? '';
-    this.highlightedElement.style.borderRadius = this.previousInlineStyles.borderRadius ?? '';
     this.highlightedElement = null;
-    this.previousInlineStyles = {};
+    this.highlightedClone?.remove();
+    this.highlightedClone = null;
+  }
+
+  private renderHighlightedClone(): void {
+    const element = this.highlightedElement;
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    const style = window.getComputedStyle(element);
+
+    this.highlightedClone?.remove();
+
+    const clone = element.cloneNode(true) as HTMLElement;
+    clone.setAttribute('aria-hidden', 'true');
+    clone.classList.add('tour-target-clone');
+    clone.style.position = 'fixed';
+    clone.style.left = `${rect.left}px`;
+    clone.style.top = `${rect.top}px`;
+    clone.style.width = `${rect.width}px`;
+    clone.style.height = `${rect.height}px`;
+    clone.style.margin = '0';
+    clone.style.zIndex = '9992';
+    clone.style.pointerEvents = 'none';
+    clone.style.boxSizing = 'border-box';
+    clone.style.transform = 'none';
+    clone.style.opacity = '1';
+    clone.style.borderRadius = style.borderRadius === '0px' ? '16px' : style.borderRadius;
+    clone.style.overflow = 'hidden';
+    clone.style.boxShadow = '0 0 0 5px rgba(205, 220, 255, 0.45), 0 12px 28px rgba(0, 0, 0, 0.18)';
+
+    if (style.backgroundColor === 'rgba(0, 0, 0, 0)' || style.backgroundColor === 'transparent') {
+      clone.style.backgroundColor = 'var(--surface-container-lowest)';
+    }
+
+    const cloneStyle = (selector: string, apply: (node: HTMLElement) => void) => {
+      clone.querySelectorAll(selector).forEach((node) => apply(node as HTMLElement));
+    };
+
+    cloneStyle('.logo, .label, strong, span, a, button', (node) => {
+      node.style.color = '#031632';
+      node.style.opacity = '1';
+    });
+
+    cloneStyle('.material-symbols-outlined', (node) => {
+      node.style.color = '#031632';
+      node.style.opacity = '1';
+    });
+
+    cloneStyle('input, textarea, select', (node) => {
+      node.style.background = '#ffffff';
+      node.style.color = '#031632';
+      node.style.borderColor = 'rgba(148, 163, 184, 0.6)';
+      node.style.boxShadow = 'none';
+      node.style.opacity = '1';
+      node.style.filter = 'none';
+    });
+
+    cloneStyle('.btn-outline, .btn-user-trigger, .btn-navbar-help, .btn-navbar-bell', (node) => {
+      node.style.background = '#ffffff';
+      node.style.color = '#031632';
+      node.style.borderColor = 'rgba(148, 163, 184, 0.6)';
+      node.style.opacity = '1';
+      node.style.filter = 'none';
+    });
+
+    cloneStyle('.btn-solid', (node) => {
+      node.style.background = '#067647';
+      node.style.color = '#ffffff';
+      node.style.borderColor = '#067647';
+      node.style.opacity = '1';
+      node.style.filter = 'none';
+    });
+
+    cloneStyle('.user-avatar-sm', (node) => {
+      node.style.color = '#ffffff';
+      node.style.opacity = '1';
+    });
+
+    const clonedInputs = clone.querySelectorAll('input, textarea, select');
+    const originalInputs = element.querySelectorAll('input, textarea, select');
+    clonedInputs.forEach((input, index) => {
+      const original = originalInputs[index] as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | undefined;
+      if (!original) return;
+
+      if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+        input.value = original.value;
+      }
+
+      if (input instanceof HTMLSelectElement && original instanceof HTMLSelectElement) {
+        input.value = original.value;
+      }
+    });
+
+    document.body.appendChild(clone);
+    this.highlightedClone = clone;
   }
 }

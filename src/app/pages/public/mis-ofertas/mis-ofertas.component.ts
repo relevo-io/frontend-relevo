@@ -6,6 +6,7 @@ import { OfertaService } from '../../../core/services/oferta.service';
 import { Oferta, OwnerAnalyticsSummary } from '../../../core/models/oferta.model';
 import { PaginationMeta } from '../../../core/models/pagination.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
+import { getSectorToneClass } from '../../../shared/utils/sector-tone';
 
 @Component({
   selector: 'app-mis-ofertas',
@@ -61,6 +62,10 @@ export class MisOfertasComponent implements OnInit {
 
   formatEmployees(val?: string) {
     return formatEmployeeRange(val);
+  }
+
+  sectorToneClass(sector?: string): string {
+    return getSectorToneClass(sector);
   }
 
   prevPage(): void {

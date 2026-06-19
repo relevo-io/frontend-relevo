@@ -4,19 +4,24 @@
       <a routerLink="/" class="logo" data-tour="brand">Relevo</a>
     </div>
 
-    @if (authService.isLoggedIn()) {
-      <div class="navbar-search" data-tour="search">
-        <span class="material-symbols-outlined">search</span>
-        <input
-          type="text"
-          [placeholder]="'NAVBAR.SEARCH_PLACEHOLDER' | translate"
-          [ngModel]="searchQuery()"
-          (ngModelChange)="onSearchInput($event)"
-        />
-      </div>
-    }
+    <div class="navbar-search" data-tour="search" (click)="handleSearchAccess()">
+      <span class="material-symbols-outlined">search</span>
+      <input
+        type="text"
+        [placeholder]="'NAVBAR.SEARCH_PLACEHOLDER' | translate"
+        [ngModel]="searchQuery()"
+        (focus)="handleSearchAccess()"
+        (ngModelChange)="onSearchInput($event)"
+      />
+    </div>
 
     <div class="navbar-actions">
+      @if (authService.isLoggedIn() && authService.isInterested() && !authService.isPro() && !authService.isAdmin()) {
+        <button routerLink="/pago-simulado/pro" class="btn-outline btn-pro">
+          {{ 'MONETIZATION.BECOME_PRO' | translate }}
+        </button>
+      }
+
       @if (authService.isLoggedIn()) {
         <!-- Botón de campana de notificaciones con dropdown de historial -->
         <div class="bell-dropdown-container">
@@ -155,6 +160,14 @@
                 <div class="dropdown-item-static">
                   <span class="material-symbols-outlined">language</span>
                   <app-language-selector></app-language-selector>
+                  <button
+                    type="button"
+                    class="btn-help-inline"
+                    (click)="openHelpModal()"
+                    [title]="'HELP.BUTTON_TITLE' | translate"
+                  >
+                    ?
+                  </button>
                 </div>
               </div>
 
@@ -205,6 +218,15 @@
           }
         </div>
       } @else {
+        <button
+          type="button"
+          class="btn-navbar-help"
+          (click)="openHelpModal()"
+          [title]="'HELP.BUTTON_TITLE' | translate"
+        >
+          ?
+        </button>
+
         <!-- Menú de preferències per a usuaris no loguejats -->
         <div class="user-dropdown-container">
           <button class="btn-user-trigger" (click)="toggleMenu()">
@@ -228,6 +250,14 @@
               <div class="dropdown-item-static">
                 <span class="material-symbols-outlined">language</span>
                 <app-language-selector></app-language-selector>
+                <button
+                  type="button"
+                  class="btn-help-inline"
+                  (click)="openHelpModal()"
+                  [title]="'HELP.BUTTON_TITLE' | translate"
+                >
+                  ?
+                </button>
               </div>
             </div>
           }
@@ -238,6 +268,33 @@
     </div>
   </div>
 </nav>
+
+<!-- Modal de ayuda y FAQs -->
+@if (isHelpModalOpen()) {
+  <div class="notifications-modal-overlay" (click)="closeHelpModal()">
+    <div class="notifications-modal-card help-modal-card" (click)="$event.stopPropagation()">
+      <div class="notifications-modal-icon-container icon-container-green help-modal-icon">
+        <span>?</span>
+      </div>
+      <h3>{{ 'HELP.TITLE' | translate }}</h3>
+      <p>{{ 'HELP.SUBTITLE' | translate }}</p>
+
+      <div class="faq-list">
+        @for (faq of faqItems; track faq.question) {
+          <article class="faq-item">
+            <h4>{{ faq.question | translate }}</h4>
+            <p>{{ faq.answer | translate }}</p>
+          </article>
+        }
+      </div>
+
+      <div class="notifications-modal-actions">
+        <button class="btn-outline" (click)="closeHelpModal()">{{ 'HELP.CLOSE' | translate }}</button>
+        <button class="btn-solid" (click)="startOnboardingFromHelp()">{{ 'HELP.START_TOUR' | translate }}</button>
+      </div>
+    </div>
+  </div>
+}
 
 <!-- Modal de confirmación para activar notificaciones (Pre-permission dialog) -->
 @if (isNotificationModalOpen()) {

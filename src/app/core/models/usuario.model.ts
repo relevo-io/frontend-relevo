@@ -43,11 +43,19 @@ export interface Usuario {
   professionalBackground?: string; // required: false
   cv?: string;
   preferredRegions?: string[];
+  preferredSectors?: string[];
+  preferredEmployeeRanges?: string[];
+  preferredRevenueRanges?: string[];
+  preferredCreationYearFrom?: number;
+  preferredCreationYearTo?: number;
   visible?: boolean;
   language?: string;
   theme?: string;
   fcmTokens?: string[];
   notificationPreferences?: NotificationPreferences;
+  publicationCredits?: number;
+  proExpiresAt?: string | null;
+  proActive?: boolean;
   ratingAsOwner?: RatingSummary;
   ratingAsInterested?: RatingSummary;
   createdAt?: string;

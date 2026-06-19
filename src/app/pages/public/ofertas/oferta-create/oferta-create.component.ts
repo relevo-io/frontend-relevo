@@ -2,10 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { OfertaService } from '../../../../core/services/oferta.service';
-import { NotificationService } from '../../../../core/services/notification.service';
 import { Oferta } from '../../../../core/models/oferta.model';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { MonetizationService } from '../../../../core/services/monetization.service';
 
 @Component({
   selector: 'app-oferta-create',
@@ -16,10 +15,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 })
 export class OfertaCreateComponent {
   private fb = inject(FormBuilder);
-  private ofertaService = inject(OfertaService);
-  private ns = inject(NotificationService);
   private router = inject(Router);
-  private translate = inject(TranslateService);
+  private monetizationService = inject(MonetizationService);
 
   isSaving = signal<boolean>(false);
 
@@ -43,7 +40,6 @@ export class OfertaCreateComponent {
       return;
     }
 
-    this.isSaving.set(true);
     const raw = this.form.getRawValue();
     const payload: Partial<Oferta> = {
       region: raw.region?.trim() ?? '',
@@ -55,20 +51,9 @@ export class OfertaCreateComponent {
       ...(raw.employeeRange ? { employeeRange: raw.employeeRange } : {})
     };
 
-    this.ofertaService.createOferta(payload).subscribe({
-      next: (ofertaCreada) => {
-        this.isSaving.set(false);
-        this.ns.success(this.translate.instant('COMMON.NOTIF.OFFER_CREATED_SUCCESS'));
-        if (ofertaCreada._id) {
-          this.router.navigate(['/ofertas', ofertaCreada._id]);
-          return;
-        }
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error('Error al crear oferta:', err);
-        this.isSaving.set(false);
-      }
-    });
+    this.isSaving.set(true);
+    this.monetizationService.setPendingOfferDraft(payload);
+    this.isSaving.set(false);
+    this.router.navigate(['/pago-simulado', 'publish-offer']);
   }
 }

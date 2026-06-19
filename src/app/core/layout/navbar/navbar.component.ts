@@ -16,6 +16,7 @@ import { AlertaService } from '../../services/alerta.service';
 import { AlertaOferta } from '../../models/alerta.model';
 import { Oferta } from '../../models/oferta.model';
 import { formatEmployeeRange, formatRevenueRange } from '../../../shared/utils/oferta-formatters';
+import { OnboardingService } from '../../services/onboarding.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 
@@ -37,6 +38,7 @@ export class Navbar {
   private translate = inject(TranslateService);
   private notificationHistoryService = inject(NotificationHistoryService);
   private alertaService = inject(AlertaService);
+  private onboardingService = inject(OnboardingService);
 
   searchQuery = this.marketplaceSearchService.query;
   isMenuOpen = signal(false);
@@ -44,6 +46,7 @@ export class Navbar {
   isNotificationModalOpen = signal(false);
   isDeactivateModalOpen = signal(false);
   isPreferencesModalOpen = signal(false);
+  isHelpModalOpen = signal(false);
 
   // Historial de notificaciones
   isHistoryOpen = signal(false);
@@ -70,6 +73,28 @@ export class Navbar {
 
   revenueRangeOptions = ['UNDER_100K', 'BETWEEN_100K_500K', 'BETWEEN_500K_1M', 'BETWEEN_1M_5M', 'OVER_5M'];
   employeeRangeOptions = ['1_5', '6_10', '11_25', '26_50', '51_100', '100_PLUS'];
+  faqItems = [
+    {
+      question: 'HELP.FAQ_1_Q',
+      answer: 'HELP.FAQ_1_A'
+    },
+    {
+      question: 'HELP.FAQ_2_Q',
+      answer: 'HELP.FAQ_2_A'
+    },
+    {
+      question: 'HELP.FAQ_3_Q',
+      answer: 'HELP.FAQ_3_A'
+    },
+    {
+      question: 'HELP.FAQ_4_Q',
+      answer: 'HELP.FAQ_4_A'
+    },
+    {
+      question: 'HELP.FAQ_5_Q',
+      answer: 'HELP.FAQ_5_A'
+    }
+  ];
 
   private syncPreferenceSignals(): void {
     const user = this.authService.currentUser();
@@ -195,6 +220,23 @@ export class Navbar {
 
   closePreferencesModal(): void {
     this.isPreferencesModalOpen.set(false);
+  }
+
+  openHelpModal(): void {
+    this.isHelpModalOpen.set(true);
+    this.isHistoryOpen.set(false);
+  }
+
+  closeHelpModal(): void {
+    this.isHelpModalOpen.set(false);
+  }
+
+  startOnboardingFromHelp(): void {
+    this.closeHelpModal();
+    this.closeMenu();
+    this.router.navigate(['/']).then(() => {
+      setTimeout(() => this.onboardingService.start(), 350);
+    });
   }
 
   getBellIcon(): string {
@@ -508,9 +550,20 @@ export class Navbar {
   }
 
   onSearchInput(value: string): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
+      return;
+    }
+
     this.marketplaceSearchService.setQuery(value);
     if (!this.router.url.startsWith('/admin') && this.router.url !== '/') {
       this.router.navigate(['/']);
+    }
+  }
+
+  handleSearchAccess(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/' } });
     }
   }
 

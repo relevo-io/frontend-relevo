@@ -379,11 +379,72 @@ body.dark-mode .pager-btn:hover:not(:disabled) {
 }
 
 .sector {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #eaf7f1;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   color: var(--secondary);
-  letter-spacing: 0.03em;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.sector-badge.sector-tone--healthcare,
+.sector.sector-tone--healthcare {
+  background: #e7f7ef;
+  color: #008a52;
+}
+
+.sector-badge.sector-tone--education,
+.sector.sector-tone--education {
+  background: #eaf1ff;
+  color: #2563eb;
+}
+
+.sector-badge.sector-tone--technology,
+.sector.sector-tone--technology {
+  background: #f0eafe;
+  color: #6d28d9;
+}
+
+.sector-badge.sector-tone--hospitality,
+.sector.sector-tone--hospitality {
+  background: #fff1e7;
+  color: #ea580c;
+}
+
+.sector-badge.sector-tone--retail,
+.sector.sector-tone--retail {
+  background: #fff7e0;
+  color: #b77900;
+}
+
+.sector-badge.sector-tone--logistics,
+.sector.sector-tone--logistics {
+  background: #e9f7fb;
+  color: #087990;
+}
+
+.sector-badge.sector-tone--services,
+.sector.sector-tone--services {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.sector-badge.sector-tone--industry,
+.sector.sector-tone--industry {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.sector-badge.sector-tone--default,
+.sector.sector-tone--default {
+  background: #eef6f1;
+  color: var(--secondary);
 }
 
 .meta {
