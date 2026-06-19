@@ -1,0 +1,57 @@
+{
+  "cookies": [
+    {
+      "name": "_pk_id.1.1fff",
+      "value": "f00942467fd79ef0.1781856017.",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1815811217,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_pk_ses.1.1fff",
+      "value": "1",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1781857817,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "refreshToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMzRmNTU1YTU5ODFjNGI3Yzk5M2MyNSIsImZ1bGxOYW1lIjoiUGF1bGEgVG9sb3NhIiwiZW1haWwiOiJwYXVsYUBnbWFpbC5jb20iLCJyb2xlcyI6WyJPV05FUiIsIklOVEVSRVNURUQiXSwiaWF0IjoxNzgxODU2MDE3LCJleHAiOjE3ODI0NjA4MTd9.sXwswbpigHH_FQH-ImgMCW7hSE3pqHOVB5HDSeDOocw",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1782460817.003837,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:4200",
+      "localStorage": [
+        {
+          "name": "preferred_theme",
+          "value": "light"
+        },
+        {
+          "name": "user_data",
+          "value": "{\"_id\":\"6a34f555a5981c4b7c993c25\",\"fullName\":\"Paula Tolosa\",\"email\":\"paula@gmail.com\",\"roles\":[\"OWNER\",\"INTERESTED\"],\"language\":\"es\",\"theme\":\"light\",\"notificationPreferences\":{\"newMessages\":true,\"applicationStatus\":true,\"newApplications\":true,\"cvAnalysis\":true,\"offerAlerts\":true}}"
+        },
+        {
+          "name": "access_token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMzRmNTU1YTU5ODFjNGI3Yzk5M2MyNSIsImZ1bGxOYW1lIjoiUGF1bGEgVG9sb3NhIiwiZW1haWwiOiJwYXVsYUBnbWFpbC5jb20iLCJyb2xlcyI6WyJPV05FUiIsIklOVEVSRVNURUQiXSwiaWF0IjoxNzgxODU2MDE3LCJleHAiOjE3ODE4OTkyMTd9.LimbRsoCgRSQmyh4zfUeQHe9ws_Kg14J0BdE0QDlw8g"
+        },
+        {
+          "name": "preferred_language",
+          "value": "es"
+        }
+      ]
+    }
+  ]
+}
