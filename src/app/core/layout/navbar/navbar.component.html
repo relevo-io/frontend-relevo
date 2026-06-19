@@ -4,19 +4,24 @@
       <a routerLink="/" class="logo" data-tour="brand">Relevo</a>
     </div>
 
-    @if (authService.isLoggedIn()) {
-      <div class="navbar-search" data-tour="search">
-        <span class="material-symbols-outlined">search</span>
-        <input
-          type="text"
-          [placeholder]="'NAVBAR.SEARCH_PLACEHOLDER' | translate"
-          [ngModel]="searchQuery()"
-          (ngModelChange)="onSearchInput($event)"
-        />
-      </div>
-    }
+    <div class="navbar-search" data-tour="search" (click)="handleSearchAccess()">
+      <span class="material-symbols-outlined">search</span>
+      <input
+        type="text"
+        [placeholder]="'NAVBAR.SEARCH_PLACEHOLDER' | translate"
+        [ngModel]="searchQuery()"
+        (focus)="handleSearchAccess()"
+        (ngModelChange)="onSearchInput($event)"
+      />
+    </div>
 
     <div class="navbar-actions">
+      @if (authService.isLoggedIn() && authService.isInterested() && !authService.isPro() && !authService.isAdmin()) {
+        <button routerLink="/pago-simulado/pro" class="btn-outline btn-pro">
+          {{ 'MONETIZATION.BECOME_PRO' | translate }}
+        </button>
+      }
+
       @if (authService.isLoggedIn()) {
         <!-- Botón de campana de notificaciones con dropdown de historial -->
         <div class="bell-dropdown-container">

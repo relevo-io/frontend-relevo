@@ -58,6 +58,74 @@
               ></textarea>
             </div>
 
+            <div class="form-group">
+              <label>{{ 'MONETIZATION.PREFERRED_LOCATIONS' | translate }}</label>
+              <input
+                type="text"
+                formControlName="preferredRegionsText"
+                [placeholder]="'MONETIZATION.PREFERRED_LOCATIONS_PLACEHOLDER' | translate"
+              />
+            </div>
+
+            <div class="preference-picker-group">
+              <label>{{ 'MONETIZATION.PREFERRED_SECTORS' | translate }}</label>
+              <div class="pill-picker">
+                @for (sector of sectorOptions; track sector) {
+                  <button
+                    type="button"
+                    class="pill-option"
+                    [class.active]="hasPreferenceValue(selectedPreferredSectors, sector)"
+                    (click)="togglePreferenceValue(selectedPreferredSectors, sector)"
+                  >
+                    {{ sector }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="preference-picker-group">
+              <label>{{ 'MONETIZATION.PREFERRED_EMPLOYEES' | translate }}</label>
+              <div class="pill-picker">
+                @for (option of employeeRangeOptions; track option) {
+                  <button
+                    type="button"
+                    class="pill-option"
+                    [class.active]="hasPreferenceValue(selectedPreferredEmployeeRanges, option)"
+                    (click)="togglePreferenceValue(selectedPreferredEmployeeRanges, option)"
+                  >
+                    {{ formatEmployee(option) }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="preference-picker-group">
+              <label>{{ 'MONETIZATION.PREFERRED_REVENUE' | translate }}</label>
+              <div class="pill-picker">
+                @for (option of revenueRangeOptions; track option) {
+                  <button
+                    type="button"
+                    class="pill-option"
+                    [class.active]="hasPreferenceValue(selectedPreferredRevenueRanges, option)"
+                    (click)="togglePreferenceValue(selectedPreferredRevenueRanges, option)"
+                  >
+                    {{ formatRevenue(option) }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="form-row-two">
+              <div class="form-group">
+                <label>{{ 'MONETIZATION.PREFERRED_YEAR_FROM' | translate }}</label>
+                <input type="number" formControlName="preferredCreationYearFrom" min="1800" />
+              </div>
+              <div class="form-group">
+                <label>{{ 'MONETIZATION.PREFERRED_YEAR_TO' | translate }}</label>
+                <input type="number" formControlName="preferredCreationYearTo" min="1800" />
+              </div>
+            </div>
+
             <button type="submit" class="btn-save" [disabled]="isSaving()">
               {{ (isSaving() ? 'PROFILE_PAGE.SAVING' : 'PROFILE_PAGE.SAVE_CHANGES') | translate }}
             </button>
@@ -78,9 +146,35 @@
               <h3>{{ 'PROFILE_PAGE.BACKGROUND_LABEL' | translate }}</h3>
               <p>{{ user.professionalBackground || ('PROFILE_PAGE.NO_BACKGROUND' | translate) }}</p>
             </div>
+
+            <div class="data-group">
+              <h3>{{ 'MONETIZATION.PREFERRED_MARKETPLACE_TITLE' | translate }}</h3>
+              <p>{{ getPreferencesSummary(user) || ('MONETIZATION.NO_PREFERENCES' | translate) }}</p>
+            </div>
           </div>
         }
       </div>
+
+      @if (user.roles.includes('INTERESTED')) {
+        <div class="profile-card subscription-card">
+          <div class="card-header">
+            <h2>{{ 'MONETIZATION.PROFILE_PRO_TITLE' | translate }}</h2>
+            @if (isProUser()) {
+              <span class="badge interested">{{ 'MONETIZATION.PRO_ACTIVE_BADGE' | translate }}</span>
+            }
+          </div>
+          <p class="card-subtitle">
+            {{
+              (isProUser() ? 'MONETIZATION.PROFILE_PRO_ACTIVE_BODY' : 'MONETIZATION.PROFILE_PRO_FREE_BODY') | translate
+            }}
+          </p>
+          @if (!isProUser()) {
+            <button class="btn-save btn-pro-activate" type="button" routerLink="/pago-simulado/pro">
+              {{ 'MONETIZATION.BECOME_PRO' | translate }}
+            </button>
+          }
+        </div>
+      }
 
       <div class="profile-card ratings-card">
         <div class="card-header">

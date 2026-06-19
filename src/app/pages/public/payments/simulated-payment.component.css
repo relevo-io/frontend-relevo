@@ -1,0 +1,158 @@
+.payment-page {
+  min-height: 100vh;
+  padding-top: 132px;
+  padding-bottom: 48px;
+  background: var(--surface);
+}
+
+.payment-shell {
+  max-width: 920px;
+}
+
+.back-link {
+  display: inline-flex;
+  margin-bottom: 16px;
+  color: var(--secondary);
+  font-weight: 700;
+}
+
+.payment-card {
+  padding: 32px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 24px;
+  background: var(--surface-container-lowest);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.payment-card-header h1 {
+  margin-bottom: 12px;
+  font-size: 2.1rem;
+}
+
+.payment-card-header p {
+  max-width: 620px;
+  color: var(--on-surface-variant);
+}
+
+.payment-badge {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--secondary);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.summary-item,
+.benefit-item {
+  padding: 18px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.summary-item span,
+.benefit-item p {
+  color: var(--on-surface-variant);
+}
+
+.summary-item strong {
+  display: block;
+  margin-top: 8px;
+  color: var(--on-surface);
+  font-size: 1rem;
+}
+
+.summary-item.full {
+  grid-column: 1 / -1;
+}
+
+.pro-benefits {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.benefit-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.benefit-item .material-symbols-outlined {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--secondary);
+  font-size: 24px;
+}
+
+.benefit-item strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.payment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn-outline,
+.btn-solid {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.btn-outline {
+  border: 1px solid var(--outline);
+  background: transparent;
+  color: var(--on-surface);
+}
+
+.btn-solid {
+  border: 1px solid var(--secondary);
+  background: var(--secondary);
+  color: var(--on-secondary);
+}
+
+@media (max-width: 680px) {
+  .payment-page {
+    padding-top: 146px;
+  }
+
+  .payment-card {
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-item.full {
+    grid-column: auto;
+  }
+
+  .payment-actions {
+    flex-direction: column;
+  }
+}
