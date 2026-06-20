@@ -415,7 +415,8 @@
 }
 
 .deal-close-panel,
-.deal-rating-panel {
+.deal-rating-panel,
+.post-close-guidance-panel {
   padding: 14px;
   background: var(--surface-container);
   border: 1px solid var(--outline-variant);
@@ -500,6 +501,38 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.post-close-guidance-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.post-close-guidance-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-guidance-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--outline-variant);
+  background: transparent;
+  color: var(--on-surface-variant);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-guidance-secondary:hover {
+  background: var(--surface-container-high);
 }
 
 .stars-row {
@@ -819,6 +852,15 @@ body.dark-mode .rejected-banner .material-symbols-outlined {
 
 body.dark-mode .waiting-banner .material-symbols-outlined {
   color: var(--secondary);
+}
+
+body.dark-mode .btn-guidance-secondary {
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .btn-guidance-secondary:hover {
+  background: #1e293b;
 }
 
 /* ── Animations ───────────────────────────── */

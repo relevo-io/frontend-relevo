@@ -113,13 +113,24 @@ export class AuthService {
           ? new firebaseAuthModule.GoogleAuthProvider()
           : new firebaseAuthModule.GithubAuthProvider();
 
+      if (provider === 'github') {
+        authProvider.addScope('read:user');
+        authProvider.addScope('user:email');
+      }
+
       const credential = await firebaseAuthModule.signInWithPopup(auth, authProvider);
-      return credential.user.getIdToken(true);
+      const idToken = await credential.user.getIdToken(true);
+      const providerAccessToken =
+        provider === 'github'
+          ? firebaseAuthModule.GithubAuthProvider.credentialFromResult(credential)?.accessToken
+          : undefined;
+
+      return { idToken, providerAccessToken };
     })();
 
     return from(firebaseLoginPromise).pipe(
-      switchMap((idToken) => {
-        const body: FirebaseLoginRequest = { idToken };
+      switchMap(({ idToken, providerAccessToken }) => {
+        const body: FirebaseLoginRequest = { idToken, providerAccessToken };
         return this.http.post<AuthResponse>(`${this.apiUrl}/auth/firebase`, body, { withCredentials: true });
       }),
       tap((res) => {

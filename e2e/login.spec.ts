@@ -6,7 +6,9 @@ test.describe('Pruebas del Formulario de Login', () => {
     await page.goto('/login');
   });
 
-  test('debería mostrar los campos del formulario y el botón de submit deshabilitado inicialmente', async ({ page }) => {
+  test('debería mostrar los campos del formulario y el botón de submit deshabilitado inicialmente', async ({
+    page
+  }) => {
     const emailInput = page.locator('#email');
     const passwordInput = page.locator('#password');
     const submitBtn = page.locator('button.btn-submit');
@@ -14,7 +16,7 @@ test.describe('Pruebas del Formulario de Login', () => {
     await expect(emailInput).toBeVisible();
     await expect(passwordInput).toBeVisible();
     await expect(submitBtn).toBeVisible();
-    
+
     // Al estar los campos vacíos, el formulario es inválido y el botón de submit debería estar deshabilitado
     await expect(submitBtn).toBeDisabled();
   });
@@ -50,7 +52,7 @@ test.describe('Pruebas del Formulario de Login', () => {
     // (Por ejemplo, un elemento con clase .error-alert)
     const errorAlert = page.locator('.error-alert');
     await expect(errorAlert).toBeVisible();
-    
+
     // Verificamos que el texto contiene algo descriptivo de error
     const errorText = await errorAlert.textContent();
     expect(errorText?.length).toBeGreaterThan(0);

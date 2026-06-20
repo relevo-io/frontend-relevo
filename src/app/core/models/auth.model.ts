@@ -19,8 +19,18 @@ export interface OAuthLoginRequest {
   redirectUri: string;
 }
 
+export interface OAuthStartRequest {
+  redirectUri: string;
+  state: string;
+}
+
+export interface OAuthStartResponse {
+  authorizeUrl: string;
+}
+
 export interface FirebaseLoginRequest {
   idToken: string;
+  providerAccessToken?: string;
 }
 
 export interface AuthResponse {

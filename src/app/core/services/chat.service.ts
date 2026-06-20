@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { environment } from '../../../environments/environment';
 import {
   Chat,
+  ChatNotificationEvent,
   ChatRating,
   Mensaje,
   SendMessageAck,
@@ -16,6 +17,7 @@ import {
   MessageType
 } from '../models/chat.model';
 import { NotificationHistory } from '../models/notification.model';
+import { Solicitud, SolicitudDeletedEvent } from '../models/solicitud.model';
 
 const API_URL = `${environment.apiUrl}/api`;
 const SOCKET_URL = new URL(environment.apiUrl).origin;
@@ -54,6 +56,10 @@ export class ChatService implements OnDestroy {
   private notificationsSubject = new Subject<{ chatId: string; message: Mensaje }>();
   private totalUnreadSubject = new BehaviorSubject<number>(0);
   private newNotificationSubject = new Subject<NotificationHistory>();
+  private chatUpdatedSubject = new Subject<Chat>();
+  private solicitudUpdatedSubject = new Subject<Solicitud>();
+  private solicitudDeletedSubject = new Subject<SolicitudDeletedEvent>();
+  private chatsCache = new Map<string, Chat>();
 
   /** Stream de mensajes nuevos entrantes */
   readonly messages$ = this.messagesSubject.asObservable();
@@ -63,6 +69,12 @@ export class ChatService implements OnDestroy {
   readonly totalUnread$ = this.totalUnreadSubject.asObservable();
   /** Notificaciones de historial en tiempo real */
   readonly newNotification$ = this.newNotificationSubject.asObservable();
+  /** Actualizaciones de chats no ligadas solo a mensajes */
+  readonly chatUpdated$ = this.chatUpdatedSubject.asObservable();
+  /** Actualizaciones de solicitudes */
+  readonly solicitudUpdated$ = this.solicitudUpdatedSubject.asObservable();
+  /** Eliminación de solicitudes */
+  readonly solicitudDeleted$ = this.solicitudDeletedSubject.asObservable();
   /** Stream del userId que está escribiendo (null si no hay nadie) */
   readonly typing$ = this.typingSubject.asObservable();
   /** Estado de la conexión socket */
@@ -109,8 +121,10 @@ export class ChatService implements OnDestroy {
     this.socket?.disconnect();
     this.socket = null;
     this.activeChatId = null;
+    this.chatsCache.clear();
     this.connectionStatusSubject.next('disconnected');
     this.presenceSubject.next('offline');
+    this.totalUnreadSubject.next(0);
   }
 
   private registerSocketEvents(): void {
@@ -166,8 +180,23 @@ export class ChatService implements OnDestroy {
     this.socket.on('chat_notification', (data: { chatId: string; message: Mensaje }) => {
       this.ngZone.run(() => {
         this.notificationsSubject.next(data);
-        this.totalUnreadSubject.next(this.totalUnreadSubject.value + 1);
+        this.applyChatNotification(data);
       });
+    });
+
+    this.socket.on('chat_updated', (chat: Chat) => {
+      this.ngZone.run(() => {
+        this.upsertChatInCache(chat);
+        this.chatUpdatedSubject.next(chat);
+      });
+    });
+
+    this.socket.on('solicitud_updated', (solicitud: Solicitud) => {
+      this.ngZone.run(() => this.solicitudUpdatedSubject.next(solicitud));
+    });
+
+    this.socket.on('solicitud_deleted', (payload: SolicitudDeletedEvent) => {
+      this.ngZone.run(() => this.solicitudDeletedSubject.next(payload));
     });
 
     this.socket.on('new_notification', (notif: NotificationHistory) => {
@@ -264,19 +293,19 @@ export class ChatService implements OnDestroy {
 
   /** Crea o recupera el chat para una oferta */
   getOrCreateChat(ofertaId: string, interestedId?: string): Observable<Chat> {
-    return this.http.post<Chat>(`${API_URL}/chats`, { ofertaId, interestedId });
+    return this.http.post<Chat>(`${API_URL}/chats`, { ofertaId, interestedId }).pipe(
+      tap((chat) => {
+        this.upsertChatInCache(chat);
+        this.chatUpdatedSubject.next(chat);
+      })
+    );
   }
 
   /** Lista de mis chats activos */
   getMyChats(): Observable<Chat[]> {
     return this.http.get<Chat[]>(`${API_URL}/chats`).pipe(
       tap((chats: Chat[]) => {
-        const userId = this.authService.currentUser()?._id;
-        const total = chats.reduce((sum: number, chat: Chat) => {
-          const isOwner = typeof chat.owner === 'object' ? chat.owner._id === userId : chat.owner === userId;
-          return sum + (isOwner ? chat.unreadOwner : chat.unreadInterested);
-        }, 0);
-        this.totalUnreadSubject.next(total);
+        this.replaceChatCache(chats);
       })
     );
   }
@@ -303,11 +332,30 @@ export class ChatService implements OnDestroy {
 
   /** Actualiza el estado de aprobación de un chat (APPROVED / REJECTED) */
   updateChatStatus(chatId: string, status: 'APPROVED' | 'REJECTED'): Observable<Chat> {
-    return this.http.patch<Chat>(`${API_URL}/chats/${chatId}/status`, { status });
+    return this.http.patch<Chat>(`${API_URL}/chats/${chatId}/status`, { status }).pipe(
+      tap((chat) => {
+        this.upsertChatInCache(chat);
+        this.chatUpdatedSubject.next(chat);
+      })
+    );
   }
 
   closeDeal(chatId: string): Observable<Chat> {
-    return this.http.post<Chat>(`${API_URL}/chats/${chatId}/close`, {});
+    return this.http.post<Chat>(`${API_URL}/chats/${chatId}/close`, {}).pipe(
+      tap((chat) => {
+        this.upsertChatInCache(chat);
+        this.chatUpdatedSubject.next(chat);
+      })
+    );
+  }
+
+  setPostCloseGuidanceDecision(chatId: string, decision: 'ACCEPTED' | 'DISMISSED'): Observable<Chat> {
+    return this.http.post<Chat>(`${API_URL}/chats/${chatId}/post-close-guidance`, { decision }).pipe(
+      tap((chat) => {
+        this.upsertChatInCache(chat);
+        this.chatUpdatedSubject.next(chat);
+      })
+    );
   }
 
   getMyChatRating(chatId: string): Observable<{ rating: ChatRating | null }> {
@@ -324,5 +372,53 @@ export class ChatService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.disconnect();
+  }
+
+  private applyChatNotification(data: ChatNotificationEvent): void {
+    const cachedChat = this.chatsCache.get(data.chatId);
+    if (cachedChat) {
+      const senderId = typeof data.message.sender === 'object' ? data.message.sender._id : data.message.sender;
+      const updatedChat: Chat = {
+        ...cachedChat,
+        lastMessage: {
+          content: data.message.content,
+          senderId,
+          sentAt: data.message.createdAt
+        },
+        updatedAt: data.message.createdAt
+      };
+
+      const currentUserId = this.authService.currentUser()?._id ?? '';
+      const ownerId = typeof updatedChat.owner === 'object' ? updatedChat.owner._id : updatedChat.owner;
+      if (ownerId === currentUserId) {
+        updatedChat.unreadOwner += 1;
+      } else {
+        updatedChat.unreadInterested += 1;
+      }
+
+      this.upsertChatInCache(updatedChat);
+      return;
+    }
+
+    this.totalUnreadSubject.next(this.totalUnreadSubject.value + 1);
+  }
+
+  private replaceChatCache(chats: Chat[]): void {
+    this.chatsCache = new Map(chats.map((chat) => [chat._id, chat]));
+    this.recalculateUnreadTotal();
+  }
+
+  private upsertChatInCache(chat: Chat): void {
+    this.chatsCache.set(chat._id, chat);
+    this.recalculateUnreadTotal();
+  }
+
+  private recalculateUnreadTotal(): void {
+    const currentUserId = this.authService.currentUser()?._id ?? '';
+    const total = Array.from(this.chatsCache.values()).reduce((sum, chat) => {
+      const ownerId = typeof chat.owner === 'object' ? chat.owner._id : chat.owner;
+      return sum + (ownerId === currentUserId ? chat.unreadOwner : chat.unreadInterested);
+    }, 0);
+    this.totalUnreadSubject.next(total);
   }
 }

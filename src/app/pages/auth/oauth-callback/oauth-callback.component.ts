@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { OAuthProvider } from '../../../core/models/auth.model';
 import { PLATFORM_ID } from '@angular/core';
+import { OnboardingService } from '../../../core/services/onboarding.service';
 
 @Component({
   selector: 'app-oauth-callback',
@@ -17,6 +18,7 @@ export class OAuthCallbackComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
+  private onboardingService = inject(OnboardingService);
 
   errorMessage = signal<string | null>(null);
   isLoading = signal(true);
@@ -47,7 +49,10 @@ export class OAuthCallbackComponent implements OnInit {
     localStorage.removeItem(`oauth_redirect_uri_${provider}`);
 
     this.authService.completeOAuthLogin(provider, { code, redirectUri }).subscribe({
-      next: () => {
+      next: (response) => {
+        if (response.isNewUser) {
+          this.onboardingService.markPending();
+        }
         this.isLoading.set(false);
         this.router.navigate(['/']);
       },

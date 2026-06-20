@@ -190,24 +190,30 @@
             <strong>
               @if (ratings()?.asOwner?.count) {
                 {{ ratings()!.asOwner.average | number: '1.1-1' }}
+                <span class="material-symbols-outlined">star</span>
               } @else {
                 -
               }
             </strong>
-            <span class="rating-count">{{ ratings()?.asOwner?.count || 0 }} {{ 'RATINGS.REVIEWS' | translate }}</span>
+            <span class="rating-count">
+              {{ ratings()?.asOwner?.count || 0 }}
+              {{ ((ratings()?.asOwner?.count || 0) === 1 ? 'RATINGS.REVIEW' : 'RATINGS.REVIEWS') | translate }}
+            </span>
           </div>
           <div class="rating-summary-item">
             <span class="rating-label">{{ 'RATINGS.AS_INTERESTED' | translate }}</span>
             <strong>
               @if (ratings()?.asInterested?.count) {
                 {{ ratings()!.asInterested.average | number: '1.1-1' }}
+                <span class="material-symbols-outlined">star</span>
               } @else {
                 -
               }
             </strong>
-            <span class="rating-count"
-              >{{ ratings()?.asInterested?.count || 0 }} {{ 'RATINGS.REVIEWS' | translate }}</span
-            >
+            <span class="rating-count">
+              {{ ratings()?.asInterested?.count || 0 }}
+              {{ ((ratings()?.asInterested?.count || 0) === 1 ? 'RATINGS.REVIEW' : 'RATINGS.REVIEWS') | translate }}
+            </span>
           </div>
         </div>
 

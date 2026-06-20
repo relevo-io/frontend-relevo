@@ -31,11 +31,14 @@
             </span>
           }
           <span class="owner-rating-badge">
-            <span class="material-symbols-outlined">star</span>
             <span class="owner-rating-label">{{ 'RATINGS.OWNER_OFFER_LABEL' | translate }}</span>
             @if (o.ownerRating?.count) {
               {{ o.ownerRating!.average | number: '1.1-1' }}
-              <small>({{ o.ownerRating!.count }})</small>
+              <span class="material-symbols-outlined">star</span>
+              <small>
+                {{ o.ownerRating!.count }}
+                {{ (o.ownerRating!.count === 1 ? 'RATINGS.REVIEW' : 'RATINGS.REVIEWS') | translate }}
+              </small>
             } @else {
               {{ 'RATINGS.NO_RATINGS' | translate }}
             }

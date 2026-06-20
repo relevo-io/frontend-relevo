@@ -79,11 +79,25 @@ export class RegisterComponent {
     if (backendMessage) return backendMessage;
 
     const code = error?.code as string | undefined;
+    const firebaseMessage = error?.message as string | undefined;
     if (code === 'auth/popup-closed-by-user')
       return `Has cerrado la ventana de ${providerLabel} antes de completar el acceso.`;
+    if (code === 'auth/popup-blocked') {
+      return `Tu navegador ha bloqueado la ventana emergente de ${providerLabel}. Permite pop-ups e inténtalo de nuevo.`;
+    }
+    if (code === 'auth/cancelled-popup-request') {
+      return `Se ha cancelado la apertura de ${providerLabel}. Vuelve a intentarlo en una sola ventana.`;
+    }
+    if (code === 'auth/unauthorized-domain') {
+      return `El dominio actual no está autorizado para iniciar sesión con ${providerLabel}.`;
+    }
+    if (code === 'auth/operation-not-allowed') {
+      return `${providerLabel} no esta habilitado en Firebase Authentication.`;
+    }
     if (code === 'auth/account-exists-with-different-credential') {
       return 'Ya existe una cuenta con ese email usando otro metodo de acceso.';
     }
+    if (firebaseMessage) return firebaseMessage;
 
     return `No se pudo iniciar sesion con ${providerLabel}.`;
   }

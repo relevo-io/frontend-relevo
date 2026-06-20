@@ -6,7 +6,7 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     // 1. Crear contextos independientes para el Vendedor (Pablo) y el Comprador (Pol)
     const ownerContext = await browser.newContext();
     const ownerPage = await ownerContext.newPage();
-    
+
     const buyerContext = await browser.newContext();
     const buyerPage = await buyerContext.newPage();
 
@@ -28,14 +28,15 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     await ownerPage.locator('input#creationYear').fill('2015');
 
     const shortDesc = 'Librería con mucho encanto en el centro de Barcelona.';
-    const extendedDesc = 'Librería histórica con gran volumen de negocio, clientela fiel, inventario completo y excelente ubicación. Se traspasa por jubilación del dueño actual.';
+    const extendedDesc =
+      'Librería histórica con gran volumen de negocio, clientela fiel, inventario completo y excelente ubicación. Se traspasa por jubilación del dueño actual.';
     await ownerPage.locator('textarea#companyDescription').fill(shortDesc);
     await ownerPage.locator('textarea#extendedDescription').fill(extendedDesc);
 
     // Enviar y esperar redirección
     await ownerPage.locator('button.btn-save').click();
     await ownerPage.waitForURL(/\/ofertas\/[a-f0-9]+$/);
-    
+
     const offerUrl = ownerPage.url();
     const offerId = offerUrl.split('/').pop()!;
     console.log(`Oferta creada exitosamente con ID: ${offerId}`);
@@ -44,7 +45,7 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     // PASO 2: El Interesado (Pol) solicita la oferta
     // ==========================================
     await buyerPage.goto(`/ofertas/${offerId}`);
-    
+
     // Debería ver el botón de solicitar
     const requestBtn = buyerPage.locator('button.btn-interest');
     await expect(requestBtn).toBeVisible();
@@ -54,7 +55,9 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     const modal = buyerPage.locator('section.request-modal');
     await expect(modal).toBeVisible();
 
-    await buyerPage.locator('textarea#professionalBackground').fill('Más de 8 años de experiencia en sector editorial y distribución.');
+    await buyerPage
+      .locator('textarea#professionalBackground')
+      .fill('Más de 8 años de experiencia en sector editorial y distribución.');
     await buyerPage.locator('input#preferredRegionsText').fill('Barcelona Centro, Gracia');
     await buyerPage.locator('textarea#bio').fill('Emprendedor local buscando continuar legados culturales.');
     await buyerPage.locator('input#availableCapital').fill('95000');
@@ -65,13 +68,13 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     await buyerPage.locator('input#cvFile').setInputFiles({
       name: 'cv_pol.pdf',
       mimeType: 'application/pdf',
-      buffer: Buffer.from('%PDF-1.4 \n%...'),
+      buffer: Buffer.from('%PDF-1.4 \n%...')
     });
 
     // Enviar solicitud
     await buyerPage.locator('section.request-modal button[type="submit"].btn-save').click();
     await expect(modal).toBeHidden();
-    
+
     // Debería ver banner de solicitud pendiente
     const statusBanner = buyerPage.locator('.status-banner.pending');
     await expect(statusBanner).toBeVisible();
@@ -80,16 +83,17 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     // PASO 3: El Propietario (Pablo) acepta la solicitud
     // ==========================================
     await ownerPage.goto('/mis-solicitudes');
-    
+
     // Debería haber una solicitud recibida de "Pol Puig" para la oferta
-    const requestCard = ownerPage.locator('.request-card', { hasText: 'Pol Puig' })
+    const requestCard = ownerPage
+      .locator('.request-card', { hasText: 'Pol Puig' })
       .filter({ hasText: 'Comercio - Barcelona, Cataluña' })
       .first();
     await expect(requestCard).toBeVisible();
 
     // Aceptar solicitud
     await requestCard.locator('button.btn-accept').click();
-    
+
     // Debería aparecer el botón para contactar
     const contactBtn = requestCard.locator('button.btn-contact');
     await expect(contactBtn).toBeVisible();
@@ -106,7 +110,9 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
 
     // Enviar primer mensaje (el chat se inicia ya aprobado porque la solicitud fue previamente aceptada)
     const messageInput = ownerPage.locator('textarea#message-input');
-    await messageInput.fill('Hola Pol, he revisado tu solicitud para la librería y me parece muy interesante. ¿Cuándo te viene bien hablar?');
+    await messageInput.fill(
+      'Hola Pol, he revisado tu solicitud para la librería y me parece muy interesante. ¿Cuándo te viene bien hablar?'
+    );
     await ownerPage.locator('button#send-message-btn').click();
 
     // ==========================================
@@ -121,7 +127,9 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     await expect(lastTheirsMessage).toContainText('Hola Pol, he revisado tu solicitud');
 
     // Responder
-    await buyerPage.locator('textarea#message-input').fill('Hola Pablo, gracias. Me vendría ideal reunirnos esta misma semana, tal vez el jueves por la tarde.');
+    await buyerPage
+      .locator('textarea#message-input')
+      .fill('Hola Pablo, gracias. Me vendría ideal reunirnos esta misma semana, tal vez el jueves por la tarde.');
     await buyerPage.locator('button#send-message-btn').click();
 
     // ==========================================
@@ -129,7 +137,7 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     // ==========================================
     // 6.1 Propietario (Pablo) inicia el cierre de venta
     await ownerPage.locator('button.btn-close-deal').click();
-    
+
     // Debería mostrar estado de espera
     const ownerStatusPill = ownerPage.locator('.deal-status-pill');
     await expect(ownerStatusPill).toBeVisible();
@@ -149,18 +157,22 @@ test.describe('Flujo Completo de Traspaso (E2E Multi-usuario)', () => {
     // PASO 7: Valoración Mutua
     // ==========================================
     // Ambos deberían ver ahora el panel de valoración (.deal-rating-panel)
-    
+
     // 7.1 Propietario valora al Comprador (5 estrellas)
     await expect(ownerPage.locator('.deal-rating-panel')).toBeVisible();
     await ownerPage.locator('button[aria-label="5 estrellas"]').click();
-    await ownerPage.locator('textarea.rating-comment').fill('Comprador excelente, muy serio y con las ideas muy claras sobre el negocio.');
+    await ownerPage
+      .locator('textarea.rating-comment')
+      .fill('Comprador excelente, muy serio y con las ideas muy claras sobre el negocio.');
     await ownerPage.locator('button.rating-submit').click();
     await expect(ownerPage.locator('.rating-sent')).toBeVisible();
 
     // 7.2 Comprador valora al Propietario (4 estrellas)
     await expect(buyerPage.locator('.deal-rating-panel')).toBeVisible();
     await buyerPage.locator('button[aria-label="4 estrellas"]').click();
-    await buyerPage.locator('textarea.rating-comment').fill('Pablo ha sido muy amable y ha facilitado toda la información necesaria para el traspaso.');
+    await buyerPage
+      .locator('textarea.rating-comment')
+      .fill('Pablo ha sido muy amable y ha facilitado toda la información necesaria para el traspaso.');
     await buyerPage.locator('button.rating-submit').click();
     await expect(buyerPage.locator('.rating-sent')).toBeVisible();
 

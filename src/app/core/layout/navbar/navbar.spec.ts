@@ -62,6 +62,7 @@ describe('Navbar', () => {
           useValue: {
             permissionState: signal('default'),
             notificationsEnabled: signal(false),
+            syncPermissionState: vi.fn().mockReturnValue('default'),
             requestNotificationPermission: vi.fn().mockResolvedValue('default'),
             disableNotifications: vi.fn().mockResolvedValue(undefined),
             updateNotificationPreferences: vi.fn().mockReturnValue(of({ success: true, user: null }))

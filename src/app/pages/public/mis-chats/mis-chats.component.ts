@@ -29,6 +29,7 @@ export class MisChatsComponent implements OnInit {
     this.chatService.connect();
     this.loadChats();
     this.listenToNotifications();
+    this.listenToChatUpdates();
   }
 
   private listenToNotifications(): void {
@@ -57,6 +58,31 @@ export class MisChatsComponent implements OnInit {
 
         // Re-ordenar perquè el més recent surti a dalt
         return newList.sort((a, b) => {
+          const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+          const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+          return dateB - dateA;
+        });
+      });
+    });
+  }
+
+  private listenToChatUpdates(): void {
+    this.chatService.chatUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((chat) => {
+      this.chats.update((list) => {
+        if (!this.isParticipant(chat)) return list;
+
+        const index = list.findIndex((item) => item._id === chat._id);
+        if (index === -1) {
+          return [chat, ...list].sort((a, b) => {
+            const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+            const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+            return dateB - dateA;
+          });
+        }
+
+        const next = [...list];
+        next[index] = chat;
+        return next.sort((a, b) => {
           const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
           const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
           return dateB - dateA;
@@ -126,6 +152,13 @@ export class MisChatsComponent implements OnInit {
     const userId = this.currentUserId();
     const ownerId = typeof chat.owner === 'object' ? chat.owner._id : chat.owner;
     return ownerId === userId;
+  }
+
+  isParticipant(chat: Chat): boolean {
+    const userId = this.currentUserId();
+    const ownerId = typeof chat.owner === 'object' ? chat.owner._id : chat.owner;
+    const interestedId = typeof chat.interested === 'object' ? chat.interested._id : chat.interested;
+    return ownerId === userId || interestedId === userId;
   }
 
   updateChatStatus(event: Event, chat: Chat, status: 'APPROVED' | 'REJECTED'): void {

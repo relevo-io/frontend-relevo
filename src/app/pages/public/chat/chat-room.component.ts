@@ -24,7 +24,8 @@ import {
   ChatRating,
   ConnectionStatus,
   PresenceStatus,
-  MessageType
+  MessageType,
+  PostCloseGuidanceDecision
 } from '../../../core/models/chat.model';
 
 @Component({
@@ -68,6 +69,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   ratingComment = signal('');
   isClosingDeal = signal(false);
   isSendingRating = signal(false);
+  isSavingGuidanceDecision = signal(false);
 
   // ── MediaRecorder properties ────────────────
   private mediaRecorder: any = null;
@@ -123,6 +125,18 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   });
 
   canRateClosedDeal = computed(() => this.isDealClosed() && !this.myRating());
+
+  myPostCloseGuidanceDecision = computed<PostCloseGuidanceDecision>(() => {
+    const c = this.chat();
+    if (!c) return 'PENDING';
+
+    const decision = this.isOwnerOfOffer() ? c.postCloseGuidanceOwnerDecision : c.postCloseGuidanceInterestedDecision;
+    return decision ?? 'PENDING';
+  });
+
+  shouldShowPostCloseGuidancePrompt = computed(
+    () => this.isDealClosed() && this.myPostCloseGuidanceDecision() === 'PENDING'
+  );
 
   otherParticipantName = computed(() => {
     const c = this.chat();
@@ -292,6 +306,11 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     // Presence
     this.chatService.presence$.pipe(takeUntil(until$)).subscribe((status) => this.presenceStatus.set(status));
+
+    this.chatService.chatUpdated$.pipe(takeUntil(until$)).subscribe((chat) => {
+      if (chat._id !== chatId) return;
+      this.chat.set(chat);
+    });
   }
 
   private setupTypingDebounce(chatId: string): void {
@@ -421,6 +440,32 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
       console.error('[ChatRoom] Error sending rating:', err);
     } finally {
       this.isSendingRating.set(false);
+    }
+  }
+
+  async handlePostCloseGuidanceDecision(decision: 'ACCEPTED' | 'DISMISSED'): Promise<void> {
+    const id = this.chatId();
+    if (!id || this.isSavingGuidanceDecision()) return;
+
+    this.isSavingGuidanceDecision.set(true);
+    try {
+      const updated = await this.chatService.setPostCloseGuidanceDecision(id, decision).toPromise();
+      if (updated) {
+        this.chat.set(updated);
+      }
+
+      if (decision === 'ACCEPTED') {
+        await this.router.navigate(['/mentoring'], {
+          queryParams: {
+            route: 'BUY',
+            contentKey: 'buy_m6_i1'
+          }
+        });
+      }
+    } catch (err) {
+      console.error('[ChatRoom] Error saving post-close guidance decision:', err);
+    } finally {
+      this.isSavingGuidanceDecision.set(false);
     }
   }
 

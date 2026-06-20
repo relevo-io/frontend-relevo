@@ -61,6 +61,17 @@ export class FcmService {
     }
   }
 
+  public syncPermissionState(): NotificationPermission {
+    if (!isPlatformBrowser(this.platformId) || typeof window === 'undefined' || !('Notification' in window)) {
+      this.permissionState.set('default');
+      return 'default';
+    }
+
+    const permission = Notification.permission;
+    this.permissionState.set(permission);
+    return permission;
+  }
+
   /**
    * Inicializa Firebase Cloud Messaging (FCM)
    */
@@ -142,6 +153,22 @@ export class FcmService {
     }
 
     try {
+      const currentPermission = this.syncPermissionState();
+      if (currentPermission === 'granted') {
+        this.notificationsEnabled.set(true);
+        localStorage.setItem('fcm_enabled', 'true');
+
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (registration && this.messaging) {
+          await this.acquireToken(registration);
+        }
+        return currentPermission;
+      }
+
+      if (currentPermission === 'denied') {
+        return currentPermission;
+      }
+
       const permission = await Notification.requestPermission();
       this.permissionState.set(permission);
 
