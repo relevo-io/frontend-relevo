@@ -320,10 +320,14 @@
     "SEPTEMBER_8_2025": "08 de septiembre de 2025"
   },
   "SECTORS": {
-    "HOSTELRY": "Hostelería",
+    "TECHNOLOGY": "Tecnología",
+    "HOSPITALITY": "Hostelería",
     "SERVICES": "Servicios",
-    "INDUSTRY": "Industria",
-    "COMMERCE": "Comercio"
+    "INDUSTRIAL": "Industria",
+    "RETAIL": "Comercio",
+    "HEALTHCARE": "Salud",
+    "LOGISTICS": "Logística",
+    "EDUCATION": "Educación"
   },
   "REVENUE_RANGES": {
     "UNDER_100K": "0 - 100k €",

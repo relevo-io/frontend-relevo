@@ -72,7 +72,7 @@
         <select [ngModel]="selectedSector()" (ngModelChange)="selectedSector.set($event)">
           <option value="">{{ 'MONETIZATION.FILTER_SECTOR' | translate }}</option>
           @for (sector of sectorOptions; track sector) {
-            <option [value]="sector">{{ sector }}</option>
+            <option [value]="sector">{{ 'SECTORS.' + sector | translate }}</option>
           }
         </select>
 
@@ -166,7 +166,9 @@
           >
             <header class="card-head">
               <div class="card-head-left">
-                <span class="sector" [ngClass]="sectorToneClass(oferta.sector)">{{ oferta.sector }}</span>
+                <span class="sector" [ngClass]="sectorToneClass(oferta.sector)">{{
+                  'SECTORS.' + oferta.sector | translate
+                }}</span>
               </div>
               @if (authService.isLoggedIn() && oferta.employeeRange) {
                 <span class="meta"
