@@ -86,7 +86,6 @@ export class MarketplaceHomeComponent {
     });
 
     effect((onCleanup) => {
-      const currentUserId = this.authService.currentUser()?._id;
       const currentPage = this.page();
       const currentSearch = this.searchQuery();
       const currentPageSize = this.pageSize();
@@ -95,7 +94,7 @@ export class MarketplaceHomeComponent {
       this.error.set(null);
 
       const peticion = this.ofertaService
-        .getOfertasPaged(currentPage, currentPageSize, currentUserId, currentSearch, this.buildAdvancedFilters())
+        .getOfertasPaged(currentPage, currentPageSize, currentSearch, this.buildAdvancedFilters())
         .subscribe({
           next: (result) => {
             this.ofertas.set(result.items);

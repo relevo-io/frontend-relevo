@@ -13,17 +13,13 @@ export class OfertaService {
 
   private apiUrl = `${environment.apiUrl}/api/ofertas`;
 
-  getOfertas(excludeOwnerId?: string): Observable<Oferta[]> {
-    if (excludeOwnerId) {
-      return this.http.get<Oferta[]>(`${this.apiUrl}?excludeOwnerId=${excludeOwnerId}`);
-    }
+  getOfertas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(this.apiUrl);
   }
 
   getOfertasPaged(
     page: number,
     limit: number,
-    excludeOwnerId?: string,
     search?: string,
     filters?: {
       sector?: string;
@@ -39,9 +35,6 @@ export class OfertaService {
       limit: String(limit)
     });
 
-    if (excludeOwnerId) {
-      query.set('excludeOwnerId', excludeOwnerId);
-    }
     if (search?.trim()) {
       query.set('search', search.trim());
     }
