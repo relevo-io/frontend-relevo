@@ -7,7 +7,7 @@ import { Historial, HistorialPaginatedResponse } from '../models/historial.model
   providedIn: 'root'
 })
 export class HistorialService {
-  private apiUrl = 'http://localhost:4000/api/historials/';
+  private apiUrl = 'http://localhost:4000/api/historials';
   private http = inject(HttpClient);
 
   // 1. LLISTAT: Obtenir historials amb paginació i cercador
