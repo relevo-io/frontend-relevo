@@ -12,7 +12,6 @@ export class HistorialService {
 
   // 1. LLISTAT: Obtenir historials amb paginació i cercador
   getHistorials(page = 1, limit = 10, search = ''): Observable<HistorialPaginatedResponse> {
-    // HttpParams ens ajuda a muntar la URL: ?page=1&limit=10&search=sector
     let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
 
     if (search) {
