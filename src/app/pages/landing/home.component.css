@@ -1,7 +1,6 @@
 .how-it-works-page {
   padding-top: 105px;
-  background:
-    linear-gradient(180deg, #f4f7fb 0%, #ffffff 18%, #f6f8fc 52%, #eef3f9 100%);
+  background: linear-gradient(180deg, #f4f7fb 0%, #ffffff 18%, #f6f8fc 52%, #eef3f9 100%);
   color: var(--on-surface);
 }
 
@@ -40,7 +39,13 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(115deg, rgba(3, 22, 50, 0.96) 8%, rgba(3, 22, 50, 0.78) 42%, rgba(3, 22, 50, 0.54) 66%, rgba(3, 22, 50, 0.82) 100%),
+    linear-gradient(
+      115deg,
+      rgba(3, 22, 50, 0.96) 8%,
+      rgba(3, 22, 50, 0.78) 42%,
+      rgba(3, 22, 50, 0.54) 66%,
+      rgba(3, 22, 50, 0.82) 100%
+    ),
     radial-gradient(circle at 78% 22%, rgba(96, 165, 250, 0.28) 0%, rgba(96, 165, 250, 0) 28%),
     url('/assets/images/office-skyline.png');
   background-size: cover;
@@ -505,8 +510,7 @@
 }
 
 .trust-section {
-  background:
-    linear-gradient(135deg, #07162f 0%, #0b2448 56%, #031632 100%);
+  background: linear-gradient(135deg, #07162f 0%, #0b2448 56%, #031632 100%);
 }
 
 .trust-layout {

@@ -507,6 +507,14 @@ body.dark-mode .btn-navbar-bell.active {
   align-items: center;
 }
 
+.preferences-modal-card {
+  box-sizing: border-box;
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .notifications-modal-icon-container {
   width: 72px;
   height: 72px;
