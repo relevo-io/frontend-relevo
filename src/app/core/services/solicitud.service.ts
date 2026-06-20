@@ -19,8 +19,8 @@ export class SolicitudService {
   }
 
   // Actualizar el estado de una solicitud
-  updateStatus(id: string, status: string): Observable<any> {
-    return this.http.patch(`${this.API_URL}/${id}/status`, { status });
+  updateStatus(id: string, status: string): Observable<Solicitud> {
+    return this.http.patch<Solicitud>(`${this.API_URL}/${id}/status`, { status });
   }
 
   // Obtener las solicitudes donde el usuario es el dueño de la oferta

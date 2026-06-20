@@ -2,12 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { OfertaService } from '../../../core/services/oferta.service';
-import { UsuarioService } from '../../../core/services/usuario.service';
 import { MonetizationService } from '../../../core/services/monetization.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { AuthService } from '../../../core/services/auth.service';
 import { Oferta } from '../../../core/models/oferta.model';
+import { PaymentService } from '../../../core/services/payment.service';
 
 @Component({
   selector: 'app-simulated-payment',
@@ -19,12 +17,10 @@ import { Oferta } from '../../../core/models/oferta.model';
 export class SimulatedPaymentComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private ofertaService = inject(OfertaService);
-  private usuarioService = inject(UsuarioService);
+  private paymentService = inject(PaymentService);
   private monetizationService = inject(MonetizationService);
   private notifications = inject(NotificationService);
   private translate = inject(TranslateService);
-  private authService = inject(AuthService);
 
   mode = signal<'publish-offer' | 'pro'>('pro');
   isProcessing = signal(false);
@@ -53,65 +49,33 @@ export class SimulatedPaymentComponent {
       return;
     }
 
-    if (this.mode() === 'publish-offer') {
-      this.completeOfferPublication();
-      return;
-    }
-
-    this.activateProPlan();
+    this.startStripeCheckout();
   }
 
-  private completeOfferPublication(): void {
+  private startStripeCheckout(): void {
+    this.isProcessing.set(true);
+
     const draft = this.draft();
-    if (!draft) {
+    if (this.mode() === 'publish-offer' && !draft) {
+      this.isProcessing.set(false);
       this.router.navigate(['/ofertas/crear']);
       return;
     }
 
-    this.isProcessing.set(true);
-    this.ofertaService.purchasePublicationCredit().subscribe({
-      next: () => {
-        this.ofertaService.createOferta(draft).subscribe({
-          next: (oferta) => {
-            this.monetizationService.clearPendingOfferDraft();
-            this.isProcessing.set(false);
-            this.notifications.success(this.translate.instant('COMMON.NOTIF.OFFER_CREATED_SUCCESS'));
-            if (oferta._id) {
-              this.router.navigate(['/ofertas', oferta._id]);
-              return;
-            }
-            this.router.navigate(['/mis-ofertas']);
-          },
-          error: () => {
-            this.isProcessing.set(false);
-          }
-        });
-      },
-      error: () => {
-        this.isProcessing.set(false);
-      }
-    });
-  }
-
-  private activateProPlan(): void {
-    this.isProcessing.set(true);
-    this.usuarioService.activateProPlan().subscribe({
-      next: () => {
-        this.authService.fetchProfile().subscribe({
-          next: () => {
-            this.isProcessing.set(false);
-            this.notifications.success(this.translate.instant('MONETIZATION.PRO_ACTIVATED_SUCCESS'));
-            this.router.navigate(['/perfil']);
-          },
-          error: () => {
-            this.isProcessing.set(false);
-            this.router.navigate(['/perfil']);
-          }
-        });
-      },
-      error: () => {
-        this.isProcessing.set(false);
-      }
-    });
+    this.paymentService
+      .createCheckoutSession(
+        this.mode() === 'publish-offer'
+          ? { kind: 'offer_publication', offerDraft: draft ?? undefined }
+          : { kind: 'pro_activation' }
+      )
+      .subscribe({
+        next: ({ checkoutUrl }) => {
+          window.location.href = checkoutUrl;
+        },
+        error: () => {
+          this.isProcessing.set(false);
+          this.notifications.error(this.translate.instant('MONETIZATION.CHECKOUT_ERROR'));
+        }
+      });
   }
 }

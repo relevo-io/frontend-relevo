@@ -53,10 +53,11 @@ export class OnboardingTourComponent implements OnDestroy {
   highlightStyle(): Record<string, string> {
     const rect = this.rect();
     if (!rect) return {};
+    const padding = this.getHighlightPadding();
     return {
-      width: `${rect.width + 14}px`,
-      height: `${rect.height + 14}px`,
-      transform: `translate(${rect.left - 7}px, ${rect.top - 7}px)`
+      width: `${rect.width + padding.x * 2}px`,
+      height: `${rect.height + padding.y * 2}px`,
+      transform: `translate(${rect.left - padding.x}px, ${rect.top - padding.y}px)`
     };
   }
 
@@ -92,6 +93,7 @@ export class OnboardingTourComponent implements OnDestroy {
 
     const rect = element.getBoundingClientRect();
     const style = window.getComputedStyle(element);
+    const padding = this.getHighlightPadding();
 
     this.highlightedClone?.remove();
 
@@ -99,10 +101,10 @@ export class OnboardingTourComponent implements OnDestroy {
     clone.setAttribute('aria-hidden', 'true');
     clone.classList.add('tour-target-clone');
     clone.style.position = 'fixed';
-    clone.style.left = `${rect.left}px`;
-    clone.style.top = `${rect.top}px`;
-    clone.style.width = `${rect.width}px`;
-    clone.style.height = `${rect.height}px`;
+    clone.style.left = `${rect.left - padding.x}px`;
+    clone.style.top = `${rect.top - padding.y}px`;
+    clone.style.width = `${rect.width + padding.x * 2}px`;
+    clone.style.height = `${rect.height + padding.y * 2}px`;
     clone.style.margin = '0';
     clone.style.zIndex = '9992';
     clone.style.pointerEvents = 'none';
@@ -115,6 +117,13 @@ export class OnboardingTourComponent implements OnDestroy {
 
     if (style.backgroundColor === 'rgba(0, 0, 0, 0)' || style.backgroundColor === 'transparent') {
       clone.style.backgroundColor = 'var(--surface-container-lowest)';
+    }
+
+    if (this.step().target === '[data-tour="brand"]') {
+      clone.style.display = 'inline-flex';
+      clone.style.alignItems = 'center';
+      clone.style.justifyContent = 'center';
+      clone.style.padding = '0 14px';
     }
 
     const cloneStyle = (selector: string, apply: (node: HTMLElement) => void) => {
@@ -178,5 +187,13 @@ export class OnboardingTourComponent implements OnDestroy {
 
     document.body.appendChild(clone);
     this.highlightedClone = clone;
+  }
+
+  private getHighlightPadding(): { x: number; y: number } {
+    if (this.step().target === '[data-tour="brand"]') {
+      return { x: 14, y: 10 };
+    }
+
+    return { x: 7, y: 7 };
   }
 }

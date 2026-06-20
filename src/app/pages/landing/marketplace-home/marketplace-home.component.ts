@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, signal, computed } from '@angular/core';
+import { Component, effect, inject, signal, computed, DestroyRef } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +12,8 @@ import { getSectorToneClass } from '../../../shared/utils/sector-tone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaginationMeta } from '../../../core/models/pagination.model';
 import { SolicitudService } from '../../../core/services/solicitud.service';
+import { ChatService } from '../../../core/services/chat.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   MARKETPLACE_EMPLOYEE_RANGE_OPTIONS,
   MARKETPLACE_LOCATION_SUGGESTIONS,
@@ -32,7 +34,9 @@ export class MarketplaceHomeComponent {
   public authService = inject(AuthService);
   private translate = inject(TranslateService);
   private solicitudService = inject(SolicitudService);
+  private chatService = inject(ChatService);
   private sanitizer = inject(DomSanitizer);
+  private destroyRef = inject(DestroyRef);
   private mapUrlCache = new Map<string, SafeResourceUrl>();
 
   ofertas = signal<Oferta[]>([]);
@@ -68,6 +72,8 @@ export class MarketplaceHomeComponent {
   );
 
   constructor() {
+    this.listenToSolicitudChanges();
+
     effect(() => {
       this.searchQuery();
       this.selectedSector();
@@ -277,5 +283,25 @@ export class MarketplaceHomeComponent {
     }
 
     return (this.pagination()?.totalPages ?? 1) > 1;
+  }
+
+  private listenToSolicitudChanges(): void {
+    this.chatService.solicitudUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((solicitud) => {
+      if (solicitud.opportunity?._id) {
+        this.solicitudesMap.update((current) => {
+          const next = new Map(current);
+          next.set(solicitud.opportunity._id, solicitud.status);
+          return next;
+        });
+      }
+    });
+
+    this.chatService.solicitudDeleted$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
+      this.solicitudesMap.update((current) => {
+        const next = new Map(current);
+        next.delete(event.opportunityId);
+        return next;
+      });
+    });
   }
 }

@@ -185,6 +185,39 @@
 
   <!-- Input Area -->
   <footer class="chat-footer">
+    @if (shouldShowPostCloseGuidancePrompt()) {
+      <div class="post-close-guidance-panel">
+        <div class="deal-rating-copy">
+          <span class="material-symbols-outlined icon-main">support_agent</span>
+          <div>
+            <h4>{{ 'CHAT.POST_CLOSE_GUIDANCE_TITLE' | translate }}</h4>
+            <p>{{ 'CHAT.POST_CLOSE_GUIDANCE_DESC' | translate }}</p>
+          </div>
+        </div>
+        <div class="post-close-guidance-actions">
+          <button
+            class="btn-guidance-secondary"
+            type="button"
+            (click)="handlePostCloseGuidanceDecision('DISMISSED')"
+            [disabled]="isSavingGuidanceDecision()"
+          >
+            {{ 'CHAT.POST_CLOSE_GUIDANCE_NO' | translate }}
+          </button>
+          <button
+            class="btn-approve"
+            type="button"
+            (click)="handlePostCloseGuidanceDecision('ACCEPTED')"
+            [disabled]="isSavingGuidanceDecision()"
+          >
+            {{
+              (isSavingGuidanceDecision() ? 'CHAT.POST_CLOSE_GUIDANCE_LOADING' : 'CHAT.POST_CLOSE_GUIDANCE_YES')
+                | translate
+            }}
+          </button>
+        </div>
+      </div>
+    }
+
     @if (canRateClosedDeal()) {
       <div class="deal-rating-panel">
         <div class="deal-rating-copy">

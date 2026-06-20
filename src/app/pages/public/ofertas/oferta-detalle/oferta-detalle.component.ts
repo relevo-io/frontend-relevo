@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, DestroyRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,6 +12,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ChatService } from '../../../../core/services/chat.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-oferta-detalle',
@@ -32,6 +33,7 @@ export class OfertaDetalle {
   private fb = inject(FormBuilder);
   private translate = inject(TranslateService);
   private sanitizer = inject(DomSanitizer);
+  private destroyRef = inject(DestroyRef);
   private mapUrlCache = new Map<string, SafeResourceUrl>();
 
   oferta = signal<Oferta | null>(null);
@@ -79,6 +81,8 @@ export class OfertaDetalle {
   });
 
   constructor() {
+    this.listenToSolicitudChanges();
+
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (!id) {
@@ -368,5 +372,26 @@ export class OfertaDetalle {
       }
     }
     return null;
+  }
+
+  private listenToSolicitudChanges(): void {
+    this.chatService.solicitudUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((solicitud) => {
+      const offerId = this.oferta()?._id;
+      const currentUserId = this.authService.currentUser()?._id;
+      if (!offerId || !currentUserId) return;
+      if (solicitud.opportunity?._id !== offerId) return;
+      if (solicitud.interestedUser?._id !== currentUserId) return;
+
+      this.solicitudStatus.set(solicitud.status);
+    });
+
+    this.chatService.solicitudDeleted$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
+      const offerId = this.oferta()?._id;
+      const currentUserId = this.authService.currentUser()?._id;
+      if (!offerId || !currentUserId) return;
+      if (event.opportunityId !== offerId || event.interestedUserId !== currentUserId) return;
+
+      this.solicitudStatus.set(null);
+    });
   }
 }

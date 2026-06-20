@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-mentoring',
@@ -37,6 +38,8 @@ export class MentoringComponent implements OnInit {
   public languageService = inject(LanguageService);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   modules = signal<MentoringModule[]>([]);
   isLoading = signal<boolean>(true);
@@ -85,6 +88,7 @@ export class MentoringComponent implements OnInit {
         // Sort modules by order
         const sorted = data.sort((a, b) => a.order - b.order);
         this.modules.set(sorted);
+        this.applyDeepLinkSelection();
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -189,5 +193,29 @@ export class MentoringComponent implements OnInit {
     if (totalItems === 0) return 0;
     const completedCount = module.items.filter((item) => this.completedKeys().has(item.contentKey)).length;
     return Math.round((completedCount / totalItems) * 100);
+  }
+
+  private applyDeepLinkSelection(): void {
+    const routeParam = this.route.snapshot.queryParamMap.get('route');
+    const contentKey = this.route.snapshot.queryParamMap.get('contentKey');
+    if (!routeParam || !contentKey) return;
+
+    const targetModule = this.modules().find((module) => module.route === routeParam && module.isActive);
+    const targetItem = targetModule?.items.find((item) => item.contentKey === contentKey);
+    if (!targetModule || !targetItem) return;
+
+    this.activeTab.set(targetModule.route === 'BUY' ? 0 : 1);
+    this.selectedItem.set({ module: targetModule, item: targetItem });
+
+    queueMicrotask(() => {
+      this.router.navigate([], {
+        replaceUrl: true,
+        queryParams: {
+          route: null,
+          contentKey: null
+        },
+        queryParamsHandling: 'merge'
+      });
+    });
   }
 }

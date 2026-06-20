@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SolicitudService } from '../../../core/services/solicitud.service';
@@ -9,6 +9,8 @@ import { SearchInputComponent } from '../../../shared/components/search-input/se
 import { UsuarioService } from '../../../core/services/usuario.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { ChatService } from '../../../core/services/chat.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-solicitudes-admin',
@@ -24,6 +26,8 @@ export class SolicitudesComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   private ns = inject(NotificationService);
   private confirmService = inject(ConfirmDialogService);
+  private chatService = inject(ChatService);
+  private destroyRef = inject(DestroyRef);
 
   // Formulario de nueva solicitud
   solicitudForm: FormGroup = this.fb.group({
@@ -107,6 +111,7 @@ export class SolicitudesComponent implements OnInit {
     this.fetchSolicitudes();
     this.fetchOfertas();
     this.fetchUsuarios();
+    this.listenToRealtimeChanges();
   }
 
   fetchSolicitudes(): void {
@@ -266,5 +271,27 @@ export class SolicitudesComponent implements OnInit {
         }
       });
     }
+  }
+
+  private listenToRealtimeChanges(): void {
+    this.chatService.solicitudUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((solicitud) => {
+      this.solicitudes.update((current) => {
+        const index = current.findIndex((item) => item._id === solicitud._id);
+        if (index === -1) return [solicitud, ...current];
+
+        const next = [...current];
+        next[index] = solicitud;
+        return next;
+      });
+    });
+
+    this.chatService.solicitudDeleted$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ solicitudId }) => {
+      this.solicitudes.update((current) => current.filter((item) => item._id !== solicitudId));
+      this.selectedIds.update((current) => {
+        const next = new Set(current);
+        next.delete(solicitudId);
+        return next;
+      });
+    });
   }
 }

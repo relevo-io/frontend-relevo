@@ -9,6 +9,7 @@ export interface LastMessage {
 }
 
 export type ChatStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED';
+export type PostCloseGuidanceDecision = 'PENDING' | 'ACCEPTED' | 'DISMISSED';
 
 export interface Chat {
   _id: string;
@@ -23,6 +24,8 @@ export interface Chat {
   closedByOwner?: boolean;
   closedByInterested?: boolean;
   closedAt?: string;
+  postCloseGuidanceOwnerDecision?: PostCloseGuidanceDecision;
+  postCloseGuidanceInterestedDecision?: PostCloseGuidanceDecision;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -81,6 +84,11 @@ export interface SendMessageAck {
 export interface JoinChatAck {
   ok: boolean;
   error?: string;
+}
+
+export interface ChatNotificationEvent {
+  chatId: string;
+  message: Mensaje;
 }
 
 export type ConnectionStatus = 'connected' | 'disconnected' | 'reconnecting';

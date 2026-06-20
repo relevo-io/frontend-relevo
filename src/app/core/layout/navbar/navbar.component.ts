@@ -115,7 +115,7 @@ export class Navbar {
   }
 
   onBellClick(): void {
-    const permission = this.fcmService.permissionState();
+    const permission = this.fcmService.syncPermissionState();
     const enabled = this.fcmService.notificationsEnabled();
 
     if (permission === 'default') {
@@ -142,7 +142,7 @@ export class Navbar {
         this.loadOfferAlerts();
         this.isPreferencesModalOpen.set(true);
       } else if (permission === 'denied') {
-        this.toastService.warn(this.translate.instant('NOTIFICATIONS.TOAST_DENIED'));
+        this.toastService.warn(this.translate.instant('NOTIFICATIONS.TOAST_BLOCKED'));
       }
     });
   }
@@ -258,6 +258,9 @@ export class Navbar {
     effect(() => {
       if (this.authService.isLoggedIn()) {
         this.loadInitialUnreadCount();
+        this.chatService.getMyChats().subscribe({
+          error: (err) => console.error('[Navbar] Error al precargar chats:', err)
+        });
       } else {
         this.unreadNotifCount.set(0);
         this.notifications.set([]);

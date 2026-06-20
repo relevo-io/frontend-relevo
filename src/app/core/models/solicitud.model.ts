@@ -45,3 +45,10 @@ export interface Solicitud {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface SolicitudDeletedEvent {
+  solicitudId: string;
+  opportunityId: string;
+  ownerId: string;
+  interestedUserId: string;
+}

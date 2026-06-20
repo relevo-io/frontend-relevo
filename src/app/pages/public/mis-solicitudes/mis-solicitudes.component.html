@@ -51,10 +51,18 @@
                     <span class="label">{{ 'MAILBOX.MESSAGE_LABEL' | translate }}</span>
                     <span class="name">{{ solicitud.interestedUser.fullName }}</span>
                     <span class="user-rating-line">
-                      <span class="material-symbols-outlined">star</span>
                       @if (solicitud.interestedUser.ratingAsInterested?.count) {
                         {{ solicitud.interestedUser.ratingAsInterested!.average | number: '1.1-1' }}
-                        <small>({{ solicitud.interestedUser.ratingAsInterested!.count }})</small>
+                        <span class="material-symbols-outlined">star</span>
+                        <small>
+                          {{ solicitud.interestedUser.ratingAsInterested!.count }}
+                          {{
+                            (solicitud.interestedUser.ratingAsInterested!.count === 1
+                              ? 'RATINGS.REVIEW'
+                              : 'RATINGS.REVIEWS'
+                            ) | translate
+                          }}
+                        </small>
                       } @else {
                         {{ 'RATINGS.NO_RATINGS' | translate }}
                       }
@@ -67,10 +75,16 @@
                     <span class="label">{{ 'MAILBOX.SENT_TO' | translate }}</span>
                     <span class="name">{{ solicitud.owner.fullName }}</span>
                     <span class="user-rating-line">
-                      <span class="material-symbols-outlined">star</span>
                       @if (solicitud.owner.ratingAsOwner?.count) {
                         {{ solicitud.owner.ratingAsOwner!.average | number: '1.1-1' }}
-                        <small>({{ solicitud.owner.ratingAsOwner!.count }})</small>
+                        <span class="material-symbols-outlined">star</span>
+                        <small>
+                          {{ solicitud.owner.ratingAsOwner!.count }}
+                          {{
+                            (solicitud.owner.ratingAsOwner!.count === 1 ? 'RATINGS.REVIEW' : 'RATINGS.REVIEWS')
+                              | translate
+                          }}
+                        </small>
                       } @else {
                         {{ 'RATINGS.NO_RATINGS' | translate }}
                       }

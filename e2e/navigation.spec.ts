@@ -19,8 +19,10 @@ test.describe('Navegación Básica', () => {
 
     // Hacer clic en el enlace o botón de "Cómo funciona"
     // Buscamos el botón secundario en la sección Hero que va a /como-funciona
-    const howItWorksBtn = page.locator('button.btn-secondary:has-text("Cómo funciona"), button.btn-secondary:has-text("Com funciona"), button.btn-secondary:has-text("How it works")');
-    
+    const howItWorksBtn = page.locator(
+      'button.btn-secondary:has-text("Cómo funciona"), button.btn-secondary:has-text("Com funciona"), button.btn-secondary:has-text("How it works")'
+    );
+
     // Si el botón es visible lo clicamos, si no, navegamos directamente
     if (await howItWorksBtn.isVisible()) {
       await howItWorksBtn.click();

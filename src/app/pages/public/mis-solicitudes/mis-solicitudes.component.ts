@@ -1,9 +1,10 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, DestroyRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { TranslateModule } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SolicitudService } from '../../../core/services/solicitud.service';
 import { Solicitud } from '../../../core/models/solicitud.model';
 import { PaginationMeta } from '../../../core/models/pagination.model';
@@ -24,6 +25,7 @@ export class MisSolicitudesComponent implements OnInit {
   private ns = inject(NotificationService);
   private chatService = inject(ChatService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   solicitudes = signal<Solicitud[]>([]);
   activeTab = signal<'received' | 'sent'>('received');
@@ -32,9 +34,7 @@ export class MisSolicitudesComponent implements OnInit {
   pageSize = 8;
   pagination = signal<PaginationMeta | null>(null);
 
-  // Almacenar qué solicitudes tienen su panel de IA expandido
   expandedAiIds = signal<Set<string>>(new Set());
-  // Almacenar qué solicitudes están en proceso de análisis para mostrar loaders locales
   analizandoIds = signal<Set<string>>(new Set());
 
   userRoles = computed(() => this.authService.currentUser()?.roles || []);
@@ -46,15 +46,16 @@ export class MisSolicitudesComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    // Si l'usuari no és owner, anem directament a la pestanya d'enviades
+  ngOnInit(): void {
     if (this.authService.isBrowser && !this.isOwner()) {
       this.activeTab.set('sent');
       this.cargarSolicitudes();
     }
+
+    this.listenToRealtimeChanges();
   }
 
-  cargarSolicitudes() {
+  cargarSolicitudes(): void {
     this.isLoading.set(true);
     const request =
       this.activeTab() === 'received'
@@ -68,13 +69,13 @@ export class MisSolicitudesComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Error carregant sol·licituds:', err);
+        console.error('Error cargando solicitudes:', err);
         this.isLoading.set(false);
       }
     });
   }
 
-  toggleAiExpansion(solicitudId: string) {
+  toggleAiExpansion(solicitudId: string): void {
     this.expandedAiIds.update((set) => {
       const next = new Set(set);
       if (next.has(solicitudId)) next.delete(solicitudId);
@@ -91,18 +92,15 @@ export class MisSolicitudesComponent implements OnInit {
     return this.analizandoIds().has(solicitudId);
   }
 
-  analizarCv(solicitudId: string) {
-    // Añadimos a la lista de cargando local
+  analizarCv(solicitudId: string): void {
     this.analizandoIds.update((set) => new Set([...set, solicitudId]));
 
-    // Actualizamos localmente el estado de análisis a EN_PROCESO para feedback inmediato
     this.solicitudes.update((list) =>
       list.map((s) => (s._id === solicitudId ? { ...s, estadoAnalisis: 'EN_PROCESO' } : s))
     );
 
     this.solicitudService.analizarCvConIa(solicitudId).subscribe({
       next: (solicitudActualizada) => {
-        // Actualizamos la solicitud en el listado local (mezclando los campos de IA para no perder las relaciones populadas)
         this.solicitudes.update((list) =>
           list.map((s) =>
             s._id === solicitudId
@@ -114,24 +112,21 @@ export class MisSolicitudesComponent implements OnInit {
               : s
           )
         );
-        // Quitamos del set de cargando
+
         this.analizandoIds.update((set) => {
           const next = new Set(set);
           next.delete(solicitudId);
           return next;
         });
-        this.ns.success('Análisis de currículum completado con éxito');
 
-        // Auto-expandir el resultado
+        this.ns.success('Análisis de currículum completado con éxito');
         this.expandedAiIds.update((set) => new Set([...set, solicitudId]));
       },
       error: (err) => {
         console.error('Error al analizar CV:', err);
-        // Actualizamos localmente el estado a ERROR
         this.solicitudes.update((list) =>
           list.map((s) => (s._id === solicitudId ? { ...s, estadoAnalisis: 'ERROR' } : s))
         );
-        // Quitamos del set de cargando
         this.analizandoIds.update((set) => {
           const next = new Set(set);
           next.delete(solicitudId);
@@ -144,13 +139,13 @@ export class MisSolicitudesComponent implements OnInit {
     });
   }
 
-  setTab(tab: 'received' | 'sent') {
+  setTab(tab: 'received' | 'sent'): void {
     this.activeTab.set(tab);
     this.page.set(1);
     this.cargarSolicitudes();
   }
 
-  cambiarEstado(id: string, nuevoEstado: string) {
+  cambiarEstado(id: string, nuevoEstado: string): void {
     this.solicitudService.updateStatus(id, nuevoEstado).subscribe({
       next: (actualizada) => {
         this.solicitudes.update((list) => list.map((s) => (s._id === id ? { ...s, status: actualizada.status } : s)));
@@ -161,7 +156,7 @@ export class MisSolicitudesComponent implements OnInit {
     });
   }
 
-  verCv(solicitudId: string) {
+  verCv(solicitudId: string): void {
     this.solicitudService.getViewUrl(solicitudId).subscribe({
       next: ({ viewUrl }) => {
         window.open(viewUrl, '_blank', 'noopener,noreferrer');
@@ -173,12 +168,11 @@ export class MisSolicitudesComponent implements OnInit {
     });
   }
 
-  async contactar(solicitud: Solicitud) {
+  async contactar(solicitud: Solicitud): Promise<void> {
     if (solicitud.status !== 'ACCEPTED') return;
 
     try {
       const isOwner = this.isOwner();
-      // Si el que contacta és el propietari, hem de passar l'ID de l'interessat
       const interestedId = isOwner ? solicitud.interestedUser._id : undefined;
 
       const chat = await firstValueFrom(this.chatService.getOrCreateChat(solicitud.opportunity._id, interestedId));
@@ -186,7 +180,7 @@ export class MisSolicitudesComponent implements OnInit {
         this.router.navigate(['/chats', chat._id]);
       }
     } catch (err) {
-      console.error('Error iniciant xat:', err);
+      console.error('Error iniciando chat:', err);
       this.ns.error("No s'ha pogut obrir el xat.");
     }
   }
@@ -203,5 +197,38 @@ export class MisSolicitudesComponent implements OnInit {
     if (!meta?.hasNextPage) return;
     this.page.set(meta.page + 1);
     this.cargarSolicitudes();
+  }
+
+  private listenToRealtimeChanges(): void {
+    this.chatService.solicitudUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((solicitud) => {
+      if (!this.isSolicitudRelevantForActiveTab(solicitud)) return;
+
+      this.solicitudes.update((current) => {
+        const index = current.findIndex((item) => item._id === solicitud._id);
+        if (index !== -1) {
+          const next = [...current];
+          next[index] = solicitud;
+          return next;
+        }
+
+        if (this.page() !== 1) return current;
+        return [solicitud, ...current].slice(0, this.pageSize);
+      });
+    });
+
+    this.chatService.solicitudDeleted$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ solicitudId }) => {
+      this.solicitudes.update((current) => current.filter((item) => item._id !== solicitudId));
+    });
+  }
+
+  private isSolicitudRelevantForActiveTab(solicitud: Solicitud): boolean {
+    const currentUserId = this.authService.currentUser()?._id;
+    if (!currentUserId) return false;
+
+    if (this.activeTab() === 'received') {
+      return this.isOwner() && solicitud.owner?._id === currentUserId;
+    }
+
+    return solicitud.interestedUser?._id === currentUserId;
   }
 }
