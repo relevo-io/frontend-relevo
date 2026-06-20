@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Ofertas } from './ofertas';
-import { OfertaService } from '../../../services/oferta.service';
+import { OfertaService } from '../../../core/services/oferta.service';
 
 describe('OfertasAdmin', () => {
   let component: Ofertas;
