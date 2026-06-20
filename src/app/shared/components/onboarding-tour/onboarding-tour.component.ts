@@ -98,13 +98,14 @@ export class OnboardingTourComponent implements OnDestroy {
     this.highlightedClone?.remove();
 
     const clone = element.cloneNode(true) as HTMLElement;
+    const usesHighlightFrame = this.usesHighlightFrame();
     clone.setAttribute('aria-hidden', 'true');
     clone.classList.add('tour-target-clone');
-    clone.style.position = 'fixed';
-    clone.style.left = `${rect.left - padding.x}px`;
-    clone.style.top = `${rect.top - padding.y}px`;
-    clone.style.width = `${rect.width + padding.x * 2}px`;
-    clone.style.height = `${rect.height + padding.y * 2}px`;
+    clone.style.position = usesHighlightFrame ? 'absolute' : 'fixed';
+    clone.style.left = usesHighlightFrame ? `${padding.x}px` : `${rect.left - padding.x}px`;
+    clone.style.top = usesHighlightFrame ? `${padding.y}px` : `${rect.top - padding.y}px`;
+    clone.style.width = usesHighlightFrame ? `${rect.width}px` : `${rect.width + padding.x * 2}px`;
+    clone.style.height = usesHighlightFrame ? `${rect.height}px` : `${rect.height + padding.y * 2}px`;
     clone.style.margin = '0';
     clone.style.zIndex = '9992';
     clone.style.pointerEvents = 'none';
@@ -113,7 +114,9 @@ export class OnboardingTourComponent implements OnDestroy {
     clone.style.opacity = '1';
     clone.style.borderRadius = style.borderRadius === '0px' ? '16px' : style.borderRadius;
     clone.style.overflow = 'hidden';
-    clone.style.boxShadow = '0 0 0 5px rgba(205, 220, 255, 0.45), 0 12px 28px rgba(0, 0, 0, 0.18)';
+    clone.style.boxShadow = usesHighlightFrame
+      ? 'none'
+      : '0 0 0 5px rgba(205, 220, 255, 0.45), 0 12px 28px rgba(0, 0, 0, 0.18)';
 
     if (style.backgroundColor === 'rgba(0, 0, 0, 0)' || style.backgroundColor === 'transparent') {
       clone.style.backgroundColor = 'var(--surface-container-lowest)';
@@ -185,6 +188,28 @@ export class OnboardingTourComponent implements OnDestroy {
       }
     });
 
+    if (usesHighlightFrame) {
+      const frame = document.createElement('div');
+      frame.setAttribute('aria-hidden', 'true');
+      frame.classList.add('tour-target-clone');
+      frame.style.position = 'fixed';
+      frame.style.left = `${rect.left - padding.x}px`;
+      frame.style.top = `${rect.top - padding.y}px`;
+      frame.style.width = `${rect.width + padding.x * 2}px`;
+      frame.style.height = `${rect.height + padding.y * 2}px`;
+      frame.style.zIndex = '9992';
+      frame.style.pointerEvents = 'none';
+      frame.style.boxSizing = 'border-box';
+      frame.style.overflow = 'hidden';
+      frame.style.borderRadius =
+        this.step().target === '[data-tour="sell-now"]' || style.borderRadius === '0px' ? '16px' : style.borderRadius;
+      frame.style.backgroundColor = 'var(--surface-container-lowest)';
+      frame.appendChild(clone);
+      document.body.appendChild(frame);
+      this.highlightedClone = frame;
+      return;
+    }
+
     document.body.appendChild(clone);
     this.highlightedClone = clone;
   }
@@ -194,6 +219,18 @@ export class OnboardingTourComponent implements OnDestroy {
       return { x: 14, y: 10 };
     }
 
+    if (this.step().target === '[data-tour="search"]') {
+      return { x: 16, y: 12 };
+    }
+
+    if (this.step().target === '[data-tour="sell-now"]') {
+      return { x: 14, y: 12 };
+    }
+
     return { x: 7, y: 7 };
+  }
+
+  private usesHighlightFrame(): boolean {
+    return ['[data-tour="search"]', '[data-tour="sell-now"]'].includes(this.step().target);
   }
 }
