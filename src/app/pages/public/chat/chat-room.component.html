@@ -369,6 +369,7 @@
           </button>
 
           <textarea
+            #messageInputEl
             id="message-input"
             class="message-input"
             [value]="messageInput()"
@@ -376,7 +377,7 @@
             (keydown)="onKeydown($event)"
             placeholder="Escribe un mensaje..."
             rows="1"
-            [disabled]="!canReply() || isSending() || isUploadingFile()"
+            [disabled]="!canReply()"
             aria-label="Escribir mensaje"
             maxlength="2000"
           ></textarea>

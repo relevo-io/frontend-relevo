@@ -37,6 +37,7 @@ import {
 })
 export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('messagesContainer') messagesContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('messageInputEl') messageInputEl!: ElementRef<HTMLTextAreaElement>;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -353,6 +354,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     this.messages.set([...this.messages(), optimisticMsg]);
     this.messageInput.set('');
+    this.focusInput();
     this.chatService.sendTypingStop(chatId);
     this.shouldScrollToBottom = true;
     this.isSending.set(true);
@@ -376,6 +378,15 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.messages.set(updated);
     } finally {
       this.isSending.set(false);
+      this.focusInput();
+    }
+  }
+
+  focusInput(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.messageInputEl?.nativeElement?.focus();
+      }, 0);
     }
   }
 
@@ -549,6 +560,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
     } finally {
       this.isUploadingFile.set(false);
       input.value = ''; // Reset input selection
+      this.focusInput();
     }
   }
 
@@ -738,6 +750,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.mediaRecorder.stop();
     }
     this.cleanupRecordingResources();
+    this.focusInput();
   }
 
   cancelRecording(): void {
@@ -746,6 +759,7 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.mediaRecorder.stop();
     }
     this.cleanupRecordingResources();
+    this.focusInput();
   }
 
   private cleanupRecordingResources(): void {
