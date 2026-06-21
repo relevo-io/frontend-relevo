@@ -1,27 +1,58 @@
-/* Hacemos que la cuadrícula ocupe todo el ancho y sea responsive */
+/* Contenedor del Banner Superior */
+.status-banner {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+/* Tarjeta de estado en formato horizontal y más estrecho */
+.status-card {
+  padding: 1rem 1.5rem !important; /* Más estrecho verticalmente */
+  background: #0d1117; /* Ajusta al color exacto de tus tarjetas si varía */
+  border: 1px solid #21262d;
+  border-radius: 6px;
+}
+
+/* Flexbox para alinear el icono y el texto de lado a lado */
+.status-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.status-text h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+}
+
+.status-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #8b949e;
+}
+
+/* Cuadrícula inferior para los gráficos */
 .dashboard-grid {
   display: grid;
   gap: 1.5rem;
-  margin-top: 2rem;
-  /* Por defecto (móviles): 1 sola columna */
-  grid-template-columns: 1fr;
+  margin-top: 1.5rem;
+  /* Por defecto ocupa todo el ancho disponible */
+  grid-template-columns: 1fr; 
 }
 
-/* En pantallas grandes (escritorio): dividimos en 2 columnas (1/3 y 2/3) */
+/* Cuando en el futuro añadas más gráficos, se alinearán en columnas perfectas automáticamente */
 @media (min-width: 992px) {
   .dashboard-grid {
-    grid-template-columns: 1fr 2fr; /* El gráfico será el doble de ancho que la tarjeta */
-    align-items: stretch; /* Hace que ambas tarjetas tengan la misma altura base */
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   }
 }
 
-/* Ajustes específicos para que el iframe se vea perfecto */
+/* Formato limpio para la tarjeta del gráfico */
 .chart-card {
-  padding: 0 !important; /* Quitamos el padding para que el gráfico llegue a los bordes */
+  padding: 0 !important;
   min-height: 400px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  border: 1px solid #21262d;
+  border-radius: 6px;
 }
 
 .chart-card iframe {
@@ -29,5 +60,19 @@
   height: 100%;
   min-height: 400px;
   border: none;
-  flex-grow: 1;
+}
+
+/* Corrección de colores para legibilidad en el banner */
+.status-text h3 {
+  color: #ffffff; /* Blanco brillante para el título de la consola */
+  font-weight: 600;
+}
+
+.status-text p {
+  color: #c9d1d9; /* Gris claro con excelente contraste para el detalle */
+}
+
+/* Opcional: Si quieres que el icono destaque más en sintonía con el texto */
+.status-content .material-symbols-outlined {
+  color: #58a6ff; /* Un azul brillante tecnológico, o usa tu verde si prefieres */
 }
