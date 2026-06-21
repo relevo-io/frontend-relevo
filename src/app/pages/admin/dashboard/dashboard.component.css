@@ -1,1 +1,33 @@
-/* Intentionally empty. Styles are centralized in src/styles/_admin-theme.css (Section 11) */
+/* Hacemos que la cuadrícula ocupe todo el ancho y sea responsive */
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  /* Por defecto (móviles): 1 sola columna */
+  grid-template-columns: 1fr;
+}
+
+/* En pantallas grandes (escritorio): dividimos en 2 columnas (1/3 y 2/3) */
+@media (min-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 2fr; /* El gráfico será el doble de ancho que la tarjeta */
+    align-items: stretch; /* Hace que ambas tarjetas tengan la misma altura base */
+  }
+}
+
+/* Ajustes específicos para que el iframe se vea perfecto */
+.chart-card {
+  padding: 0 !important; /* Quitamos el padding para que el gráfico llegue a los bordes */
+  min-height: 400px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  border: none;
+  flex-grow: 1;
+}
