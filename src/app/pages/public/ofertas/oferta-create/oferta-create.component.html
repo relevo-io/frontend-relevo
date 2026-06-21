@@ -10,10 +10,14 @@
         <label for="sector">{{ 'OFFER_CREATE.SECTOR_LABEL' | translate }} <span class="required">*</span></label>
         <select id="sector" formControlName="sector">
           <option value="">{{ 'OFFER_CREATE.SECTOR_PLACEHOLDER' | translate }}</option>
-          <option value="Hostelería">{{ 'SECTORS.HOSTELRY' | translate }}</option>
-          <option value="Servicios">{{ 'SECTORS.SERVICES' | translate }}</option>
-          <option value="Industria">{{ 'SECTORS.INDUSTRY' | translate }}</option>
-          <option value="Comercio">{{ 'SECTORS.COMMERCE' | translate }}</option>
+          <option value="TECHNOLOGY">{{ 'SECTORS.TECHNOLOGY' | translate }}</option>
+          <option value="HOSPITALITY">{{ 'SECTORS.HOSPITALITY' | translate }}</option>
+          <option value="SERVICES">{{ 'SECTORS.SERVICES' | translate }}</option>
+          <option value="INDUSTRIAL">{{ 'SECTORS.INDUSTRIAL' | translate }}</option>
+          <option value="RETAIL">{{ 'SECTORS.RETAIL' | translate }}</option>
+          <option value="HEALTHCARE">{{ 'SECTORS.HEALTHCARE' | translate }}</option>
+          <option value="LOGISTICS">{{ 'SECTORS.LOGISTICS' | translate }}</option>
+          <option value="EDUCATION">{{ 'SECTORS.EDUCATION' | translate }}</option>
         </select>
         @if (f['sector'].invalid && f['sector'].touched) {
           <span class="field-error">{{ 'OFFER_CREATE.SECTOR_REQUIRED' | translate }}</span>
