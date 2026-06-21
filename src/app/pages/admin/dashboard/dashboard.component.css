@@ -36,7 +36,7 @@
   gap: 1.5rem;
   margin-top: 1.5rem;
   /* Por defecto ocupa todo el ancho disponible */
-  grid-template-columns: 1fr; 
+  grid-template-columns: 1fr;
 }
 
 /* Cuando en el futuro añadas más gráficos, se alinearán en columnas perfectas automáticamente */
