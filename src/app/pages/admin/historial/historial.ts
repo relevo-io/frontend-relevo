@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common'; // Importem per fer servir *ngFor, *ngIf i el format de data
 import { FormsModule } from '@angular/forms'; // Importem per fer servir [(ngModel)] al cercador
 import { HistorialService } from '../../../core/services/historial.service';
@@ -21,6 +21,7 @@ export class HistorialComponent implements OnInit {
   searchTerm = '';
 
   private historialService = inject(HistorialService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.carregarHistorials();
@@ -38,6 +39,7 @@ export class HistorialComponent implements OnInit {
         this.historials = historialResponse.data;
         this.totalPages = historialResponse.totalPages;
         this.currentPage = historialResponse.page;
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al carregar historials', err)
     });
@@ -69,10 +71,20 @@ export class HistorialComponent implements OnInit {
 
   mostrarOferta(oferta: string | Oferta | any): string {
     // Si es un objeto y tiene la propiedad sector, mostramos el sector
-    if (oferta && typeof oferta === 'object' && 'sector' in oferta) {
-      return oferta.sector;
+    if (!oferta) {
+      return 'Sense ID';
     }
-    // Si es solo un string (el ID), lo devolvemos tal cual
+    if (typeof oferta === 'object') {
+      if (oferta.sector) {
+        return oferta.sector;
+      }
+      // Si viene poblado pero sin sector, intentamos mostrar al menos su ID interno
+      if (oferta._id) {
+        return oferta._id;
+      }
+      return 'Objecte desconegut';
+    }
+
     return oferta as string;
   }
 }

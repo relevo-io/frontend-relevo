@@ -7,10 +7,12 @@
   </header>
 
   <div class="dashboard-grid">
-    <div class="tech-card welcome-card">
-      <span class="material-symbols-outlined icon-glow">terminal</span>
-      <h3>Estado de la Consola</h3>
-      <p>Todos los sistemas están operativos. No hay alertas pendientes de activación.</p>
+    <div class="tech-card chart-card">
+      <iframe [src]="grafanaSectorUrl"></iframe>
+    </div>
+
+    <div class="tech-card chart-card">
+      <iframe [src]="grafanaRevenueUrl"></iframe>
     </div>
   </div>
 </div>

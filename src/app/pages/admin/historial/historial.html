@@ -1,11 +1,11 @@
 <div class="container" style="padding: 20px">
-  <h2>Auditoria de Canvis (Historial)</h2>
+  <h2 style="color: white">Registro de cambios</h2>
 
   <div style="margin-bottom: 20px">
     <input
       type="text"
       [(ngModel)]="searchTerm"
-      placeholder="Buscar per camp modificat (ex. sector)..."
+      placeholder="Buscar per campo modificado (ej. sector)..."
       style="padding: 8px; width: 300px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px"
     />
     <button
@@ -29,15 +29,16 @@
       border-collapse: collapse;
       text-align: left;
       background-color: white;
+      color: #212529;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     "
   >
     <thead>
-      <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6">
-        <th style="padding: 12px 15px">Data</th>
+      <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6; color: #212529">
+        <th style="padding: 12px 15px">Fecha</th>
         <th style="padding: 12px 15px">ID Oferta</th>
-        <th style="padding: 12px 15px">Canvis Detectats</th>
-        <th style="padding: 12px 15px">Accions</th>
+        <th style="padding: 12px 15px">Cambios</th>
+        <th style="padding: 12px 15px">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -60,14 +61,12 @@
             (click)="esborrarRegistre(historial._id)"
             style="color: #dc3545; background: none; border: none; cursor: pointer"
           >
-            🗑️ Esborrar
+            🗑️ Eliminar registro
           </button>
         </td>
       </tr>
       <tr *ngIf="historials.length === 0">
-        <td colspan="4" style="text-align: center; padding: 30px; color: #6c757d">
-          No s'han trobat registres d'auditoria.
-        </td>
+        <td colspan="4" style="text-align: center; padding: 30px; color: #6c757d">No hay registros.</td>
       </tr>
     </tbody>
   </table>
@@ -76,23 +75,37 @@
     <button
       (click)="canviarPagina(currentPage - 1)"
       [disabled]="currentPage === 1"
-      style="padding: 8px 15px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer"
+      style="
+        padding: 8px 15px;
+        background-color: white;
+        color: #212529;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+      "
       [style.opacity]="currentPage === 1 ? '0.5' : '1'"
     >
       ⬅️ Anterior
     </button>
 
     <span
-      >Pàgina <strong>{{ currentPage }}</strong> de <strong>{{ totalPages }}</strong></span
+      >Página <strong>{{ currentPage }}</strong> de <strong>{{ totalPages }}</strong></span
     >
 
     <button
       (click)="canviarPagina(currentPage + 1)"
       [disabled]="currentPage === totalPages"
-      style="padding: 8px 15px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer"
+      style="
+        padding: 8px 15px;
+        background-color: white;
+        color: #212529;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+      "
       [style.opacity]="currentPage === totalPages ? '0.5' : '1'"
     >
-      Següent ➡️
+      Siguiente ➡️
     </button>
   </div>
 </div>
