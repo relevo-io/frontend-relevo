@@ -1,5 +1,6 @@
 import { Component, inject, input, output, effect, signal, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { OfertaService } from '../../../../core/services/oferta.service';
 import { UsuarioService } from '../../../../core/services/usuario.service';
 import { Oferta } from '../../../../core/models/oferta.model';
@@ -8,7 +9,7 @@ import { Usuario } from '../../../../core/models/usuario.model';
 @Component({
   selector: 'app-oferta-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslateModule],
   templateUrl: './oferta-form.component.html',
   styleUrl: './oferta-form.component.css'
 })

@@ -53,3 +53,5 @@ src/environments/environment.prod.ts
 /playwright-report
 /test-results
 /playwright/.cache
+
+.env

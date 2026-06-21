@@ -77,7 +77,7 @@
                     [class.active]="hasPreferenceValue(selectedPreferredSectors, sector)"
                     (click)="togglePreferenceValue(selectedPreferredSectors, sector)"
                   >
-                    {{ sector }}
+                    {{ 'SECTORS.' + sector | translate }}
                   </button>
                 }
               </div>

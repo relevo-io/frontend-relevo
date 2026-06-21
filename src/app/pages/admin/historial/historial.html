@@ -1,0 +1,111 @@
+<div class="container" style="padding: 20px">
+  <h2 style="color: white">Registro de cambios</h2>
+
+  <div style="margin-bottom: 20px">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Buscar per campo modificado (ej. sector)..."
+      style="padding: 8px; width: 300px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px"
+    />
+    <button
+      (click)="onSearch()"
+      style="
+        padding: 8px 15px;
+        background-color: #0056b3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      "
+    >
+      Buscar
+    </button>
+  </div>
+
+  <table
+    style="
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      background-color: white;
+      color: #212529;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    "
+  >
+    <thead>
+      <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6; color: #212529">
+        <th style="padding: 12px 15px">Fecha</th>
+        <th style="padding: 12px 15px">ID Oferta</th>
+        <th style="padding: 12px 15px">Cambios</th>
+        <th style="padding: 12px 15px">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let historial of historials" style="border-bottom: 1px solid #dee2e6">
+        <td style="padding: 12px 15px">{{ historial.fecha | date: 'short' }}</td>
+        <td style="padding: 12px 15px">{{ mostrarOferta(historial.ofertaId) }}</td>
+        <td style="padding: 12px 15px">
+          <ul style="margin: 0; padding-left: 20px">
+            <li *ngFor="let canvi of historial.canvis">
+              <strong>{{ canvi.campo }}</strong
+              >:
+              <span style="color: #dc3545; text-decoration: line-through">{{ canvi.valorAnterior }}</span>
+              ➔
+              <span style="color: #28a745; font-weight: bold">{{ canvi.valorNuevo }}</span>
+            </li>
+          </ul>
+        </td>
+        <td style="padding: 12px 15px">
+          <button
+            (click)="esborrarRegistre(historial._id)"
+            style="color: #dc3545; background: none; border: none; cursor: pointer"
+          >
+            🗑️ Eliminar registro
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="historials.length === 0">
+        <td colspan="4" style="text-align: center; padding: 30px; color: #6c757d">No hay registros.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center">
+    <button
+      (click)="canviarPagina(currentPage - 1)"
+      [disabled]="currentPage === 1"
+      style="
+        padding: 8px 15px;
+        background-color: white;
+        color: #212529;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+      "
+      [style.opacity]="currentPage === 1 ? '0.5' : '1'"
+    >
+      ⬅️ Anterior
+    </button>
+
+    <span
+      >Página <strong>{{ currentPage }}</strong> de <strong>{{ totalPages }}</strong></span
+    >
+
+    <button
+      (click)="canviarPagina(currentPage + 1)"
+      [disabled]="currentPage === totalPages"
+      style="
+        padding: 8px 15px;
+        background-color: white;
+        color: #212529;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+      "
+      [style.opacity]="currentPage === totalPages ? '0.5' : '1'"
+    >
+      Siguiente ➡️
+    </button>
+  </div>
+</div>

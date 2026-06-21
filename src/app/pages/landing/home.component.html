@@ -1,183 +1,182 @@
-<main class="landing-content">
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-bg">
-      <img src="/assets/images/abstract-blue.png" alt="Relevo Business Background" />
-      <div class="hero-overlay"></div>
-    </div>
+<main class="how-it-works-page">
+  <section class="how-hero">
+    <div class="how-hero-bg"></div>
 
-    <div class="container-full hero-content">
-      <div class="hero-text">
-        <div class="badge">
+    <div class="container-full how-hero-layout">
+      <div class="hero-copy">
+        <div class="hero-badge">
           <span class="material-symbols-outlined">verified</span>
           {{ 'HOME.MARKETPLACE_BADGE' | translate }}
         </div>
-        <h1>
-          {{ 'HOME.SLOGAN' | translate }} <span class="highlight">{{ 'HOME.SLOGAN2' | translate }}</span>
-        </h1>
-        <p>{{ 'HOME.INTRO' | translate }}</p>
 
-        <div class="hero-cta">
-          <button class="btn btn-primary-dark" routerLink="/register">
+        <h1>
+          {{ 'HOME.SLOGAN' | translate }}
+          <span>{{ 'HOME.SLOGAN2' | translate }}</span>
+        </h1>
+
+        <p class="hero-lead">{{ 'HOME.INTRO' | translate }}</p>
+
+        <div class="hero-actions">
+          <button class="btn-primary-dark" routerLink="/register">
             {{ 'AUTH.ROLE_OWNER' | translate }}
             <span class="material-symbols-outlined">trending_flat</span>
           </button>
-          <button class="btn btn-secondary-light" routerLink="/register">
-            {{ 'AUTH.ROLE_INTERESTED' | translate }}
+          <button class="btn-secondary-light" routerLink="/ofertas">
+            {{ 'HOME.EXPLORE_BUSINESSES' | translate }}
           </button>
         </div>
+
+        <div class="hero-metrics">
+          <article class="metric-card">
+            <strong>{{ 'HOME.STAT_VALUE1' | translate }}</strong>
+            <span>{{ 'HOME.STAT_LABEL1' | translate }}</span>
+          </article>
+          <article class="metric-card metric-card-accent">
+            <strong>{{ 'HOME.STATS_SUCCESS' | translate }}</strong>
+            <span>{{ 'HOME.STAT_LABEL2' | translate }}</span>
+          </article>
+        </div>
       </div>
 
-      <div class="hero-stats">
-        <div class="stat-card card-white">
-          <span class="stat-value">{{ 'HOME.STAT_VALUE1' | translate }}</span>
-          <p class="stat-label">{{ 'HOME.STAT_LABEL1' | translate }}</p>
-        </div>
-        <div class="stat-card card-dark">
-          <div class="avatar-group">
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-qDmhEy15v4dRCGM69XZu8m3QzqwvY1X6H47TWaua4v5M9n1dgNm4Sn4VA8NB1VwwI16Jz0aBj0oCHPRL99nBDY8y9wFfcr-bQIirQSsCvQWFlIEQzyB4M3Xu83eNAFYSfxrGwwaGY8mhMDiSszOlKgq7YiMjJpRHzJV_CCVnKqH4REGfWFwSZpGgankptjuuPbKhBPvU-Z-i_DfrSt5iHVIZ611km9Et8AFi0Ib9d9KzbFSUoJvws3fUrwktpRt4c_dNtIEpX50"
-              alt="User"
-            />
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeh9-cxr9M1YaVKu3cuhZ2GHeFygavdxh5X620jwctXwTv1GwLnYhyzH0AdFCgNS60O8ZTHakDPLA5J_VnEsLFxMdyjiqbuiuHhhiICD3f9rQ8NCA4eB3j7n7sTEOJNJcUCh9o5A5DXKk9hte28pD_3-6oZpaU0VUo5Wfc1jn7nmTCXhFLoJaDzCqwB7wadzO6r4ORi8XpkFlbwVGJ1Fp7A5ivwggTuDQ_c3y5f85h7edVK1QWunrVzIXG1L7SbZId7lEeKYBNGZc"
-              alt="User"
-            />
-          </div>
-          <p class="stat-label">{{ 'HOME.STAT_LABEL2' | translate }}</p>
-        </div>
-        <div class="stat-card card-green">
-          <span class="material-symbols-outlined icon-fill">handshake</span>
-          <p class="stat-label-bold">{{ 'HOME.STATS_SUCCESS' | translate }}</p>
-        </div>
-        <div class="stat-image">
-          <img src="/assets/images/office-detail.png" alt="Office Detail" />
-        </div>
-      </div>
-    </div>
-  </section>
+      <aside class="hero-panel">
+        <div class="panel-kicker">{{ 'HOME.PROCESS_TITLE' | translate }}</div>
+        <h2>{{ 'HOME.PROCESS_SUBTITLE' | translate }}</h2>
 
-  <!-- Owners Section -->
-  <section class="features bg-light">
-    <div class="container-full grid-2">
-      <div class="feature-visual">
-        <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPcIHB_0_HBJvYJUzrfM-RSYjuf7HbBy4J_EYgidJgpVkClF420T1EvEc-cZb8oVRx6NGDSTyBdECkxZu38_R4h56P1HkEOUrZFZcNML-ibpOYvQGrYVgHk0rhQNken1vwFi0f2VO4SHWJsi46C7bkfclQEtKzuB8syqOTkl2fBFUms2XBTIlnfBBOHDpCwq0822qQfYfEVpfybQYRd2cGrIMsIlg7SZY-Cu6tEA7QxOo_5VEL7cwbV80so8bAtWQQxho8KSI1FC0"
-          alt="Consultation"
-        />
-        <div class="testimonial-bubble">
-          <p>{{ 'HOME.TESTIMONIAL_TEXT' | translate }}</p>
-          <div class="auth-info">
-            <div class="auth-avatar">M</div>
+        <div class="panel-steps">
+          <div class="panel-step">
+            <span>01</span>
             <div>
-              <strong>{{ 'HOME.TESTIMONIAL_AUTHOR' | translate }}</strong>
+              <h3>{{ 'HOME.STEP1_TITLE' | translate }}</h3>
+              <p>{{ 'HOME.STEP1_DESC' | translate }}</p>
+            </div>
+          </div>
+          <div class="panel-step">
+            <span>02</span>
+            <div>
+              <h3>{{ 'HOME.STEP2_TITLE' | translate }}</h3>
+              <p>{{ 'HOME.STEP2_DESC' | translate }}</p>
+            </div>
+          </div>
+          <div class="panel-step">
+            <span>03</span>
+            <div>
+              <h3>{{ 'HOME.STEP3_TITLE' | translate }}</h3>
+              <p>{{ 'HOME.STEP3_DESC' | translate }}</p>
             </div>
           </div>
         </div>
-      </div>
-      <div class="feature-info">
-        <span class="tag">{{ 'HOME.OWNERS_TITLE' | translate }}</span>
-        <h2>{{ 'HOME.OWNERS_SUBTITLE' | translate }}</h2>
-        <p>{{ 'HOME.OWNERS_DESC' | translate }}</p>
-        <ul class="check-list">
-          <li><span class="material-symbols-outlined">check</span> {{ 'HOME.OWNERS_FEATURE1' | translate }}</li>
-          <li><span class="material-symbols-outlined">check</span> {{ 'HOME.OWNERS_FEATURE2' | translate }}</li>
-          <li><span class="material-symbols-outlined">check</span> {{ 'HOME.OWNERS_FEATURE3' | translate }}</li>
-        </ul>
-        <a href="#" class="link-arrow"
-          >{{ 'HOME.OWNERS_LEARN_MORE' | translate }} <span class="material-symbols-outlined">arrow_forward</span></a
-        >
-      </div>
+      </aside>
     </div>
   </section>
 
-  <!-- Buyers Section -->
-  <section class="features">
-    <div class="container-full grid-2">
-      <div class="feature-info">
-        <span class="tag">{{ 'HOME.ENTREPRENEURS_TITLE' | translate }}</span>
-        <h2>{{ 'HOME.ENTREPRENEURS_SUBTITLE' | translate }}</h2>
-        <p>{{ 'HOME.ENTREPRENEURS_DESC' | translate }}</p>
-        <div class="sub-grid">
-          <div class="feature-card">
+  <section class="audiences-section">
+    <div class="container-full">
+      <div class="section-heading">
+        <span class="section-tag">{{ 'HOME.PROCESS_TITLE' | translate }}</span>
+        <h2>{{ 'HOME.TRUST_TITLE' | translate }}</h2>
+        <p>{{ 'HOME.TRUST_SUBTITLE' | translate }}</p>
+      </div>
+
+      <div class="audiences-grid">
+        <article class="audience-card audience-card-owner">
+          <div class="audience-icon">
+            <span class="material-symbols-outlined">storefront</span>
+          </div>
+          <span class="audience-tag">{{ 'HOME.OWNERS_TITLE' | translate }}</span>
+          <h3>{{ 'HOME.OWNERS_SUBTITLE' | translate }}</h3>
+          <p>{{ 'HOME.OWNERS_DESC' | translate }}</p>
+          <ul class="feature-list">
+            <li><span class="material-symbols-outlined">check</span>{{ 'HOME.OWNERS_FEATURE1' | translate }}</li>
+            <li><span class="material-symbols-outlined">check</span>{{ 'HOME.OWNERS_FEATURE2' | translate }}</li>
+            <li><span class="material-symbols-outlined">check</span>{{ 'HOME.OWNERS_FEATURE3' | translate }}</li>
+          </ul>
+        </article>
+
+        <article class="audience-card audience-card-buyer">
+          <div class="audience-icon">
             <span class="material-symbols-outlined">insights</span>
-            <h3>{{ 'HOME.ENTREPRENEURS_FEATURE_TITLE' | translate }}</h3>
-            <p>{{ 'HOME.ENTREPRENEURS_FEATURE_DESC' | translate }}</p>
           </div>
-          <div class="feature-card">
-            <span class="material-symbols-outlined">account_balance</span>
-            <h3>{{ 'HOME.FINANCING_TITLE' | translate }}</h3>
-            <p>{{ 'HOME.FINANCING_DESC' | translate }}</p>
+          <span class="audience-tag">{{ 'HOME.ENTREPRENEURS_TITLE' | translate }}</span>
+          <h3>{{ 'HOME.ENTREPRENEURS_SUBTITLE' | translate }}</h3>
+          <p>{{ 'HOME.ENTREPRENEURS_DESC' | translate }}</p>
+          <div class="mini-feature-grid">
+            <div class="mini-feature">
+              <h4>{{ 'HOME.ENTREPRENEURS_FEATURE_TITLE' | translate }}</h4>
+              <p>{{ 'HOME.ENTREPRENEURS_FEATURE_DESC' | translate }}</p>
+            </div>
+            <div class="mini-feature">
+              <h4>{{ 'HOME.FINANCING_TITLE' | translate }}</h4>
+              <p>{{ 'HOME.FINANCING_DESC' | translate }}</p>
+            </div>
           </div>
-        </div>
-        <button class="btn btn-primary-dark lg">{{ 'HOME.EXPLORE_BUSINESSES' | translate }}</button>
-      </div>
-      <div class="feature-visual">
-        <img
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7uNLbCA0b4JiQH3NIYrcQwQe35_wOcQRgCaOOnMHqDIGjF8RJTy_hdNScwZzq_tzSHY0hctLy5BOx3WiOdnbpNQWdIvy8Oqhb9CFWJ5IhZ5XmE-fRZ0AaRdx5Q-iWg23k-9ovbRLYv2GweZuo5ICKg6YobMHWqlCqXisJzs-EBDAQUhJeBFvG42VZ-kx1pWkgFFxfmVMljFMHNV2v2sSoYMZUQ9W0ENOMJHKSh4yvY-LxbzYd5bNGMDaKwo3y7jH2sSiCI1MCxYc"
-          alt="Buyers"
-        />
-        <div class="overlay-badge">
-          <span class="val">+250</span>
-          <span class="lbl">{{ 'HOME.INVESTMENT_OPPORTUNITIES' | translate }}</span>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- Process Section -->
-  <section class="process bg-white">
-    <div class="container-full text-center">
-      <h2>{{ 'HOME.PROCESS_TITLE' | translate }}</h2>
-      <p class="section-lead">{{ 'HOME.PROCESS_SUBTITLE' | translate }}</p>
+  <section class="timeline-section">
+    <div class="container-full timeline-layout">
+      <div class="timeline-copy">
+        <span class="section-tag">{{ 'HOME.PROCESS_TITLE' | translate }}</span>
+        <h2>{{ 'HOME.PROCESS_SUBTITLE' | translate }}</h2>
+        <p>{{ 'HOME.TESTIMONIAL_TEXT' | translate }}</p>
 
-      <div class="steps-grid">
-        <div class="step">
-          <div class="step-number">1</div>
+        <div class="testimonial-inline">
+          <div class="author-mark">M</div>
+          <strong>{{ 'HOME.TESTIMONIAL_AUTHOR' | translate }}</strong>
+        </div>
+      </div>
+
+      <div class="timeline-cards">
+        <article class="timeline-card">
+          <span class="timeline-number">1</span>
           <h3>{{ 'HOME.STEP1_TITLE' | translate }}</h3>
           <p>{{ 'HOME.STEP1_DESC' | translate }}</p>
-        </div>
-        <div class="step">
-          <div class="step-number">2</div>
+        </article>
+        <article class="timeline-card">
+          <span class="timeline-number">2</span>
           <h3>{{ 'HOME.STEP2_TITLE' | translate }}</h3>
           <p>{{ 'HOME.STEP2_DESC' | translate }}</p>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
+        </article>
+        <article class="timeline-card">
+          <span class="timeline-number">3</span>
           <h3>{{ 'HOME.STEP3_TITLE' | translate }}</h3>
           <p>{{ 'HOME.STEP3_DESC' | translate }}</p>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- Trust Section -->
-  <section class="trust dark">
-    <div class="container-full grid-2">
-      <div class="trust-content">
-        <h2>{{ 'HOME.TRUST_TITLE' | translate }}</h2>
-        <p class="lead">{{ 'HOME.TRUST_SUBTITLE' | translate }}</p>
+  <section class="trust-section">
+    <div class="container-full trust-layout">
+      <div class="trust-visual-card">
+        <div class="trust-image-frame">
+          <img src="/assets/images/office-detail.png" alt="Detalle corporativo de Relevo" />
+        </div>
 
         <div class="trust-points">
-          <div class="point">
+          <div class="trust-point">
             <span class="material-symbols-outlined">lock</span>
             <div>
-              <h4>{{ 'HOME.TRUST_FEATURE1_TITLE' | translate }}</h4>
+              <h3>{{ 'HOME.TRUST_FEATURE1_TITLE' | translate }}</h3>
               <p>{{ 'HOME.TRUST_FEATURE1_DESC' | translate }}</p>
             </div>
           </div>
-          <div class="point">
+          <div class="trust-point">
             <span class="material-symbols-outlined">support_agent</span>
             <div>
-              <h4>{{ 'HOME.TRUST_FEATURE2_TITLE' | translate }}</h4>
+              <h3>{{ 'HOME.TRUST_FEATURE2_TITLE' | translate }}</h3>
               <p>{{ 'HOME.TRUST_FEATURE2_DESC' | translate }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="form-card">
-        <h3>{{ 'HOME.CONTACT_TITLE' | translate }}</h3>
+      <div class="contact-card">
+        <span class="section-tag">{{ 'HOME.CONTACT_TITLE' | translate }}</span>
+        <h2>{{ 'HOME.TRUST_TITLE' | translate }}</h2>
+        <p>{{ 'HOME.TRUST_SUBTITLE' | translate }}</p>
+
         <form class="contact-form">
           <div class="form-row">
             <div class="form-group">
@@ -189,6 +188,7 @@
               <input type="email" [placeholder]="'AUTH.EMAIL_HINT' | translate" />
             </div>
           </div>
+
           <div class="form-group">
             <label>{{ 'HOME.CONTACT_INTEREST_LABEL' | translate }}</label>
             <select>
@@ -196,7 +196,8 @@
               <option>{{ 'AUTH.ROLE_INTERESTED' | translate }}</option>
             </select>
           </div>
-          <button type="button" routerLink="/register" class="btn btn-secondary w-full">
+
+          <button type="button" routerLink="/register" class="btn-submit">
             {{ 'HOME.CONTACT_BUTTON' | translate }}
           </button>
         </form>

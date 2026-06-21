@@ -345,7 +345,7 @@
 <!-- Modal de ajustes de preferencias de notificación -->
 @if (isPreferencesModalOpen()) {
   <div class="notifications-modal-overlay" (click)="closePreferencesModal()">
-    <div class="notifications-modal-card" (click)="$event.stopPropagation()">
+    <div class="notifications-modal-card preferences-modal-card" (click)="$event.stopPropagation()">
       <div class="notifications-modal-icon-container icon-container-green">
         <span class="material-symbols-outlined">tune</span>
       </div>
