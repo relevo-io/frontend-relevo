@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { OfertaService } from '../../../core/services/oferta.service';
 import { Oferta } from '../../../core/models/oferta.model';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -10,7 +11,7 @@ import { OfertaFormComponent } from './oferta-form/oferta-form.component';
 @Component({
   selector: 'app-ofertas-admin',
   standalone: true,
-  imports: [CommonModule, SearchInputComponent, OfertaFormComponent],
+  imports: [CommonModule, TranslateModule, SearchInputComponent, OfertaFormComponent],
   templateUrl: './ofertas.html',
   styleUrl: './ofertas.css'
 })

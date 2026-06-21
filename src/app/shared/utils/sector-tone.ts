@@ -21,6 +21,7 @@ const SECTOR_TONE_MAP: Record<string, string> = {
   services: 'services',
   servicios: 'services',
   industry: 'industry',
+  industrial: 'industry',
   industria: 'industry'
 };
 
