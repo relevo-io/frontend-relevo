@@ -71,6 +71,24 @@
     "CHATS": "Xats",
     "FAVORITES": "Els meus preferits"
   },
+  "ADMIN": {
+    "CONSOLE_TITLE": "Consola d'Administracio",
+    "NAV_DASHBOARD": "Dashboard",
+    "NAV_USERS": "Usuaris",
+    "NAV_OFFERS": "Ofertes",
+    "NAV_REQUESTS": "Sollicituds",
+    "NAV_ACTIVITY": "Registre d'Activitat",
+    "NAV_PAYMENTS": "Pagaments",
+    "NAV_NOTIFICATIONS": "Notificacions",
+    "NAV_ALERTS": "Alertes",
+    "NAV_MENTORING": "Mentoring",
+    "NAV_CHATS": "Xats",
+    "BACK_TO_WEB": "Tornar al web",
+    "STATUS_ACTIVE": "Backoffice actiu",
+    "BREADCRUMB_ADMIN": "Admin",
+    "BREADCRUMB_BACKOFFICE": "Backoffice",
+    "ROLE_SUPER_ADMIN": "Super Admin"
+  },
   "PROFILE": {
     "TITLE": "El Meu Perfil",
     "DEFAULT_USER": "Usuari",

@@ -1,0 +1,21 @@
+.match-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.match-list li {
+  color: var(--admin-text-main);
+}
+
+.match-title {
+  font-weight: 700;
+}
+
+.match-date {
+  margin-left: 8px;
+  color: var(--admin-text-muted);
+  font-size: 0.85rem;
+}

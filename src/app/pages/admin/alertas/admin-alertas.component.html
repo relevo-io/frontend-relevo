@@ -1,0 +1,175 @@
+<section class="admin-module-page animate-in">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="section-kicker">
+        <span class="material-symbols-outlined">notification_important</span>
+        <span>Backoffice</span>
+      </div>
+      <h1 class="page-title">Alertas</h1>
+      <p class="page-subtitle">Consulta las alertas creadas por usuarios y revisa sus coincidencias recientes.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" [class.spinning]="isRefreshing()" (click)="refresh()" title="Recargar">
+        <span class="material-symbols-outlined">refresh</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="summary-grid">
+    <article class="tech-card summary-card">
+      <span class="summary-label">Alertas</span>
+      <span class="summary-value">{{ alertas().length }}</span>
+      <p class="summary-copy">Volumen total de alertas registradas en el sistema.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Con matches</span>
+      <span class="summary-value">{{ alertas().filter((alerta) => getMatchCount(alerta) > 0).length }}</span>
+      <p class="summary-copy">Alertas que ya han generado al menos una coincidencia.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Activas</span>
+      <span class="summary-value">{{ alertas().filter((alerta) => alerta.isActive).length }}</span>
+      <p class="summary-copy">Alertas actualmente activas y operativas.</p>
+    </article>
+  </div>
+
+  <div class="control-panel tech-card">
+    <div class="search-section">
+      <app-search-input
+        [placeholder]="'Buscar por nombre de alerta...'"
+        (searchTerm)="updateSearch($event)"
+      ></app-search-input>
+    </div>
+
+    <div class="toolbar-actions">
+      <div class="filter-group">
+        <span class="material-symbols-outlined">public</span>
+        <select class="tech-select" (change)="updateFilter(regionFilter, $event)">
+          <option value="ALL">Todas las regiones</option>
+          @for (region of regions(); track region) {
+            <option [value]="region">{{ region }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="material-symbols-outlined">groups</span>
+        <select class="tech-select" (change)="updateFilter(employeeRangeFilter, $event)">
+          <option value="ALL">Todos los tramos</option>
+          @for (employeeRange of employeeRanges(); track employeeRange) {
+            <option [value]="employeeRange">{{ employeeRange }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="material-symbols-outlined">euro</span>
+        <select class="tech-select" (change)="updateFilter(revenueRangeFilter, $event)">
+          <option value="ALL">Todos los revenues</option>
+          @for (revenueRange of revenueRanges(); track revenueRange) {
+            <option [value]="revenueRange">{{ revenueRange }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="state-container tech-card">
+      <div class="loader-tech"></div>
+      <p>Sincronizando alertas guardadas...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-container error tech-card">
+      <span class="material-symbols-outlined">warning</span>
+      <p>{{ error() }}</p>
+      <button class="btn-secondary-tech" (click)="fetchAlertas()">Reintentar</button>
+    </div>
+  } @else {
+    <div class="tech-table-container">
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>Alerta</th>
+            <th>Usuario</th>
+            <th>Region</th>
+            <th>Revenue</th>
+            <th>Employees</th>
+            <th>Matches</th>
+            <th>Ultima coincidencia</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (alerta of filteredAlertas(); track alerta._id ?? alerta.name ?? $index) {
+            <tr>
+              <td>
+                <div class="stacked-meta">
+                  <span class="primary">{{ alerta.name || 'Sin nombre' }}</span>
+                  <span class="secondary">{{ alerta.isActive ? 'Activa' : 'Inactiva' }}</span>
+                </div>
+              </td>
+              <td>{{ alerta.userId || 'No disponible' }}</td>
+              <td>{{ alerta.region || 'No definida' }}</td>
+              <td>{{ alerta.revenueRange || 'No definido' }}</td>
+              <td>{{ alerta.employeeRange || 'No definido' }}</td>
+              <td>{{ getMatchCount(alerta) }}</td>
+              <td>
+                {{ getLastMatch(alerta) ? (getLastMatch(alerta)! | date: 'dd/MM/yyyy HH:mm') : 'Sin coincidencias' }}
+              </td>
+              <td class="text-right">
+                <div class="action-group">
+                  <button class="action-btn" (click)="toggleExpanded(alerta._id)" title="Ver detalle">
+                    <span class="material-symbols-outlined">
+                      {{ expandedAlertId() === alerta._id ? 'expand_less' : 'expand_more' }}
+                    </span>
+                  </button>
+                  <button class="action-btn delete" (click)="deleteAlerta(alerta)" title="Eliminar">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            @if (expandedAlertId() === alerta._id) {
+              <tr class="table-expand-row">
+                <td colspan="8">
+                  <div class="detail-panel">
+                    <div class="detail-grid">
+                      <div class="detail-item">
+                        <span class="detail-item-title">Matches encontrados</span>
+                        <div class="detail-item-copy">
+                          @if ((alerta.matchedOffers ?? []).length > 0) {
+                            <ul class="match-list">
+                              @for (match of alerta.matchedOffers ?? []; track match.matchedAt + getOfferLabel(match)) {
+                                <li>
+                                  <span class="match-title">{{ getOfferLabel(match) }}</span>
+                                  <span class="match-date">{{ match.matchedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                                </li>
+                              }
+                            </ul>
+                          } @else {
+                            <span class="empty-inline">Esta alerta todavia no tiene coincidencias registradas.</span>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            }
+          } @empty {
+            <tr>
+              <td colspan="8">
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">notification_important</span>
+                  <p>No se han encontrado alertas coincidentes.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

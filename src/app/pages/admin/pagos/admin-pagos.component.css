@@ -1,0 +1,16 @@
+.lookup-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.lookup-row .tech-input {
+  flex: 1;
+}
+
+@media (max-width: 720px) {
+  .lookup-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -310,6 +310,11 @@ export class ChatService implements OnDestroy {
     );
   }
 
+  /** Vista administrativa de todos los chats */
+  getAllChatsAdmin(): Observable<Chat[]> {
+    return this.http.get<Chat[]>(`${API_URL}/chats/admin/all`);
+  }
+
   /**
    * Historial de mensajes con paginación por cursor.
    * @param before ISO date string — carga mensajes anteriores a esta fecha
@@ -338,6 +343,10 @@ export class ChatService implements OnDestroy {
         this.chatUpdatedSubject.next(chat);
       })
     );
+  }
+
+  setChatReadOnly(chatId: string): Observable<{ ok: boolean }> {
+    return this.http.patch<{ ok: boolean }>(`${API_URL}/chats/${chatId}/readonly`, {});
   }
 
   closeDeal(chatId: string): Observable<Chat> {

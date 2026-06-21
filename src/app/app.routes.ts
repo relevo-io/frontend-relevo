@@ -35,6 +35,12 @@ import { Usuarios as AdminUsuariosComponent } from './pages/admin/usuarios/usuar
 import { Ofertas as OfertasAdminComponent } from './pages/admin/ofertas/ofertas';
 import { SolicitudesComponent } from './pages/admin/solicitudes/solicitudes-list';
 import { HistorialComponent } from './pages/admin/historial/historial';
+import { AdminSectionPlaceholderComponent } from './pages/admin/admin-section-placeholder/admin-section-placeholder.component';
+import { AdminPagosComponent } from './pages/admin/pagos/admin-pagos.component';
+import { AdminNotificacionesComponent } from './pages/admin/notificaciones/admin-notificaciones.component';
+import { AdminAlertasComponent } from './pages/admin/alertas/admin-alertas.component';
+import { AdminMentoringComponent } from './pages/admin/mentoring/admin-mentoring.component';
+import { AdminChatsComponent } from './pages/admin/chats/admin-chats.component';
 
 export const routes: Routes = [
   // --- MUNDO PÚBLICO ---
@@ -105,6 +111,23 @@ export const routes: Routes = [
       { path: 'ofertas', component: OfertasAdminComponent },
       { path: 'solicitudes', component: SolicitudesComponent },
       { path: 'historial', component: HistorialComponent },
+      { path: 'pagos', component: AdminPagosComponent },
+      { path: 'notificaciones', component: AdminNotificacionesComponent },
+      { path: 'alertas', component: AdminAlertasComponent },
+      { path: 'mentoring', component: AdminMentoringComponent },
+      { path: 'chats', component: AdminChatsComponent },
+      {
+        path: 'settings',
+        component: AdminSectionPlaceholderComponent,
+        data: {
+          title: 'Ajustes del Sistema',
+          subtitle: 'Punto de entrada para configuracion general del backoffice y accesos rapidos.',
+          icon: 'settings',
+          emptyTitle: 'No hay ajustes adicionales configurados todavia.',
+          emptyMessage:
+            'Desde aqui podras centralizar configuracion del backoffice, preferencias operativas y accesos generales cuando este modulo se complete.'
+        }
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

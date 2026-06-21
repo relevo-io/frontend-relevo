@@ -30,7 +30,7 @@
 .page-title {
   font-size: 2rem;
   font-weight: 800;
-  color: white;
+  color: var(--admin-text-main);
   margin-bottom: 8px;
 }
 
@@ -68,7 +68,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
   padding: 8px 16px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--admin-border);
@@ -82,7 +82,7 @@
 .tech-select {
   background: transparent;
   border: none;
-  color: white;
+  color: var(--admin-text-main);
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
@@ -90,14 +90,14 @@
 
 .tech-select option {
   background: var(--admin-sidebar);
-  color: white;
+  color: var(--admin-text-main);
 }
 
 /* 3. Formularis Tècnics de l'Admin */
 .form-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: white;
+  color: var(--admin-text-main);
   margin-bottom: 20px;
 }
 
@@ -124,11 +124,11 @@
 
 .tech-select-full,
 .tech-input {
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
   border: 1px solid var(--admin-border);
   border-radius: 8px;
   padding: 10px 14px;
-  color: white;
+  color: var(--admin-text-main);
   font-size: 0.9rem;
   width: 100%;
   transition: border-color 0.2s;
@@ -164,7 +164,7 @@
 }
 
 .tech-table th {
-  background: rgba(255, 255, 255, 0.02);
+  background: color-mix(in srgb, var(--admin-sidebar) 95%, var(--admin-text-main) 5%);
   padding: 1rem;
   text-align: left;
   font-size: 0.75rem;
@@ -206,8 +206,8 @@
 /* 5. Selecció de Files i Accions en Bloc */
 .btn-checkbox {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: white;
+  border: 1px solid color-mix(in srgb, var(--admin-border) 70%, var(--admin-text-main) 30%);
+  color: var(--admin-text-main);
   width: 22px;
   height: 22px;
   display: flex;
@@ -220,7 +220,7 @@
 
 .btn-checkbox:hover {
   border-color: var(--secondary);
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
 }
 
 .row-selected {
@@ -260,7 +260,7 @@
 }
 
 .selection-info .count {
-  background: white;
+  background: var(--admin-sidebar);
   color: var(--secondary);
   width: 28px;
   height: 28px;
@@ -341,9 +341,9 @@
 }
 
 .btn-secondary-tech {
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
   border: 1px solid var(--admin-border);
-  color: white;
+  color: var(--admin-text-main);
   padding: 10px 20px;
   border-radius: var(--radius-lg);
   font-weight: 700;
@@ -356,7 +356,7 @@
 }
 
 .btn-secondary-tech:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--admin-sidebar) 84%, var(--admin-text-main) 16%);
   border-color: var(--secondary);
 }
 
@@ -374,8 +374,8 @@
 }
 
 .icon-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: color-mix(in srgb, var(--admin-sidebar) 84%, var(--admin-text-main) 16%);
+  color: var(--admin-text-main);
 }
 
 .icon-btn.spinning .material-symbols-outlined {
@@ -401,8 +401,8 @@
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: color-mix(in srgb, var(--admin-sidebar) 84%, var(--admin-text-main) 16%);
+  color: var(--admin-text-main);
 }
 
 .action-btn.success:hover {
@@ -444,9 +444,9 @@
 }
 
 .tech-select-mini {
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
   border: 1px solid var(--admin-border);
-  color: white;
+  color: var(--admin-text-main);
   padding: 4px 8px;
   border-radius: 6px;
 }
@@ -464,8 +464,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
+  color: var(--admin-text-main);
   transition: all 0.2s;
 }
 
@@ -477,7 +477,7 @@
 .page-indicator {
   font-size: 0.85rem;
   font-weight: 700;
-  color: white;
+  color: var(--admin-text-main);
 }
 
 /* 8. Contenidors d'Estat Comuns i Loaders */
@@ -587,7 +587,7 @@
   transform: translateX(100%);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
-  color: white;
+  color: var(--admin-text-main);
 }
 
 .drawer.open {
@@ -624,7 +624,7 @@
 .drawer-header h2 {
   font-size: 1.0625rem;
   font-weight: 700;
-  color: white;
+  color: var(--admin-text-main);
   margin: 0;
 }
 
@@ -641,8 +641,8 @@
 }
 
 .btn-close-drawer:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
+  color: var(--admin-text-main);
 }
 
 .btn-close-drawer .material-symbols-outlined {
@@ -691,8 +691,8 @@
   border: 1px solid var(--admin-border);
   border-radius: 8px;
   font-size: 0.875rem;
-  color: white;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--admin-text-main);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
   outline: none;
   transition:
     border-color 0.15s,
@@ -713,14 +713,14 @@
 
 .form-select option {
   background-color: var(--admin-sidebar);
-  color: white;
+  color: var(--admin-text-main);
 }
 
 .field-group input:focus,
 .field-group textarea:focus,
 .form-select:focus {
   border-color: var(--secondary);
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--admin-sidebar) 84%, var(--admin-text-main) 16%);
   box-shadow: 0 0 0 3px rgba(0, 109, 61, 0.15);
 }
 
@@ -769,9 +769,9 @@
 }
 
 .drawer-footer .btn-cancel {
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
   border: 1px solid var(--admin-border);
-  color: white;
+  color: var(--admin-text-main);
   padding: 9px 18px;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -781,9 +781,9 @@
 }
 
 .drawer-footer .btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--admin-sidebar) 84%, var(--admin-text-main) 16%);
   border-color: var(--secondary);
-  color: white;
+  color: var(--admin-text-main);
 }
 
 .drawer-footer .btn-save {
@@ -865,7 +865,7 @@
 
 .user-info-text .name {
   font-weight: 700;
-  color: white;
+  color: var(--admin-text-main);
 }
 
 .user-info-text .bio-snippet {
@@ -874,7 +874,7 @@
 }
 
 .tech-data {
-  color: white;
+  color: var(--admin-text-main);
   font-family: inherit;
   font-weight: 600;
 }
@@ -966,7 +966,7 @@
 }
 
 .welcome-card h3 {
-  color: white;
+  color: var(--admin-text-main);
   margin: 0;
   font-size: 1.25rem;
 }
@@ -975,4 +975,220 @@
   color: var(--admin-text-muted);
   font-size: 0.95rem;
   line-height: 1.6;
+}
+
+/* ==========================================================================
+   12. Shared Admin Module Blocks
+   ========================================================================== */
+.admin-module-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 109, 61, 0.12);
+  color: var(--secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--admin-text-muted);
+}
+
+.summary-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--admin-text-main);
+}
+
+.summary-copy {
+  color: var(--admin-text-muted);
+  line-height: 1.5;
+}
+
+.toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.stacked-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stacked-meta .primary {
+  font-weight: 700;
+  color: var(--admin-text-main);
+}
+
+.stacked-meta .secondary {
+  color: var(--admin-text-muted);
+  font-size: 0.8rem;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.status-chip.success {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.status-chip.warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.status-chip.danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.status-chip.info {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.status-chip.neutral {
+  background: rgba(148, 163, 184, 0.12);
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+.detail-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--admin-text-muted);
+}
+
+.detail-item-copy {
+  color: var(--admin-text-main);
+  line-height: 1.55;
+}
+
+.detail-item-copy.muted {
+  color: var(--admin-text-muted);
+}
+
+.table-expand-row td {
+  background: color-mix(in srgb, var(--admin-sidebar) 94%, var(--admin-text-main) 6%);
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-item {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
+}
+
+.message-item-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+}
+
+.message-item-content {
+  white-space: pre-wrap;
+  color: var(--admin-text-main);
+  line-height: 1.55;
+}
+
+.empty-inline {
+  color: var(--admin-text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .control-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .search-section {
+    max-width: none;
+  }
+
+  .tech-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 }

@@ -1,5 +1,4 @@
 <div class="admin-container admin-theme">
-  <!-- Sidebar Navigation -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="logo-box">
@@ -7,44 +6,59 @@
       </div>
       <div class="brand">
         <h1>RELEVO</h1>
-        <p>Consola de Administración</p>
+        <p>{{ 'ADMIN.CONSOLE_TITLE' | translate }}</p>
       </div>
     </div>
 
     <nav class="nav-links">
       <a routerLink="dashboard" routerLinkActive="active" class="nav-item">
         <span class="material-symbols-outlined icon-fill">grid_view</span>
-        <span>Dashboard</span>
+        <span>{{ 'ADMIN.NAV_DASHBOARD' | translate }}</span>
       </a>
       <a routerLink="usuarios" routerLinkActive="active" class="nav-item">
         <span class="material-symbols-outlined icon-fill">badge</span>
-        <span>Usuarios</span>
+        <span>{{ 'ADMIN.NAV_USERS' | translate }}</span>
       </a>
       <a routerLink="ofertas" routerLinkActive="active" class="nav-item">
         <span class="material-symbols-outlined icon-fill">rocket_launch</span>
-        <span>Ofertas</span>
+        <span>{{ 'ADMIN.NAV_OFFERS' | translate }}</span>
       </a>
       <a routerLink="solicitudes" routerLinkActive="active" class="nav-item">
         <span class="material-symbols-outlined icon-fill">notifications_active</span>
-        <span>Solicitudes</span>
+        <span>{{ 'ADMIN.NAV_REQUESTS' | translate }}</span>
       </a>
       <a routerLink="historial" routerLinkActive="active" class="nav-item">
         <span class="material-symbols-outlined icon-fill">history</span>
-        <span>Registro Actividad</span>
+        <span>{{ 'ADMIN.NAV_ACTIVITY' | translate }}</span>
       </a>
-
-      <div class="nav-divider">Configuración</div>
-
+      <a routerLink="pagos" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined icon-fill">payments</span>
+        <span>{{ 'ADMIN.NAV_PAYMENTS' | translate }}</span>
+      </a>
+      <a routerLink="notificaciones" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined icon-fill">notifications</span>
+        <span>{{ 'ADMIN.NAV_NOTIFICATIONS' | translate }}</span>
+      </a>
+      <a routerLink="alertas" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined icon-fill">notification_important</span>
+        <span>{{ 'ADMIN.NAV_ALERTS' | translate }}</span>
+      </a>
+      <a routerLink="mentoring" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined icon-fill">school</span>
+        <span>{{ 'ADMIN.NAV_MENTORING' | translate }}</span>
+      </a>
+      <a routerLink="chats" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-outlined icon-fill">forum</span>
+        <span>{{ 'ADMIN.NAV_CHATS' | translate }}</span>
+      </a>
       <a routerLink="settings" routerLinkActive="active" class="nav-item">
         <span class="material-symbols-outlined icon-fill">settings</span>
-        <span>Ajustes</span>
+        <span>{{ 'PROFILE.SETTINGS' | translate }}</span>
       </a>
-
-      <div class="nav-divider">Sistema</div>
 
       <a routerLink="/" class="nav-item">
         <span class="material-symbols-outlined icon-fill">public</span>
-        <span>Web Principal</span>
+        <span>{{ 'ADMIN.BACK_TO_WEB' | translate }}</span>
       </a>
     </nav>
 
@@ -52,40 +66,95 @@
       <div class="system-status tech-card">
         <div class="status-indicator">
           <span class="dot green"></span>
-          <span class="status-text">Sistemas operativos</span>
+          <span class="status-text">{{ 'ADMIN.STATUS_ACTIVE' | translate }}</span>
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- Main Area -->
   <div class="main-wrapper">
-    <!-- Clean Top Header -->
     <header class="admin-header">
       <div class="header-left">
-        <span class="breadcrumb-root">Admin</span>
+        <span class="breadcrumb-root">{{ 'ADMIN.BREADCRUMB_ADMIN' | translate }}</span>
         <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-current">Backoffice</span>
+        <span class="breadcrumb-current">{{ 'ADMIN.BREADCRUMB_BACKOFFICE' | translate }}</span>
       </div>
 
       <div class="header-right">
-        <button class="icon-btn">
-          <span class="material-symbols-outlined">search</span>
-        </button>
-        <button class="icon-btn">
-          <span class="material-symbols-outlined">notifications</span>
-        </button>
-        <div class="user-profile">
-          <div class="user-info">
-            <span class="name">Admin User</span>
-            <span class="role">Super Admin</span>
-          </div>
-          <div class="avatar"></div>
+        <div class="user-dropdown-container">
+          <button class="user-profile btn-user-trigger" type="button" (click)="toggleMenu()">
+            <div class="user-info">
+              <span class="name">{{ currentUser()?.fullName || 'Admin User' }}</span>
+              <span class="role">{{ userRoleLabel() | translate }}</span>
+            </div>
+            <div class="avatar">{{ userInitial() }}</div>
+          </button>
+
+          @if (isMenuOpen()) {
+            <div class="dropdown-overlay" (click)="closeMenu()"></div>
+
+            <div class="user-dropdown-menu animate-in">
+              <div class="dropdown-header">
+                <strong>{{ currentUser()?.fullName || 'Admin User' }}</strong>
+                <span class="user-email">{{ currentUser()?.email || 'admin@relevo.local' }}</span>
+              </div>
+
+              <div class="dropdown-divider"></div>
+
+              <div class="dropdown-section">
+                <div class="dropdown-item-static">
+                  <span class="material-symbols-outlined">{{
+                    themeService.currentTheme() === 'light' ? 'dark_mode' : 'light_mode'
+                  }}</span>
+                  <span class="label">{{
+                    (themeService.currentTheme() === 'light' ? 'NAVBAR.DARK_MODE' : 'NAVBAR.LIGHT_MODE') | translate
+                  }}</span>
+                  <button type="button" (click)="themeService.toggleTheme()" class="btn-switch-theme">
+                    <span class="material-symbols-outlined">sync</span>
+                  </button>
+                </div>
+
+                <div class="dropdown-item-static">
+                  <span class="material-symbols-outlined">translate</span>
+                  <div class="language-inline">
+                    @for (lang of languages; track lang.code) {
+                      <button
+                        type="button"
+                        class="lang-inline-btn"
+                        [class.active]="languageService.languageCode() === lang.code"
+                        (click)="setLanguage(lang.code)"
+                      >
+                        {{ lang.label }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <div class="dropdown-divider"></div>
+
+              <a routerLink="/" (click)="closeMenu()" class="dropdown-item">
+                <span class="material-symbols-outlined">public</span>
+                <span>{{ 'ADMIN.BACK_TO_WEB' | translate }}</span>
+              </a>
+
+              <a routerLink="/admin/settings" (click)="closeMenu()" class="dropdown-item">
+                <span class="material-symbols-outlined">settings</span>
+                <span>{{ 'PROFILE.SETTINGS' | translate }}</span>
+              </a>
+
+              <div class="dropdown-divider"></div>
+
+              <button type="button" (click)="logout()" class="dropdown-item logout">
+                <span class="material-symbols-outlined">logout</span>
+                <span>{{ 'NAVBAR.LOGOUT' | translate }}</span>
+              </button>
+            </div>
+          }
         </div>
       </div>
     </header>
 
-    <!-- CONTENT OUTLET -->
     <main class="admin-content">
       <router-outlet></router-outlet>
     </main>

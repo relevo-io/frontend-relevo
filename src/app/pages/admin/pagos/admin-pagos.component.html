@@ -1,0 +1,94 @@
+<section class="admin-module-page animate-in">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="section-kicker">
+        <span class="material-symbols-outlined">payments</span>
+        <span>Backoffice</span>
+      </div>
+      <h1 class="page-title">Pagos</h1>
+      <p class="page-subtitle">Consulta manual por identificador interno de sesion de pago.</p>
+    </div>
+  </header>
+
+  <article class="tech-card summary-card">
+    <span class="summary-label">Modo v1</span>
+    <span class="summary-value">Consulta por ID</span>
+    <p class="summary-copy">
+      Esta pantalla usa el endpoint real disponible hoy. Para una tabla completa de sesiones hara falta un listado admin
+      nuevo en backend.
+    </p>
+  </article>
+
+  <section class="tech-card detail-panel">
+    <div class="detail-item">
+      <span class="detail-item-title">Payment Session ID</span>
+      <div class="lookup-row">
+        <input
+          type="text"
+          class="tech-input"
+          [(ngModel)]="paymentSessionId"
+          name="paymentSessionId"
+          placeholder="Introduce el ID interno de la sesion..."
+        />
+        <button class="btn-primary-tech" (click)="search()" [disabled]="isLoading()">
+          <span class="material-symbols-outlined">search</span>
+          Consultar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  @if (isLoading()) {
+    <div class="state-container tech-card">
+      <div class="loader-tech"></div>
+      <p>Consultando estado de la sesion...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-container error tech-card">
+      <span class="material-symbols-outlined">warning</span>
+      <p>{{ error() }}</p>
+    </div>
+  } @else if (result()) {
+    <section class="tech-card detail-panel">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="detail-item-title">Sesion consultada</span>
+          <div class="detail-item-copy">{{ searchedId() }}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-item-title">Tipo</span>
+          <div class="detail-item-copy">{{ kindLabel(result()!.kind) }}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-item-title">Estado</span>
+          <div class="detail-item-copy">
+            <span class="status-chip" [class]="statusClass(result()!.status)">{{ result()!.status }}</span>
+          </div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-item-title">Oferta creada</span>
+          <div class="detail-item-copy">{{ result()!.createdOfferId || 'No disponible' }}</div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-item-title">PRO activo</span>
+          <div class="detail-item-copy">
+            {{ result()!.proActive === undefined ? 'No aplica' : result()!.proActive ? 'Si' : 'No' }}
+          </div>
+        </div>
+        <div class="detail-item">
+          <span class="detail-item-title">Expiracion PRO</span>
+          <div class="detail-item-copy">
+            {{ result()!.proExpiresAt ? (result()!.proExpiresAt | date: 'dd/MM/yyyy HH:mm') : 'No disponible' }}
+          </div>
+        </div>
+      </div>
+    </section>
+  } @else {
+    <div class="tech-table-container">
+      <div class="empty-state">
+        <span class="material-symbols-outlined">payments</span>
+        <p>Introduce un paymentSessionId para consultar una sesion de pago.</p>
+      </div>
+    </div>
+  }
+</section>

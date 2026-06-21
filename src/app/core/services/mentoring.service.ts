@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MentoringModule } from '../models/mentoring.model';
+import { MentoringModule, MentoringProgress } from '../models/mentoring.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -23,11 +23,11 @@ export class MentoringService {
     });
   }
 
-  getProgress(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/progress`);
+  getProgress(): Observable<MentoringProgress> {
+    return this.http.get<MentoringProgress>(`${this.apiUrl}/progress`);
   }
 
-  toggleStep(contentKey: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/progress/toggle-step`, { contentKey });
+  toggleStep(contentKey: string): Observable<MentoringProgress> {
+    return this.http.post<MentoringProgress>(`${this.apiUrl}/progress/toggle-step`, { contentKey });
   }
 }

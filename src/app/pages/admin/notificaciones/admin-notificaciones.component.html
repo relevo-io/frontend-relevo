@@ -1,0 +1,163 @@
+<section class="admin-module-page animate-in">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="section-kicker">
+        <span class="material-symbols-outlined">notifications</span>
+        <span>Backoffice</span>
+      </div>
+      <h1 class="page-title">Notificaciones</h1>
+      <p class="page-subtitle">Historial real del canal in-app con filtros, lectura y limpieza segura.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-secondary-tech" (click)="markAllAsRead()" [disabled]="unreadCount() === 0">
+        <span class="material-symbols-outlined">done_all</span>
+        Marcar todas
+      </button>
+      <button class="btn-secondary-tech" (click)="clearAll()" [disabled]="totalItems() === 0">
+        <span class="material-symbols-outlined">delete_sweep</span>
+        Vaciar bandeja
+      </button>
+      <button class="icon-btn" [class.spinning]="isRefreshing()" (click)="refresh()" title="Recargar">
+        <span class="material-symbols-outlined">refresh</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="summary-grid">
+    <article class="tech-card summary-card">
+      <span class="summary-label">No leidas</span>
+      <span class="summary-value">{{ unreadCount() }}</span>
+      <p class="summary-copy">Total pendiente de revisar en la bandeja actual del admin.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Pagina actual</span>
+      <span class="summary-value">{{ currentPage() }}</span>
+      <p class="summary-copy">Consulta paginada conectada al endpoint real de historial.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Total registrado</span>
+      <span class="summary-value">{{ totalItems() }}</span>
+      <p class="summary-copy">Volumen total recuperado para esta bandeja.</p>
+    </article>
+  </div>
+
+  <div class="control-panel tech-card">
+    <div class="search-section">
+      <app-search-input
+        [placeholder]="'Buscar por titulo o cuerpo...'"
+        (searchTerm)="updateSearch($event)"
+      ></app-search-input>
+    </div>
+
+    <div class="toolbar-actions">
+      <div class="filter-group">
+        <span class="material-symbols-outlined">sell</span>
+        <select class="tech-select" (change)="updateType($event)">
+          <option value="ALL">Todos los tipos</option>
+          <option value="chat">Chat</option>
+          <option value="solicitud">Solicitud</option>
+          <option value="cv_analysis">CV Analysis</option>
+          <option value="alerta">Alerta</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="material-symbols-outlined">mark_email_read</span>
+        <select class="tech-select" (change)="updateReadState($event)">
+          <option value="ALL">Todas</option>
+          <option value="UNREAD">No leidas</option>
+          <option value="READ">Leidas</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="state-container tech-card">
+      <div class="loader-tech"></div>
+      <p>Sincronizando historial de notificaciones...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-container error tech-card">
+      <span class="material-symbols-outlined">warning</span>
+      <p>{{ error() }}</p>
+      <button class="btn-secondary-tech" (click)="fetchNotifications()">Reintentar</button>
+    </div>
+  } @else {
+    <div class="tech-table-container">
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>Titulo</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (notification of filteredNotifications(); track notification._id) {
+            <tr [class.unread-row]="!notification.read">
+              <td>
+                <div class="stacked-meta">
+                  <span class="primary">{{ notification.title }}</span>
+                  <span class="secondary">{{ notification.body }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-chip" [class]="typeClass(notification.type)">
+                  {{ typeLabel(notification.type) }}
+                </span>
+              </td>
+              <td>
+                <span class="status-chip" [class]="notification.read ? 'neutral' : 'warning'">
+                  {{ notification.read ? 'Leida' : 'No leida' }}
+                </span>
+              </td>
+              <td>{{ notification.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td class="text-right">
+                <div class="action-group">
+                  @if (!notification.read) {
+                    <button class="action-btn success" (click)="markAsRead(notification)" title="Marcar como leida">
+                      <span class="material-symbols-outlined">mark_email_read</span>
+                    </button>
+                  }
+                  <button class="action-btn delete" (click)="deleteNotification(notification)" title="Eliminar">
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">notifications_off</span>
+                  <p>No se han encontrado notificaciones coincidentes.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <footer class="tech-pagination">
+        <div class="pagination-info">
+          Mostrando <strong>{{ pageStart() }}-{{ pageEnd() }}</strong> de <strong>{{ totalItems() }}</strong>
+          notificaciones
+        </div>
+
+        <div class="page-nav">
+          <button class="nav-btn" (click)="prevPage()" [disabled]="!hasPrevPage()">
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <span class="page-indicator">{{ currentPage() }} / {{ totalPages() }}</span>
+          <button class="nav-btn" (click)="nextPage()" [disabled]="!hasNextPage()">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  }
+</section>

@@ -45,13 +45,22 @@
   --shadow-ambient: 0 20px 40px -15px rgba(3, 22, 50, 0.04);
 
   /* Technical/Admin Specific */
+  --admin-bg: #f4f7fb;
+  --admin-sidebar: #ffffff;
+  --admin-card: rgba(255, 255, 255, 0.92);
+  --admin-border: rgba(3, 22, 50, 0.1);
+  --admin-text-main: #0f172a;
+  --admin-text-muted: #64748b;
+
+  /* Utility Alphas */
+  --surface-alpha-80: rgba(249, 249, 249, 0.8);
+}
+
+body.dark-mode {
   --admin-bg: #010a18;
   --admin-sidebar: #031632;
   --admin-card: rgba(255, 255, 255, 0.03);
   --admin-border: rgba(255, 255, 255, 0.08);
   --admin-text-main: #ffffff;
   --admin-text-muted: #8293b5;
-
-  /* Utility Alphas */
-  --surface-alpha-80: rgba(249, 249, 249, 0.8);
 }

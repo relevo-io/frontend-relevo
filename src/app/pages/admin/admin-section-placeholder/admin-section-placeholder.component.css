@@ -1,0 +1,48 @@
+.admin-section-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 109, 61, 0.12);
+  color: var(--secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.admin-empty-state {
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 48px 24px;
+}
+
+.admin-empty-state .material-symbols-outlined {
+  font-size: 56px;
+  color: var(--admin-text-muted);
+}
+
+.empty-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--admin-text-main);
+}
+
+.empty-copy {
+  margin: 0;
+  max-width: 680px;
+  color: var(--admin-text-muted);
+  line-height: 1.6;
+}

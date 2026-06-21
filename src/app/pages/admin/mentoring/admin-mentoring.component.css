@@ -1,0 +1,31 @@
+.selected-row td {
+  background: rgba(0, 109, 61, 0.04);
+}
+
+.module-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.module-item-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  background: color-mix(in srgb, var(--admin-sidebar) 92%, var(--admin-text-main) 8%);
+  color: inherit;
+  text-align: left;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.module-item-btn:hover {
+  border-color: var(--secondary);
+  transform: translateY(-1px);
+}

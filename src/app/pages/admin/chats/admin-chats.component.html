@@ -1,0 +1,199 @@
+<section class="admin-module-page animate-in">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="section-kicker">
+        <span class="material-symbols-outlined">forum</span>
+        <span>Backoffice</span>
+      </div>
+      <h1 class="page-title">Chats</h1>
+      <p class="page-subtitle">Supervision simple de conversaciones, estados, lectura y detalle de mensajes.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" [class.spinning]="isRefreshing()" (click)="refresh()" title="Recargar">
+        <span class="material-symbols-outlined">refresh</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="summary-grid">
+    <article class="tech-card summary-card">
+      <span class="summary-label">Chats</span>
+      <span class="summary-value">{{ chats().length }}</span>
+      <p class="summary-copy">Total de conversaciones disponibles para supervision.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Solo lectura</span>
+      <span class="summary-value">{{ chats().filter((chat) => chat.isReadOnly).length }}</span>
+      <p class="summary-copy">Conversaciones ya bloqueadas para nuevos mensajes.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Cerrados</span>
+      <span class="summary-value">{{ chats().filter((chat) => !!chat.closedAt).length }}</span>
+      <p class="summary-copy">Chats asociados a acuerdos cerrados.</p>
+    </article>
+  </div>
+
+  <div class="control-panel tech-card">
+    <div class="search-section">
+      <app-search-input
+        [placeholder]="'Buscar por participantes u oferta...'"
+        (searchTerm)="updateSearch($event)"
+      ></app-search-input>
+    </div>
+
+    <div class="toolbar-actions">
+      <div class="filter-group">
+        <span class="material-symbols-outlined">filter_list</span>
+        <select class="tech-select" (change)="updateStatus($event)">
+          <option value="ALL">Todos los estados</option>
+          <option value="PENDING_APPROVAL">Pendiente</option>
+          <option value="APPROVED">Aprobado</option>
+          <option value="REJECTED">Rechazado</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="state-container tech-card">
+      <div class="loader-tech"></div>
+      <p>Sincronizando chats del marketplace...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-container error tech-card">
+      <span class="material-symbols-outlined">warning</span>
+      <p>{{ error() }}</p>
+      <button class="btn-secondary-tech" (click)="fetchChats()">Reintentar</button>
+    </div>
+  } @else {
+    <div class="tech-table-container">
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>Owner</th>
+            <th>Interested</th>
+            <th>Oferta</th>
+            <th>Estado</th>
+            <th>No leidos</th>
+            <th>Flags</th>
+            <th>Ultima actividad</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (chat of filteredChats(); track chat._id) {
+            <tr [class.selected-row]="selectedChat()?._id === chat._id">
+              <td>
+                <div class="stacked-meta">
+                  <span class="primary">{{ userLabel(chat.owner) }}</span>
+                  <span class="secondary">{{ userEmail(chat.owner) }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="stacked-meta">
+                  <span class="primary">{{ userLabel(chat.interested) }}</span>
+                  <span class="secondary">{{ userEmail(chat.interested) }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="stacked-meta">
+                  <span class="primary">{{ offerLabel(chat) }}</span>
+                  <span class="secondary">{{ offerMeta(chat) }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-chip" [class]="statusClass(chat.status)">{{ chat.status }}</span>
+              </td>
+              <td>{{ chat.unreadOwner }} / {{ chat.unreadInterested }}</td>
+              <td>
+                <div class="flag-list">
+                  <span class="status-chip" [class]="chat.isReadOnly ? 'danger' : 'neutral'">
+                    {{ chat.isReadOnly ? 'Readonly' : 'Editable' }}
+                  </span>
+                  <span class="status-chip" [class]="chat.closedAt ? 'success' : 'neutral'">
+                    {{ chat.closedAt ? 'Cerrado' : 'Abierto' }}
+                  </span>
+                </div>
+              </td>
+              <td>{{ chat.updatedAt || chat.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td class="text-right">
+                <div class="action-group">
+                  <button class="action-btn" (click)="viewMessages(chat)" title="Ver mensajes">
+                    <span class="material-symbols-outlined">chat</span>
+                  </button>
+                  @if (!chat.isReadOnly) {
+                    <button class="action-btn delete" (click)="setReadOnly(chat)" title="Poner en solo lectura">
+                      <span class="material-symbols-outlined">lock</span>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8">
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">forum</span>
+                  <p>No se han encontrado chats coincidentes.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (selectedChat()) {
+      <section class="tech-card detail-panel">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-item-title">Oferta asociada</span>
+            <div class="detail-item-copy">{{ offerLabel(selectedChat()!) }}</div>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-title">Estado</span>
+            <div class="detail-item-copy">{{ selectedChat()!.status }}</div>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-title">Readonly</span>
+            <div class="detail-item-copy">{{ selectedChat()!.isReadOnly ? 'Si' : 'No' }}</div>
+          </div>
+        </div>
+
+        @if (isLoadingMessages()) {
+          <div class="state-container">
+            <div class="loader-tech"></div>
+            <p>Cargando mensajes del chat...</p>
+          </div>
+        } @else if (messageError()) {
+          <div class="state-container error">
+            <span class="material-symbols-outlined">warning</span>
+            <p>{{ messageError() }}</p>
+          </div>
+        } @else if (messages().length === 0) {
+          <div class="empty-state">
+            <span class="material-symbols-outlined">chat_bubble_outline</span>
+            <p>No se han encontrado mensajes en este chat.</p>
+          </div>
+        } @else {
+          <div class="message-list">
+            @for (message of messages(); track message._id ?? message.createdAt) {
+              <article class="message-item">
+                <div class="message-item-header">
+                  <span>{{
+                    typeof message.sender === 'string'
+                      ? message.sender
+                      : message.sender.fullName || message.sender.email
+                  }}</span>
+                  <span>{{ message.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+                <div class="message-item-content">{{ message.content || '[Adjunto sin texto]' }}</div>
+              </article>
+            }
+          </div>
+        }
+      </section>
+    }
+  }
+</section>

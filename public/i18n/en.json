@@ -71,6 +71,24 @@
     "CHATS": "Chats",
     "FAVORITES": "My favorites"
   },
+  "ADMIN": {
+    "CONSOLE_TITLE": "Administration Console",
+    "NAV_DASHBOARD": "Dashboard",
+    "NAV_USERS": "Users",
+    "NAV_OFFERS": "Offers",
+    "NAV_REQUESTS": "Requests",
+    "NAV_ACTIVITY": "Activity Log",
+    "NAV_PAYMENTS": "Payments",
+    "NAV_NOTIFICATIONS": "Notifications",
+    "NAV_ALERTS": "Alerts",
+    "NAV_MENTORING": "Mentoring",
+    "NAV_CHATS": "Chats",
+    "BACK_TO_WEB": "Back to website",
+    "STATUS_ACTIVE": "Backoffice active",
+    "BREADCRUMB_ADMIN": "Admin",
+    "BREADCRUMB_BACKOFFICE": "Backoffice",
+    "ROLE_SUPER_ADMIN": "Super Admin"
+  },
   "PROFILE": {
     "TITLE": "My Profile",
     "DEFAULT_USER": "User",

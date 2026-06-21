@@ -1,0 +1,9 @@
+.selected-row td {
+  background: rgba(0, 109, 61, 0.04);
+}
+
+.flag-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

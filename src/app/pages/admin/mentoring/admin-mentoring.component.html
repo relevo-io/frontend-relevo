@@ -1,0 +1,163 @@
+<section class="admin-module-page animate-in">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="section-kicker">
+        <span class="material-symbols-outlined">school</span>
+        <span>Backoffice</span>
+      </div>
+      <h1 class="page-title">Mentoring</h1>
+      <p class="page-subtitle">Vista editorial y de seguimiento sobre modulos, estructura y progreso disponible.</p>
+    </div>
+  </header>
+
+  <div class="summary-grid">
+    <article class="tech-card summary-card">
+      <span class="summary-label">Modulos</span>
+      <span class="summary-value">{{ modules().length }}</span>
+      <p class="summary-copy">Estructura total publicada en el sistema de mentoring.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Activos</span>
+      <span class="summary-value">{{ activeModules() }}</span>
+      <p class="summary-copy">Modulos visibles actualmente para los usuarios.</p>
+    </article>
+    <article class="tech-card summary-card">
+      <span class="summary-label">Progreso agregado</span>
+      <span class="summary-value">{{ progress()?.progressPercentage ?? 0 }}%</span>
+      <p class="summary-copy">Progreso del usuario autenticado segun la informacion disponible hoy.</p>
+    </article>
+  </div>
+
+  <div class="control-panel tech-card">
+    <div class="toolbar-actions">
+      <div class="filter-group">
+        <span class="material-symbols-outlined">alt_route</span>
+        <select class="tech-select" (change)="updateRouteFilter($event)">
+          <option value="ALL">Todas las rutas</option>
+          <option value="BUY">BUY</option>
+          <option value="SELL">SELL</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="state-container tech-card">
+      <div class="loader-tech"></div>
+      <p>Sincronizando modulos de mentoring...</p>
+    </div>
+  } @else if (error()) {
+    <div class="state-container error tech-card">
+      <span class="material-symbols-outlined">warning</span>
+      <p>{{ error() }}</p>
+      <button class="btn-secondary-tech" (click)="fetchModules()">Reintentar</button>
+    </div>
+  } @else {
+    <div class="tech-table-container">
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>Ruta</th>
+            <th>Modulo</th>
+            <th>Estado</th>
+            <th>Items</th>
+            <th>Duracion</th>
+            <th>Progreso</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (module of filteredModules(); track module._id) {
+            <tr [class.selected-row]="selectedModule()?._id === module._id">
+              <td>{{ module.route }}</td>
+              <td>
+                <div class="stacked-meta">
+                  <span class="primary">{{ module.titleKey | translate }}</span>
+                  <span class="secondary">{{ module.descriptionKey | translate }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-chip" [class]="module.isActive ? 'success' : 'neutral'">
+                  {{ module.isActive ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>{{ module.items.length }}</td>
+              <td>{{ module.duration }} min</td>
+              <td>{{ moduleProgress(module) }}%</td>
+              <td class="text-right">
+                <div class="action-group">
+                  <button class="action-btn" (click)="selectModule(module)" title="Ver estructura">
+                    <span class="material-symbols-outlined">visibility</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7">
+                <div class="empty-state">
+                  <span class="material-symbols-outlined">school</span>
+                  <p>No se han encontrado modulos de mentoring visibles.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (selectedModule()) {
+      <section class="tech-card detail-panel">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-item-title">Modulo seleccionado</span>
+            <div class="detail-item-copy">{{ selectedModule()!.titleKey | translate }}</div>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-title">Ruta</span>
+            <div class="detail-item-copy">{{ selectedModule()!.route }}</div>
+          </div>
+          <div class="detail-item">
+            <span class="detail-item-title">Items</span>
+            <div class="detail-item-copy">{{ selectedModule()!.items.length }}</div>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-item-title">Estructura del modulo</span>
+          <div class="module-items">
+            @for (item of selectedModule()!.items; track item.contentKey) {
+              <button class="module-item-btn" (click)="viewItem(selectedModule()!, item)">
+                <div class="stacked-meta">
+                  <span class="primary">{{ item.titleKey | translate }}</span>
+                  <span class="secondary">{{ item.contentKey }}</span>
+                </div>
+                <span class="status-chip" [class]="isStepCompleted(item) ? 'success' : 'neutral'">
+                  {{ isStepCompleted(item) ? 'Completado' : 'Pendiente' }}
+                </span>
+              </button>
+            }
+          </div>
+        </div>
+      </section>
+    }
+
+    @if (selectedItem()) {
+      <section class="tech-card detail-panel">
+        <div class="detail-item">
+          <span class="detail-item-title">Contenido markdown</span>
+          <div class="detail-item-copy muted">{{ selectedItem()!.contentKey }}</div>
+        </div>
+
+        @if (isLoadingContent()) {
+          <div class="state-container">
+            <div class="loader-tech"></div>
+            <p>Cargando contenido del item...</p>
+          </div>
+        } @else {
+          <markdown [data]="markdownContent()"></markdown>
+        }
+      </section>
+    }
+  }
+</section>

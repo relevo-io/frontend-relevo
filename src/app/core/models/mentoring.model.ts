@@ -14,3 +14,9 @@ export interface MentoringModule {
   isActive: boolean;
   items: MentoringItem[];
 }
+
+export interface MentoringProgress {
+  completedModules: string[];
+  completedSteps: string[];
+  progressPercentage: number;
+}
